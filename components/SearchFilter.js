@@ -123,6 +123,7 @@ export default class SearchFilter extends React.PureComponent{
                 monthNameAbbr: months[iDate.getMonth()].slice(0,3),
                 dateName: iDate.getDate(),
                 dayValue: iDate.getDay(),
+                year: iDate.getFullYear(),
                 isEnabled: i < numInvalidDaysOnEachSide || i > numInvalidDaysOnEachSide + 6 ? false : true,
 
             }

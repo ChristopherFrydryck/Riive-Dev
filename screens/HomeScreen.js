@@ -105,6 +105,7 @@ export default class Home extends Component{
                 dayNameAbbr: days[(date.getDay())%7].slice(0,3),
                 monthName: months[date.getMonth()],
                 monthNameAbbr: months[date.getMonth()].slice(0,3),
+                year: date.getFullYear(),
                 dateName: (date.getDate()),
                 dayValue: (date.getDay())%7,
                 isEnabled: true,
@@ -280,6 +281,7 @@ export default class Home extends Component{
 
             let today = date.getDate();
             let weekday = days[date.getDay()]
+            let month = months[date.getMonth()]
 
             let hour = date.getHours()
             let minute = date.getMinutes();
@@ -301,16 +303,19 @@ export default class Home extends Component{
 
 
             // console.log(filteredStarts[0].key)
-            // console.log(this.state.timeSearched[0].key)
+            console.log(this.state.daySearched)
         
-            var isCurrentDay = weekday === this.state.daySearched.dayName && today === this.state.daySearched.dateName && this.state.daySearched.dayValue === 0;
+            var isToday = weekday === this.state.daySearched.dayName && today === this.state.daySearched.dateName && this.state.daySearched.monthName === month && this.state.daySearched.dayValue === 0;
 
-            if(isCurrentDay){
+            if(isToday){
                 if(filteredStarts[0].key <= this.state.timeSearched[0].key){
                     await this.setState({dayTimeValid: true})
                 }else{
                     await this.setState({dayTimeValid: false})      
                 }
+                this.slideBottomPill()
+            }else if(today > this.state.daySearched.dateName && this.state.daySearched.monthName === month){
+                await this.setState({dayTimeValid: false})
                 this.slideBottomPill()
             }else{
                 await this.setState({dayTimeValid: true})
@@ -1035,7 +1040,16 @@ export default class Home extends Component{
                     
                     <Animated.View style={[styles.searchToastPill, {bottom: this.state.slideUpAnimation}]}>
                         {/* <ActivityIndicator /> */}
-                        <Text style={{color: "white"}}>{this.state.fetchingResults ? "Finding Spaces" : !this.state.dayTimeValid ? "Update Search Time" : this.results.length === 0 ? "No Results" : null}</Text>
+                        {this.state.fetchingResults ? 
+                            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                <ActivityIndicator color="white"/>
+                                <Text style={{color: "white", paddingLeft: 8}}>Finding Spaces</Text>
+                            </View>  
+                        : !this.state.dayTimeValid ? 
+                            <Text style={{color: "white"}}>Update Search Time</Text>
+                        : this.results.length === 0 ? 
+                            <Text style={{color: "white"}}>No Results</Text>
+                        : null}
                     </Animated.View>
                        
                 </SafeAreaView>
@@ -1079,7 +1093,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center', 
         borderRadius: 24, 
-        paddingHorizontal: 16
+        paddingHorizontal: 16,
+        shadowColor: Colors.cosmos900,
+        shadowOffset: {
+            width: 0,
+            height: 20,
+        },
+        shadowOpacity: .5,
+        shadowRadius: 20,
+        elevation: 12,
     },
     actionSheetContent:{
         paddingHorizontal: 16, 
