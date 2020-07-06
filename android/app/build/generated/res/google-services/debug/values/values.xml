@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="firebase_database_url" translatable="false">https://riive-parking.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">888723186328</string>
+    <string name="google_api_key" translatable="false">AIzaSyCsZup3roSbxSJHTnQ4cqYSU4-UHzK5XTQ</string>
+    <string name="google_app_id" translatable="false">1:888723186328:android:a4518cf53ee488a722a6ed</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCsZup3roSbxSJHTnQ4cqYSU4-UHzK5XTQ</string>
+    <string name="google_storage_bucket" translatable="false">riive-parking.appspot.com</string>
+    <string name="project_id" translatable="false">riive-parking</string>
+</resources>

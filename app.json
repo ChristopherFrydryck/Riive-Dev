@@ -1,7 +1,19 @@
 {
   "expo": {
-    "name": "riive",
-    "slug": "riive",
+    "name": "Riive",
+    "slug": "RiiveParking",
+    "privacy": "public",
+    "sdkVersion": "35.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "androidStatusBarColor": "#FF8708",
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#FF8708"
+    },
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,10 +29,33 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.riive",
+      "publishBundlePath": "ios/riive/Supporting/shell-app.bundle",
+      "publishManifestPath": "ios/riive/Supporting/shell-app-manifest.json",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.888723186328-bq5cq0kof3dd1mn5pbi6ivj5ebodis9o"
+        }
+      }
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
+    "android": {
+      "package": "com.riive",
+      "googleServicesFile": "./google-services.json",
+      "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
+      "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json",
+      "config": {
+        "googleSignIn": {
+          "certificateHash": "44:F2:53:62:3E:92:E4:1C:71:38:47:D3:25:36:26:FE:4D:24:25:94"
+        }
+      }
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js",
+    "isDetached": true,
+    "detach": {
+      "iosExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/ios-v2.13.0-sdk35.0.0-a30ebc9b-3db4-42f4-b677-e468076baf18.tar.gz",
+      "androidExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/android-v2.13.0-sdk35.0.0-b816b7af-88da-4ca9-87a5-7438f0c21b6e.tar.gz"
+    },
+    "scheme": "expf206d00a12474520826e6698bb306f77"
   }
 }
