@@ -267,6 +267,18 @@ class addSpace extends Component {
      })
     
   }
+
+  submitSpace = async () => {
+    const nameValidation = /^[A-Za-z0-9]+[A-Za-z0-9 ]+$/
+
+    let nameValid = nameValidation.test(this.state.spaceName)
+
+    if(nameValid && this.state.spaceName.split("").length > 0){
+      console.log("Name is valid")
+    }else{
+      console.log("name invalid")
+    }
+  }
    
 
 
@@ -641,7 +653,7 @@ onSelectAddress = (det) => {
                   </Card>
                 )}}
               /> */}
-              <Button onPress={() => this.uploadImage(this.state.photo)}>Add Photo</Button>
+              <Button onPress={() => this.submitSpace()}>Add Photo</Button>
 
             </View>
             

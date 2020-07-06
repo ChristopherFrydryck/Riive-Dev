@@ -8,7 +8,7 @@ This app is built on React Native and expo.  To test the app, first run `npm ins
 + ~~Add edit payment screen~~
 + Add settings and promo screen
 + ~~Integrate tipsi-stripe for PCI compliance payment vendor~~
-+ Begin google maps integration (In progress)
++ ~~Begin google maps integration~~
 
 Of course there is more, but these are key milestones.
 
