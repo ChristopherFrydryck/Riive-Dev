@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Sat Jul 04 16:22:44 MDT 2020
+#Sun Jul 05 19:16:32 MDT 2020
 56.path=lib/x86_64/libimagepipeline.so
 5.base=/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/transforms/mergeJniLibs/debug/0
 42.base=/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/transforms/mergeJniLibs/debug/0

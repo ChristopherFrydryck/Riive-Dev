@@ -400,7 +400,8 @@ onSelectAddress = (det) => {
             <Text style={styles.numTitle}>Add Your Address</Text>
           </View>
           
-          <View style={{flex: 0.4}}>
+          <View style={{flex: 0.4, paddingHorizontal: 16}}>
+            <Text style={styles.label}>Address</Text>
             <GooglePlacesAutocomplete
             placeholder='Your Address...'
             returnKeyType={'search'}
@@ -430,18 +431,18 @@ onSelectAddress = (det) => {
                 marginBottom: 8,
               },
               textInputContainer: {
-                width: '95%',
+                width: '100%',
                 display: 'flex',
                 alignSelf: 'center',
                 backgroundColor: "white",
-                marginTop: 5,
+                marginTop: -6,
                 borderColor: '#eee',
                 borderBottomWidth: 2,
                 borderTopWidth: 0,
               },
               textInput: {
-                paddingRight: 5,
-                paddingLeft: 5,
+                paddingRight: 0,
+                paddingLeft: 0,
                 paddingBottom: 0,
                 color: '#333',
                 fontSize: 18,
@@ -691,7 +692,16 @@ const styles = StyleSheet.create({
   dayHead:{
     fontSize: 24,
     fontFamily: 'WorkSans-Regular'
-  }
+  },
+  label: {
+    paddingTop: 5,
+    paddingBottom: 2,
+    paddingTop: 0,
+    color: '#333',
+    fontSize: 14,
+    fontWeight: '400',
+    width: 'auto'
+},
 })
   
 
