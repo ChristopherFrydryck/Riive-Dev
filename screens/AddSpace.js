@@ -89,28 +89,6 @@ class addSpace extends Component {
             spaceBio: '',
             spacePrice: null,
 
-            images: [
-              {
-                key: 'fpa09fa9DFdnm293mdsfadfis',
-                uri: 'oiw0sj9dfdsnfd8bs0g9xsuxjzixg0.jpg',
-                name: 'ImageOne'
-              },
-              {
-                key: 'af09fsdfds0fdsgf9ad0j32jkl',
-                uri: 'a0sfi0dgj03ng30in40qmsdngasfmak.jpg',
-                name: 'ImageTwo'
-              },
-              {
-                key: 'sdpfapsdniadgnoajsdogijisnd',
-                uri: '290u39jgn08ansdp8a2n0hj2392033.jpg',
-                name: 'ImageThree'
-              },
-              {
-                key: 'ddosjf928nSDF0whsdfh0a9sdijfs',
-                uri: 'oiw0sj9dfdsnfd8bs0g9xsuxjzixg0.jpg',
-                name: 'ImageFour'
-              }
-            ],
             daily: [
               {dayName: "Sunday", dayValue: 0, data: [{available: true, id: 100, start: '0000', end: '2359'}, {available: true, id: 100, start: '0000', end: '2359'}, {available: true, id: 100, start: '0000', end: '2359'}, {available: true, id: 100, start: '0000', end: '2359'}]},
               {dayName: "Monday", dayValue: 1, data: [{available: true, id: 200, start: '0000', end: '2359'}]},
@@ -269,15 +247,25 @@ class addSpace extends Component {
   }
 
   submitSpace = async () => {
-    const nameValidation = /^[A-Za-z0-9]+[A-Za-z0-9 ]+$/
+    const nameValidation = /^[A-Za-z0-9]+[A-Za-z0-9 %&,()]+[A-Za-z0-9]{1}$/
+    const bioValidation =  /^[A-Za-z0-9]{1}[A-Za-z0-9 .?!;,()$@%&]{1,299}$/;
 
     let nameValid = nameValidation.test(this.state.spaceName)
+    let bioValid = this.state.spaceBio.split("").length > 0 ? bioValidation.test(this.state.spaceBio) : true;
 
     if(nameValid && this.state.spaceName.split("").length > 0){
       console.log("Name is valid")
     }else{
       console.log("name invalid")
     }
+
+    if(bioValid){
+      console.log("bio is valid")
+    }else{
+      console.log("bio invlaid")
+    }
+
+    console.log(`${this.state.address.number} ${this.state.address.street}${this.state.address.box && this.state.address.box.split('').length > 0 ? " APT #" + this.state.address.box :""}, ${this.state.address.city}, ${this.state.address.state_abbr} ${this.state.address.zip}...${this.state.address.country}`)
   }
    
 
@@ -328,7 +316,7 @@ onSelectAddress = (det) => {
   
 
 
-  this.setState({
+  this.setState(prevState => ({
     searchedAddress: true,
     region:{
       latitude: det.geometry.location.lat,
@@ -337,10 +325,10 @@ onSelectAddress = (det) => {
       longitudeDelta: .006
     },
     address:{
+      ...prevState.address,
       full: det.formatted_address,
       number: number.long_name,
       street: street.long_name,
-      box: null,
       city: city.long_name,
       county: county.long_name,
       state: state.long_name,
@@ -348,9 +336,9 @@ onSelectAddress = (det) => {
       country: country.long_name,
       zip: zip.long_name,
     }
-  })
+  }))
 
-  // console.log(`${this.state.address.number} ${this.state.address.street}, ${this.state.address.city}, ${this.state.address.state_abbr} ${this.state.address.zip}...${this.state.address.country}`)
+  
 
   
 }
@@ -412,7 +400,7 @@ onSelectAddress = (det) => {
             <Text style={styles.numTitle}>Add Your Address</Text>
           </View>
           
-          <View style={{flex: 0.4, paddingHorizontal: 16}}>
+          <View style={{flex: 1, paddingHorizontal: 16}}>
             <Text style={styles.label}>Address</Text>
             <GooglePlacesAutocomplete
             placeholder='Your Address...'
@@ -435,6 +423,7 @@ onSelectAddress = (det) => {
             nearbyPlacesAPI={'GoogleReverseGeocoding'}
             debounce={200}
             predefinedPlacesAlwaysVisible={true}
+            enablePoweredByContainer={false}
             
             
             styles={{
@@ -469,6 +458,21 @@ onSelectAddress = (det) => {
               
             }}
             />
+            <View style={{flex: 1, flexDirection: "row"}}>
+            <Input
+            flex={0.35}
+            placeholder='107'        
+            label="APT # (optional)"
+            name="Apartment number"                 onChangeText= {(number) => this.setState(prevState => ({
+              address:{
+                ...prevState.address,
+                box: number,
+              }
+            }))}
+            value={this.state.address.box}
+            maxLength = {6}
+            keyboardType='number-pad'/>
+            </View>
           </View>
           <MapView
             provider={MapView.PROVIDER_GOOGLE}

@@ -210,24 +210,22 @@ const styles = StyleSheet.create({
     container: {
         marginTop: 5,
         width: '100%',
-        borderColor: '#eee',
+        borderColor: '#adadad',
         borderBottomWidth: 2
 
     },
     
     label: {
-        paddingTop: 5,
+        paddingTop: 4,
         paddingBottom: 2,
-        paddingTop: 0,
         color: '#333',
         fontSize: 14,
         fontWeight: '400',
         width: 'auto'
     },
     label_disabled: {
-        paddingTop: 5,
+        paddingTop: 4,
         paddingBottom: 2,
-        paddingTop: 0,
         color: Color.cosmos300,
         fontSize: 14,
         fontWeight: '400',
@@ -236,7 +234,7 @@ const styles = StyleSheet.create({
     input: {
         paddingRight: 5,
         paddingLeft: 5,
-        paddingBottom: 0,
+        paddingBottom: 2,
         color: '#333',
         fontSize: 18,
         width: '100%'
