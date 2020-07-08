@@ -253,19 +253,27 @@ class addSpace extends Component {
     let nameValid = nameValidation.test(this.state.spaceName)
     let bioValid = this.state.spaceBio.split("").length > 0 ? bioValidation.test(this.state.spaceBio) : true;
 
-    if(nameValid && this.state.spaceName.split("").length > 0){
-      console.log("Name is valid")
-    }else{
-      console.log("name invalid")
+    if(this.state.searchedAddress){
+      if(nameValid && this.state.spaceName.split("").length > 0){
+        console.log("Name is valid")
+      }else{
+        console.log("name invalid")
+      }
+  
+      if(bioValid){
+        console.log("bio is valid")
+      }else{
+        console.log("bio invlaid")
+      }
+  
+      console.log(`${this.state.address.number} ${this.state.address.street}${this.state.address.box && this.state.address.box.split('').length > 0 ? " APT #" + this.state.address.box :""}, ${this.state.address.city}, ${this.state.address.state_abbr} ${this.state.address.zip}...${this.state.address.country}`)
+
+      console.log(`The price is ${this.state.spacePrice}`)
     }
 
-    if(bioValid){
-      console.log("bio is valid")
-    }else{
-      console.log("bio invlaid")
-    }
+    
 
-    console.log(`${this.state.address.number} ${this.state.address.street}${this.state.address.box && this.state.address.box.split('').length > 0 ? " APT #" + this.state.address.box :""}, ${this.state.address.city}, ${this.state.address.state_abbr} ${this.state.address.zip}...${this.state.address.country}`)
+    
   }
    
 
@@ -337,10 +345,26 @@ onSelectAddress = (det) => {
       zip: zip.long_name,
     }
   }))
-
   
+}
 
-  
+clearAddress = () => {
+  this.GooglePlacesRef.setAddressText("")
+  this.setState(prevState => ({
+    searchedAddress: false,
+    address:{
+      ...prevState.address,
+      full: null,
+      number: null,
+      street: null,
+      city: null,
+      county: null,
+      state: null,
+      state_abbr: null,
+      country: null,
+      zip: null,
+    }
+  }))
 }
 
 
@@ -405,12 +429,24 @@ onSelectAddress = (det) => {
             <GooglePlacesAutocomplete
             placeholder='Your Address...'
             returnKeyType={'search'}
+            ref={(instance) => { this.GooglePlacesRef = instance }}
             currentLocation={false}
             minLength={2}
             autoFocus={false}
             listViewDisplayed={false}
             fetchDetails={true}
             onPress={(data, details = null) => this.onSelectAddress(details)}
+            textInputProps={{
+              clearButtonMode: 'never'
+            }}
+            renderRightButton={() => 
+            <Icon 
+              iconName="x"
+              iconColor={Colors.cosmos500}
+              iconSize={24}
+              onPress={() => this.clearAddress()}
+              style={{marginTop: 8, display: this.state.searchedAddress ? "flex" : "none"}}
+            />}
             query={{
               key: 'AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c',
               language: 'en'
@@ -440,6 +476,7 @@ onSelectAddress = (det) => {
                 borderColor: '#eee',
                 borderBottomWidth: 2,
                 borderTopWidth: 0,
+                backgroundColor: "none"
               },
               textInput: {
                 paddingRight: 0,
@@ -711,7 +748,7 @@ const styles = StyleSheet.create({
   },
   label: {
     paddingTop: 5,
-    paddingBottom: 2,
+    marginBottom: -2,
     paddingTop: 0,
     color: '#333',
     fontSize: 14,
