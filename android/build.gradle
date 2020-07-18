@@ -68,6 +68,8 @@ allprojects {
     // https://github.com/google/ExoPlayer/issues/5225#issuecomment-445739013
     maven { url 'https://google.bintray.com/exoplayer' }
     maven { url "https://jitpack.io" }
+    maven { url 'https://maven.google.com' }
+    maven { url "$rootDir/../node_modules/react-native/android" }
 
     // Want this last so that we never end up with a stale cache
     mavenLocal()

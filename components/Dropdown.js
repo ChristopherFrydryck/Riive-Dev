@@ -60,7 +60,7 @@ const Dropdown = ({ flex, error, enabled, label, selectedValue, onValueChange, d
 const styles = StyleSheet.create({
     container:{
         marginTop: 5,
-        borderColor: '#eee',
+        borderColor: '#adadad',
         borderBottomWidth: 2
     },
     label: {

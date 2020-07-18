@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, ScrollView, StatusBar, Platform, StyleSheet, SafeAreaView, Dimensions, KeyboardAvoidingView, FlatList, Switch, Modal} from 'react-native';
+import { View, ScrollView, StatusBar, Platform, StyleSheet, SafeAreaView, Dimensions, KeyboardAvoidingView, FlatList, Switch, Modal, Picker} from 'react-native';
 import Text from '../components/Txt'
 import MapInput, { PROVIDER_GOOGLE } from '../components/MapInput'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -11,6 +11,7 @@ import {Card} from 'react-native-paper';
 
 import ImageBrowser from '../features/camera-roll/ImageBrowser'
 import * as ImagePicker from 'expo-image-picker'
+import RNImagePicker from 'react-native-image-crop-picker';
 import * as Permissions from 'expo-permissions'
 
 
@@ -20,6 +21,7 @@ import Icon from '../components/Icon'
 import Button from '../components/Button'
 import Colors from '../constants/Colors'
 import Image from '../components/Image'
+import DayAvailabilityPicker from '../components/DayAvailabilityPicker'
 import { LinearGradient } from 'expo-linear-gradient'
 
 import * as firebase from 'firebase'
@@ -88,15 +90,16 @@ class addSpace extends Component {
             spaceName: '',
             spaceBio: '',
             spacePrice: null,
+            numSpaces: 1,
 
             daily: [
-              {dayName: "Sunday", dayValue: 0, data: [{available: true, id: 100, start: '0000', end: '2359'}, {available: true, id: 100, start: '0000', end: '2359'}, {available: true, id: 100, start: '0000', end: '2359'}, {available: true, id: 100, start: '0000', end: '2359'}]},
-              {dayName: "Monday", dayValue: 1, data: [{available: true, id: 200, start: '0000', end: '2359'}]},
-              {dayName: "Tuesday", dayValue: 2, data: [{available: true, id: 300, start: '0000', end: '2359'}]},
-              {dayName: "Wednesday", dayValue: 3, data: [{available: true, id: 400, start: '0000', end: '2359'}]},
-              {dayName: "Thursday", dayValue: 4, data: [{available: true, id: 500, start: '0000', end: '2359'}]},
-              {dayName: "Friday", dayValue: 5, data: [{available: true, id: 600, start: '0000', end: '2359'}]},
-              {dayName: "Saturday", dayValue: 6, data: [{available: true, id: 700, start: '0000', end: '2359'}]},
+              {dayName: "Monday", abbrName:"Mon", dayValue: 0, data: [{available: true, id: 200, start: '0000', end: '2359'}]},
+              {dayName: "Tuesday", abbrName:"Tue", dayValue: 1, data: [{available: true, id: 300, start: '0000', end: '2359'}]},
+              {dayName: "Wednesday", abbrName:"Wed", dayValue: 2, data: [{available: true, id: 400, start: '0000', end: '2359'}]},
+              {dayName: "Thursday", abbrName:"Thu", dayValue: 3, data: [{available: true, id: 500, start: '0000', end: '2359'}]},
+              {dayName: "Friday", abbrName:"Fri", dayValue: 4, data: [{available: true, id: 600, start: '0000', end: '2359'}]},
+              {dayName: "Saturday", abbrName:"Sat", dayValue: 5, data: [{available: true, id: 700, start: '0000', end: '2359'}]},
+              {dayName: "Sunday",  abbrName:"Sun",dayValue: 6, data: [{available: true, id: 100, start: '0000', end: '2359'}]},
             ]
             
         }
@@ -177,6 +180,8 @@ class addSpace extends Component {
       launchCamera = async () => {
       const permissions = [Permissions.CAMERA, Permissions.CAMERA_ROLL];
       let isGranted = false;
+
+      
         
       for(let i = 0; i < permissions.length; i++){
         let perms = await Permissions.askAsync(permissions[i]);
@@ -195,32 +200,45 @@ class addSpace extends Component {
       
 
       if(isGranted === true){
-        let result = await ImagePicker.launchCameraAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          allowsEditing: true,
-          aspect: [16, 9],
-          quality: 0.5,
-          // base64: true,
-        });
-
-        this.setState({imageUploading: true, photo: result.uri})
-    
-    
-        if (!result.cancelled) {
-            
-                  try {
-                      alert("Success!")
-                      this.setState({imageUploading: false})
-                  }
-                  catch {
-                      alert("Failed to upload image. Please try again.")
-                      this.setState({imageUploading: false})
-                  }
-          
-        }else{
-            console.log("No result.")
-            this.setState({imageUploading: false})
+       
+        try{
+          RNImagePicker.openCamera({
+            width: 300,
+            height: 400,
+            cropping: true,
+          }).then(image => {
+            console.log(image);
+          });
+        }catch(e){
+          console.log(e)
         }
+        
+        // let result = await ImagePicker.launchCameraAsync({
+        //   mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        //   allowsEditing: true,
+        //   aspect: [16, 9],
+        //   quality: 0.5,
+        //   // base64: true,
+        // });
+
+        // this.setState({imageUploading: true, photo: result.uri})
+    
+    
+        // if (!result.cancelled) {
+            
+        //           try {
+        //               alert("Success!")
+        //               this.setState({imageUploading: false})
+        //           }
+        //           catch {
+        //               alert("Failed to upload image. Please try again.")
+        //               this.setState({imageUploading: false})
+        //           }
+          
+        // }else{
+        //     console.log("No result.")
+        //     this.setState({imageUploading: false})
+        // }
       }else{
         this.getPermissionAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA)
       }
@@ -345,6 +363,9 @@ onSelectAddress = (det) => {
       zip: zip.long_name,
     }
   }))
+
+
+
   
 }
 
@@ -377,6 +398,9 @@ clearAddress = () => {
 
 
   render() {
+
+    var numSpacesArray = Array.from(Array(10), (_, i) => i + 1)
+
     return (
       <KeyboardAwareScrollView
       keyboardShouldPersistTaps="handled"
@@ -636,7 +660,7 @@ clearAddress = () => {
               <Text style={styles.numTitle}>Space Availability</Text>
             </View>
             <View style={{paddingHorizontal: 16}}>
-              
+              <DayAvailabilityPicker availability={this.state.daily}></DayAvailabilityPicker>
               {/* <SectionList 
               sections={this.state.daily}
               keyExtractor={(item, index) => index}  

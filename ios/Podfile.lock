@@ -250,9 +250,9 @@ PODS:
   - rn-fetch-blob (0.10.6):
     - React/Core
   - Stripe (14.0.1)
-  - tipsi-stripe (7.5.1):
+  - tipsi-stripe (7.5.3):
     - React
-    - Stripe (~> 14.0.0)
+    - Stripe (~> 14.0.1)
   - UMBarCodeScannerInterface (4.0.0)
   - UMCameraInterface (4.0.0)
   - UMConstantsInterface (4.0.0)
@@ -503,7 +503,7 @@ SPEC CHECKSUMS:
   React: 841af16feb8e7936838a626bfa1b8faaa07d9e6c
   rn-fetch-blob: 766f85cabd2992300dfa1be2bc9e4e258abc6f04
   Stripe: 4305b646743612854819fb5d5cf67aaeb93577c0
-  tipsi-stripe: 3e0073c7eec0b2bfd1d1d5736d843c22e3024485
+  tipsi-stripe: 41299d30e9b906413315eeb1b94607aaac9b6781
   UMBarCodeScannerInterface: 07047b4faa779e7963efa3d2c5951a71a0a807bf
   UMCameraInterface: f6a3e71ddd928617637084bfd67db2daec3b1927
   UMConstantsInterface: 20e6caaba4ddac70d0b50827d6cf35a202ac988f

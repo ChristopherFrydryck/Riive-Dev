@@ -202,7 +202,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B563863C1DB9693800A0598C /* Build configuration list for PBXProject "Riive" */;
+			buildConfigurationList = B563863C1DB9693800A0598C /* Build configuration list for PBXProject "riive" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -502,7 +502,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B563863C1DB9693800A0598C /* Build configuration list for PBXProject "Riive" */ = {
+		B563863C1DB9693800A0598C /* Build configuration list for PBXProject "riive" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B56386561DB9693800A0598C /* Debug */,

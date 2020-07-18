@@ -43,6 +43,8 @@ android {
             'appAuthRedirectScheme': 'host.exp.exponent'
     ]
 
+    vectorDrawables.useSupportLibrary = true
+
   }
   dexOptions {
     javaMaxHeapSize System.getenv("DISABLE_DEX_MAX_HEAP") ? null : "8g"
