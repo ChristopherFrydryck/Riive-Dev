@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Picker, StyleSheet, Platform} from 'react-native'
+import {View, Picker, StyleSheet, Platform, Dimensions} from 'react-native'
 import Text from './Txt'
 import ModalSelector from 'react-native-modal-selector'
 import Icon from './Icon'
@@ -10,6 +10,8 @@ import Colors from '../constants/Colors'
 const Dropdown = ({ flex, error, enabled, label, selectedValue, onValueChange, data, ...props}) => {
     const style = enabled ? [styles.dd, props.style || {}] : [styles.dd_disabled, props.style || {}]
     const allProps = Object.assign({}, props,{style:style})
+
+    const {height} = Dimensions.get('window');
 
     if(Platform.OS === 'android'){
         return(
@@ -37,6 +39,7 @@ const Dropdown = ({ flex, error, enabled, label, selectedValue, onValueChange, d
                         scrollViewAccessibilityLabel={'Scrollable options'}
                         cancelButtonAccessibilityLabel={'Cancel Button'}
                         onChange={onValueChange}
+                        overlayStyle={{paddingTop: '15%'}}
                         data={props.children}
                     >
                     <View style={{flexDirection: "row", justifyContent: "space-between"}}>

@@ -1,12 +1,18 @@
 import React, { Fragment } from 'react'
-import {View, StyleSheet, Switch, Modal, SafeAreaView, Dimensions, Animated} from 'react-native'
+import {View, StyleSheet, Switch, Modal, SafeAreaView, Dimensions, Animated, Picker, Platform} from 'react-native'
 
-import ClickableChip from './ClickableChip'
+
 import Text from './Txt'
 import Colors from '../constants/Colors'
 import Button from '../components/Button'
 import TopBar from '../components/TopBar'
 import Icon from '../components/Icon'
+import Dropdown from '../components/Dropdown'
+import ClickableChip from '../components/ClickableChip'
+import ModalSelector from 'react-native-modal-selector'
+
+import Times from '../constants/TimesAvailable'
+
 import { ScrollView } from 'react-native-gesture-handler'
 
 
@@ -18,13 +24,16 @@ export default class DayAvailabilityPicker extends React.Component{
             activeDay: new Date().getDay(),
             daily: this.props.availability,
             timeSlotModalVisible: false,
-            activeTimeFadeAnimation: new Animated.Value(0)
+            activeTimeFadeAnimation: new Animated.Value(0),
+
+         
+            
         }
 
 
     }
 
-    componentDidMount() {
+    componentDidMount () {
         this.fadeAnimation();
     }
 
@@ -46,12 +55,14 @@ export default class DayAvailabilityPicker extends React.Component{
         var activeDay = newDaily.filter(x => x.dayValue == day.dayValue);
         var activeDayBlock = activeDay[0].data.filter(x => x.id == id);
 
+
+
         activeDayBlock[0].available = !activeDayBlock[0].available;
 
         removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
 
         this.setState({daily: removedSelectedDay})
-        console.log(this.state.daily)
+        // console.log(this.state.daily)
         // console.log(activeDayBlock[0])
         // console.log(removedSelectedDay)
 
@@ -65,13 +76,13 @@ export default class DayAvailabilityPicker extends React.Component{
                     this.state.activeTimeFadeAnimation, // The animated value to drive
                     {
                         toValue: 1,           // Animate to opacity: 1 (opaque)
-                        duration: 2000,       // 2000ms
+                        duration: 800,       // 2000ms
                     }),
                     Animated.timing(          // Animate over time
                         this.state.activeTimeFadeAnimation, // The animated value to drive
                         {
                             toValue: 0,           // Animate to opacity: 1 (opaque)
-                            duration: 2000,       // 2000ms
+                            duration: 800,       // 2000ms
                         }),
             ]) 
         ).start();                  
@@ -84,16 +95,19 @@ export default class DayAvailabilityPicker extends React.Component{
     }
 
     render(){
-        // var reducedArray = this.state.daily.reduce((filtered, option) => {
-        //     if(option.dayValue == this.state.activeDay){
-        //         return filtered.concat({
-        //             dayName: option.dayName, abbrName: option.abbrName, dayValue: option.dayValue, data: option.data
-        //         })
-        //         }
-        //         return filtered
-        //     }, [])
+
         var dayToday = new Date().getDay()
         var hourToday = new Date().getHours()
+
+        
+        var arr123 = [];
+        for (var i = 0 ; i < Times.length; i++){
+           arr123.push({key: i, label: Times[i]})
+        }
+
+     
+
+        
 
 
         
@@ -108,7 +122,7 @@ export default class DayAvailabilityPicker extends React.Component{
                     onRequestClose={() => this.setState({timeSlotModalVisible: false})}
                     
                 >
-                    <SafeAreaView style={{paddingTop: 16, marginHorizontal: 16,flex: 1, alignItems: 'flex-start'}}>
+                    <SafeAreaView style={{paddingTop: 16, paddingHorizontal: 16, flex: 1, alignItems: 'center'}}>
                         <View>
                     <TopBar style={{flex: 0}}>
                         <Text style={{fontSize: 20, marginRight: 'auto', marginTop: 8}}>Edit {this.state.daily[this.state.activeDay].dayName} Availability</Text>
@@ -120,10 +134,84 @@ export default class DayAvailabilityPicker extends React.Component{
                                 style={{marginTop: 10, marginLeft: "auto", marginRight: 5}}
                             />
                         </TopBar>
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16, marginTop: 16, marginBottom: 8}}>
+                            <Text>Time</Text>
+                            <Text>Available</Text>
+                        </View>
                         <ScrollView contentContainerStyle={{flex: 1}}>
                        
-                            <Text>Hello.</Text>
+                        {this.state.daily[this.state.activeDay].data.map((option, i) => {
+                            return(
+                            <View key={option.id} style={{padding: 16, display: "flex", flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',borderColor: Colors.mist900, borderTopWidth: 1, borderBottomWidth: i == 0  && this.state.daily[this.state.activeDay].data.length > 1 ? 0 : 1, backgroundColor: 'white'}}>   
+                         
+                                <View style={{flexDirection: 'row'}}>
+                                {/* <ClickableChip
+                                        bgColor={Colors.tango300} // Colors.Tango300 with opacity of 30%
+                    
+                                        textColor={Colors.tango900}
+                                        onPress={() => console.log(option.id)}
+                                    >
+                                        <Icon
+                                            iconName="pencil"
+                                            iconLib = "MaterialCommunityIcons"
+                                            iconColor={Colors.cosmos500}
+                                            iconSize={16}
+                                   
+                                        />
+                                    </ClickableChip> */}
+
+                                    <Dropdown 
+                                        
+                                        label="Start Time"
+                                        data={arr123}
+                                    >
+                                        {Platform.OS === 'ios' ?
+                                           arr123
+                                        :   
+                                            arr123.map(x => {
+                                                return(<Picker.Item key={x.key} label={x.label} value={x.label} />)
+                                            })
+                                            
+                                        }
+
+                                    </Dropdown>
+
+                                    {/* <ModalSelector
+                                        data={arr123}
+                                        initValue="Select something yummy!"
+                                        supportedOrientations={['landscape']}
+                                        accessible={true}
+                                        scrollViewAccessibilityLabel={'Scrollable options'}
+                                        cancelButtonAccessibilityLabel={'Cancel Button'}
+                                    >
+                                        <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+                                            <Text style={{paddingBottom: 0, paddingTop: 0, color: '#333', fontSize: 16, fontWeight: '400', width: 'auto'}}>Hello</Text>
+                                            <Icon 
+                                                iconName="caretdown"
+                                                iconLib="AntDesign"
+                                                iconColor={Colors.cosmos300}
+                                                iconSize={10}
+                                                style={{alignSelf: "center", marginRight: 16}}
+                                            />
+                                        </View>   
+                                    </ModalSelector> */}
+                                   
+                                    <Text style={{fontSize: 16}}>{this.convertToCommonTime(option.start)} - {this.convertToCommonTime(option.end)}</Text>
+                                   
+                                </View>
+                                 
+                                    
+                                
+                                <Switch
+                                    onValueChange={() => this.changeAvailability(this.state.daily[this.state.activeDay], option.id)}
+                                    value={option.available}
+                                />
+                            </View> 
+                            )
+                            
+                        })}
                         </ScrollView>
+                            
                         </View>
                     </SafeAreaView>
                     
@@ -147,8 +235,6 @@ export default class DayAvailabilityPicker extends React.Component{
                        
                                 
                         {this.state.daily[this.state.activeDay].data.map((option, i) => {
-                            console.log(option)
-                        //    console.log(`${parseInt(option.start.substring(0,2))} => ${hourToday}`)
                             return(
                             <View key={option.id} style={{padding: 16, display: "flex", flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',borderColor: Colors.mist900, borderTopWidth: 1, borderBottomWidth: i == 0  && this.state.daily[this.state.activeDay].data.length > 1 ? 0 : 1, backgroundColor: 'white'}}>   
                                 <View style={{ flexDirection: "row", alignItems: 'center'}}>
