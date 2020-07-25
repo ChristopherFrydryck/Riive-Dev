@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         justifyContent: 'flex-start',
         width: Dimensions.get('window').width - 16 ,
-        height: 32,
+        height: 40,
         // position: 'absolute',
         marginTop: 10,
         

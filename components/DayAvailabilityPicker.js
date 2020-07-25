@@ -7,6 +7,7 @@ import Colors from '../constants/Colors'
 import Button from '../components/Button'
 import TopBar from '../components/TopBar'
 import Icon from '../components/Icon'
+import { ScrollView } from 'react-native-gesture-handler'
 
 
 
@@ -55,7 +56,7 @@ export default class DayAvailabilityPicker extends React.Component{
         // console.log(removedSelectedDay)
 
     }
-    
+
 
     fadeAnimation = () => {
         Animated.loop(
@@ -107,8 +108,9 @@ export default class DayAvailabilityPicker extends React.Component{
                     onRequestClose={() => this.setState({timeSlotModalVisible: false})}
                     
                 >
-                    <SafeAreaView style={{paddingTop: 10, marginHorizontal: 16, flex: 1}}>
-                    <TopBar>
+                    <SafeAreaView style={{paddingTop: 16, marginHorizontal: 16,flex: 1, alignItems: 'flex-start'}}>
+                        <View>
+                    <TopBar style={{flex: 0}}>
                         <Text style={{fontSize: 20, marginRight: 'auto', marginTop: 8}}>Edit {this.state.daily[this.state.activeDay].dayName} Availability</Text>
                             <Icon 
                                 iconName="x"
@@ -118,8 +120,13 @@ export default class DayAvailabilityPicker extends React.Component{
                                 style={{marginTop: 10, marginLeft: "auto", marginRight: 5}}
                             />
                         </TopBar>
-                        <Text>Hello</Text>
+                        <ScrollView contentContainerStyle={{flex: 1}}>
+                       
+                            <Text>Hello.</Text>
+                        </ScrollView>
+                        </View>
                     </SafeAreaView>
+                    
 
                     
                 </Modal>
