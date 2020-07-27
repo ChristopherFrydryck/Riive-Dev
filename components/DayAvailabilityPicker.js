@@ -68,6 +68,71 @@ export default class DayAvailabilityPicker extends React.Component{
 
     }
 
+    changeStartTime = (input, dayValue, id) => {
+        var timeSelected;
+
+        var newDaily = this.state.daily;
+        // Removes active day from array of all days and availability
+        var removedSelectedDay = newDaily.filter(x => x.dayValue != dayValue);
+        // Showcases only current active day and availability
+        var activeDay = newDaily.filter(x => x.dayValue == dayValue);
+        // Showcases only edited block of data within the entire active day
+        var activeDayBlock = activeDay[0].data.filter(x => x.id == id);
+
+        
+
+        if(Platform.OS === 'ios'){
+            timeSelected = input.baseValue
+            activeDayBlock[0].start = timeSelected;
+            removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
+
+            this.setState({daily: removedSelectedDay})
+            // console.log(activeDay)
+            // console.log(removedSelectedDay)
+        }else{
+            timeSelected = input
+            activeDayBlock[0].start = timeSelected;
+            removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
+
+            this.setState({daily: removedSelectedDay})
+        }
+
+        // console.log(timeSelected)
+    }
+
+    changeEndTime = (input, dayValue, id) => {
+        var timeSelected;
+
+        var newDaily = this.state.daily;
+        // Removes active day from array of all days and availability
+        var removedSelectedDay = newDaily.filter(x => x.dayValue != dayValue);
+        // Showcases only current active day and availability
+        var activeDay = newDaily.filter(x => x.dayValue == dayValue);
+        // Showcases only edited block of data within the entire active day
+        var activeDayBlock = activeDay[0].data.filter(x => x.id == id);
+
+        
+
+        if(Platform.OS === 'ios'){
+            timeSelected = input.baseValue
+            activeDayBlock[0].end = timeSelected;
+            removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
+
+            this.setState({daily: removedSelectedDay})
+      
+            // console.log(removedSelectedDay)
+        }else{
+            timeSelected = input
+            activeDayBlock[0].end = timeSelected;
+            removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
+
+            this.setState({daily: removedSelectedDay})
+        }
+
+           
+    
+    }
+
 
     fadeAnimation = () => {
         Animated.loop(
@@ -76,13 +141,13 @@ export default class DayAvailabilityPicker extends React.Component{
                     this.state.activeTimeFadeAnimation, // The animated value to drive
                     {
                         toValue: 1,           // Animate to opacity: 1 (opaque)
-                        duration: 800,       // 2000ms
+                        duration: 1000,       // 2000ms
                     }),
                     Animated.timing(          // Animate over time
                         this.state.activeTimeFadeAnimation, // The animated value to drive
                         {
                             toValue: 0,           // Animate to opacity: 1 (opaque)
-                            duration: 800,       // 2000ms
+                            duration: 1000,       // 2000ms
                         }),
             ]) 
         ).start();                  
@@ -100,10 +165,17 @@ export default class DayAvailabilityPicker extends React.Component{
         var hourToday = new Date().getHours()
 
         
-        var arr123 = [];
-        for (var i = 0 ; i < Times.length; i++){
-           arr123.push({key: i, label: Times[i]})
+        var startTimes = [];
+        for (var i = 0 ; i < Times[0].start.length; i++){
+           startTimes.push({key: i, label: Times[0].start[i], labelFormatted: this.convertToCommonTime(Times[0].start[i])})
         }
+
+   
+
+        var endTimes = []
+        for (var i = 0 ; i < Times[1].end.length; i++){
+            endTimes.push({key: i, label: Times[1].end[i], labelFormatted: this.convertToCommonTime(Times[1].end[i])})
+         }
 
      
 
@@ -142,9 +214,9 @@ export default class DayAvailabilityPicker extends React.Component{
                        
                         {this.state.daily[this.state.activeDay].data.map((option, i) => {
                             return(
-                            <View key={option.id} style={{padding: 16, display: "flex", flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',borderColor: Colors.mist900, borderTopWidth: 1, borderBottomWidth: i == 0  && this.state.daily[this.state.activeDay].data.length > 1 ? 0 : 1, backgroundColor: 'white'}}>   
+                            <View key={option.id} style={{paddingHorizontal: 16, display: "flex", flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',borderColor: Colors.mist900, borderTopWidth: 1, borderBottomWidth: i == 0  && this.state.daily[this.state.activeDay].data.length > 1 ? 0 : 1, backgroundColor: 'white'}}>   
                          
-                                <View style={{flexDirection: 'row'}}>
+                                <View style={{flexDirection: 'row', flex: 2, justifyContent: 'space-evenly'}}>
                                 {/* <ClickableChip
                                         bgColor={Colors.tango300} // Colors.Tango300 with opacity of 30%
                     
@@ -160,49 +232,66 @@ export default class DayAvailabilityPicker extends React.Component{
                                         />
                                     </ClickableChip> */}
 
+                                    
+                        
+
                                     <Dropdown 
-                                        
+                                        style={{minWidth: 145}}
                                         label="Start Time"
-                                        data={arr123}
+                                   
+                                        selectedValue={this.convertToCommonTime(option.start)}
+                                        onValueChange={(x) => this.changeStartTime(x, this.state.daily[this.state.activeDay].dayValue, option.id)}
                                     >
                                         {Platform.OS === 'ios' ?
-                                           arr123
+                                            this.state.daily[this.state.activeDay].data[i - 1] ?
+                                                startTimes.filter(x => parseInt(x.label) > parseInt(this.state.daily[this.state.activeDay].data[i - 1].end)).map(x => {
+                                                    return({key: x.key, label: x.labelFormatted, baseValue: x.label})
+                                                })
+                                            :
+                                                startTimes.map(x => {
+                                                    return({key: x.key, label: x.labelFormatted, baseValue: x.label})
+                                                })
                                         :   
-                                            arr123.map(x => {
-                                                return(<Picker.Item key={x.key} label={x.label} value={x.label} />)
-                                            })
-                                            
+                                            this.state.daily[this.state.activeDay].data[i - 1] ?
+                                                startTimes.filter(x => parseInt(x.label) > parseInt(this.state.daily[this.state.activeDay].data[i - 1].end)).map(x => {
+                                                    return(<Picker.Item key={x.key} label={x.labelFormatted} value={x.label} />)
+                                                }) 
+                                            :
+                                                startTimes.map(x => {
+                                                 return(<Picker.Item key={x.key} label={x.labelFormatted} value={x.label} />)
+                                                })  
                                         }
-
                                     </Dropdown>
 
-                                    {/* <ModalSelector
-                                        data={arr123}
-                                        initValue="Select something yummy!"
-                                        supportedOrientations={['landscape']}
-                                        accessible={true}
-                                        scrollViewAccessibilityLabel={'Scrollable options'}
-                                        cancelButtonAccessibilityLabel={'Cancel Button'}
+                                    <Dropdown 
+                                        style={{minWidth: 145}}
+                                        label="End Time"
+                                        selectedValue={this.convertToCommonTime(option.end)}
+                                        onValueChange={(x) => this.changeEndTime(x, this.state.daily[this.state.activeDay].dayValue, option.id)}
+                                     
                                     >
-                                        <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-                                            <Text style={{paddingBottom: 0, paddingTop: 0, color: '#333', fontSize: 16, fontWeight: '400', width: 'auto'}}>Hello</Text>
-                                            <Icon 
-                                                iconName="caretdown"
-                                                iconLib="AntDesign"
-                                                iconColor={Colors.cosmos300}
-                                                iconSize={10}
-                                                style={{alignSelf: "center", marginRight: 16}}
-                                            />
-                                        </View>   
-                                    </ModalSelector> */}
+                                        {Platform.OS === 'ios' ?
+                                           endTimes.filter(x => parseInt(x.label) > parseInt(option.start)).map(x => {
+                                               return({key: x.key, label: x.labelFormatted, baseValue: x.label})
+                                           })
+                                        :   
+                                            endTimes.filter(x => parseInt(x.label) > parseInt(option.start)).map(x => {
+                                                return(<Picker.Item key={x.key} label={x.labelFormatted} value={x.label} />)
+                                            })  
+                                        }
+                                    </Dropdown>
+                       
+
+                               
                                    
-                                    <Text style={{fontSize: 16}}>{this.convertToCommonTime(option.start)} - {this.convertToCommonTime(option.end)}</Text>
+                                    {/* <Text style={{fontSize: 16}}>{this.convertToCommonTime(option.start)} - {this.convertToCommonTime(option.end)}</Text> */}
                                    
                                 </View>
                                  
                                     
                                 
                                 <Switch
+                        
                                     onValueChange={() => this.changeAvailability(this.state.daily[this.state.activeDay], option.id)}
                                     value={option.available}
                                 />
