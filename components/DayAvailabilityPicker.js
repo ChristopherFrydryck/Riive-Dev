@@ -87,7 +87,9 @@ export default class DayAvailabilityPicker extends React.Component{
             removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
 
             this.setState({daily: removedSelectedDay})
-            // console.log(activeDay)
+
+            
+        
             // console.log(removedSelectedDay)
         }else{
             timeSelected = input
@@ -95,6 +97,19 @@ export default class DayAvailabilityPicker extends React.Component{
             removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
 
             this.setState({daily: removedSelectedDay})
+        }
+
+
+        // Error checking schedule
+        if(this.state.daily[this.state.activeDay].data.length == 1){
+            if(this.state.daily[this.state.activeDay].data[0].start == "0000" && this.state.daily[this.state.activeDay].data[0].end == "2359"){
+                console.log("Success")
+            }else{
+                console.log("error...")
+            }
+        }else{
+            let sortedDaily = this.state.daily[this.state.activeDay].data.sort((a, b) => parseInt(a.start) - parseInt(b.start))
+            console.log(sortedDaily)
         }
 
         // console.log(timeSelected)
@@ -271,13 +286,23 @@ export default class DayAvailabilityPicker extends React.Component{
                                      
                                     >
                                         {Platform.OS === 'ios' ?
+                                            this.state.daily[this.state.activeDay].data[i + 1] ?
+                                            endTimes.filter(x => parseInt(x.label) > parseInt(option.start) && parseInt(this.state.daily[this.state.activeDay].data[i + 1].start) > parseInt(x.label)).map(x => {
+                                                return({key: x.key, label: x.labelFormatted, baseValue: x.label})
+                                            })
+                                            :
                                            endTimes.filter(x => parseInt(x.label) > parseInt(option.start)).map(x => {
                                                return({key: x.key, label: x.labelFormatted, baseValue: x.label})
                                            })
-                                        :   
-                                            endTimes.filter(x => parseInt(x.label) > parseInt(option.start)).map(x => {
+                                        :  
+                                            this.state.daily[this.state.activeDay].data[i + 1] ? 
+                                            endTimes.filter(x => parseInt(x.label) > parseInt(option.start) && parseInt(this.state.daily[this.state.activeDay].data[i + 1].start) > parseInt(x.label)).map(x => {
                                                 return(<Picker.Item key={x.key} label={x.labelFormatted} value={x.label} />)
                                             })  
+                                            :
+                                            endTimes.filter(x => parseInt(x.label) > parseInt(option.start)).map(x => {
+                                                return(<Picker.Item key={x.key} label={x.labelFormatted} value={x.label} />)
+                                            }) 
                                         }
                                     </Dropdown>
                        
