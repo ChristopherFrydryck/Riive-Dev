@@ -22,9 +22,21 @@ export default class DayAvailabilityPicker extends React.Component{
         super(props)
         this.state = {
             activeDay: new Date().getDay(),
-            daily: this.props.availability,
+            
+            dailyStaging: this.props.availability,
+            timesValid: true,
             timeSlotModalVisible: false,
             activeTimeFadeAnimation: new Animated.Value(0),
+
+            daily: [
+                {dayName: "Sunday",  abbrName:"Sun",dayValue: 0, data: [{available: true, id: 100, start: '0000', end: '2359'}]},
+                {dayName: "Monday", abbrName:"Mon", dayValue: 1, data: [{available: true, id: 200, start: '0000', end: '2359'}]},
+                {dayName: "Tuesday", abbrName:"Tue", dayValue: 2, data: [{available: true, id: 300, start: '0000', end: '2359'}]},
+                {dayName: "Wednesday", abbrName:"Wed", dayValue: 3, data: [{available: true, id: 400, start: '0000', end: '2359'}]},
+                {dayName: "Thursday", abbrName:"Thu", dayValue: 4, data: [{available: true, id: 500, start: '0000', end: '2359'}]},
+                {dayName: "Friday", abbrName:"Fri", dayValue: 5, data: [{available: true, id: 600, start: '0000', end: '2359'}]},
+                {dayName: "Saturday", abbrName:"Sat", dayValue: 6, data: [{available: true, id: 700, start: '0000', end: '2359'}]},
+              ]
 
          
             
@@ -50,7 +62,7 @@ export default class DayAvailabilityPicker extends React.Component{
 
     changeAvailability = (day, id) => {
 
-        var newDaily = this.state.daily;
+        var newDaily = this.state.dailyStaging;
         var removedSelectedDay = newDaily.filter(x => x.dayValue != day.dayValue);
         var activeDay = newDaily.filter(x => x.dayValue == day.dayValue);
         var activeDayBlock = activeDay[0].data.filter(x => x.id == id);
@@ -61,8 +73,11 @@ export default class DayAvailabilityPicker extends React.Component{
 
         removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
 
-        this.setState({daily: removedSelectedDay})
-        // console.log(this.state.daily)
+        this.setState({dailyStaging: removedSelectedDay})
+
+        
+
+      
         // console.log(activeDayBlock[0])
         // console.log(removedSelectedDay)
 
@@ -71,13 +86,15 @@ export default class DayAvailabilityPicker extends React.Component{
     changeStartTime = (input, dayValue, id) => {
         var timeSelected;
 
-        var newDaily = this.state.daily;
+        var newDaily = this.state.dailyStaging;
         // Removes active day from array of all days and availability
         var removedSelectedDay = newDaily.filter(x => x.dayValue != dayValue);
         // Showcases only current active day and availability
         var activeDay = newDaily.filter(x => x.dayValue == dayValue);
         // Showcases only edited block of data within the entire active day
         var activeDayBlock = activeDay[0].data.filter(x => x.id == id);
+
+       
 
         
 
@@ -86,7 +103,7 @@ export default class DayAvailabilityPicker extends React.Component{
             activeDayBlock[0].start = timeSelected;
             removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
 
-            this.setState({daily: removedSelectedDay})
+            this.setState({dailyStaging: removedSelectedDay})
 
             
         
@@ -96,21 +113,44 @@ export default class DayAvailabilityPicker extends React.Component{
             activeDayBlock[0].start = timeSelected;
             removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
 
-            this.setState({daily: removedSelectedDay})
+            this.setState({dailyStaging: removedSelectedDay})
         }
 
 
         // Error checking schedule
-        if(this.state.daily[this.state.activeDay].data.length == 1){
-            if(this.state.daily[this.state.activeDay].data[0].start == "0000" && this.state.daily[this.state.activeDay].data[0].end == "2359"){
-                console.log("Success")
+        if(this.state.dailyStaging[this.state.activeDay].data.length == 1){
+            if(this.state.dailyStaging[this.state.activeDay].data[0].start == "0000" && this.state.dailyStaging[this.state.activeDay].data[0].end == "2359"){
+                this.setState({timesValid: true})
+              
             }else{
-                console.log("error...")
+                this.setState({timesValid: false})
+           
             }
         }else{
-            let sortedDaily = this.state.daily[this.state.activeDay].data.sort((a, b) => parseInt(a.start) - parseInt(b.start))
-            console.log(sortedDaily)
+            let sortedDaily = this.state.dailyStaging[this.state.activeDay].data.sort((a, b) => parseInt(a.start) - parseInt(b.start))
+            // console.log(sortedDaily)
+            if(sortedDaily[0].start == "0000" && sortedDaily[sortedDaily.length - 1].end == "2359"){
+                // console.log("Success")
+                for(let i = 0; i < sortedDaily.length; i++){
+                    if(sortedDaily[i+1]){
+                        if(parseInt(sortedDaily[i+1].start) - parseInt(sortedDaily[i].end) == 41 || parseInt(sortedDaily[i+1].start) - parseInt(sortedDaily[i].end) == 1){
+                            this.setState({timesValid: true})
+                            continue;
+                        }else{
+                            this.setState({timesValid: false})
+                            break;
+                        }
+                    }
+                }
+            }else{
+                this.setState({timesValid: false})
+                console.log("Error")
+            }
+            if(this.state.timesValid){
+                console.log("success!")
+            }
         }
+        
 
         // console.log(timeSelected)
     }
@@ -118,7 +158,7 @@ export default class DayAvailabilityPicker extends React.Component{
     changeEndTime = (input, dayValue, id) => {
         var timeSelected;
 
-        var newDaily = this.state.daily;
+        var newDaily = this.state.dailyStaging;
         // Removes active day from array of all days and availability
         var removedSelectedDay = newDaily.filter(x => x.dayValue != dayValue);
         // Showcases only current active day and availability
@@ -133,7 +173,7 @@ export default class DayAvailabilityPicker extends React.Component{
             activeDayBlock[0].end = timeSelected;
             removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
 
-            this.setState({daily: removedSelectedDay})
+            this.setState({dailyStaging: removedSelectedDay})
       
             // console.log(removedSelectedDay)
         }else{
@@ -141,7 +181,7 @@ export default class DayAvailabilityPicker extends React.Component{
             activeDayBlock[0].end = timeSelected;
             removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
 
-            this.setState({daily: removedSelectedDay})
+            this.setState({dailyStaging: removedSelectedDay})
         }
 
            
@@ -174,6 +214,10 @@ export default class DayAvailabilityPicker extends React.Component{
         this.fadeAnimation();
     }
 
+    closeModal = () => {
+       this.setState((prevState) => ({timeSlotModalVisible: false}))
+    }
+
     render(){
 
         var dayToday = new Date().getDay()
@@ -194,180 +238,168 @@ export default class DayAvailabilityPicker extends React.Component{
 
      
 
-        
 
 
         
           
 
         return(
+            
             <Fragment>
                 <Modal
                     animationType="slide"
                     transparent={false}
                     visible={this.state.timeSlotModalVisible}
-                    onRequestClose={() => this.setState({timeSlotModalVisible: false})}
+                    onRequestClose={() => this.closeModal()}
                     
                 >
                     <SafeAreaView style={{paddingTop: 16, paddingHorizontal: 16, flex: 1, alignItems: 'center'}}>
-                        <View>
-                    <TopBar style={{flex: 0}}>
-                        <Text style={{fontSize: 20, marginRight: 'auto', marginTop: 8}}>Edit {this.state.daily[this.state.activeDay].dayName} Availability</Text>
-                            <Icon 
-                                iconName="x"
-                                iconColor={Colors.cosmos500}
-                                iconSize={28}
-                                onPress={() => this.setState({timeSlotModalVisible: false})}
-                                style={{marginTop: 10, marginLeft: "auto", marginRight: 5}}
-                            />
-                        </TopBar>
-                        <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16, marginTop: 16, marginBottom: 8}}>
-                            <Text>Time</Text>
-                            <Text>Available</Text>
-                        </View>
-                        <ScrollView contentContainerStyle={{flex: 1}}>
-                       
-                        {this.state.daily[this.state.activeDay].data.map((option, i) => {
-                            return(
-                            <View key={option.id} style={{paddingHorizontal: 16, display: "flex", flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',borderColor: Colors.mist900, borderTopWidth: 1, borderBottomWidth: i == 0  && this.state.daily[this.state.activeDay].data.length > 1 ? 0 : 1, backgroundColor: 'white'}}>   
-                         
-                                <View style={{flexDirection: 'row', flex: 2, justifyContent: 'space-evenly'}}>
-                                {/* <ClickableChip
-                                        bgColor={Colors.tango300} // Colors.Tango300 with opacity of 30%
-                    
-                                        textColor={Colors.tango900}
-                                        onPress={() => console.log(option.id)}
-                                    >
-                                        <Icon
-                                            iconName="pencil"
-                                            iconLib = "MaterialCommunityIcons"
-                                            iconColor={Colors.cosmos500}
-                                            iconSize={16}
-                                   
-                                        />
-                                    </ClickableChip> */}
-
-                                    
+                    <View>
+                        <TopBar style={{flex: 0}}>
+                            <Text style={{fontSize: 20, marginRight: 'auto', marginTop: 8}}>Edit {this.state.dailyStaging[this.state.activeDay].dayName} Availability</Text>
+                                <Icon 
+                                    iconName="x"
+                                    iconColor={Colors.cosmos500}
+                                    iconSize={28}
+                                    onPress={() => this.closeModal()}
+                                    style={{marginTop: 10, marginLeft: "auto", marginRight: 5}}
+                                />
+                            </TopBar>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16, marginTop: 16, marginBottom: 8}}>
+                                <Text>Time</Text>
+                                <Text>Available</Text>
+                            </View>
+                            <ScrollView contentContainerStyle={{flex: 1}}>
                         
+                            {this.state.dailyStaging[this.state.activeDay].data.map((option, i) => {
+                 
+                                return(
+                                <View key={option.id} style={{paddingHorizontal: 16, display: "flex", flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',borderColor: Colors.mist900, borderTopWidth: 1, borderBottomWidth: i == 0  && this.state.dailyStaging[this.state.activeDay].data.length > 1 ? 0 : 1, backgroundColor: 'white'}}>   
+                            
+                                    <View style={{flexDirection: 'row', flex: 2, justifyContent: 'space-evenly'}}>
 
-                                    <Dropdown 
-                                        style={{minWidth: 145}}
-                                        label="Start Time"
-                                   
-                                        selectedValue={this.convertToCommonTime(option.start)}
-                                        onValueChange={(x) => this.changeStartTime(x, this.state.daily[this.state.activeDay].dayValue, option.id)}
-                                    >
-                                        {Platform.OS === 'ios' ?
-                                            this.state.daily[this.state.activeDay].data[i - 1] ?
-                                                startTimes.filter(x => parseInt(x.label) > parseInt(this.state.daily[this.state.activeDay].data[i - 1].end)).map(x => {
-                                                    return({key: x.key, label: x.labelFormatted, baseValue: x.label})
-                                                })
-                                            :
-                                                startTimes.map(x => {
-                                                    return({key: x.key, label: x.labelFormatted, baseValue: x.label})
-                                                })
-                                        :   
-                                            this.state.daily[this.state.activeDay].data[i - 1] ?
-                                                startTimes.filter(x => parseInt(x.label) > parseInt(this.state.daily[this.state.activeDay].data[i - 1].end)).map(x => {
+                                        <Dropdown 
+                                            style={{minWidth: 145}}
+                                            label="Start Time"
+                                    
+                                            selectedValue={this.convertToCommonTime(option.start)}
+                                            onValueChange={(x) => this.changeStartTime(x, this.state.dailyStaging[this.state.activeDay].dayValue, option.id)}
+                                        >
+                                            {Platform.OS === 'ios' ?
+                                                this.state.dailyStaging[this.state.activeDay].data[i - 1] ?
+                                                    startTimes.filter(x => parseInt(x.label) > parseInt(this.state.dailyStaging[this.state.activeDay].data[i - 1].end)).map(x => {
+                                                        return({key: x.key, label: x.labelFormatted, baseValue: x.label})
+                                                    })
+                                                :
+                                                    startTimes.filter(x => parseInt(x.label) < parseInt(this.state.dailyStaging[this.state.activeDay].data[i].end)).map(x => {
+                                                        return({key: x.key, label: x.labelFormatted, baseValue: x.label})
+                                                    })
+                                            :   
+                                                this.state.dailyStaging[this.state.activeDay].data[i - 1] ?
+                                                    startTimes.filter(x => parseInt(x.label) > parseInt(this.state.dailyStaging[this.state.activeDay].data[i - 1].end)).map(x => {
+                                                        return(<Picker.Item key={x.key} label={x.labelFormatted} value={x.label} />)
+                                                    }) 
+                                                :
+                                                    startTimes.filter(x => parseInt(x.label) < parseInt(this.state.dailyStaging[this.state.activeDay].data[i].end)).map(x => {
                                                     return(<Picker.Item key={x.key} label={x.labelFormatted} value={x.label} />)
-                                                }) 
-                                            :
-                                                startTimes.map(x => {
-                                                 return(<Picker.Item key={x.key} label={x.labelFormatted} value={x.label} />)
-                                                })  
-                                        }
-                                    </Dropdown>
+                                                    })  
+                                            }
+                                        </Dropdown>
 
-                                    <Dropdown 
-                                        style={{minWidth: 145}}
-                                        label="End Time"
-                                        selectedValue={this.convertToCommonTime(option.end)}
-                                        onValueChange={(x) => this.changeEndTime(x, this.state.daily[this.state.activeDay].dayValue, option.id)}
-                                     
-                                    >
-                                        {Platform.OS === 'ios' ?
-                                            this.state.daily[this.state.activeDay].data[i + 1] ?
-                                            endTimes.filter(x => parseInt(x.label) > parseInt(option.start) && parseInt(this.state.daily[this.state.activeDay].data[i + 1].start) > parseInt(x.label)).map(x => {
+                                        <Dropdown 
+                                            style={{minWidth: 145}}
+                                            label="End Time"
+                                            selectedValue={this.convertToCommonTime(option.end)}
+                                            onValueChange={(x) => this.changeEndTime(x, this.state.dailyStaging[this.state.activeDay].dayValue, option.id)}
+                                        
+                                        >
+                                            {Platform.OS === 'ios' ?
+                                                this.state.dailyStaging[this.state.activeDay].data[i + 1] ?
+                                                endTimes.filter(x => parseInt(x.label) > parseInt(option.start) && parseInt(this.state.dailyStaging[this.state.activeDay].data[i + 1].start) > parseInt(x.label)).map(x => {
+                                                    return({key: x.key, label: x.labelFormatted, baseValue: x.label})
+                                                })
+                                                :
+                                            endTimes.filter(x => parseInt(x.label) > parseInt(option.start)).map(x => {
                                                 return({key: x.key, label: x.labelFormatted, baseValue: x.label})
                                             })
-                                            :
-                                           endTimes.filter(x => parseInt(x.label) > parseInt(option.start)).map(x => {
-                                               return({key: x.key, label: x.labelFormatted, baseValue: x.label})
-                                           })
-                                        :  
-                                            this.state.daily[this.state.activeDay].data[i + 1] ? 
-                                            endTimes.filter(x => parseInt(x.label) > parseInt(option.start) && parseInt(this.state.daily[this.state.activeDay].data[i + 1].start) > parseInt(x.label)).map(x => {
-                                                return(<Picker.Item key={x.key} label={x.labelFormatted} value={x.label} />)
-                                            })  
-                                            :
-                                            endTimes.filter(x => parseInt(x.label) > parseInt(option.start)).map(x => {
-                                                return(<Picker.Item key={x.key} label={x.labelFormatted} value={x.label} />)
-                                            }) 
-                                        }
-                                    </Dropdown>
-                       
+                                            :  
+                                                this.state.dailyStaging[this.state.activeDay].data[i + 1] ? 
+                                                endTimes.filter(x => parseInt(x.label) > parseInt(option.start) && parseInt(this.state.dailyStaging[this.state.activeDay].data[i + 1].start) > parseInt(x.label)).map(x => {
+                                                    return(<Picker.Item key={x.key} label={x.labelFormatted} value={x.label} />)
+                                                })  
+                                                :
+                                                endTimes.filter(x => parseInt(x.label) > parseInt(option.start)).map(x => {
+                                                    return(<Picker.Item key={x.key} label={x.labelFormatted} value={x.label} />)
+                                                }) 
+                                            }
+                                        </Dropdown>
+                        
 
-                               
-                                   
-                                    {/* <Text style={{fontSize: 16}}>{this.convertToCommonTime(option.start)} - {this.convertToCommonTime(option.end)}</Text> */}
-                                   
-                                </View>
-                                 
+                                
                                     
-                                
-                                <Switch
-                        
-                                    onValueChange={() => this.changeAvailability(this.state.daily[this.state.activeDay], option.id)}
-                                    value={option.available}
-                                />
-                            </View> 
-                            )
-                            
-                        })}
-                        </ScrollView>
-                            
-                        </View>
-                    </SafeAreaView>
-                    
-
-                    
-                </Modal>
-                <View style={styles.daysRow}>
-                    {this.props.availability.map((x) => (
-                        
-                        <ClickableChip key={x.dayValue} 
-                        bgColor={x.dayValue == this.state.activeDay ? Colors.apollo900 : "#FFFFFF"} 
-                        textColor={x.dayValue == this.state.activeDay ? "#FFFFFF" : "#000000"}
-                        onPress={() => this.changeDay(x.dayValue)} 
-                        style={{flex: 1}}>
-                            {x.abbrName}
-                        </ClickableChip>
-                    ))}
-                </View>
-                <View style={{paddingVertical: 16}}>
-                   
-                       
-                                
-                        {this.state.daily[this.state.activeDay].data.map((option, i) => {
-                            return(
-                            <View key={option.id} style={{padding: 16, display: "flex", flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',borderColor: Colors.mist900, borderTopWidth: 1, borderBottomWidth: i == 0  && this.state.daily[this.state.activeDay].data.length > 1 ? 0 : 1, backgroundColor: 'white'}}>   
-                                <View style={{ flexDirection: "row", alignItems: 'center'}}>
-                                    {dayToday == this.state.daily[this.state.activeDay].dayValue &&  parseInt(option.start.substring(0,2)) <= hourToday && parseInt(option.end.substring(0,2)) >= hourToday?
-                                    <Animated.View style={{opacity: this.state.activeTimeFadeAnimation, width: 8, height: 8, backgroundColor: Colors.fortune500, borderRadius: Dimensions.get("window").width/2, marginRight: 8}}></Animated.View>
-                                    : null }
-                                    <Text style={{fontSize: 16}}>{this.convertToCommonTime(option.start)} - {this.convertToCommonTime(option.end)}</Text>
+                                        {/* <Text style={{fontSize: 16}}>{this.convertToCommonTime(option.start)} - {this.convertToCommonTime(option.end)}</Text> */}
+                                    
                                     </View>
-                                    <Text style={{color: option.available ? Colors.fortune900 : "#000000"}}>{option.available ? "Available" : "Unavailable"}</Text>
+                                    
+                                        
+                                    
+                                    <Switch
+                            
+                                        onValueChange={() => this.changeAvailability(this.state.dailyStaging[this.state.activeDay], option.id)}
+                                        value={option.available}
+                                    />
+                                </View> 
+                                )
                                 
-                                {/* <Switch
-                                    onValueChange={() => this.changeAvailability(this.state.daily[this.state.activeDay - 1], option.id)}
-                                    value={option.available}
-                                /> */}
-                            </View> 
+                            })}
+                              <Button style={this.state.timesValid ? {backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.tango900, marginBottom: 32, alignSelf: 'flex-end'} : {backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.mist900}} textStyle={ this.state.timesValid ? {color: Colors.tango900} : {color: Colors.mist900}} onPress={() => console.log("Hello")} disabled={!this.state.timesValid}>Save Changes on {this.state.dailyStaging[this.state.activeDay].dayName}</Button>
+                            </ScrollView>
+                        
+                            </View>
+                          
+                            
+                        </SafeAreaView>
+                        
+
+                        
+                    </Modal>
+                    <View style={styles.daysRow}>
+                        {this.props.availability.map((x) => (
+                            
+                            <ClickableChip key={x.dayValue} 
+                            bgColor={x.dayValue == this.state.activeDay ? Colors.apollo900 : "#FFFFFF"} 
+                            textColor={x.dayValue == this.state.activeDay ? "#FFFFFF" : "#000000"}
+                            onPress={() => this.changeDay(x.dayValue)} 
+                            style={{flex: 1}}>
+                                {x.abbrName}
+                            </ClickableChip>
+                        ))}
+                    </View>
+                    <View style={{paddingVertical: 16}}>
+                    
+                        
+                                    
+                            {this.state.daily[this.state.activeDay].data.map((option, i) => {
+                                return(
+                                <View key={option.id} style={{padding: 16, display: "flex", flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',borderColor: Colors.mist900, borderTopWidth: 1, borderBottomWidth: i == 0  && this.state.daily[this.state.activeDay].data.length > 1 ? 0 : 1, backgroundColor: 'white'}}>   
+                                    <View style={{ flexDirection: "row", alignItems: 'center'}}>
+                                        {dayToday == this.state.daily[this.state.activeDay].dayValue &&  parseInt(option.start.substring(0,2)) <= hourToday && parseInt(option.end.substring(0,2)) >= hourToday?
+                                        <Animated.View style={{opacity: this.state.activeTimeFadeAnimation, width: 8, height: 8, backgroundColor: Colors.fortune500, borderRadius: Dimensions.get("window").width/2, marginRight: 8}}></Animated.View>
+                                        : null }
+                                        <Text style={{fontSize: 16}}>{this.convertToCommonTime(option.start)} - {this.convertToCommonTime(option.end)}</Text>
+                                        </View>
+                                        <Text style={{color: option.available ? Colors.fortune900 : "#000000"}}>{option.available ? "Available" : "Unavailable"}</Text>
+                                    
+                                    {/* <Switch
+                                        onValueChange={() => this.changeAvailability(this.state.daily[this.state.activeDay - 1], option.id)}
+                                        value={option.available}
+                                    /> */}
+                                </View> 
                             )
                             
                         })}
                         <Button style={{backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.tango900}} textStyle={{color: Colors.tango900}} onPress={() => this.setState({timeSlotModalVisible: true})}>Edit Time Slot{this.state.daily[this.state.activeDay].data.length > 1 ? "s" : null}</Button>
+
                             
                      
                      
