@@ -24,21 +24,11 @@ export default class DayAvailabilityPicker extends React.Component{
             activeDay: new Date().getDay(),
             
             dailyStaging: this.props.availability,
-            timesValid: true,
+      
+            timesValid: [true, true, true, true, true, true, true],
             timeSlotModalVisible: false,
             activeTimeFadeAnimation: new Animated.Value(0),
-
-            daily: [
-                {dayName: "Sunday",  abbrName:"Sun",dayValue: 0, data: [{available: true, id: 100, start: '0000', end: '2359'}]},
-                {dayName: "Monday", abbrName:"Mon", dayValue: 1, data: [{available: true, id: 200, start: '0000', end: '2359'}]},
-                {dayName: "Tuesday", abbrName:"Tue", dayValue: 2, data: [{available: true, id: 300, start: '0000', end: '2359'}]},
-                {dayName: "Wednesday", abbrName:"Wed", dayValue: 3, data: [{available: true, id: 400, start: '0000', end: '2359'}]},
-                {dayName: "Thursday", abbrName:"Thu", dayValue: 4, data: [{available: true, id: 500, start: '0000', end: '2359'}]},
-                {dayName: "Friday", abbrName:"Fri", dayValue: 5, data: [{available: true, id: 600, start: '0000', end: '2359'}]},
-                {dayName: "Saturday", abbrName:"Sat", dayValue: 6, data: [{available: true, id: 700, start: '0000', end: '2359'}]},
-              ]
-
-         
+            daily: JSON.parse(JSON.stringify(this.props.availability)),
             
         }
 
@@ -73,7 +63,8 @@ export default class DayAvailabilityPicker extends React.Component{
 
         removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
 
-        this.setState({dailyStaging: removedSelectedDay})
+        this.setState(state => ({dailyStaging: removedSelectedDay}))
+        
 
         
 
@@ -81,6 +72,50 @@ export default class DayAvailabilityPicker extends React.Component{
         // console.log(activeDayBlock[0])
         // console.log(removedSelectedDay)
 
+    }
+
+    testValidAvailability = () => {
+        // Error checking schedule
+        if(this.state.dailyStaging[this.state.activeDay].data.length == 1){
+            if(this.state.dailyStaging[this.state.activeDay].data[0].start == "0000" && this.state.dailyStaging[this.state.activeDay].data[0].end == "2359"){
+                let timesValidValue = [...this.state.timesValid]
+                timesValidValue[this.state.activeDay] = true
+                this.setState({timesValid: timesValidValue})
+              
+            }else{
+                let timesValidValue = [...this.state.timesValid]
+                timesValidValue[this.state.activeDay] = false
+                this.setState({timesValid: timesValidValue})
+           
+            }
+        }else{
+            let sortedDaily = this.state.dailyStaging[this.state.activeDay].data.sort((a, b) => parseInt(a.start) - parseInt(b.start))
+            // console.log(sortedDaily)
+            if(sortedDaily[0].start == "0000" && sortedDaily[sortedDaily.length - 1].end == "2359"){
+                // console.log("Success")
+                for(let i = 0; i < sortedDaily.length; i++){
+                    if(sortedDaily[i+1]){
+                        if(parseInt(sortedDaily[i+1].start) - parseInt(sortedDaily[i].end) == 41 || parseInt(sortedDaily[i+1].start) - parseInt(sortedDaily[i].end) == 1){
+                            let timesValidValue = [...this.state.timesValid]
+                            timesValidValue[this.state.activeDay] = true
+                            this.setState({timesValid: timesValidValue})
+                            continue;
+                        }else{
+                            let timesValidValue = [...this.state.timesValid]
+                            timesValidValue[this.state.activeDay] = false
+                            this.setState({timesValid: timesValidValue})
+                            break;
+                        }
+                    }
+                }
+            }else{
+                let timesValidValue = [...this.state.timesValid]
+                timesValidValue[this.state.activeDay] = false
+                this.setState({timesValid: timesValidValue})
+
+            }
+           
+        }
     }
 
     changeStartTime = (input, dayValue, id) => {
@@ -118,38 +153,7 @@ export default class DayAvailabilityPicker extends React.Component{
 
 
         // Error checking schedule
-        if(this.state.dailyStaging[this.state.activeDay].data.length == 1){
-            if(this.state.dailyStaging[this.state.activeDay].data[0].start == "0000" && this.state.dailyStaging[this.state.activeDay].data[0].end == "2359"){
-                this.setState({timesValid: true})
-              
-            }else{
-                this.setState({timesValid: false})
-           
-            }
-        }else{
-            let sortedDaily = this.state.dailyStaging[this.state.activeDay].data.sort((a, b) => parseInt(a.start) - parseInt(b.start))
-            // console.log(sortedDaily)
-            if(sortedDaily[0].start == "0000" && sortedDaily[sortedDaily.length - 1].end == "2359"){
-                // console.log("Success")
-                for(let i = 0; i < sortedDaily.length; i++){
-                    if(sortedDaily[i+1]){
-                        if(parseInt(sortedDaily[i+1].start) - parseInt(sortedDaily[i].end) == 41 || parseInt(sortedDaily[i+1].start) - parseInt(sortedDaily[i].end) == 1){
-                            this.setState({timesValid: true})
-                            continue;
-                        }else{
-                            this.setState({timesValid: false})
-                            break;
-                        }
-                    }
-                }
-            }else{
-                this.setState({timesValid: false})
-                console.log("Error")
-            }
-            if(this.state.timesValid){
-                console.log("success!")
-            }
-        }
+       this.testValidAvailability()
         
 
         // console.log(timeSelected)
@@ -184,9 +188,14 @@ export default class DayAvailabilityPicker extends React.Component{
             this.setState({dailyStaging: removedSelectedDay})
         }
 
+        // Error checking schedule
+        this.testValidAvailability()
+
            
     
     }
+
+
 
 
     fadeAnimation = () => {
@@ -214,8 +223,26 @@ export default class DayAvailabilityPicker extends React.Component{
         this.fadeAnimation();
     }
 
-    closeModal = () => {
-       this.setState((prevState) => ({timeSlotModalVisible: false}))
+    openModal = () => {
+        
+        this.setState((prevState, state) => ({timeSlotModalVisible: true}))
+        this.testValidAvailability()
+
+
+    }
+
+    closeModal = async () => {
+      
+      await  this.setState((prevState) => ({timeSlotModalVisible: false}))
+
+
+    }
+
+    updateAvailability = async () => {
+        const val = JSON.stringify(this.state.dailyStaging)
+        await this.setState((prevState) => ({daily: JSON.parse(val), timeSlotModalVisible: false}))
+      
+        
     }
 
     render(){
@@ -251,7 +278,6 @@ export default class DayAvailabilityPicker extends React.Component{
                     transparent={false}
                     visible={this.state.timeSlotModalVisible}
                     onRequestClose={() => this.closeModal()}
-                    
                 >
                     <SafeAreaView style={{paddingTop: 16, paddingHorizontal: 16, flex: 1, alignItems: 'center'}}>
                     <View>
@@ -352,7 +378,7 @@ export default class DayAvailabilityPicker extends React.Component{
                                 )
                                 
                             })}
-                              <Button style={this.state.timesValid ? {backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.tango900, marginBottom: 32, alignSelf: 'flex-end'} : {backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.mist900}} textStyle={ this.state.timesValid ? {color: Colors.tango900} : {color: Colors.mist900}} onPress={() => console.log("Hello")} disabled={!this.state.timesValid}>Save Changes on {this.state.dailyStaging[this.state.activeDay].dayName}</Button>
+                              <Button style={this.state.timesValid[this.state.activeDay] ? {backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.tango900, marginBottom: 32, alignSelf: 'flex-end'} : {backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.mist900}} textStyle={ this.state.timesValid[this.state.activeDay] ? {color: Colors.tango900} : {color: Colors.mist900}} onPress={() => this.updateAvailability()} disabled={!this.state.timesValid[this.state.activeDay]}>Save Changes on {this.state.dailyStaging[this.state.activeDay].dayName}</Button>
                             </ScrollView>
                         
                             </View>
@@ -398,7 +424,7 @@ export default class DayAvailabilityPicker extends React.Component{
                             )
                             
                         })}
-                        <Button style={{backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.tango900}} textStyle={{color: Colors.tango900}} onPress={() => this.setState({timeSlotModalVisible: true})}>Edit Time Slot{this.state.daily[this.state.activeDay].data.length > 1 ? "s" : null}</Button>
+                        <Button style={{backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.tango900}} textStyle={{color: Colors.tango900}} onPress={(x) => this.openModal()}>Edit Time Slot{this.state.daily[this.state.activeDay].data.length > 1 ? "s" : null}</Button>
 
                             
                      
