@@ -223,6 +223,32 @@ export default class DayAvailabilityPicker extends React.Component{
         this.fadeAnimation();
     }
 
+    deleteTimeSlot = (day, id) => {
+        
+
+        var timeSlots = day.data
+        var removedTimeSlot = timeSlots.filter(x => x.id != id)
+        var dailyVals = this.state.dailyStaging[this.state.activeDay];
+        dailyVals.data = removedTimeSlot;
+
+        var newDaily = this.state.dailyStaging;
+        // Removes active day from array of all days and availability
+        var removedSelectedDay = newDaily.filter(x => x.dayValue != this.state.dailyStaging[this.state.activeDay].dayValue);
+        // Showcases only current active day and availability
+        var activeDay = newDaily.filter(x => x.dayValue == this.state.dailyStaging[this.state.activeDay].dayValue);
+
+     
+        removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
+       
+
+
+    
+        this.setState({dailyStaging: removedSelectedDay})
+        this.testValidAvailability()
+
+
+    }
+
     openModal = () => {
         
         this.setState((prevState, state) => ({timeSlotModalVisible: true}))
@@ -308,7 +334,7 @@ export default class DayAvailabilityPicker extends React.Component{
                                         iconName="trash"
                                         iconColor={Colors.hal500}
                                         iconSize={20}
-                                        onPress={() => console.log("Pressed")}
+                                        onPress={() => this.deleteTimeSlot(this.state.dailyStaging[this.state.activeDay], option.id)}
                                     /> 
                                     : null}
                             
