@@ -282,7 +282,7 @@ export default class DayAvailabilityPicker extends React.Component{
                     <SafeAreaView style={{paddingTop: 16, paddingHorizontal: 16, flex: 1, alignItems: 'center'}}>
                     <View>
                         <TopBar style={{flex: 0}}>
-                            <Text style={{fontSize: 20, marginRight: 'auto', marginTop: 8}}>Edit {this.state.dailyStaging[this.state.activeDay].dayName} Availability</Text>
+                            <Text style={{fontSize: 20, marginRight: 'auto', marginTop: 8}}>{this.state.dailyStaging[this.state.activeDay].dayName} Availability</Text>
                                 <Icon 
                                     iconName="x"
                                     iconColor={Colors.cosmos500}
@@ -300,7 +300,17 @@ export default class DayAvailabilityPicker extends React.Component{
                             {this.state.dailyStaging[this.state.activeDay].data.map((option, i) => {
                  
                                 return(
-                                <View key={option.id} style={{paddingHorizontal: 16, display: "flex", flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',borderColor: Colors.mist900, borderTopWidth: 1, borderBottomWidth: i == 0  && this.state.dailyStaging[this.state.activeDay].data.length > 1 ? 0 : 1, backgroundColor: 'white'}}>   
+                                <View key={option.id} style={{paddingHorizontal: 16, display: "flex", flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',borderColor: Colors.mist900, borderTopWidth: 1, borderBottomWidth: i == 0  && this.state.dailyStaging[this.state.activeDay].data.length > 1 ? 0 : 1, backgroundColor: 'white'}}> 
+
+                                    {/* Delete Icon */}
+                                    {this.state.dailyStaging[this.state.activeDay].data.length > 1 ?
+                                    <Icon 
+                                        iconName="trash"
+                                        iconColor={Colors.hal500}
+                                        iconSize={20}
+                                        onPress={() => console.log("Pressed")}
+                                    /> 
+                                    : null}
                             
                                     <View style={{flexDirection: 'row', flex: 2, justifyContent: 'space-evenly'}}>
 
