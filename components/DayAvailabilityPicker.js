@@ -14,6 +14,7 @@ import ModalSelector from 'react-native-modal-selector'
 import Times from '../constants/TimesAvailable'
 
 import { ScrollView } from 'react-native-gesture-handler'
+import { act } from 'react-test-renderer'
 
 
 
@@ -225,9 +226,11 @@ export default class DayAvailabilityPicker extends React.Component{
 
     deleteTimeSlot = (day, id) => {
         
-
+        // Gather data of current day
         var timeSlots = day.data
+        // Remove day deleted from the data
         var removedTimeSlot = timeSlots.filter(x => x.id != id)
+        // get current data of day and add new data with removed time
         var dailyVals = this.state.dailyStaging[this.state.activeDay];
         dailyVals.data = removedTimeSlot;
 
@@ -239,14 +242,108 @@ export default class DayAvailabilityPicker extends React.Component{
 
      
         removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
-       
 
-
-    
         this.setState({dailyStaging: removedSelectedDay})
         this.testValidAvailability()
 
 
+    }
+
+    addTimeSlot = (startTime, endTime) => {
+        var newDaily = this.state.dailyStaging;
+        // Removes active day from array of all days and availability
+        var removedSelectedDay = newDaily.filter(x => x.dayValue != this.state.dailyStaging[this.state.activeDay].dayValue);
+        // Showcases only current active day and availability
+        var activeDay = newDaily.filter(x => x.dayValue == this.state.dailyStaging[this.state.activeDay].dayValue);
+
+        activeDay[0].data.push({
+            "available": true,
+            "end": endTime,
+            "id": null,
+            "start": startTime,
+        })
+
+        activeDay[0].data.sort((a, b) => {parseInt(a.start) - parseInt(b.start)})
+
+        for(let i = 0; i < activeDay[0].data.length; i++){
+            if(i < 10){
+                activeDay[0].data[i].id = parseInt(`${activeDay[0].dayValue + 1}0${i}`)
+            }else{
+                activeDay[0].data[i].id = parseInt(`${activeDay[0].dayValue + 1}${i}`)
+            }
+           
+        }
+
+      
+       
+
+     
+        removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
+
+        // console.log(removedSelectedDay)
+
+        this.setState({dailyStaging: removedSelectedDay})
+
+    }
+
+    createTimeSpan = (option) => {
+        if(this.state.dailyStaging[this.state.activeDay].data.length == 1){
+            if(this.state.dailyStaging[this.state.activeDay].data[0].end == "2359"){
+                var newDaily = this.state.dailyStaging;
+                // Showcases only current active day and availability
+                var activeDay = newDaily.filter(x => x.dayValue == this.state.dailyStaging[this.state.activeDay].dayValue);
+                // Removes active day from array of all days and availability
+                var removedSelectedDay = newDaily.filter(x => x.dayValue != this.state.dailyStaging[this.state.activeDay].dayValue);
+
+
+                activeDay[0].data[0] = {
+                    "available": this.state.dailyStaging[this.state.activeDay].data[0].available,
+                    "end": "1159",
+                    "id": this.state.dailyStaging[this.state.activeDay].data[0].id,
+                    "start": "0000",
+                }
+
+                removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
+
+
+                this.setState({dailyStaging:  removedSelectedDay})
+                this.addTimeSlot("1200", "2359")
+                this.testValidAvailability()
+            }else{
+                this.addTimeSlot(Times[0].start[Times[1].end.indexOf(this.state.dailyStaging[this.state.activeDay].data[0].end) + 1],"2359")
+                this.testValidAvailability()
+            }
+        }else{
+            let nextDayIndex = this.state.dailyStaging[this.state.activeDay].data.indexOf(option) + 1;
+
+            // See if it is the last option where we add an end time
+            if(nextDayIndex + 1 > this.state.dailyStaging[this.state.activeDay].data.length){
+                this.addTimeSlot(Times[0].start[Times[1].end.indexOf(option.end) + 1], "2359")
+            }else{
+                this.addTimeSlot(Times[0].start[Times[1].end.indexOf(option.end) + 1],
+            Times[1].end[Times[0].start.indexOf(this.state.dailyStaging[this.state.activeDay].data[nextDayIndex].start) - 1])
+            }
+            
+            this.testValidAvailability()
+        }
+
+        // console.log(this.state.dailyStaging[this.state.activeDay].data.indexOf(option))
+
+        // console.log(this.state.dailyStaging[this.state.activeDay].data)
+
+        // console.log(option)
+
+    }
+
+
+    getNextDay = (d, increment) => {
+        if(d.substring(2) == '29' || d.substring(2) == '59'){
+            const dayIndex = Times[1].end.indexOf(d)
+            return Times[1].end[dayIndex + increment]
+        }else{
+            const dayIndex = Times[0].start.indexOf(d)
+            return Times[0].start[dayIndex + increment]
+        }
     }
 
     openModal = () => {
@@ -326,7 +423,8 @@ export default class DayAvailabilityPicker extends React.Component{
                             {this.state.dailyStaging[this.state.activeDay].data.map((option, i) => {
                  
                                 return(
-                                <View key={option.id} style={{paddingHorizontal: 16, display: "flex", flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',borderColor: Colors.mist900, borderTopWidth: 1, borderBottomWidth: i == 0  && this.state.dailyStaging[this.state.activeDay].data.length > 1 ? 0 : 1, backgroundColor: 'white'}}> 
+                                <View key={option.id} >
+                                    <View  style={{paddingHorizontal: 16, display: "flex", flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',borderColor: Colors.mist900, borderTopWidth: 1, borderBottomWidth: i == 0  && this.state.dailyStaging[this.state.activeDay].data.length > 1 ? 0 : 1, backgroundColor: 'white'}}> 
 
                                     {/* Delete Icon */}
                                     {this.state.dailyStaging[this.state.activeDay].data.length > 1 ?
@@ -403,6 +501,8 @@ export default class DayAvailabilityPicker extends React.Component{
                                     
                                     </View>
                                     
+                                    
+                                    
                                         
                                     
                                     <Switch
@@ -410,7 +510,22 @@ export default class DayAvailabilityPicker extends React.Component{
                                         onValueChange={() => this.changeAvailability(this.state.dailyStaging[this.state.activeDay], option.id)}
                                         value={option.available}
                                     />
+                                   
                                 </View> 
+                        
+                                     {/* Add time button */}
+                                    {this.state.dailyStaging[this.state.activeDay].data[i + 1] && parseInt(this.state.dailyStaging[this.state.activeDay].data[i + 1].start) - parseInt(this.state.dailyStaging[this.state.activeDay].data[i].end) != 41 && parseInt(this.state.dailyStaging[this.state.activeDay].data[i + 1].start) - parseInt(this.state.dailyStaging[this.state.activeDay].data[i].end) != 1 || this.state.dailyStaging[this.state.activeDay].data.length == 1 ||  this.state.dailyStaging[this.state.activeDay].data[i] == this.state.dailyStaging[this.state.activeDay].data[this.state.dailyStaging[this.state.activeDay].data.length - 1] && this.state.dailyStaging[this.state.activeDay].data[i].end != "2359" ? 
+                                        <ClickableChip 
+                                            bgColor='rgba(255, 193, 76, 0.3)' // Colors.Tango300 with opacity of 30%
+                                            style={{width: 130}}
+                                           
+                                            onPress={() => this.createTimeSpan(option)}
+                                            textColor={Colors.tango700}>
+                                                + Add Time Slot
+                                        </ClickableChip> : null}
+                             
+                            
+                                </View>
                                 )
                                 
                             })}
@@ -461,6 +576,7 @@ export default class DayAvailabilityPicker extends React.Component{
                             
                         })}
                         <Button style={{backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.tango900}} textStyle={{color: Colors.tango900}} onPress={(x) => this.openModal()}>Edit Time Slot{this.state.daily[this.state.activeDay].data.length > 1 ? "s" : null}</Button>
+                       
 
                             
                      

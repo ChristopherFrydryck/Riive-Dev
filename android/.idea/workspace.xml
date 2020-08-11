@@ -10,8 +10,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c8c2fdd9-4a96-4225-b00b-5f0236b3de90" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gradle/4.10.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.2/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.10.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.2/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.10.2/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.2/taskHistory/taskHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/host/exp/exponent/generated/DetachBuildConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/host/exp/exponent/generated/DetachBuildConstants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../components/DayAvailabilityPicker.js" beforeDir="false" afterPath="$PROJECT_DIR$/../components/DayAvailabilityPicker.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ios/Riive.xcworkspace/xcuserdata/christopherfrydryck.xcuserdatad/UserInterfaceState.xcuserstate" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Riive.xcworkspace/xcuserdata/christopherfrydryck.xcuserdatad/UserInterfaceState.xcuserstate" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Riive/Supporting/EXBuildConstants.json" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Riive/Supporting/EXBuildConstants.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Riive/Supporting/EXBuildConstants.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Riive/Supporting/EXBuildConstants.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Riive/Supporting/EXBuildConstants.plist.bak" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Riive/Supporting/EXBuildConstants.plist.bak" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -47,7 +56,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
+            <state relative-caret-position="495">
               <caret line="33" column="55" selection-start-line="33" selection-start-column="55" selection-end-line="33" selection-end-column="55" />
             </state>
           </provider>
@@ -79,7 +88,6 @@
               <caret line="38" column="70" selection-start-line="38" selection-start-column="70" selection-end-line="38" selection-end-column="70" />
             </state>
           </provider>
-          <provider editor-type-id="android-manifest" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -127,7 +135,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="38" />
     <option name="y" value="23" />
     <option name="width" value="840" />
@@ -258,11 +266,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="38" y="23" width="840" height="956" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.4948276" visible="true" weight="0.15538847" />
-      <window_info id="Structure" order="2" sideWeight="0.50517243" side_tool="true" visible="true" weight="0.15538847" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.49293563" visible="true" weight="0.15538847" />
+      <window_info id="Structure" order="2" sideWeight="0.50706434" side_tool="true" visible="true" weight="0.15538847" />
       <window_info id="Favorites" order="3" sideWeight="0.50517243" side_tool="true" weight="0.15538847" />
       <window_info id="Build Variants" order="4" sideWeight="0.50517243" side_tool="true" weight="0.15538847" />
       <window_info id="Image Layers" order="5" />
@@ -274,10 +281,10 @@
       <window_info anchor="bottom" id="TODO" order="2" sideWeight="0.4993895" weight="0.3298611" />
       <window_info anchor="bottom" id="Debug" order="3" />
       <window_info anchor="bottom" id="Terminal" order="4" sideWeight="0.4981685" weight="0.3287037" />
-      <window_info anchor="bottom" id="Event Log" order="5" sideWeight="0.5112782" side_tool="true" visible="true" weight="0.3287037" />
+      <window_info anchor="bottom" id="Event Log" order="5" sideWeight="0.45864663" side_tool="true" visible="true" weight="0.2627315" />
       <window_info anchor="bottom" id="Version Control" order="6" sideWeight="0.498779" weight="0.3287037" />
-      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.6065163" weight="0.2627315" />
-      <window_info anchor="bottom" id="Android Profiler" order="8" />
+      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.5413534" visible="true" weight="0.2627315" />
+      <window_info anchor="bottom" id="Android Profiler" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Find" order="9" />
       <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" weight="0.32967034" />
       <window_info anchor="right" id="Capture Analysis" order="1" />
@@ -291,6 +298,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1050">
           <caret line="70" column="44" selection-start-line="70" selection-start-column="44" selection-end-line="70" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="33" column="55" selection-start-line="33" selection-start-column="55" selection-end-line="33" selection-end-column="55" />
         </state>
       </provider>
     </entry>
@@ -319,13 +333,6 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="33" column="55" selection-start-line="33" selection-start-column="55" selection-end-line="33" selection-end-column="55" />
         </state>
       </provider>
     </entry>
