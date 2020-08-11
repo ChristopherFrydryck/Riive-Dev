@@ -308,10 +308,8 @@ export default class DayAvailabilityPicker extends React.Component{
 
                 this.setState({dailyStaging:  removedSelectedDay})
                 this.addTimeSlot("1200", "2359")
-                this.testValidAvailability()
             }else{
                 this.addTimeSlot(Times[0].start[Times[1].end.indexOf(this.state.dailyStaging[this.state.activeDay].data[0].end) + 1],"2359")
-                this.testValidAvailability()
             }
         }else{
             let nextDayIndex = this.state.dailyStaging[this.state.activeDay].data.indexOf(option) + 1;
@@ -323,9 +321,10 @@ export default class DayAvailabilityPicker extends React.Component{
                 this.addTimeSlot(Times[0].start[Times[1].end.indexOf(option.end) + 1],
             Times[1].end[Times[0].start.indexOf(this.state.dailyStaging[this.state.activeDay].data[nextDayIndex].start) - 1])
             }
-            
-            this.testValidAvailability()
+
         }
+                    
+        this.testValidAvailability()
 
         // console.log(this.state.dailyStaging[this.state.activeDay].data.indexOf(option))
 
@@ -403,7 +402,7 @@ export default class DayAvailabilityPicker extends React.Component{
                     onRequestClose={() => this.closeModal()}
                 >
                     <SafeAreaView style={{paddingTop: 16, paddingHorizontal: 16, flex: 1, alignItems: 'center'}}>
-                    <View>
+                    <View style={{}}>
                         <TopBar style={{flex: 0}}>
                             <Text style={{fontSize: 20, marginRight: 'auto', marginTop: 8}}>{this.state.dailyStaging[this.state.activeDay].dayName} Availability</Text>
                                 <Icon 
@@ -418,7 +417,7 @@ export default class DayAvailabilityPicker extends React.Component{
                                 <Text>Time</Text>
                                 <Text>Available</Text>
                             </View>
-                            <ScrollView contentContainerStyle={{flex: 1}}>
+                            <ScrollView contentContainerStyle={{flexGrow: 1}}>
                         
                             {this.state.dailyStaging[this.state.activeDay].data.map((option, i) => {
                  
@@ -516,11 +515,11 @@ export default class DayAvailabilityPicker extends React.Component{
                                      {/* Add time button */}
                                     {this.state.dailyStaging[this.state.activeDay].data[i + 1] && parseInt(this.state.dailyStaging[this.state.activeDay].data[i + 1].start) - parseInt(this.state.dailyStaging[this.state.activeDay].data[i].end) != 41 && parseInt(this.state.dailyStaging[this.state.activeDay].data[i + 1].start) - parseInt(this.state.dailyStaging[this.state.activeDay].data[i].end) != 1 || this.state.dailyStaging[this.state.activeDay].data.length == 1 ||  this.state.dailyStaging[this.state.activeDay].data[i] == this.state.dailyStaging[this.state.activeDay].data[this.state.dailyStaging[this.state.activeDay].data.length - 1] && this.state.dailyStaging[this.state.activeDay].data[i].end != "2359" ? 
                                         <ClickableChip 
-                                            bgColor='rgba(255, 193, 76, 0.3)' // Colors.Tango300 with opacity of 30%
-                                            style={{width: 130}}
+                                            bgColor='rgba(98, 200, 151, 0.3)' // Colors.Fortune300 with opacity of 30%
+                                            style={{borderRadius: 0}}
                                            
                                             onPress={() => this.createTimeSpan(option)}
-                                            textColor={Colors.tango700}>
+                                            textColor={Colors.fortune900}>
                                                 + Add Time Slot
                                         </ClickableChip> : null}
                              
@@ -529,9 +528,12 @@ export default class DayAvailabilityPicker extends React.Component{
                                 )
                                 
                             })}
-                              <Button style={this.state.timesValid[this.state.activeDay] ? {backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.tango900, marginBottom: 32, alignSelf: 'flex-end'} : {backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.mist900}} textStyle={ this.state.timesValid[this.state.activeDay] ? {color: Colors.tango900} : {color: Colors.mist900}} onPress={() => this.updateAvailability()} disabled={!this.state.timesValid[this.state.activeDay]}>Save Changes on {this.state.dailyStaging[this.state.activeDay].dayName}</Button>
+                            
+                             
                             </ScrollView>
-                        
+                                <View style={{paddingBottom: 32, backgroundColor: "white", flexGrow: 1, marginTop: 8}}>
+                                    <Button style={this.state.timesValid[this.state.activeDay] ? {backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.tango900} : {backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.mist900}} textStyle={ this.state.timesValid[this.state.activeDay] ? {color: Colors.tango900} : {color: Colors.mist900}} onPress={() => this.updateAvailability()} disabled={!this.state.timesValid[this.state.activeDay]}>Save Changes on {this.state.dailyStaging[this.state.activeDay].dayName}</Button>
+                                </View>
                             </View>
                           
                             
