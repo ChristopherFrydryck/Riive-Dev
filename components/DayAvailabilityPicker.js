@@ -446,7 +446,7 @@ export default class DayAvailabilityPicker extends React.Component{
                                         >
                                             {Platform.OS === 'ios' ?
                                                 this.state.dailyStaging[this.state.activeDay].data[i - 1] ?
-                                                    startTimes.filter(x => parseInt(x.label) > parseInt(this.state.dailyStaging[this.state.activeDay].data[i - 1].end)).map(x => {
+                                                    startTimes.filter(x => parseInt(x.label) > parseInt(this.state.dailyStaging[this.state.activeDay].data[i - 1].end) && parseInt(x.label) < parseInt(this.state.dailyStaging[this.state.activeDay].data[i].end)).map(x => {
                                                         return({key: x.key, label: x.labelFormatted, baseValue: x.label})
                                                     })
                                                 :
