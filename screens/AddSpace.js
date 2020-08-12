@@ -269,30 +269,36 @@ class addSpace extends Component {
     const nameValidation = /^[A-Za-z0-9]+[A-Za-z0-9 %&,()]+[A-Za-z0-9]{1}$/
     const bioValidation =  /^[A-Za-z0-9]{1}[A-Za-z0-9 .?!;,()$@%&]{1,299}$/;
 
-    let nameValid = nameValidation.test(this.state.spaceName)
-    let bioValid = this.state.spaceBio.split("").length > 0 ? bioValidation.test(this.state.spaceBio) : true;
+    // let nameValid = nameValidation.test(this.state.spaceName)
+    // let bioValid = this.state.spaceBio.split("").length > 0 ? bioValidation.test(this.state.spaceBio) : true;
 
-    if(this.state.searchedAddress){
-      if(nameValid && this.state.spaceName.split("").length > 0){
-        console.log("Name is valid")
-      }else{
-        console.log("name invalid")
-      }
+    // if(this.state.searchedAddress){
+    //   if(nameValid && this.state.spaceName.split("").length > 0){
+    //     console.log("Name is valid")
+    //   }else{
+    //     console.log("name invalid")
+    //   }
   
-      if(bioValid){
-        console.log("bio is valid")
-      }else{
-        console.log("bio invlaid")
-      }
+    //   if(bioValid){
+    //     console.log("bio is valid")
+    //   }else{
+    //     console.log("bio invlaid")
+    //   }
   
-      console.log(`${this.state.address.number} ${this.state.address.street}${this.state.address.box && this.state.address.box.split('').length > 0 ? " APT #" + this.state.address.box :""}, ${this.state.address.city}, ${this.state.address.state_abbr} ${this.state.address.zip}...${this.state.address.country}`)
+    //   console.log(`${this.state.address.number} ${this.state.address.street}${this.state.address.box && this.state.address.box.split('').length > 0 ? " APT #" + this.state.address.box :""}, ${this.state.address.city}, ${this.state.address.state_abbr} ${this.state.address.zip}...${this.state.address.country}`)
 
-      console.log(`The price is ${this.state.spacePrice}`)
-    }
+    //   console.log(`The price is ${this.state.spacePrice}`)
+    // }
+
+    console.log(this.state.daily)
 
     
 
     
+  }
+
+  availabilityCallbackFunction = (data) => {
+    this.setState({daily: data})
   }
    
 
@@ -662,7 +668,9 @@ clearAddress = () => {
             </View>
             <View style={{paddingHorizontal: 16}}>
               <DayAvailabilityPicker 
-                availability={this.state.daily}>
+                availability={this.state.daily}
+                availabilityCallback={this.availabilityCallbackFunction}
+                >
               </DayAvailabilityPicker>
               {/* <SectionList 
               sections={this.state.daily}

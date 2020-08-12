@@ -23,13 +23,16 @@ export default class DayAvailabilityPicker extends React.Component{
         super(props)
         this.state = {
             activeDay: new Date().getDay(),
-            
-            dailyStaging: this.props.availability,
+
+            daily: this.props.availability,
+            dailyStaging: JSON.parse(JSON.stringify(this.props.availability)),
       
             timesValid: [true, true, true, true, true, true, true],
+
             timeSlotModalVisible: false,
+
             activeTimeFadeAnimation: new Animated.Value(0),
-            daily: JSON.parse(JSON.stringify(this.props.availability)),
+            
             
         }
 
@@ -363,6 +366,7 @@ export default class DayAvailabilityPicker extends React.Component{
     updateAvailability = async () => {
         const val = JSON.stringify(this.state.dailyStaging)
         await this.setState((prevState) => ({daily: JSON.parse(val), timeSlotModalVisible: false}))
+        this.props.availabilityCallback(this.state.daily);
       
         
     }
