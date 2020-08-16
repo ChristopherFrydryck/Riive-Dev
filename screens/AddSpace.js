@@ -31,7 +31,7 @@ import firebaseConfig from '../firebaseConfig'
 
 //MobX Imports
 import {inject, observer} from 'mobx-react/native'
-import { requireNativeViewManager } from '@unimodules/core';
+
 
 
 
@@ -79,8 +79,19 @@ class addSpace extends Component {
               country_abbr: null,
               zip: null,
             },
-            allValid: false,
+            
             searchedAddress: false,
+            nameValid: false,
+            bioValid: true,
+            priceValid: false,
+
+            nameError: '',
+            bioError: '',
+            priceError: '',
+
+    
+            
+
 
             imageBrowserOpen: false,
             uploadingImage: false,
@@ -98,8 +109,7 @@ class addSpace extends Component {
               {dayName: "Tuesday", abbrName:"Tue", dayValue: 2, data: [{available: true, id: 300, start: '0000', end: '2359'}]},
               {dayName: "Wednesday", abbrName:"Wed", dayValue: 3, data: [{available: true, id: 400, start: '0000', end: '2359'}]},
               {dayName: "Thursday", abbrName:"Thu", dayValue: 4, data: [{available: true, id: 500, start: '0000', end: '2359'}]},
-              {dayName: "Friday", abbrName:"Fri", dayValue: 5, data: [{available: true, id: 600, start: '0000', end: '1059'}, 
-              {available: false, id: 601, start: '1100', end: '2359'}]},
+              {dayName: "Friday", abbrName:"Fri", dayValue: 5, data: [{available: true, id: 600, start: '0000', end: '2359'}]},
               {dayName: "Saturday", abbrName:"Sat", dayValue: 6, data: [{available: true, id: 700, start: '0000', end: '2359'}]},
             ]
             
@@ -161,7 +171,7 @@ class addSpace extends Component {
         if (!result.cancelled) {
             
                   try {
-                      alert("Success!")
+                      // alert("Success!")
                       this.setState({imageUploading: false})
                   }
                   catch {
@@ -269,33 +279,63 @@ class addSpace extends Component {
     const nameValidation = /^[A-Za-z0-9]+[A-Za-z0-9 %&,()]+[A-Za-z0-9]{1}$/
     const bioValidation =  /^[A-Za-z0-9]{1}[A-Za-z0-9 .?!;,()$@%&]{1,299}$/;
 
-    // let nameValid = nameValidation.test(this.state.spaceName)
-    // let bioValid = this.state.spaceBio.split("").length > 0 ? bioValidation.test(this.state.spaceBio) : true;
+    let nameValid = nameValidation.test(this.state.spaceName)
+    let bioValid = this.state.spaceBio.split("").length > 0 ? bioValidation.test(this.state.spaceBio) : true;
+
+    
+
+   
+    
+    
 
     // if(this.state.searchedAddress){
-    //   if(nameValid && this.state.spaceName.split("").length > 0){
-    //     console.log("Name is valid")
-    //   }else{
-    //     console.log("name invalid")
-    //   }
-  
-    //   if(bioValid){
-    //     console.log("bio is valid")
-    //   }else{
-    //     console.log("bio invlaid")
-    //   }
-  
-    //   console.log(`${this.state.address.number} ${this.state.address.street}${this.state.address.box && this.state.address.box.split('').length > 0 ? " APT #" + this.state.address.box :""}, ${this.state.address.city}, ${this.state.address.state_abbr} ${this.state.address.zip}...${this.state.address.country}`)
-
-    //   console.log(`The price is ${this.state.spacePrice}`)
+      
     // }
 
-    console.log(this.state.daily)
+      if(this.state.spacePrice){
+        let spaceCentsArray = this.state.spacePrice.split(".")
+        let spaceCents = parseInt(spaceCentsArray[0].slice(1) + spaceCentsArray[1])
+          if(spaceCents > 0){
+            this.setState({spacePriceValid: true, priceError: ''})
+            // console.log("Price is valid")
+          }else{
+            this.setState({spacePriceValid: false, priceError: 'Price must be greater than $0.00'})
+            // console.log("Price must be greater than $0.00")
+          }
+      }else{
+        this.setState({spacePriceValid: false, priceError: 'Add an hourly price'})
+        // console.log("Add a price per hour")
+      }
 
-    
+      if(nameValid && this.state.spaceName.split("").length > 0){
+        this.setState({nameValid: true, nameError: ''})
+      }else{
+        this.setState({nameValid: false, nameError: 'Add a name to your space'})
+      }
+  
+      if(bioValid){
+        this.setState({bioValid: true, bioError: ''})
+      }else{
+        this.setState({bioValid: false, bioError: 'Avoid use of special characters outside of .?!;,()$@%&'})
+      }
 
+      // if(this.state.photo){
+      //   this.setState({photoValid: true})
+      // }else{
+      //   this.setState({photoValid: false})
+      // }
+
+      if(this.state.searchedAddress && this.state.spacePrice && this.state.nameValid && this.state.bioValid && this.state.photo){
+        // console.log(`${this.state.address.number} ${this.state.address.street}${this.state.address.box && this.state.address.box.split('').length > 0 ? " APT #" + this.state.address.box :""}, ${this.state.address.city}, ${this.state.address.state_abbr} ${this.state.address.zip}...${this.state.address.country}`)
+
+      }
+  
+     
+      // console.log(`The price is ${this.state.spacePrice}`)
+    }
     
-  }
+  
+
 
   availabilityCallbackFunction = (data) => {
     this.setState({daily: data})
@@ -528,10 +568,11 @@ clearAddress = () => {
             />
             <View style={{flex: 1, flexDirection: "row"}}>
             <Input
-            flex={0.35}
+            flex={0.4}
             placeholder='107'        
-            label="APT # (optional)"
-            name="Apartment number"                 onChangeText= {(number) => this.setState(prevState => ({
+            label= "Space # (optional)"
+            name="Apartment number"                 
+            onChangeText= {(number) => this.setState(prevState => ({
               address:{
                 ...prevState.address,
                 box: number,
@@ -580,7 +621,7 @@ clearAddress = () => {
               value={this.state.spaceName}
               maxLength = {40}
               keyboardType='default'
-              // error={}
+              error={this.state.nameError}
             />
              <Input 
               placeholder='Add a bio...'         
@@ -592,7 +633,7 @@ clearAddress = () => {
               numLines={4}
               maxLength = {300}
               keyboardType='default'
-              // error={}
+              error={this.state.bioError}
             />
             
           </View>
@@ -604,8 +645,8 @@ clearAddress = () => {
           </View>
           <View style={{paddingHorizontal: 16}}>
             <View style={{display: "flex", flexDirection: 'row', marginBottom: 16}}>
-              <Button style={{flex: 1, marginRight: 8, backgroundColor: "#FF8708"}} textStyle={{color:"#FFFFFF"}} onPress={() => this.pickImage()}>Add Photo</Button>
-              <Button style={{flex: 1, marginLeft: 8, backgroundColor: "#FF8708"}} textStyle={{color:"#FFFFFF"}} onPress={() => this.launchCamera()}>Take Photo</Button>
+              <Button style={this.state.photo ? {flex: 1, marginLeft: 8, backgroundColor: Colors.mist900} :{flex: 1, marginLeft: 8, backgroundColor: "#FF8708"}} textStyle={ this.state.photo ? {color: Colors.cosmos300} : {color:"#FFFFFF"}} disabled={this.state.photo ? true : false} onPress={() => this.pickImage()}>Add Photo</Button>
+              <Button style={this.state.photo ? {flex: 1, marginLeft: 8, backgroundColor: Colors.mist900} :{flex: 1, marginLeft: 8, backgroundColor: "#FF8708"}} textStyle={ this.state.photo ? {color: Colors.cosmos300} : {color:"#FFFFFF"}} disabled={this.state.photo  ? true : false} onPress={() => this.launchCamera()}>Take Photo</Button>
             </View>
           {/* <Text>Upload Pictures</Text> */}
           {/* <View style={{display: 'flex', flexDirection: 'row', marginBottom: 16}}> */}
@@ -613,14 +654,23 @@ clearAddress = () => {
               <Button style={{flex: 1, marginLeft:4, borderColor: "#FF8708", borderWidth: 3}} textStyle={{color:"#FF8708"}} onPress={() => alert("Something...")}>Take Photo</Button> */}
             {/* </View> */}
             {this.state.photo ? 
+            <View>
+              <View style={{position: "absolute", top: 8, right: 8, zIndex: 999, padding: 4, backgroundColor: 'rgba(54, 55, 59, 0.7)', borderRadius: Dimensions.get('window').width/2}}>
+                <Icon 
+                  iconName="x"
+                  iconColor={Colors.mist300}
+                  iconSize={24}
+                  onPress={() => this.setState({photo: null})}
+                />
+              </View>
               <Image 
                 style={{width: Dimensions.get("window").width - 32}}
                 aspectRatio={16/9}
                 source={{uri: this.state.photo}}
                 backupSource={require('../assets/img/Logo_001.png')}
                 resizeMode={'cover'}
-                // onPress={() => alert("HELLO")}
               /> 
+              </View>
               : null}
           
             
@@ -656,7 +706,7 @@ clearAddress = () => {
                 keyboardType='default'
                 suffix="/hr"
                 rightText="Estimated $1.50/hr"
-                // error={}
+                error={this.state.priceError}
               />
             </View>
 
