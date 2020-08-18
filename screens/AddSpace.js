@@ -7,7 +7,7 @@ import MapView, {Marker} from 'react-native-maps';
 import DayMap from '../constants/DayMap'
 import NightMap from '../constants/NightMap'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import {Card} from 'react-native-paper';
+import {Card, ThemeProvider} from 'react-native-paper';
 
 import ImageBrowser from '../features/camera-roll/ImageBrowser'
 import * as ImagePicker from 'expo-image-picker'
@@ -347,11 +347,16 @@ class addSpace extends Component {
 
       if(this.state.searchedAddress && this.state.spacePrice && this.state.nameValid && this.state.bioValid && this.state.photo){
 
+       
+
         // console.log(`${this.state.address.number} ${this.state.address.street}${this.state.address.box && this.state.address.box.split('').length > 0 ? " APT #" + this.state.address.box :""}, ${this.state.address.city}, ${this.state.address.state_abbr} ${this.state.address.zip}...${this.state.address.country}`)
         // console.log(`${this.state.address.spaceNumber}`)
                 await this.uploadImage(this.state.photo)
                 this.setState({savingSpace: true})
                 try{  
+
+                let spaceCentsArray = this.state.spacePrice.split(".")
+                let spaceCents = parseInt(spaceCentsArray[0].slice(1) + spaceCentsArray[1])
                  
                  console.log(this.state.photo)
                  await this.setState({savingSpace: true})
@@ -362,13 +367,48 @@ class addSpace extends Component {
                         address: this.state.address,
                         region: this.state.region,
                         photo: this.state.photo,
+                        spaceName: this.state.spaceName,
+                        spaceBio: this.state.spaceBio,
+                        spacePrice: this.state.spacePrice,
+                        spacePriceCents: spaceCents,
+                        numSpaces: this.state.numSpaces,
+                        availability: this.state.daily,
                     })
                  })
-                      // navigate back to profile
+                 await db.collection("listings").doc(this.state.postID).set({
                   
+                      listingID: this.state.postID,
+                      address: this.state.address,
+                      region: this.state.region,
+                      photo: this.state.photo,
+                      spaceName: this.state.spaceName,
+                      spaceBio: this.state.spaceBio,
+                      spacePrice: this.state.spacePrice,
+                      spacePriceCents: spaceCents,
+                      numSpaces: this.state.numSpaces,
+                      availability: this.state.daily,
+                 
+               })
+
+               // add space to mobx UserStore
+               await this.props.UserStore.listings.push({
+                  listingID: this.state.postID,
+                  address: this.state.address,
+                  region: this.state.region,
+                  photo: this.state.photo,
+                  spaceName: this.state.spaceName,
+                  spaceBio: this.state.spaceBio,
+                  spacePrice: this.state.spacePrice,
+                  spacePriceCents: spaceCents,
+                  numSpaces: this.state.numSpaces,
+                  availability: this.state.daily,
+               })
+
+                  // navigate back to profile
                   this.props.navigation.navigate("Profile")
+                  this.setState({savingSpace: false})
                 }catch{
-                  this.setState({savingSpace: true})
+                  this.setState({savingSpace: false})
                 }
                 
             

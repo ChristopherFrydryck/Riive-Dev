@@ -7,6 +7,7 @@ class ComponentStore {
     @observable spotsLoaded = false;
     @observable selectedVehicle = [];
     @observable selectedPayment = [];
+    @observable selectedSpot = [];
    
 
 
