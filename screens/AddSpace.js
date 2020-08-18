@@ -78,6 +78,7 @@ class addSpace extends Component {
               country: null,
               country_abbr: null,
               zip: null,
+              spaceNumber: null,
             },
             
             searchedAddress: false,
@@ -96,6 +97,8 @@ class addSpace extends Component {
             imageBrowserOpen: false,
             uploadingImage: false,
             photo: null,
+
+            savingSpace: false,
             
 
             spaceName: '',
@@ -261,73 +264,122 @@ class addSpace extends Component {
     const db = firebase.firestore();
     const doc = db.collection('users').doc(this.props.UserStore.userID);
 
+
+
       const response = await fetch(uri)
       const blob = await response.blob()
 
-      const storageRef = firebase.storage().ref();
-      const spacesPicRef = storageRef.child("users/" + this.props.UserStore.userID + '/spaces/' + this.state.postID + '/main')
-      return spacesPicRef.put(blob)
-      .then(() => {
-       spacesPicRef.getDownloadURL().then((uri) => {
-        this.setState({photo: uri})
-       })
-     })
+      const storageRef = await firebase.storage().ref().child("listings/" + this.state.postID + '/main')
+
+     await storageRef.put(blob)
+
+     const url = await storageRef.getDownloadURL();
+
+      this.setState({photo: url})
+     
+      // const url = uploadTask.getDownloadURL();
+        
+      // this.setState({photo: url})
+      // return url
+          
+    
+
+
+
+     
     
   }
 
-  submitSpace = async () => {
+  verifyInputs = () => {
+
     const nameValidation = /^[A-Za-z0-9]+[A-Za-z0-9 %&,()]+[A-Za-z0-9]{1}$/
     const bioValidation =  /^[A-Za-z0-9]{1}[A-Za-z0-9 .?!;,()$@%&]{1,299}$/;
 
     let nameValid = nameValidation.test(this.state.spaceName)
     let bioValid = this.state.spaceBio.split("").length > 0 ? bioValidation.test(this.state.spaceBio) : true;
 
-    
+    if(this.state.spacePrice){
+      let spaceCentsArray = this.state.spacePrice.split(".")
+      let spaceCents = parseInt(spaceCentsArray[0].slice(1) + spaceCentsArray[1])
+        if(spaceCents > 0){
+          this.setState({spacePriceValid: true, priceError: ''})
+          // console.log("Price is valid")
+        }else{
+          this.setState({spacePriceValid: false, priceError: 'Price must be greater than $0.00'})
+          // console.log("Price must be greater than $0.00")
+        }
+    }else{
+      this.setState({spacePriceValid: false, priceError: 'Add an hourly price'})
+      // console.log("Add a price per hour")
+    }
 
-   
-    
-    
-
-    // if(this.state.searchedAddress){
+    if(nameValid && this.state.spaceName.length > 0){
+      this.setState({nameValid: true, nameError: ''})
+    }else{
+      this.setState({nameValid: false})
+      if(this.state.spaceName.length == 0){
+        this.setState({nameError: 'Add a name to your space'})
+      }else if(!nameValid){
+        this.setState({nameError: 'Avoid using special characters'})
+      }
       
-    // }
+    }
 
-      if(this.state.spacePrice){
-        let spaceCentsArray = this.state.spacePrice.split(".")
-        let spaceCents = parseInt(spaceCentsArray[0].slice(1) + spaceCentsArray[1])
-          if(spaceCents > 0){
-            this.setState({spacePriceValid: true, priceError: ''})
-            // console.log("Price is valid")
-          }else{
-            this.setState({spacePriceValid: false, priceError: 'Price must be greater than $0.00'})
-            // console.log("Price must be greater than $0.00")
-          }
-      }else{
-        this.setState({spacePriceValid: false, priceError: 'Add an hourly price'})
-        // console.log("Add a price per hour")
-      }
+    if(bioValid){
+      this.setState({bioValid: true, bioError: ''})
+    }else{
+      this.setState({bioValid: false, bioError: 'Avoid use of special characters outside of .?!;,()$@%&'})
+    }
+  }
 
-      if(nameValid && this.state.spaceName.split("").length > 0){
-        this.setState({nameValid: true, nameError: ''})
-      }else{
-        this.setState({nameValid: false, nameError: 'Add a name to your space'})
-      }
-  
-      if(bioValid){
-        this.setState({bioValid: true, bioError: ''})
-      }else{
-        this.setState({bioValid: false, bioError: 'Avoid use of special characters outside of .?!;,()$@%&'})
-      }
+  submitSpace = async() => {
+    
+    await this.verifyInputs();
 
-      // if(this.state.photo){
-      //   this.setState({photoValid: true})
-      // }else{
-      //   this.setState({photoValid: false})
-      // }
+    const db = firebase.firestore();
+
+    console.log(this.state.postID)
+
+
+    
+
+    
 
       if(this.state.searchedAddress && this.state.spacePrice && this.state.nameValid && this.state.bioValid && this.state.photo){
-        // console.log(`${this.state.address.number} ${this.state.address.street}${this.state.address.box && this.state.address.box.split('').length > 0 ? " APT #" + this.state.address.box :""}, ${this.state.address.city}, ${this.state.address.state_abbr} ${this.state.address.zip}...${this.state.address.country}`)
 
+        // console.log(`${this.state.address.number} ${this.state.address.street}${this.state.address.box && this.state.address.box.split('').length > 0 ? " APT #" + this.state.address.box :""}, ${this.state.address.city}, ${this.state.address.state_abbr} ${this.state.address.zip}...${this.state.address.country}`)
+        // console.log(`${this.state.address.spaceNumber}`)
+                await this.uploadImage(this.state.photo)
+                this.setState({savingSpace: true})
+                try{  
+                 
+                 console.log(this.state.photo)
+                 await this.setState({savingSpace: true})
+
+                 await db.collection("users").doc(this.props.UserStore.userID).update({
+                    listings: firebase.firestore.FieldValue.arrayUnion({
+                        listingID: this.state.postID,
+                        address: this.state.address,
+                        region: this.state.region,
+                        photo: this.state.photo,
+                    })
+                 })
+                      // navigate back to profile
+                  
+                  this.props.navigation.navigate("Profile")
+                }catch{
+                  this.setState({savingSpace: true})
+                }
+                
+            
+               
+               
+              
+           
+                
+
+      }else{
+        this.setState({savingSpace: false})
       }
   
      
@@ -568,10 +620,11 @@ clearAddress = () => {
             />
             <View style={{flex: 1, flexDirection: "row"}}>
             <Input
-            flex={0.4}
+            flex={0.35}
             placeholder='107'        
-            label= "Space # (optional)"
-            name="Apartment number"                 
+            label= "Apt # (optional)"
+            name="Apartment number" 
+            style={{marginRight: 16}}                
             onChangeText= {(number) => this.setState(prevState => ({
               address:{
                 ...prevState.address,
@@ -579,6 +632,20 @@ clearAddress = () => {
               }
             }))}
             value={this.state.address.box}
+            maxLength = {6}
+            keyboardType='number-pad'/>
+            <Input
+            flex={0.45}
+            placeholder='32'        
+            label= "Space # (optional)"
+            name="Space number"                 
+            onChangeText= {(number) => this.setState(prevState => ({
+              address:{
+                ...prevState.address,
+                spaceNumber: number,
+              }
+            }))}
+            value={this.state.address.spaceNumber}
             maxLength = {6}
             keyboardType='number-pad'/>
             </View>
@@ -617,7 +684,8 @@ clearAddress = () => {
           <View style={{paddingHorizontal: 16}}>
             <Input 
               placeholder='Name your space...'         label="Space Name"
-              name="space name"                 onChangeText= {(spaceName) => this.setState({spaceName})}
+              name="space name"                 
+              onChangeText= {(spaceName) => this.setState({spaceName})}
               value={this.state.spaceName}
               maxLength = {40}
               keyboardType='default'
@@ -779,7 +847,7 @@ clearAddress = () => {
                   </Card>
                 )}}
               /> */}
-              <Button onPress={() => this.submitSpace()}>Add Photo</Button>
+              <Button disabled={this.state.savingSpace} onPress={() => this.submitSpace()}>Add Photo</Button>
 
             </View>
             

@@ -6,11 +6,13 @@ import {TextInputMask} from 'react-native-masked-text'
 import { isNullOrUndefined } from 'util';
 
 const input = ({label, masked, flex, error, value, onChangeText, placeholder, secureTextEntry, id, keyboardType, maxLength, autoCapitalize, editable, ccType, numLines, rightText, ...props}) => {
- 
+    
+    const style = [{flex: flex},  props.style || {}]
+    const allProps = Object.assign({}, props,{style:style})  
    
     if(!props.mask){
     return (
-        <View style={{flex: flex}}>
+        <View {...allProps}>
             <View style={styles.container}>
                  <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                      <Text style={editable ? styles.label : styles.label_disabled}>{label} </Text>
@@ -37,7 +39,7 @@ const input = ({label, masked, flex, error, value, onChangeText, placeholder, se
         </View>    
     )}else if(props.mask == 'multiline'){
         return(
-        <View style={{flex: flex}}>
+        <View {...allProps}>
             <View style={styles.container}>
                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Text style={editable ? styles.label : styles.label_disabled}>{label} </Text>
@@ -74,7 +76,7 @@ const input = ({label, masked, flex, error, value, onChangeText, placeholder, se
         // For docs on text input masking:
         // https://github.com/benhurott/react-native-masked-text
         return (
-            <View style={{flex: flex}}>
+            <View {...allProps}>
                 <View style={styles.container}>
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={editable ? styles.label : styles.label_disabled}>{label} </Text>
@@ -100,7 +102,7 @@ const input = ({label, masked, flex, error, value, onChangeText, placeholder, se
         )
     }if(props.mask == 'phone'){
         return (
-            <View style={{flex: flex}}>
+            <View {...allProps}>
                 <View style={styles.container}>
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                             <Text style={editable ? styles.label : styles.label_disabled}>{label} </Text>
@@ -125,7 +127,7 @@ const input = ({label, masked, flex, error, value, onChangeText, placeholder, se
         )
     }if(props.mask == 'mm/dd/yyyy'){
         return (
-            <View style={{flex: flex}}>
+            <View {...allProps}>
                 <View style={styles.container}>
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={editable ? styles.label : styles.label_disabled}>{label} </Text>
@@ -150,7 +152,7 @@ const input = ({label, masked, flex, error, value, onChangeText, placeholder, se
         )
     }if(props.mask == 'mm/yy'){
         return (
-            <View style={{flex: flex}}>
+            <View {...allProps}>
                 <View style={styles.container}>
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                             <Text style={editable ? styles.label : styles.label_disabled}>{label} </Text>
@@ -175,7 +177,7 @@ const input = ({label, masked, flex, error, value, onChangeText, placeholder, se
         )
     }if(props.mask == 'USD'){
         return(
-            <View style={{flex: flex}}>
+            <View {...allProps}>
                     <View style={styles.container}>
                         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                             <Text style={editable ? styles.label : styles.label_disabled}>{label} </Text>
