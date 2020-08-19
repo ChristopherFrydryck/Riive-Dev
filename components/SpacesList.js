@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Dimensions, FlatList } from 'react-native';
 import Text from './Txt'
 import Colors from '../constants/Colors'
 import Icon from '../components/Icon'
@@ -26,9 +26,17 @@ function cacheFonts(fonts){
 @observer
 class SpacesList extends React.Component{
 
+    constructor(props){
+        super(props);
+        this.state = {
+            data: this.props.UserStore.listings,
+        }
+    }
+
     async componentDidMount(){
         const iconAssets = cacheFonts([FontAwesome.font, MaterialCommunityIcons.font])
         await Promise.all([...iconAssets])
+        this.setState({data: this.props.UserStore.listings})
         this.props.ComponentStore.spotsLoaded = true;
     }
 
@@ -50,22 +58,84 @@ class SpacesList extends React.Component{
         this.props.navigation.navigate("AddSpace")
     }
 
+    renderSpaceCard = (spot, isFirst) => {
+        return(
+        <TouchableOpacity
+        key={spot.listingID}
+        style={isFirst ? styles.li_first :styles.li}
+        onPress = {() => this.selectSpace(spot)}
+        >
+        <Image 
+            style={styles.image}
+            aspectRatio={21/9}
+            source={{uri: spot.photo}}
+            backupSource={require('../assets/img/Logo_001.png')}
+            resizeMode={'cover'}
+        /> 
+        <View style={{flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', padding: 8}}>
+            {/* <Icon
+                iconName="navigation"
+                iconColor={Colors.apollo500}
+                iconSize={28}
+                style={{marginRight: 8}}
+                
+            /> */}
+            <View style={{flexDirection: "column"}}>
+            {spot.spaceName.length <= 28 ?
+            <Text style={{fontSize: 16}}>{spot.spaceName}</Text>
+            : <Text style={{fontSize: 16}}>{spot.spaceName.substring(0, 28) + "..."}</Text>}
+            {spot.address.full.length <= 28 ?
+            <Text style={{fontSize: 16}}>{spot.address.full}</Text>
+            : <Text style={{fontSize: 16}}>{spot.address.full.substring(0, 28) + "..."}</Text>}
+            </View>
+            <View style={{position:"absolute", right:0}}>
+                <Icon 
+                    iconName="chevron-right"
+                    iconColor={Colors.mist900}
+                    iconSize={28}
+                />
+            </View>
+
+        </View>
+       
+       
+    </TouchableOpacity> 
+        )
+    }
+
     render(){
         let {spotsLoaded} =  this.props.ComponentStore;
         let loaders = [];
-        if(spotsLoaded){
+        if(spotsLoaded && this.state.data.length == 1){
         return(
         <View style={styles.container}>
-                {
-                    this.props.UserStore.listings.map((spot, i) => (
-      
+                        
+            {this.renderSpaceCard(this.state.data[0])} 
+               
+            </View>
+            
+        )}else if(spotsLoaded && this.state.data.length > 1){
+            return(
+            <View style={styles.container}>
+                <FlatList
+                    data={this.state.data}
+                    renderItem={({item, i}) => i === 0 ? this.renderSpaceCard(item, true) : this.renderSpaceCard(item, false)}
+                    keyExtractor={item => item.listingID}
+                    horizontal={true}
+                    snapToAlignment={"start"}
+                    decelerationRate={"fast"}
+                    pagingEnabled
+                />
+                {/* {
+                    this.state.data.map((spot, i) => (
+                        
                         <TouchableOpacity
                             key={this.props.UserStore.listings[i].listingID}
                             style={i == 0 ? styles.li_first : styles.li}
                             onPress = {() => this.selectSpace(spot)}
                             >
                             <Image 
-                                style={{width: Dimensions.get("window").width - 32, borderTopLeftRadius: 4, borderTopRightRadius: 4}}
+                                style={styles.image}
                                 aspectRatio={21/9}
                                 source={{uri: spot.photo}}
                                 backupSource={require('../assets/img/Logo_001.png')}
@@ -83,7 +153,9 @@ class SpacesList extends React.Component{
                                 {spot.spaceName.length <= 28 ?
                                 <Text style={{fontSize: 16}}>{spot.spaceName}</Text>
                                 : <Text style={{fontSize: 16}}>{spot.spaceName.substring(0, 28) + "..."}</Text>}
-                                <Text style={{flexWrap: 'wrap'}}>{spot.spacePrice}</Text>
+                                {spot.address.full.length <= 28 ?
+                                <Text style={{fontSize: 16}}>{spot.address.full}</Text>
+                                : <Text style={{fontSize: 16}}>{spot.address.full.substring(0, 28) + "..."}</Text>}
                                 </View>
                                 <View style={{position:"absolute", right:0}}>
                                     <Icon 
@@ -99,10 +171,10 @@ class SpacesList extends React.Component{
                         </TouchableOpacity>
                         
                     ))
-                }
+                } */}
             </View>
-            
-        )}else{
+            )
+        }else{
             for(let i = 0; i < this.props.UserStore.listings.length; i++){
                 loaders.push(
                     <SvgAnimatedLinearGradient key={i} width={Dimensions.get('window').width} height="50">
@@ -123,7 +195,20 @@ class SpacesList extends React.Component{
 const styles = StyleSheet.create({
     container:{
         marginHorizontal: 16,
-        marginTop: 10,
+        marginTop: 8,
+     
+    },
+    image: {
+    
+        borderTopLeftRadius: 4,
+        borderTopRightRadius: 4,
+    },
+    li: {
+        // borderBottomColor: Colors.mist700,
+        // borderBottomWidth: 1,
+        // padding: 15,
+        width: Dimensions.get("window").width * .8,
+        marginHorizontal: 8,
         backgroundColor: 'white',
         shadowColor: '#000', 
           shadowOpacity: 0.6, 
@@ -131,12 +216,8 @@ const styles = StyleSheet.create({
           shadowRadius: 3, 
           elevation: 12,
           borderRadius: 4,
-    },
-    li: {
-        // borderBottomColor: Colors.mist700,
-        // borderBottomWidth: 1,
-        // padding: 15,
-        marginVertical: 8
+          marginVertical: 8
+        
        
     },
     li_first: {
@@ -145,7 +226,18 @@ const styles = StyleSheet.create({
         // borderBottomColor: Colors.mist700,
         // borderBottomWidth: 1,
         // padding: 10,
-        marginTop: 8
+        width: Dimensions.get("window").width * .8,
+        marginRight: 8,
+        backgroundColor: 'white',
+        shadowColor: '#000', 
+          shadowOpacity: 0.6, 
+          shadowOffset:{width: 2, height: 2}, 
+          shadowRadius: 3, 
+          elevation: 12,
+          borderRadius: 4,
+          marginVertical: 8
+         
+        
     }
 })
 
