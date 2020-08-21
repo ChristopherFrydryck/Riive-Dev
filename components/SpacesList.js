@@ -123,6 +123,7 @@ class SpacesList extends React.Component{
                     keyExtractor={item => item.listingID}
                     horizontal={true}
                     snapToAlignment={"start"}
+                    snapToInterval={Dimensions.get("window").width * 0.80 + 16}
                     decelerationRate={"fast"}
                     pagingEnabled
                 />
