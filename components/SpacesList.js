@@ -118,7 +118,7 @@ class SpacesList extends React.Component{
             return(
             <View style={styles.container}>
                 <FlatList
-                    data={this.state.data}
+                    data={this.state.data.slice().sort((a, b) => b.created - a.created)}
                     renderItem={({item, i}) => i === 0 ? this.renderSpaceCard(item, true) : this.renderSpaceCard(item, false)}
                     keyExtractor={item => item.listingID}
                     horizontal={true}

@@ -211,6 +211,7 @@ resetPassword = () =>{
 
         const db = firebase.firestore();
         const doc = db.collection('users').doc(this.props.UserStore.userID);
+     
 
 
         doc.get().then((doc) => {
@@ -448,8 +449,11 @@ resetPassword = () =>{
 
       const db = firebase.firestore();
       const doc = db.collection('users').doc(this.props.UserStore.userID);
+        
 
-      console.log(firebase.auth().currentUser.providerId)
+         
+
+      // console.log(firebase.auth().currentUser.providerId)
 
       
 
@@ -459,34 +463,37 @@ resetPassword = () =>{
         doc.get().then((doc) => {
           if (doc.exists){
 
-            
+
+              db.collection('listings').where(firebase.firestore.FieldPath.documentId(), "in", doc.data().listings).get().then((qs) => {
+                  let listingsData = [];
+                  for(let i = 0; i < qs.docs.length; i++){
+                    listingsData.push(qs.docs[i].data())
+                  }
+                  // alert(`${doc.id} => ${doc.data().fullname}`);
+                  this.props.UserStore.fullname = doc.data().fullname;
+                  this.props.UserStore.phone = doc.data().phone;
+                  this.props.UserStore.userID = doc.data().id;
+                  this.props.UserStore.stripeID = doc.data().stripeID;
+                  this.props.UserStore.photo = doc.data().photo;
+                  this.props.UserStore.joinedDate = firebase.auth().currentUser.metadata.creationTime
+                  this.props.UserStore.vehicles = doc.data().vehicles;
+                  this.props.UserStore.listings = listingsData;
+                  this.props.UserStore.payments = doc.data().payments;
+                  this.props.UserStore.searchHistory = doc.data().searchHistory;
+
+                  // ID if user signed in via email or google
+                  this.props.UserStore.signInProvider = firebase.auth().currentUser.providerData[0].providerId;
+                  ;
+              }).then(() => {
+                  // in case a user reverts their email change via profile update
+                  db.collection("users").doc(this.props.UserStore.userID).update({
+                    email: this.props.UserStore.email,
+                })
+                  // Upon setting the MobX State Observer, navigate to home
+                  this.props.navigation.navigate('Home')
+              })
 
 
-            // alert(`${doc.id} => ${doc.data().fullname}`);
-            this.props.UserStore.fullname = doc.data().fullname;
-            this.props.UserStore.phone = doc.data().phone;
-            this.props.UserStore.userID = doc.data().id;
-            this.props.UserStore.stripeID = doc.data().stripeID;
-            this.props.UserStore.photo = doc.data().photo;
-            this.props.UserStore.joinedDate = firebase.auth().currentUser.metadata.creationTime
-            this.props.UserStore.vehicles = doc.data().vehicles;
-            this.props.UserStore.listings = doc.data().listings;
-            this.props.UserStore.payments = doc.data().payments;
-            this.props.UserStore.searchHistory = doc.data().searchHistory;
-
-             // ID if user signed in via email or google
-            this.props.UserStore.signInProvider = firebase.auth().currentUser.providerData[0].providerId;
-            ;
-
-            // in case a user reverts their email change via profile update
-            db.collection("users").doc(this.props.UserStore.userID).update({
-              email: this.props.UserStore.email,
-           })
-
-           
-
-            // Upon setting the MobX State Observer, navigate to home
-            this.props.navigation.navigate('Home')
         }else{
           alert("No user found")
         }

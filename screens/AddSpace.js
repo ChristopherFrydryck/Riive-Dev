@@ -357,23 +357,16 @@ class addSpace extends Component {
 
                 let spaceCentsArray = this.state.spacePrice.split(".")
                 let spaceCents = parseInt(spaceCentsArray[0].slice(1) + spaceCentsArray[1])
+
+                let createdTime = new Date().getTime();
                  
                  console.log(this.state.photo)
                  await this.setState({savingSpace: true})
 
                  await db.collection("users").doc(this.props.UserStore.userID).update({
-                    listings: firebase.firestore.FieldValue.arrayUnion({
-                        listingID: this.state.postID,
-                        address: this.state.address,
-                        region: this.state.region,
-                        photo: this.state.photo,
-                        spaceName: this.state.spaceName,
-                        spaceBio: this.state.spaceBio,
-                        spacePrice: this.state.spacePrice,
-                        spacePriceCents: spaceCents,
-                        numSpaces: this.state.numSpaces,
-                        availability: this.state.daily,
-                    })
+                    listings: firebase.firestore.FieldValue.arrayUnion(
+                      this.state.postID
+                    )
                  })
                  await db.collection("listings").doc(this.state.postID).set({
                   
@@ -387,6 +380,7 @@ class addSpace extends Component {
                       spacePriceCents: spaceCents,
                       numSpaces: this.state.numSpaces,
                       availability: this.state.daily,
+                      created: createdTime
                  
                })
 
@@ -402,6 +396,7 @@ class addSpace extends Component {
                   spacePriceCents: spaceCents,
                   numSpaces: this.state.numSpaces,
                   availability: this.state.daily,
+                  created: createdTime
                })
 
                   // navigate back to profile
