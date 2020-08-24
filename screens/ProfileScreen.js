@@ -412,7 +412,7 @@ class Profile extends Component{
 
     render(){
         const initals = this.props.UserStore.firstname.charAt(0).toUpperCase() + "" + this.props.UserStore.lastname.charAt(0).toUpperCase()
-        const {firstname, lastname, vehicles, payments} = this.props.UserStore 
+        const {firstname, lastname, vehicles, payments, listings} = this.props.UserStore 
         var {height, width} = Dimensions.get('window');
 
 
@@ -427,7 +427,7 @@ class Profile extends Component{
             <Provider>
                 <View style={{flex: 1}}>
 
-                     {/* Edit Account Modal!!! */}
+                {/* Edit Account Modal!!! */}
                 <Modal
                     animationType="slide"
                     transparent={false}
@@ -723,8 +723,8 @@ class Profile extends Component{
                    
                     <ScrollView style={{marginTop: 40}}>
                         <View style={styles.contentBox}>
-                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 8, paddingRight: 8}}>
-                                {vehicles == undefined || vehicles.length <= 1 ? <Text style={{fontSize: 20, marginRight: 'auto'}}>My Space</Text> : <Text style={{fontSize: 20, marginRight: 'auto'}}>My Spaces</Text>}
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 16, paddingRight: 16}}>
+                                {listings == undefined || listings.length <= 1 ? <Text style={styles.categoryTitle}>My Space</Text> : <Text style={{fontSize: 20, marginRight: 'auto'}}>My Spaces</Text>}
                                 <ClickableChip
                                     bgColor='rgba(255, 193, 76, 0.3)' // Colors.Tango300 with opacity of 30%
                                     onPress={() => this.props.navigation.navigate("AddSpace")}
@@ -732,13 +732,13 @@ class Profile extends Component{
                                 >+ Space</ClickableChip>
                             </View>
                             <View>
-                                {vehicles == undefined ? null : <SpacesList/>}
+                                {listings == undefined ? null : <SpacesList/>}
                             </View>
                             
                         </View>
                         <View style={styles.contentBox}>
-                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 8, paddingRight: 8}}>
-                                {vehicles == undefined || vehicles.length <= 1 ? <Text style={{fontSize: 20, marginRight: 'auto'}}>My Vehicle</Text> : <Text style={{fontSize: 20, marginRight: 'auto'}}>My Vehicles</Text>}
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 16, paddingRight: 16}}>
+                                {vehicles == undefined || vehicles.length <= 1 ? <Text style={styles.categoryTitle}>My Vehicle</Text> : <Text style={{fontSize: 20, marginRight: 'auto'}}>My Vehicles</Text>}
                                 <ClickableChip
                                     onPress={() => this.props.navigation.navigate("AddVehicle")}
                                     bgColor='rgba(255, 193, 76, 0.3)' // Colors.Tango300 with opacity of 30%
@@ -751,8 +751,8 @@ class Profile extends Component{
                             
                         </View>
                         <View style={styles.contentBox}>
-                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 8, paddingRight: 8}}>
-                                {vehicles == undefined || vehicles.length <= 1 ? <Text style={{fontSize: 20, marginRight: 'auto'}}>My Payment</Text> : <Text style={{fontSize: 20, marginRight: 'auto'}}>My Payments</Text>}
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 16, paddingRight: 16}}>
+                                {payments == undefined || payments.length <= 1 ? <Text style={styles.categoryTitle}>My Payment</Text> : <Text style={{fontSize: 20, marginRight: 'auto'}}>My Payments</Text>}
                                 <ClickableChip
                                     onPress={() => this.props.navigation.navigate("AddPayment")}
                                     bgColor='rgba(255, 193, 76, 0.3)' // Colors.Tango300 with opacity of 30%
@@ -792,8 +792,14 @@ const styles = StyleSheet.create({
         position: 'absolute',
      
     },
+
+    categoryTitle: {
+        fontSize: 20, 
+        marginRight: 'auto'
+    },
+
     contentBox:{
-        paddingVertical: 20,   
+        paddingVertical: 16,   
 
     },
     headerBox: {

@@ -41,37 +41,45 @@ class SpacesList extends React.Component{
     }
 
     selectSpace = (spot) => {
-        this.props.ComponentStore.selectedSpot = [];
-        this.props.ComponentStore.selectedSpot.push({
-            listingID: spot.postID,
-            address: spot.address,
-            region: spot.region,
-            photo: spot.photo,
-            spaceName: spot.spaceName,
-            spaceBio: spot.spaceBio,
-            spacePrice: spot.spacePrice,
-            spacePriceCents: spot.spaceCents,
-            numSpaces: spot.numSpaces,
-            availability: spot.daily,
-        })
+            // console.log(spot.listingID)
+            this.props.ComponentStore.selectedSpot = []
+            this.props.ComponentStore.selectedSpot.push({
+                listingID: spot.listingID,
+                address: spot.address,
+                region: spot.region,
+                photo: spot.photo,
+                spaceName: spot.spaceName,
+                spaceBio: spot.spaceBio,
+                spacePrice: spot.spacePrice,
+                spacePriceCents: spot.spacePriceCents,
+                numSpaces: spot.numSpaces,
+                availability: spot.availability,
+            })
+            // console.log(this.props.ComponentStore.selectedSpot[0].spaceName)
+            this.props.navigation.navigate("EditSpace")
+         
+
+       
         
-        this.props.navigation.navigate("AddSpace")
+        
     }
 
-    renderSpaceCard = (spot, isFirst) => {
+    renderSpaceCard = (spot, index) => {
+       
         return(
         <TouchableOpacity
         key={spot.listingID}
-        style={isFirst ? styles.li_first :styles.li}
+        style={index == 0 ? styles.li_first : styles.li}
         onPress = {() => this.selectSpace(spot)}
         >
-        <Image 
-            style={styles.image}
-            aspectRatio={21/9}
-            source={{uri: spot.photo}}
-            backupSource={require('../assets/img/Logo_001.png')}
-            resizeMode={'cover'}
-        /> 
+        <View style={styles.image}>
+            <Image 
+                aspectRatio={21/9}
+                source={{uri: spot.photo}}
+                backupSource={require('../assets/img/Logo_001.png')}
+                resizeMode={'cover'}
+            /> 
+        </View>
         <View style={{flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', padding: 8}}>
             {/* <Icon
                 iconName="navigation"
@@ -115,64 +123,21 @@ class SpacesList extends React.Component{
             </View>
             
         )}else if(spotsLoaded && this.state.data.length > 1){
+            // console.log(this.state.data[0].availability[new Date().getDay()].data)
+           
             return(
             <View style={styles.container}>
                 <FlatList
                     data={this.state.data.slice().sort((a, b) => b.created - a.created)}
-                    renderItem={({item, i}) => i === 0 ? this.renderSpaceCard(item, true) : this.renderSpaceCard(item, false)}
+                    renderItem={({item, index}) => this.renderSpaceCard(item, index)}
                     keyExtractor={item => item.listingID}
                     horizontal={true}
                     snapToAlignment={"start"}
                     snapToInterval={Dimensions.get("window").width * 0.80 + 16}
                     decelerationRate={"fast"}
+                    showsHorizontalScrollIndicator={false}
                     pagingEnabled
                 />
-                {/* {
-                    this.state.data.map((spot, i) => (
-                        
-                        <TouchableOpacity
-                            key={this.props.UserStore.listings[i].listingID}
-                            style={i == 0 ? styles.li_first : styles.li}
-                            onPress = {() => this.selectSpace(spot)}
-                            >
-                            <Image 
-                                style={styles.image}
-                                aspectRatio={21/9}
-                                source={{uri: spot.photo}}
-                                backupSource={require('../assets/img/Logo_001.png')}
-                                resizeMode={'cover'}
-                            /> 
-                            <View style={{flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', padding: 8}}>
-                                <Icon
-                                    iconName="navigation"
-                                    iconColor={Colors.apollo500}
-                                    iconSize={28}
-                                    style={{marginRight: 8}}
-                                    
-                                />
-                                <View style={{flexDirection: "column"}}>
-                                {spot.spaceName.length <= 28 ?
-                                <Text style={{fontSize: 16}}>{spot.spaceName}</Text>
-                                : <Text style={{fontSize: 16}}>{spot.spaceName.substring(0, 28) + "..."}</Text>}
-                                {spot.address.full.length <= 28 ?
-                                <Text style={{fontSize: 16}}>{spot.address.full}</Text>
-                                : <Text style={{fontSize: 16}}>{spot.address.full.substring(0, 28) + "..."}</Text>}
-                                </View>
-                                <View style={{position:"absolute", right:0}}>
-                                    <Icon 
-                                        iconName="chevron-right"
-                                        iconColor={Colors.mist900}
-                                        iconSize={28}
-                                    />
-                                </View>
-    
-                            </View>
-                           
-                           
-                        </TouchableOpacity>
-                        
-                    ))
-                } */}
             </View>
             )
         }else{
@@ -200,14 +165,12 @@ const styles = StyleSheet.create({
      
     },
     image: {
-    
+        overflow: 'hidden',
         borderTopLeftRadius: 4,
         borderTopRightRadius: 4,
+       
     },
     li: {
-        // borderBottomColor: Colors.mist700,
-        // borderBottomWidth: 1,
-        // padding: 15,
         width: Dimensions.get("window").width * .8,
         marginHorizontal: 8,
         backgroundColor: 'white',
@@ -222,13 +185,9 @@ const styles = StyleSheet.create({
        
     },
     li_first: {
-        // borderTopWidth: 1,
-        // borderTopColor: Colors.mist700,
-        // borderBottomColor: Colors.mist700,
-        // borderBottomWidth: 1,
-        // padding: 10,
         width: Dimensions.get("window").width * .8,
         marginRight: 8,
+        marginLeft: 4,
         backgroundColor: 'white',
         shadowColor: '#000', 
           shadowOpacity: 0.6, 

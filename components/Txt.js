@@ -40,7 +40,7 @@ class Txt extends React.Component{
         const allProps = Object.assign({}, this.props,{style:style})
        
           
-                return(<Text {...allProps}> {this.props.children} </Text>)
+                return(<Text {...allProps}>{this.props.children}</Text>)
                 
            
             
