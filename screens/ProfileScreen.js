@@ -408,7 +408,7 @@ class Profile extends Component{
             this.props.UserStore.phone = ""
             this.props.UserStore.userID = ""
         })
-    }
+    }   
 
     render(){
         const initals = this.props.UserStore.firstname.charAt(0).toUpperCase() + "" + this.props.UserStore.lastname.charAt(0).toUpperCase()
@@ -450,7 +450,7 @@ class Profile extends Component{
                         
                     <ScrollView>
                         <TopBar>
-                        <Text style={{fontSize: 20, marginRight: 'auto', marginTop: 8}}>Edit Profile</Text>
+                        <Text style={{fontSize: 20, marginRight: 'auto', marginTop: 8, marginLeft: 16}}>Edit Profile</Text>
                             <Icon 
                                 iconName="x"
                                 iconColor={Colors.cosmos500}

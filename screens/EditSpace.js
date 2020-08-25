@@ -641,7 +641,7 @@ renderDotsView = (numItems, position) =>{
                 >
                     Edit Space
                 </ClickableChip> */}
-                <Text  style={{fontSize: 24}}>{this.state.spaceName}</Text>
+                <Text  style={{fontSize: 24, flexWrap: 'wrap'}}>{this.state.spaceName}</Text>
                 <View style={{flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8}}>
                     <Icon
                         iconName="location-pin"
@@ -650,10 +650,10 @@ renderDotsView = (numItems, position) =>{
                         iconSize={16}
                         style={{marginRight: 8, marginTop: 4}}
                     />
-                    <Text style={{fontSize: 16, color: Colors.cosmos300}}>{this.state.address.full} {this.state.address.box ? "#"+this.state.address.box : null}</Text>
+                    <Text style={{fontSize: 16, color: Colors.cosmos300,  flexWrap: 'wrap', marginRight: 24}}>{this.state.address.full} {this.state.address.box ? "#"+this.state.address.box : null}</Text>
                 </View>
                 {this.state.spaceBio ? 
-                <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
+                <View style={{flexDirection: 'row', flex: 1, alignItems: 'flex-start', flexShrink: 1}}>
                     <Icon
                         iconName="form"
                         iconLib="AntDesign"
@@ -661,7 +661,7 @@ renderDotsView = (numItems, position) =>{
                         iconSize={16}
                         style={{marginRight: 8, marginTop: 4}}
                     />
-                    <Text style={{fontSize: 16, color: Colors.cosmos300, paddingRight: 16}}>{this.state.spaceBio}</Text> 
+                    <Text style={{fontSize: 16, color: Colors.cosmos300, marginRight: 24}}>{this.state.spaceBio}</Text> 
                 </View>
                 : null}
 
@@ -1061,7 +1061,7 @@ const styles = StyleSheet.create({
     height: 44,
   },
   contentBox:{
-    marginHorizontal: 16,   
+    marginHorizontal: 16,  
   
   },
   number:{

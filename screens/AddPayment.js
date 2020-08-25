@@ -316,6 +316,7 @@ verifyInput = () => {
     //Checking if everything is valid for a year that is not the current year
     if(this.state.creditCardNum.length == ccLength
       && this.state.CCV.length == CCVLength
+      && !isNaN(this.state.CCV)
       && this.state.exp.length == expLength
       && this.state.expYear > lastTwoYear
       && this.state.expMonth < 13 
@@ -361,6 +362,8 @@ verifyInput = () => {
       if(this.state.CCV.length !== CCVLength){
         // console.log('CCV fail...')
         this.setState({CCVError: "CCV too short"})
+      }else if(isNaN(this.state.CCV)){
+        this.setState({CCVError: "CCV should be numbers"})
       }else{this.setState({CCVError: ""})}
 
       // expiration date value check
