@@ -670,6 +670,7 @@ renderDotsView = (numItems, position) =>{
                     <DayAvailabilityPicker 
                         availability={this.state.daily}
                         availabilityCallback={this.availabilityCallbackFunction}
+                        editable={false}
                     />
                 </View>
                 

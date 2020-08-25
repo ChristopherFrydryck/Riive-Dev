@@ -581,7 +581,9 @@ export default class DayAvailabilityPicker extends React.Component{
                             )
                             
                         })}
+                        {this.props.editable ? 
                         <Button style={{backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.tango900}} textStyle={{color: Colors.tango900}} onPress={(x) => this.openModal()}>Edit Time Slot{this.state.daily[this.state.activeDay].data.length > 1 ? "s" : null}</Button>
+                        : null}
                        
 
                             
@@ -603,7 +605,14 @@ export default class DayAvailabilityPicker extends React.Component{
             
         )
     }
+      
 }
+
+DayAvailabilityPicker.defaultProps = {
+   editable: true
+};
+
+
 
 const styles = StyleSheet.create({
     daysRow:{
