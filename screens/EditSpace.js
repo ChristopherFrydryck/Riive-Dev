@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, ScrollView, StatusBar, Platform, StyleSheet, SafeAreaView, Dimensions, Animated, KeyboardAvoidingView, FlatList, Switch, Modal, Picker} from 'react-native';
+import { View, ScrollView, StatusBar, Platform, StyleSheet, SafeAreaView, Dimensions, Animated, TouchableOpacity, KeyboardAvoidingView, FlatList, Switch, Modal, Picker} from 'react-native';
 import Text from '../components/Txt'
 import MapInput, { PROVIDER_GOOGLE } from '../components/MapInput'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -567,6 +567,8 @@ renderDotsView = (numItems, position) =>{
   render() {
     //   console.log(this.props.ComponentStore.selectedSpace)
       const {width, height} = Dimensions.get('window')
+      var dayToday = new Date().getDay()
+        var hourToday = new Date().getHours()
       
       return(
         <KeyboardAwareScrollView
@@ -631,16 +633,24 @@ renderDotsView = (numItems, position) =>{
           </View>
          
           <View style={styles.contentBox}>
+            <View style={{alignSelf: 'flex-end', marginTop: -60, zIndex: 10, position: 'absolute'}}>
+                <TouchableOpacity
+                        onPress={() => console.log("edit")}
+                        style={{width: 80, height: 80, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.tango700, borderRadius: width, }}
+                    >
+                    <Icon
+                        iconLib="MaterialIcons"
+                        iconName="edit"
+                        iconColor={Colors.mist300}
+                        iconSize={32}        
+                    />
+                    <Text type="bold" style={{color: Colors.mist300}}>Edit</Text>
+                </TouchableOpacity>
+            </View>
             <View style={{width: 100, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.fortune500, paddingVertical: 4, borderRadius: width, marginBottom: 8}}>
                         <Text style={{ fontSize: 16, color: Colors.mist300,}}>{this.state.spacePrice}/hr</Text>
             </View>
-            {/* <ClickableChip
-                    onPress={() => console.log("test")}
-                    bgColor='rgba(255, 193, 76, 0.3)' // Colors.Tango300 with opacity of 30%
-                    textColor={Colors.tango700}
-                >
-                    Edit Space
-                </ClickableChip> */}
+          
                 <Text  style={{fontSize: 24, flexWrap: 'wrap'}}>{this.state.spaceName}</Text>
                 <View style={{flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8}}>
                     <Icon

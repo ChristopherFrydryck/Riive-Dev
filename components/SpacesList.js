@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, TouchableOpacity, Dimensions, FlatList } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Dimensions, FlatList, Animated } from 'react-native';
 import Text from './Txt'
 import Colors from '../constants/Colors'
 import Icon from '../components/Icon'
@@ -30,6 +30,7 @@ class SpacesList extends React.Component{
         super(props);
         this.state = {
             data: this.props.UserStore.listings,
+            activeTimeFadeAnimation: new Animated.Value(0),
         }
     }
 
@@ -38,6 +39,26 @@ class SpacesList extends React.Component{
         await Promise.all([...iconAssets])
         this.setState({data: this.props.UserStore.listings})
         this.props.ComponentStore.spotsLoaded = true;
+        this.fadeAnimation();
+    }
+
+    fadeAnimation = () => {
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(          // Animate over time
+                    this.state.activeTimeFadeAnimation, // The animated value to drive
+                    {
+                        toValue: 1,           // Animate to opacity: 1 (opaque)
+                        duration: 1000,       // 2000ms
+                    }),
+                    Animated.timing(          // Animate over time
+                        this.state.activeTimeFadeAnimation, // The animated value to drive
+                        {
+                            toValue: 0,           // Animate to opacity: 1 (opaque)
+                            duration: 1000,       // 2000ms
+                        }),
+            ]) 
+        ).start();                  
     }
 
     selectSpace = (spot) => {
@@ -65,7 +86,15 @@ class SpacesList extends React.Component{
     }
 
     renderSpaceCard = (spot, index) => {
+        var dayToday = new Date().getDay()
+        var hourToday = new Date().getHours()
+        var orderedData = this.state.data.slice().sort((a, b) => b.created - a.created)
+        
+        let currentActive = orderedData[index].availability[dayToday].data.filter((x) => parseInt(x.start.substring(0,2)) <= hourToday && parseInt(x.end.substring(0,2)) >= hourToday)
+
+
        
+
         return(
         <TouchableOpacity
         key={spot.listingID}
@@ -79,6 +108,12 @@ class SpacesList extends React.Component{
                 backupSource={require('../assets/img/Logo_001.png')}
                 resizeMode={'cover'}
             /> 
+            {currentActive[0].available ? 
+                <View style={{flexDirection: 'row', alignItems: 'center', position: 'absolute', top: 12, left: 0, backgroundColor: 'white', paddingVertical: 4, paddingHorizontal: 8, borderTopRightRadius: 4, borderBottomRightRadius: 4}}>
+                    <Animated.View style={{opacity: this.state.activeTimeFadeAnimation, width: 8, height: 8, backgroundColor: Colors.fortune500, borderRadius: Dimensions.get("window").width/2, marginRight: 8}}/>
+                    <Text style={{color: Colors.fortune500}}>Available Now</Text>
+                </View>
+                : null}
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', padding: 8}}>
             {/* <Icon
@@ -114,7 +149,12 @@ class SpacesList extends React.Component{
     render(){
         let {spotsLoaded} =  this.props.ComponentStore;
         let loaders = [];
+        var dayToday = new Date().getDay()
+        var hourToday = new Date().getHours()
+        var orderedData = this.state.data.slice().sort((a, b) => b.created - a.created)
+
         if(spotsLoaded && this.state.data.length == 1){
+
         return(
         <View style={styles.container}>
                         
@@ -123,12 +163,13 @@ class SpacesList extends React.Component{
             </View>
             
         )}else if(spotsLoaded && this.state.data.length > 1){
-            // console.log(this.state.data[0].availability[new Date().getDay()].data)
+   
+
            
             return(
             <View style={styles.container}>
                 <FlatList
-                    data={this.state.data.slice().sort((a, b) => b.created - a.created)}
+                    data={orderedData}
                     renderItem={({item, index}) => this.renderSpaceCard(item, index)}
                     keyExtractor={item => item.listingID}
                     horizontal={true}
