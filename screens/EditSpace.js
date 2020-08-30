@@ -17,6 +17,7 @@ import * as Permissions from 'expo-permissions'
 
 
 import Input from '../components/Input'
+import TopBar from '../components/TopBar'
 import Icon from '../components/Icon'
 import Button from '../components/Button'
 import Colors from '../constants/Colors'
@@ -47,12 +48,41 @@ import {inject, observer} from 'mobx-react/native'
 class editSpace extends Component {
   _isMounted = false;
 
-  static navigationOptions = {
-    title: "Edit Space",
-    headerTitleStyle:{
-        fontWeight: "300",
-        fontSize: 18,
+  static navigationOptions = ({navigation}) => {
+    const { params = {} } = navigation.state;
+
+    return{
+      title: params.title,
+      headerTitleStyle:{
+          fontWeight: "300",
+          fontSize: 18,
+      },
+      headerRight:(
+        // <ClickableChip
+        //   bgColor='rgba(255, 193, 76, 0.3)' // Colors.Tango300 with opacity of 30%
+        //   textColor={Colors.tango700}
+        //   onPress={() => console.log("tst")}
+        //   style={{marginRight: 16}}
+        // >
+        //   Edit
+        // </ClickableChip>
+        <TouchableOpacity
+          onPress={() => params.openEditModal()}
+          style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16}}
+        >
+          <Icon 
+            iconName="edit-2"
+            iconColor="rgb(14, 122, 254)"
+            iconSize={18}
+            style={{marginRight: 4}}
+          />
+          <Text style={{fontSize: 18, color: "rgb(14, 122, 254)"}}>Edit</Text>
+        </TouchableOpacity>
+      )
     }
+      
+        
+    
 
 };
 
@@ -60,23 +90,14 @@ class editSpace extends Component {
     constructor(props){
         super(props)
 
-        // listingID: spot.postID,
-//                 address: spot.address,
-//                 region: spot.region,
-//                 photo: spot.photo,
-//                 spaceName: spot.spaceName,
-//                 spaceBio: spot.spaceBio,
-//                 spacePrice: spot.spacePrice,
-//                 spacePriceCents: spot.spaceCents,
-//                 numSpaces: spot.numSpaces,
-//                 availability: spot.daily,
-
         const {selectedSpot} = this.props.ComponentStore
         const space = selectedSpot[0]
 
         this.state = {
 
             currentActivePhoto: 0,
+
+            editModalOpen: false,
 
 
             postID: space.postID,
@@ -143,7 +164,18 @@ class editSpace extends Component {
          Platform.OS === 'android' && StatusBar.setBackgroundColor('white');
        });
 
+       const add = this.state.address.number + " " + this.state.address.street
+
+       this.props.navigation.setParams({
+         title: add.length > 20 ? add.substring(0,20) + "..." : add,
+         openEditModal: this.openEditModal,
+      });
+
        
+    }
+
+    openEditModal = () => {
+      this.setState({editModalOpen: !this.state.editModalOpen})
     }
 
     getPermissionAsync = async (...perms) => {
@@ -567,8 +599,9 @@ renderDotsView = (numItems, position) =>{
   render() {
     //   console.log(this.props.ComponentStore.selectedSpace)
       const {width, height} = Dimensions.get('window')
-      var dayToday = new Date().getDay()
-        var hourToday = new Date().getHours()
+
+      const {ComponentStore, UserStore} = this.props
+
       
       return(
         <KeyboardAwareScrollView
@@ -578,6 +611,25 @@ renderDotsView = (numItems, position) =>{
               extraScrollHeight={150} //iOS
               extraHeight={135} //Android
               >
+          <Modal
+            visible={this.state.editModalOpen} animationType="slide"
+            //         transparent={true}          
+          >
+            <ScrollView>
+              <SafeAreaView style={{paddingTop: 10, marginHorizontal: 16, flex: 1}}>
+                <TopBar>
+                 <Text style={{fontSize: 20, marginRight: 'auto', marginTop: 8, marginLeft: 16}}>Edit {ComponentStore.selectedSpot[0].spaceName.length > 20 ? ComponentStore.selectedSpot[0].spaceName.substring(0, 20) + "..." : ComponentStore.selectedSpot[0].spaceName}</Text>
+                 <Icon 
+                                  iconName="x"
+                                  iconColor={Colors.cosmos500}
+                                  iconSize={28}
+                                  onPress={() => this.openEditModal()}
+                                  style={{marginTop: 10, marginLeft: "auto", marginRight: 5}}
+                              />
+                  </TopBar>
+              </SafeAreaView>
+            </ScrollView>
+          </Modal>
           <View>
             <ScrollView
                 horizontal={true}
@@ -633,20 +685,6 @@ renderDotsView = (numItems, position) =>{
           </View>
          
           <View style={styles.contentBox}>
-            <View style={{alignSelf: 'flex-end', marginTop: -60, zIndex: 10, position: 'absolute'}}>
-                <TouchableOpacity
-                        onPress={() => console.log("edit")}
-                        style={{width: 80, height: 80, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.tango700, borderRadius: width, }}
-                    >
-                    <Icon
-                        iconLib="MaterialIcons"
-                        iconName="edit"
-                        iconColor={Colors.mist300}
-                        iconSize={32}        
-                    />
-                    <Text type="bold" style={{color: Colors.mist300}}>Edit</Text>
-                </TouchableOpacity>
-            </View>
             <View style={{width: 100, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.fortune500, paddingVertical: 4, borderRadius: width, marginBottom: 8}}>
                         <Text style={{ fontSize: 16, color: Colors.mist300,}}>{this.state.spacePrice}/hr</Text>
             </View>
