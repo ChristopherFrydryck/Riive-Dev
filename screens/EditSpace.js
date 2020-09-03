@@ -50,22 +50,14 @@ class editSpace extends Component {
 
   static navigationOptions = ({navigation}) => {
     const { params = {} } = navigation.state;
-
+    
     return{
-      title: params.title,
+      title: params.title ? params.title : "Loading...",
       headerTitleStyle:{
           fontWeight: "300",
           fontSize: 18,
       },
       headerRight:(
-        // <ClickableChip
-        //   bgColor='rgba(255, 193, 76, 0.3)' // Colors.Tango300 with opacity of 30%
-        //   textColor={Colors.tango700}
-        //   onPress={() => console.log("tst")}
-        //   style={{marginRight: 16}}
-        // >
-        //   Edit
-        // </ClickableChip>
         <TouchableOpacity
           onPress={() => params.openEditModal()}
           style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16}}
@@ -92,6 +84,7 @@ class editSpace extends Component {
 
         const {selectedSpot} = this.props.ComponentStore
         const space = selectedSpot[0]
+        
 
         this.state = {
 
@@ -100,7 +93,7 @@ class editSpace extends Component {
             editModalOpen: false,
 
 
-            postID: space.postID,
+            postID: space.listingID,
             region: {
               latitude: space.region.latitude,
               longitude: space.region.longitude,
@@ -157,7 +150,7 @@ class editSpace extends Component {
       // Set Status Bar page info here!
       const db = firebase.firestore();
       const ref = db.collection("spaces").doc();
-      this.setState({postID: ref.id})
+
       this._isMounted = true;
      this._navListener = this.props.navigation.addListener('didFocus', () => {
          StatusBar.setBarStyle('dark-content', true);
@@ -190,10 +183,11 @@ class editSpace extends Component {
     pickImage = async () => {
       const permissions = [Permissions.CAMERA_ROLL];
       let isGranted = true;
+      let prevPhoto = this.state.photo
         
       for(let i = 0; i < permissions.length; i++){
         let perms = await Permissions.askAsync(permissions[i]);
-        console.log(permissions[i], perms.status)
+        // console.log(permissions[i], perms.status)
 
         if(perms.status != 'granted'){
           isGranted = false;
@@ -219,16 +213,16 @@ class editSpace extends Component {
         if (!result.cancelled) {
             
                   try {
-                      // alert("Success!")
+                     console.log("Success!")
                       this.setState({imageUploading: false})
                   }
                   catch {
-                      alert("Failed to upload image. Please try again.")
+                      console.log("Failed to upload image. Please try again.")
                       this.setState({imageUploading: false})
                   }
           
         }else{
-            this.setState({imageUploading: false})
+            this.setState({imageUploading: false, photo: prevPhoto})
         }
       }else{
         this.getPermissionAsync(Permissions.CAMERA_ROLL)
@@ -244,7 +238,7 @@ class editSpace extends Component {
         
       for(let i = 0; i < permissions.length; i++){
         let perms = await Permissions.askAsync(permissions[i]);
-        console.log(permissions[i], perms.status)
+        // console.log(permissions[i], perms.status)
 
         if(perms.status != 'granted'){
           isGranted = false;
@@ -378,71 +372,77 @@ class editSpace extends Component {
   }
 
   submitSpace = async() => {
+
+    
     
     await this.verifyInputs();
 
     const db = firebase.firestore();
+    const {selectedSpot} = this.props.ComponentStore;
+    const space = selectedSpot[0]
+    // console.log(this.state.postID)
 
-    console.log(this.state.postID)
 
 
+    let spaceAvailableMatch = JSON.stringify(space.availability) == JSON.stringify(this.state.daily)
+    let spaceBioMatch = space.spaceBio == this.state.spaceBio
+    let spaceNameMatch = space.spaceName == this.state.spaceName;
+    let spacePriceMatch = space.spacePrice == this.state.spacePrice;
+    let spacePhotoMatch = space.photo == this.state.photo
+
+ 
     
 
     
 
-      if(this.state.searchedAddress && this.state.spacePrice && this.state.nameValid && this.state.bioValid && this.state.photo){
+      if(this.state.searchedAddress && this.state.spacePrice && this.state.priceValid && this.state.nameValid && this.state.bioValid && this.state.photo){
 
-       
 
-        // console.log(`${this.state.address.number} ${this.state.address.street}${this.state.address.box && this.state.address.box.split('').length > 0 ? " APT #" + this.state.address.box :""}, ${this.state.address.city}, ${this.state.address.state_abbr} ${this.state.address.zip}...${this.state.address.country}`)
-        // console.log(`${this.state.address.spaceNumber}`)
-                await this.uploadImage(this.state.photo)
-                this.setState({savingSpace: true})
-                try{  
-
-                let spaceCentsArray = this.state.spacePrice.split(".")
-                let spaceCents = parseInt(spaceCentsArray[0].slice(1) + spaceCentsArray[1])
-
-                let createdTime = new Date().getTime();
+        if(spaceAvailableMatch && spaceBioMatch && spaceNameMatch && spacePriceMatch && spacePhotoMatch){
+          // console.log(this.props.UserStore.listings.indexOf(space))
+        }else{
+          await this.uploadImage(this.state.photo)
+          this.setState({savingSpace: true})
+          try{  
+             let spaceCentsArray = this.state.spacePrice.split(".")
+             let spaceCents = parseInt(spaceCentsArray[0].slice(1) + spaceCentsArray[1])
+             let createdTime = new Date().getTime();
                  
-                 console.log(this.state.photo)
-                 await this.setState({savingSpace: true})
+           
+              await this.setState({savingSpace: true})
 
-                 await db.collection("users").doc(this.props.UserStore.userID).update({
-                    listings: firebase.firestore.FieldValue.arrayUnion(
-                      this.state.postID
-                    )
-                 })
-                 await db.collection("listings").doc(this.state.postID).set({
-                  
-                      listingID: this.state.postID,
-                      address: this.state.address,
-                      region: this.state.region,
-                      photo: this.state.photo,
-                      spaceName: this.state.spaceName,
-                      spaceBio: this.state.spaceBio,
-                      spacePrice: this.state.spacePrice,
-                      spacePriceCents: spaceCents,
-                      numSpaces: this.state.numSpaces,
-                      availability: this.state.daily,
-                      created: createdTime
-                 
+              
+              
+              await db.collection("listings").doc(this.state.postID).update({
+                listingID: this.state.postID,
+                address: this.state.address,
+                region: this.state.region,
+                photo: this.state.photo,
+                spaceName: this.state.spaceName,
+                spaceBio: this.state.spaceBio,
+                spacePrice: this.state.spacePrice,
+                spacePriceCents: spaceCents,
+                numSpaces: this.state.numSpaces,
+                availability: this.state.daily,
+                updated: createdTime,
                })
 
+               
+               console.log(this.props.UserStore.listings.map(x => x.listingID).indexOf(this.state.postID))
                // add space to mobx UserStore
-               await this.props.UserStore.listings.push({
-                  listingID: this.state.postID,
-                  address: this.state.address,
-                  region: this.state.region,
-                  photo: this.state.photo,
-                  spaceName: this.state.spaceName,
-                  spaceBio: this.state.spaceBio,
-                  spacePrice: this.state.spacePrice,
-                  spacePriceCents: spaceCents,
-                  numSpaces: this.state.numSpaces,
-                  availability: this.state.daily,
-                  created: createdTime
-               })
+              //  await this.props.UserStore.listings.push({
+              //     listingID: this.state.postID,
+              //     address: this.state.address,
+              //     region: this.state.region,
+              //     photo: this.state.photo,
+              //     spaceName: this.state.spaceName,
+              //     spaceBio: this.state.spaceBio,
+              //     spacePrice: this.state.spacePrice,
+              //     spacePriceCents: spaceCents,
+              //     numSpaces: this.state.numSpaces,
+              //     availability: this.state.daily,
+              //     created: createdTime
+              //  })
 
                   // navigate back to profile
                   this.props.navigation.navigate("Profile")
@@ -450,20 +450,16 @@ class editSpace extends Component {
                 }catch{
                   this.setState({savingSpace: false})
                 }
-                
-            
-               
-               
-              
-           
-                
+        }
+       
+
+        // console.log(`${this.state.address.number} ${this.state.address.street}${this.state.address.box && this.state.address.box.split('').length > 0 ? " APT #" + this.state.address.box :""}, ${this.state.address.city}, ${this.state.address.state_abbr} ${this.state.address.zip}...${this.state.address.country}`)
+        // console.log(`${this.state.address.spaceNumber}`)
+                 
 
       }else{
         this.setState({savingSpace: false})
       }
-  
-     
-      // console.log(`The price is ${this.state.spacePrice}`)
     }
     
   
@@ -599,11 +595,11 @@ renderDotsView = (numItems, position) =>{
   render() {
     //   console.log(this.props.ComponentStore.selectedSpace)
       const {width, height} = Dimensions.get('window')
-
       const {ComponentStore, UserStore} = this.props
 
       
       return(
+        
         <KeyboardAwareScrollView
               keyboardShouldPersistTaps="handled"
               contentContainerStyle={{ flexGrow: 1 }} scrollEnabled
@@ -615,483 +611,291 @@ renderDotsView = (numItems, position) =>{
             visible={this.state.editModalOpen} animationType="slide"
             //         transparent={true}          
           >
-            <ScrollView>
-              <SafeAreaView style={{paddingTop: 10, marginHorizontal: 16, flex: 1}}>
-                <TopBar>
-                 <Text style={{fontSize: 20, marginRight: 'auto', marginTop: 8, marginLeft: 16}}>Edit {ComponentStore.selectedSpot[0].spaceName.length > 20 ? ComponentStore.selectedSpot[0].spaceName.substring(0, 20) + "..." : ComponentStore.selectedSpot[0].spaceName}</Text>
-                 <Icon 
-                                  iconName="x"
-                                  iconColor={Colors.cosmos500}
-                                  iconSize={28}
-                                  onPress={() => this.openEditModal()}
-                                  style={{marginTop: 10, marginLeft: "auto", marginRight: 5}}
-                              />
-                  </TopBar>
-              </SafeAreaView>
-            </ScrollView>
-          </Modal>
-          <View>
-            <ScrollView
-                horizontal={true}
-                pagingEnabled={true}
-                scrollEnabled={true}
-                decelerationRate={0}
-                snapToAlignment="start"
-                snapToInterval={Dimensions.get("window").width}
-                onScroll={data =>  this.carouselUpdate(data.nativeEvent.contentOffset.x)}
-                scrollEventThrottle={1}
-                showsHorizontalScrollIndicator={false}
-                // persistentScrollbar={true}
-            >
-            <View>
-            <Image 
-                    style={{width: width}}
-                    aspectRatio={16/9}
-                    source={{uri: this.state.photo}}
-                    backupSource={require('../assets/img/Logo_001.png')}
-                    resizeMode={'cover'}
-                /> 
-                </View>
-                <View>
-                <View  style={{ position:'absolute', width: width, aspectRatio: 16/9, zIndex: 9}}/>
-                    <MapView
+            <SafeAreaView style={{backgroundColor: 'white', flex: 1}} />
+            <View style={{padding: 8, flexDirection: 'row', justifyContent: 'space-between'}}>
+    
+                  <Text style={{fontSize: 20, marginRight: 'auto', marginTop: 8, marginLeft: 8}}>Edit Space</Text>
+                  <Icon 
+                                    iconName="x"
+                                    iconColor={Colors.cosmos500}
+                                    iconSize={28}
+                                    onPress={() => this.openEditModal()}
+                                    style={{marginTop: 10, marginLeft: "auto", marginRight: 5}}
+                                />
+              </View>
+              <KeyboardAwareScrollView 
+                    keyboardShouldPersistTaps="handled"
+                    contentContainerStyle={{ flexGrow: 1 }} scrollEnabled
+                    enableOnAndroid={true}
+                    extraScrollHeight={150} //iOS
+                    extraHeight={135} //Android
+                  >
+                  
+                  <View style={{ width: "100%", paddingHorizontal: 16, position: 'absolute', zIndex: 9, }}>
+                    <View style={{ padding: 8, backgroundColor: 'rgba(0, 0, 0, 0.6)'}}>
+                      <View style={{flexDirection: 'row'}}>
+                      <Icon
+                                iconName="location-pin"
+                                iconLib="Entypo"
+                                iconColor="white"
+                                iconSize={16}
+                                style={{marginRight: 8, marginTop: 4}}
+                            />
+                        <Text style={{color: "white", fontSize: 16, marginRight: 24}}>{this.state.address.full} {this.state.address.box ? <Text style={{color: "white"}}># {this.state.address.box}</Text> : null}</Text>
+                      </View>
+                      {this.state.address.spaceNumber ? <Text style={{color: "white", marginLeft: 24}}>Space # {this.state.address.spaceNumber}</Text> : null}
+                    </View>
+                  </View>
+                  <View style={{paddingHorizontal: 16}}>
+                      {this.state.photo ? 
+                      <View>
+                        <Image 
+                          style={{width: Dimensions.get("window").width - 32}}
+                          aspectRatio={16/9}
+                          source={{uri: this.state.photo}}
+                          backupSource={require('../assets/img/Logo_001.png')}
+                          resizeMode={'cover'}
+                        /> 
+                      </View>
+                      : null}
+  
+                        <View style={{display: "flex", flexDirection: 'row', marginBottom: 16}}>
+                        <Button style={{flex: 1, backgroundColor: "#FF8708"}} textStyle={{color:"#FFFFFF"}} onPress={() => this.pickImage()}>Change Photo</Button>
+                        <Button style={{flex: 1, marginLeft: 8, backgroundColor: "#FF8708"}} textStyle={{color:"#FFFFFF"}} onPress={() => this.launchCamera()}>Take Photo</Button>
+                      </View>
+                    
+                      
+                      </View>
+  
+                  {/* <MapView
                     provider={MapView.PROVIDER_GOOGLE}
                     mapStyle={NightMap}
-                    style={{width: width, aspectRatio:16/9}}
+                    style={styles.mapStyle}
                     region={{
-                    latitude: this.state.region.latitude,
-                    longitude: this.state.region.longitude,
-                    latitudeDelta: this.state.region.latitudeDelta,
-                    longitudeDelta: this.state.region.longitudeDelta,
+                      latitude: this.state.region.latitude ? this.state.region.latitude : 37.8020,
+                      longitude: this.state.region.longitude ? this.state.region.longitude : -122.4486,
+                      latitudeDelta: this.state.region.latitudeDelta ? this.state.region.latitudeDelta : 0.025,
+                      longitudeDelta: this.state.region.longitudeDelta ? this.state.region.longitudeDelta : 0.025,
                     }}
                     pitchEnabled={false} 
                     rotateEnabled={false} 
                     zoomEnabled={false} 
                     scrollEnabled={false}
                     >
-                        <Marker 
-                            coordinate={{
-                            latitude: this.state.region.latitude,
-                            longitude: this.state.region.longitude
-                            }}   
-                        />
-                    </MapView>
-                </View>
-            </ScrollView>
-            
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginVertical: 8}}>
-                {this.renderDotsView(2, this.state.currentActivePhoto)}
-            </View>
-          </View>
-         
-          <View style={styles.contentBox}>
-            <View style={{width: 100, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.fortune500, paddingVertical: 4, borderRadius: width, marginBottom: 8}}>
-                        <Text style={{ fontSize: 16, color: Colors.mist300,}}>{this.state.spacePrice}/hr</Text>
-            </View>
-          
-                <Text  style={{fontSize: 24, flexWrap: 'wrap'}}>{this.state.spaceName}</Text>
-                <View style={{flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8}}>
-                    <Icon
-                        iconName="location-pin"
-                        iconLib="Entypo"
-                        iconColor={Colors.cosmos300}
-                        iconSize={16}
-                        style={{marginRight: 8, marginTop: 4}}
-                    />
-                    <Text style={{fontSize: 16, color: Colors.cosmos300,  flexWrap: 'wrap', marginRight: 24}}>{this.state.address.full} {this.state.address.box ? "#"+this.state.address.box : null}</Text>
-                </View>
-                {this.state.spaceBio ? 
-                <View style={{flexDirection: 'row', flex: 1, alignItems: 'flex-start', flexShrink: 1}}>
-                    <Icon
-                        iconName="form"
-                        iconLib="AntDesign"
-                        iconColor={Colors.cosmos300}
-                        iconSize={16}
-                        style={{marginRight: 8, marginTop: 4}}
-                    />
-                    <Text style={{fontSize: 16, color: Colors.cosmos300, marginRight: 24}}>{this.state.spaceBio}</Text> 
-                </View>
-                : null}
+                      {this.state.searchedAddress ?
+                      <Marker 
+                        coordinate={{
+                          latitude: this.state.region.latitude,
+                          longitude: this.state.region.longitude
+                        }}   
+                      />
+                      : null }
+                    </MapView> */}
 
-               
-                <View style={{marginTop: 32}}>
-                    <DayAvailabilityPicker 
+                    {/* <View style={styles.numHoriz}>
+                    <View style={styles.numContainer}>
+                      <Text style={styles.number} type="bold">2</Text>
+                    </View>
+                    <Text style={styles.numTitle}>Stand Out!</Text>
+                  </View> */}
+                  <View style={{paddingHorizontal: 16}}>
+                    <Input 
+                      placeholder='Name your space...'         label="Space Name"
+                      name="space name"                 
+                      onChangeText= {(spaceName) => this.setState({spaceName})}
+                      value={this.state.spaceName}
+                      maxLength = {40}
+                      keyboardType='default'
+                      error={this.state.nameError}
+                    />
+                    <Input 
+                      placeholder='Add a bio...'         
+                      label="Space Bio (optional)"
+                      name="space bio"                 
+                      onChangeText= {(spaceBio) => this.setState({spaceBio})}
+                      value={this.state.spaceBio}
+                      mask="multiline"
+                      numLines={4}
+                      maxLength = {300}
+                      keyboardType='default'
+                      error={this.state.bioError}
+                    />
+                    
+                  </View>
+                  {/* <View style={styles.numHoriz}>
+                    <View style={styles.numContainer}>
+                      <Text style={styles.number} type="bold">3</Text>
+                    </View>
+                    <Text style={styles.numTitle}>Upload Photo</Text>
+                  </View> */}
+                 
+
+                    {/* <Input 
+                      placeholder='Please park to the far right of the driveway...'         
+                      label="Message for Guests (optional)"
+                      name="guest message"                 onChangeText= {(spaceName) => this.setState({spaceName})}
+                      value={this.state.spaceName}
+                      mask="multiline"
+                      numLines={4}
+                      maxLength = {300}
+                      keyboardType='default'
+                      // error={}
+                    /> */}
+                    {/* <View style={styles.numHoriz}>
+                      <View style={styles.numContainer}>
+                        <Text style={styles.number} type="bold">4</Text>
+                      </View>
+                      <Text style={styles.numTitle}>Choose your price</Text>
+                    </View> */}
+                  <View style={{paddingHorizontal: 16}}>
+                    <Input 
+                        placeholder='$1.25'         
+                        label="Cost Per Hour"
+                        name="cost"             
+                        onChangeText= {(spacePrice) => this.setState({spacePrice})}
+                        value={this.state.spacePrice}
+                        mask="USD"
+                        maxLength = {6}
+                        keyboardType='default'
+                        suffix="/hr"
+                        rightText="Estimated $1.50/hr"
+                        error={this.state.priceError}
+                      />
+                    </View>
+
+                    {/* <View style={styles.numHoriz}>
+                      <View style={styles.numContainer}>
+                        <Text style={styles.number} type="bold">5</Text>
+                      </View>
+                      <Text style={styles.numTitle}>Space Availability</Text>
+                    </View> */}
+                    <View style={{paddingHorizontal: 16}}>
+                      <DayAvailabilityPicker 
                         availability={this.state.daily}
                         availabilityCallback={this.availabilityCallbackFunction}
-                        editable={false}
-                    />
+                        >
+                      </DayAvailabilityPicker>
+
+                    </View>
+                   
+                </KeyboardAwareScrollView>
+                <View style={{paddingHorizontal: 16, marginBottom: 32, height: 60, alignItems: 'center', justifyContent: 'center'}}>
+                  <Button style={{backgroundColor: "#FF8708"}} textStyle={{color:"#FFFFFF"}} disabled={this.state.savingSpace} onPress={() => this.submitSpace()}>Save Changes</Button>
                 </View>
-                
-            
            
-          </View>
-          
-        </KeyboardAwareScrollView>
-      )
 
-//     var numSpacesArray = Array.from(Array(10), (_, i) => i + 1)
-
-//     return (
-//       <KeyboardAwareScrollView
-//       keyboardShouldPersistTaps="handled"
-//       contentContainerStyle={{ flexGrow: 1 }} scrollEnabled
-//       enableOnAndroid={true}
-//       extraScrollHeight={150} //iOS
-//       extraHeight={135} //Android
-//       >
-//       {/* <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{flexGrow : 1}}>
-//          <SafeAreaView style={{backgroundColor: "white", }} /
-//       > */}
-
-//       <Modal 
-//         visible={this.state.imageBrowserOpen} animationType="fade"
-//         transparent={true}
-//       >
-//         <View>
-//         <View style={{height: 200, backgroundColor: 'rgba(0,0,0,0.5)'}}/>
-//         <View style={{
-//           flex: 1,
-//           flexDirection: 'column',
-//           justifyContent: 'flex-start',
-//           alignItems: 'center'}}>
-            
-//             <View style={{height: Dimensions.get('window').height - 200, backgroundColor: 'white'}}>
-//             <ImageBrowser max={5} callback={this.imageBrowserCallback}/>
-//          </View>
-//         </View>
-//         </View>
-//       </Modal>
+                  
+                   
+                  </Modal>
 
 
-//          <KeyboardAvoidingView 
-         
-//          behavior={Platform.OS === 'ios' ? "padding" : null} 
-//             keyboardVerticalOffset={250}
-//             enabled 
-//           >
-        
-       
-//           <View style={styles.numHoriz}>
-//             <View style={styles.numContainer}>
-//               <Text style={styles.number} type="bold">1</Text>
-//             </View>
-//             <Text style={styles.numTitle}>Add Your Address</Text>
-//           </View>
-          
-//           <View style={{flex: 1, paddingHorizontal: 16}}>
-//             <Text style={styles.label}>Address</Text>
-//             <GooglePlacesAutocomplete
-//             placeholder='Your Address...'
-//             returnKeyType={'search'}
-//             ref={(instance) => { this.GooglePlacesRef = instance }}
-//             currentLocation={false}
-//             minLength={2}
-//             autoFocus={false}
-//             listViewDisplayed={false}
-//             fetchDetails={true}
-//             onPress={(data, details = null) => this.onSelectAddress(details)}
-//             textInputProps={{
-//               clearButtonMode: 'never'
-//             }}
-//             renderRightButton={() => 
-//             <Icon 
-//               iconName="x"
-//               iconColor={Colors.cosmos500}
-//               iconSize={24}
-//               onPress={() => this.clearAddress()}
-//               style={{marginTop: 8, display: this.state.searchedAddress ? "flex" : "none"}}
-//             />}
-//             query={{
-//               key: 'AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c',
-//               language: 'en'
-//             }}
-//             GooglePlacesSearchQuery={{
-//               rankby: 'distance',
-//               type: 'geocode'
-//             }}
-//             // GooglePlacesDetailsQuery={{ fields: 'geometry', }}
-//             nearbyPlacesAPI={'GoogleReverseGeocoding'}
-//             debounce={200}
-//             predefinedPlacesAlwaysVisible={true}
-//             enablePoweredByContainer={false}
-            
-            
-//             styles={{
-//               container: {
-//                 border: 'none',
-//                 marginBottom: 8,
-//               },
-//               textInputContainer: {
-//                 width: '100%',
-//                 display: 'flex',
-//                 alignSelf: 'center',
-//                 backgroundColor: "white",
-//                 marginTop: -6,
-//                 borderColor: '#eee',
-//                 borderBottomWidth: 2,
-//                 borderTopWidth: 0,
-//                 backgroundColor: "none"
-//               },
-//               textInput: {
-//                 paddingRight: 0,
-//                 paddingLeft: 0,
-//                 paddingBottom: 0,
-//                 color: '#333',
-//                 fontSize: 18,
-//                 width: '100%'
-//               },
-//               description: {
-//                 fontWeight: 'bold'
-//               },
-//               predefinedPlacesDescription: {
-//                 color: '#1faadb'
-//               }
-              
-//             }}
-//             />
-//             <View style={{flex: 1, flexDirection: "row"}}>
-//             <Input
-//             flex={0.35}
-//             placeholder='107'        
-//             label= "Apt # (optional)"
-//             name="Apartment number" 
-//             style={{marginRight: 16}}                
-//             onChangeText= {(number) => this.setState(prevState => ({
-//               address:{
-//                 ...prevState.address,
-//                 box: number,
-//               }
-//             }))}
-//             value={this.state.address.box}
-//             maxLength = {6}
-//             keyboardType='number-pad'/>
-//             <Input
-//             flex={0.45}
-//             placeholder='32'        
-//             label= "Space # (optional)"
-//             name="Space number"                 
-//             onChangeText= {(number) => this.setState(prevState => ({
-//               address:{
-//                 ...prevState.address,
-//                 spaceNumber: number,
-//               }
-//             }))}
-//             value={this.state.address.spaceNumber}
-//             maxLength = {6}
-//             keyboardType='number-pad'/>
-//             </View>
-//           </View>
-//           <MapView
-//             provider={MapView.PROVIDER_GOOGLE}
-//             mapStyle={NightMap}
-//             style={styles.mapStyle}
-//             region={{
-//               latitude: this.state.region.latitude ? this.state.region.latitude : 37.8020,
-//               longitude: this.state.region.longitude ? this.state.region.longitude : -122.4486,
-//               latitudeDelta: this.state.region.latitudeDelta ? this.state.region.latitudeDelta : 0.025,
-//               longitudeDelta: this.state.region.longitudeDelta ? this.state.region.longitudeDelta : 0.025,
-//             }}
-//             pitchEnabled={false} 
-//             rotateEnabled={false} 
-//             zoomEnabled={false} 
-//             scrollEnabled={false}
-//             >
-//               {this.state.searchedAddress ?
-//               <Marker 
-//                 coordinate={{
-//                   latitude: this.state.region.latitude,
-//                   longitude: this.state.region.longitude
-//                 }}   
-//               />
-//               : null }
-//             </MapView>
-
-//             <View style={styles.numHoriz}>
-//             <View style={styles.numContainer}>
-//               <Text style={styles.number} type="bold">2</Text>
-//             </View>
-//             <Text style={styles.numTitle}>Stand Out!</Text>
-//           </View>
-//           <View style={{paddingHorizontal: 16}}>
-//             <Input 
-//               placeholder='Name your space...'         label="Space Name"
-//               name="space name"                 
-//               onChangeText= {(spaceName) => this.setState({spaceName})}
-//               value={this.state.spaceName}
-//               maxLength = {40}
-//               keyboardType='default'
-//               error={this.state.nameError}
-//             />
-//              <Input 
-//               placeholder='Add a bio...'         
-//               label="Space Bio (optional)"
-//               name="space bio"                 
-//               onChangeText= {(spaceBio) => this.setState({spaceBio})}
-//               value={this.state.spaceBio}
-//               mask="multiline"
-//               numLines={4}
-//               maxLength = {300}
-//               keyboardType='default'
-//               error={this.state.bioError}
-//             />
-            
-//           </View>
-//           <View style={styles.numHoriz}>
-//             <View style={styles.numContainer}>
-//               <Text style={styles.number} type="bold">3</Text>
-//             </View>
-//             <Text style={styles.numTitle}>Upload Photo</Text>
-//           </View>
-//           <View style={{paddingHorizontal: 16}}>
-//             <View style={{display: "flex", flexDirection: 'row', marginBottom: 16}}>
-//               <Button style={this.state.photo ? {flex: 1, marginLeft: 8, backgroundColor: Colors.mist900} :{flex: 1, marginLeft: 8, backgroundColor: "#FF8708"}} textStyle={ this.state.photo ? {color: Colors.cosmos300} : {color:"#FFFFFF"}} disabled={this.state.photo ? true : false} onPress={() => this.pickImage()}>Add Photo</Button>
-//               <Button style={this.state.photo ? {flex: 1, marginLeft: 8, backgroundColor: Colors.mist900} :{flex: 1, marginLeft: 8, backgroundColor: "#FF8708"}} textStyle={ this.state.photo ? {color: Colors.cosmos300} : {color:"#FFFFFF"}} disabled={this.state.photo  ? true : false} onPress={() => this.launchCamera()}>Take Photo</Button>
-//             </View>
-//           {/* <Text>Upload Pictures</Text> */}
-//           {/* <View style={{display: 'flex', flexDirection: 'row', marginBottom: 16}}> */}
-//               {/* <Button style={{flex: 1, marginRight:4, backgroundColor: "#FF8708"}} textStyle={{color:"#FFFFFF"}} onPress={() => alert("Something...")}>Upload Image</Button>
-//               <Button style={{flex: 1, marginLeft:4, borderColor: "#FF8708", borderWidth: 3}} textStyle={{color:"#FF8708"}} onPress={() => alert("Something...")}>Take Photo</Button> */}
-//             {/* </View> */}
-//             {this.state.photo ? 
-//             <View>
-//               <View style={{position: "absolute", top: 8, right: 8, zIndex: 999, padding: 4, backgroundColor: 'rgba(54, 55, 59, 0.7)', borderRadius: Dimensions.get('window').width/2}}>
-//                 <Icon 
-//                   iconName="x"
-//                   iconColor={Colors.mist300}
-//                   iconSize={24}
-//                   onPress={() => this.setState({photo: null})}
-//                 />
-//               </View>
-//               <Image 
-//                 style={{width: Dimensions.get("window").width - 32}}
-//                 aspectRatio={16/9}
-//                 source={{uri: this.state.photo}}
-//                 backupSource={require('../assets/img/Logo_001.png')}
-//                 resizeMode={'cover'}
-//               /> 
-//               </View>
-//               : null}
-          
-            
-//             </View>
-
-
-//             {/* <Input 
-//               placeholder='Please park to the far right of the driveway...'         
-//               label="Message for Guests (optional)"
-//               name="guest message"                 onChangeText= {(spaceName) => this.setState({spaceName})}
-//               value={this.state.spaceName}
-//               mask="multiline"
-//               numLines={4}
-//               maxLength = {300}
-//               keyboardType='default'
-//               // error={}
-//             /> */}
-//             <View style={styles.numHoriz}>
-//               <View style={styles.numContainer}>
-//                 <Text style={styles.number} type="bold">4</Text>
-//               </View>
-//               <Text style={styles.numTitle}>Choose your price</Text>
-//             </View>
-//           <View style={{paddingHorizontal: 16}}>
-//             <Input 
-//                 placeholder='$1.25'         
-//                 label="Cost Per Hour"
-//                 name="cost"             
-//                 onChangeText= {(spacePrice) => this.setState({spacePrice})}
-//                 value={this.state.spacePrice}
-//                 mask="USD"
-//                 maxLength = {6}
-//                 keyboardType='default'
-//                 suffix="/hr"
-//                 rightText="Estimated $1.50/hr"
-//                 error={this.state.priceError}
-//               />
-//             </View>
-
-//             <View style={styles.numHoriz}>
-//               <View style={styles.numContainer}>
-//                 <Text style={styles.number} type="bold">5</Text>
-//               </View>
-//               <Text style={styles.numTitle}>Space Availability</Text>
-//             </View>
-//             <View style={{paddingHorizontal: 16}}>
-//               <DayAvailabilityPicker 
-//                 availability={this.state.daily}
-//                 availabilityCallback={this.availabilityCallbackFunction}
-//                 >
-//               </DayAvailabilityPicker>
-//               {/* <SectionList 
-//               sections={this.state.daily}
-//               keyExtractor={(item, index) => index}  
-//               horizontal={false}
-//               renderSectionHeader={({section}) => (
-//                   <View style={{padding: 12, backgroundColor: '#efefef'}}>
-//                    <Text style={styles.dayHead}>{section.dayName}</Text>
-//                   </View>
-//               )}  
-//               renderItem={({item}) => (
-//                 <View style={{display: 'flex', flexDirection: 'row', marginTop: 24}}> 
-//                   <Text>{item.start}</Text>
-//                   <Text>{item.end}</Text>
-//                   <Text>{item.start}</Text>
-//                   <Text>{item.end}</Text>
-//                 </View>
-//               )}  
+                  <View>
+                    <ScrollView
+                        horizontal={true}
+                        pagingEnabled={true}
+                        scrollEnabled={true}
+                        decelerationRate={0}
+                        snapToAlignment="start"
+                        snapToInterval={Dimensions.get("window").width}
+                        onScroll={data =>  this.carouselUpdate(data.nativeEvent.contentOffset.x)}
+                        scrollEventThrottle={1}
+                        showsHorizontalScrollIndicator={false}
+                        // persistentScrollbar={true}
+                    >
+                    <View>
+                    <Image 
+                            style={{width: width}}
+                            aspectRatio={16/9}
+                            source={{uri: this.state.photo}}
+                            backupSource={require('../assets/img/Logo_001.png')}
+                            resizeMode={'cover'}
+                        /> 
+                        </View>
+                        <View>
+                        <View  style={{ position:'absolute', width: width, aspectRatio: 16/9, zIndex: 9}}/>
+                            <MapView
+                            provider={MapView.PROVIDER_GOOGLE}
+                            mapStyle={NightMap}
+                            style={{width: width, aspectRatio:16/9}}
+                            region={{
+                            latitude: this.state.region.latitude,
+                            longitude: this.state.region.longitude,
+                            latitudeDelta: this.state.region.latitudeDelta,
+                            longitudeDelta: this.state.region.longitudeDelta,
+                            }}
+                            pitchEnabled={false} 
+                            rotateEnabled={false} 
+                            zoomEnabled={false} 
+                            scrollEnabled={false}
+                            >
+                                <Marker 
+                                    coordinate={{
+                                    latitude: this.state.region.latitude,
+                                    longitude: this.state.region.longitude
+                                    }}   
+                                />
+                            </MapView>
+                        </View>
+                    </ScrollView>
+                    
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginVertical: 8}}>
+                        {this.renderDotsView(2, this.state.currentActivePhoto)}
+                    </View>
+                  </View>
                 
-//               /> */}
-//               {/* <FlatList
-//                 style={{paddingVertical: 8}}
-//                 horizontal
-//                 showsHorizontalScrollIndicator={false}
-//                 keyExtractor={(item) => item.dayName} 
-//                 data={this.state.daily}
-//                 snapToAlignment={"start"}
-//                 snapToInterval={Dimensions.get("window").width * 0.7 + 32}
-//                 decelerationRate={"fast"}
-//                 pagingEnabled
-//                 renderItem={({ item }) => { return (
-//                   <Card elevation={5} style={{width: Dimensions.get("window").width * 0.7, marginHorizontal: 16}}>
-//                       <Card.Title style={styles.dayHead} title={item.dayName} />
-//                       <Card.Content>
-//                       <View style={{display: 'flex', flexDirection: 'row'}}>
-//                         <View style={{display: 'flex', flex: 1, flexDirection: 'column'}}>
-//                           <Text>Start</Text>
-//                           {item.data.map((x, i) => (
-//                           <Text key={item.data[i].id}>{parseInt(item.data[i].start)}</Text>
-//                           ))}
-//                         </View>
-//                         <View style={{display: 'flex', flex: 1, flexDirection: 'column'}}>
-//                           <Text>End</Text>
-//                           {item.data.map((x, i) => (
-//                           <Text key={item.data[i].id}>{parseInt(item.data[i].end)}</Text>
-//                           ))}
-//                         </View>
-//                         <View style={{display: 'flex', flex: 1, flexDirection: 'column'}}>
-//                           <Text>Availability</Text>
-//                           {item.data.map((x, i) => (
-//                             <Switch key={item.data[i].id} value={item.data[i].available}/>
-//                           ))}
-//                         </View>
-//                       </View>
-//                       </Card.Content>
-//                   </Card>
-//                 )}}
-//               /> */}
-//               <Button disabled={this.state.savingSpace} onPress={() => this.submitSpace()}>Add Photo</Button>
+                  <View style={styles.contentBox}>
+                    <View style={{width: 100, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.fortune500, paddingVertical: 4, borderRadius: width, marginBottom: 8}}>
+                                <Text style={{ fontSize: 16, color: Colors.mist300,}}>{this.state.spacePrice}/hr</Text>
+                    </View>
+                  
+                        <Text  style={{fontSize: 24, flexWrap: 'wrap'}}>{this.state.spaceName}</Text>
+                        <View style={{flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8}}>
+                            <Icon
+                                iconName="location-pin"
+                                iconLib="Entypo"
+                                iconColor={Colors.cosmos300}
+                                iconSize={16}
+                                style={{marginRight: 8, marginTop: 4}}
+                            />
+                            <Text style={{fontSize: 16, color: Colors.cosmos300,  flexWrap: 'wrap', marginRight: 24}}>{this.state.address.full} {this.state.address.box ? "#"+this.state.address.box : null}</Text>
+                        </View>
+                        {this.state.spaceBio ? 
+                        <View style={{flexDirection: 'row', flex: 1, alignItems: 'flex-start', flexShrink: 1}}>
+                            <Icon
+                                iconName="form"
+                                iconLib="AntDesign"
+                                iconColor={Colors.cosmos300}
+                                iconSize={16}
+                                style={{marginRight: 8, marginTop: 4}}
+                            />
+                            <Text style={{fontSize: 16, color: Colors.cosmos300, marginRight: 24}}>{this.state.spaceBio}</Text> 
+                        </View>
+                        : null}
 
-//             </View>
-            
-//         </KeyboardAvoidingView>
-//       {/* </ScrollView> */}
-//       </KeyboardAwareScrollView>
-//     );
-//   }
+                      
+                        <View style={{marginTop: 32}}>
+                            <DayAvailabilityPicker 
+                                availability={this.state.daily}
+                                availabilityCallback={this.availabilityCallbackFunction}
+                                editable={false}
+                            />
+                        </View>
+                        
+                    
+                  
+                  </View>
+                  
+                </KeyboardAwareScrollView>
+      )
 }
 }
 
 const styles = StyleSheet.create({
 
+  mapStyle: {
+    width: Dimensions.get('window').width,
+    height: 175,
+  },
   numHoriz:{
     flex: 1,
     flexDirection: 'row',
@@ -1141,6 +945,17 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     width: 'auto'
 },
+
+
+
+
+
+
+
+
+
+
+
 })
   
 
