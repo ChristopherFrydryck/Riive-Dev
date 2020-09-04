@@ -380,7 +380,14 @@ class editSpace extends Component {
     const db = firebase.firestore();
     const {selectedSpot} = this.props.ComponentStore;
     const space = selectedSpot[0]
+    var spaceFromDB = null
     // console.log(this.state.postID)
+
+    await db.collection("listings").doc(this.state.postID).get().then((snapshot) => {
+      spaceFromDB = snapshot.data()
+     })
+
+
 
 
 
@@ -428,7 +435,24 @@ class editSpace extends Component {
                })
 
                
-               console.log(this.props.UserStore.listings.map(x => x.listingID).indexOf(this.state.postID))
+               const spaceIndex = this.props.UserStore.listings.map(x => x.listingID).indexOf(this.state.postID)
+
+            
+
+               this.props.UserStore.listings[spaceIndex] = {
+                  listingID: this.state.postID,
+                  address: this.state.address,
+                  region: this.state.region,
+                  photo: this.state.photo,
+                  spaceName: this.state.spaceName,
+                  spaceBio: this.state.spaceBio,
+                  spacePrice: this.state.spacePrice,
+                  spacePriceCents: spaceCents,
+                  numSpaces: this.state.numSpaces,
+                  availability: this.state.daily,
+                  created: spaceFromDB.created,
+                  updated: createdTime,
+               }
                // add space to mobx UserStore
               //  await this.props.UserStore.listings.push({
               //     listingID: this.state.postID,
