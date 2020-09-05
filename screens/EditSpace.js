@@ -470,8 +470,8 @@ class editSpace extends Component {
               //  })
 
                   // navigate back to profile
-                  // this.props.navigation.navigate("Profile")
-                  this.setState({savingSpace: false, editModalOpen: false})
+                  this.props.navigation.navigate("Profile")
+                  this.setState({savingSpace: false})
                 }catch{
                   this.setState({savingSpace: false})
                 }
@@ -491,6 +491,7 @@ class editSpace extends Component {
 
 
   availabilityCallbackFunction = (data) => {
+  
     this.checkForChanges("daily", data)
   }
    
