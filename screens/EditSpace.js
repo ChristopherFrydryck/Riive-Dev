@@ -72,10 +72,6 @@ class editSpace extends Component {
         </TouchableOpacity>
       )
     }
-      
-        
-    
-
 };
 
 
@@ -89,6 +85,7 @@ class editSpace extends Component {
         this.state = {
 
             currentActivePhoto: 0,
+            changesMade: false,
 
             editModalOpen: false,
 
@@ -168,8 +165,9 @@ class editSpace extends Component {
     }
 
     openEditModal = () => {
-      this.setState({editModalOpen: !this.state.editModalOpen})
+      this.setState({editModalOpen: !this.state.editModalOpen, changesMade: false})
     }
+
 
     getPermissionAsync = async (...perms) => {
       if (Platform.OS == 'ios') {
@@ -214,7 +212,7 @@ class editSpace extends Component {
             
                   try {
                      console.log("Success!")
-                      this.setState({imageUploading: false})
+                      this.setState({imageUploading: false, changesMade: true})
                   }
                   catch {
                       console.log("Failed to upload image. Please try again.")
@@ -320,14 +318,10 @@ class editSpace extends Component {
         
       // this.setState({photo: url})
       // return url
-          
-    
-
-
-
-     
     
   }
+
+
 
   verifyInputs = () => {
 
@@ -371,24 +365,12 @@ class editSpace extends Component {
     }
   }
 
-  submitSpace = async() => {
 
-    
-    
-    await this.verifyInputs();
-
-    const db = firebase.firestore();
+  checkForChanges = async(stateArg, val) => {
     const {selectedSpot} = this.props.ComponentStore;
     const space = selectedSpot[0]
-    var spaceFromDB = null
-    // console.log(this.state.postID)
 
-    await db.collection("listings").doc(this.state.postID).get().then((snapshot) => {
-      spaceFromDB = snapshot.data()
-     })
-
-
-
+    await this.setState({[stateArg]: val})
 
 
     let spaceAvailableMatch = JSON.stringify(space.availability) == JSON.stringify(this.state.daily)
@@ -397,17 +379,36 @@ class editSpace extends Component {
     let spacePriceMatch = space.spacePrice == this.state.spacePrice;
     let spacePhotoMatch = space.photo == this.state.photo
 
- 
-    
+    if(spaceAvailableMatch && spaceBioMatch && spaceNameMatch && spacePriceMatch && spacePhotoMatch){
+      // console.log("No changes")
+      this.setState({changesMade: false})
+    }else{
+      // console.log("Changes made")
+      this.setState({changesMade: true})
+    }
+  }
 
-    
+
+
+
+  submitSpace = async() => {
+
+
+    await this.verifyInputs();
+
+    const db = firebase.firestore();
+    var spaceFromDB = null
+    // console.log(this.state.postID)
+
+    await db.collection("listings").doc(this.state.postID).get().then((snapshot) => {
+      spaceFromDB = snapshot.data()
+     })
+
 
       if(this.state.searchedAddress && this.state.spacePrice && this.state.priceValid && this.state.nameValid && this.state.bioValid && this.state.photo){
 
 
-        if(spaceAvailableMatch && spaceBioMatch && spaceNameMatch && spacePriceMatch && spacePhotoMatch){
-          // console.log(this.props.UserStore.listings.indexOf(space))
-        }else{
+       
           await this.uploadImage(this.state.photo)
           this.setState({savingSpace: true})
           try{  
@@ -469,12 +470,12 @@ class editSpace extends Component {
               //  })
 
                   // navigate back to profile
-                  this.props.navigation.navigate("Profile")
-                  this.setState({savingSpace: false})
+                  // this.props.navigation.navigate("Profile")
+                  this.setState({savingSpace: false, editModalOpen: false})
                 }catch{
                   this.setState({savingSpace: false})
                 }
-        }
+        
        
 
         // console.log(`${this.state.address.number} ${this.state.address.street}${this.state.address.box && this.state.address.box.split('').length > 0 ? " APT #" + this.state.address.box :""}, ${this.state.address.city}, ${this.state.address.state_abbr} ${this.state.address.zip}...${this.state.address.country}`)
@@ -490,7 +491,7 @@ class editSpace extends Component {
 
 
   availabilityCallbackFunction = (data) => {
-    this.setState({daily: data})
+    this.checkForChanges("daily", data)
   }
    
 
@@ -504,88 +505,12 @@ class editSpace extends Component {
          this._navListener.remove();
        }
 
-      getCoordsFromName(loc) {
-        this.setState({
-          latitude: loc.lat,
-          longitude: loc.lng,
-        })
-      }
-
-      imageBrowserCallback = (callback) => {
-        callback.then((photos) => {
-          console.log(photos)
-          this.setState({
-            imageBrowserOpen: false,
-            photos: photos,
-          })
-        }).catch((e) => console.log(e))
-      }
-
-
-onSelectAddress = (det) => {
-  // console.log(det.formatted_address)
-  // console.log(det.geometry.location.lat);
-  // console.log(det.address_components)
-  
-  var number = det.address_components.filter(x => x.types.includes('street_number'))[0]
-  var street = det.address_components.filter(x => x.types.includes('route'))[0]
-  var city = det.address_components.filter(x => x.types.includes('locality'))[0]
-  var county = det.address_components.filter(x => x.types.includes('administrative_area_level_2'))[0]
-  var state = det.address_components.filter(x => x.types.includes('administrative_area_level_1'))[0]
-  var country = det.address_components.filter(x => x.types.includes('country'))[0]
-  var zip = det.address_components.filter(x => x.types.includes('postal_code'))[0]
-
-  
-
-
-  
-
-
-  this.setState(prevState => ({
-    searchedAddress: true,
-    region:{
-      latitude: det.geometry.location.lat,
-      longitude: det.geometry.location.lng,
-      latitudeDelta: .006,
-      longitudeDelta: .006
-    },
-    address:{
-      ...prevState.address,
-      full: det.formatted_address,
-      number: number.long_name,
-      street: street.long_name,
-      city: city.long_name,
-      county: county.long_name,
-      state: state.long_name,
-      state_abbr: state.short_name,
-      country: country.long_name,
-      zip: zip.long_name,
-    }
-  }))
+   
+      
 
 
 
-  
-}
 
-clearAddress = () => {
-  this.GooglePlacesRef.setAddressText("")
-  this.setState(prevState => ({
-    searchedAddress: false,
-    address:{
-      ...prevState.address,
-      full: null,
-      number: null,
-      street: null,
-      city: null,
-      county: null,
-      state: null,
-      state_abbr: null,
-      country: null,
-      zip: null,
-    }
-  }))
-}
 
 
 carouselUpdate = (xVal) => {
@@ -671,8 +596,7 @@ renderDotsView = (numItems, position) =>{
                     </View>
                   </View>
                   <View style={{paddingHorizontal: 16}}>
-                      {this.state.photo ? 
-                      <View>
+                      
                         <Image 
                           style={{width: Dimensions.get("window").width - 32}}
                           aspectRatio={16/9}
@@ -680,8 +604,7 @@ renderDotsView = (numItems, position) =>{
                           backupSource={require('../assets/img/Logo_001.png')}
                           resizeMode={'cover'}
                         /> 
-                      </View>
-                      : null}
+                    
   
                         <View style={{display: "flex", flexDirection: 'row', marginBottom: 16}}>
                         <Button style={{flex: 1, backgroundColor: "#FF8708"}} textStyle={{color:"#FFFFFF"}} onPress={() => this.pickImage()}>Change Photo</Button>
@@ -690,43 +613,13 @@ renderDotsView = (numItems, position) =>{
                     
                       
                       </View>
-  
-                  {/* <MapView
-                    provider={MapView.PROVIDER_GOOGLE}
-                    mapStyle={NightMap}
-                    style={styles.mapStyle}
-                    region={{
-                      latitude: this.state.region.latitude ? this.state.region.latitude : 37.8020,
-                      longitude: this.state.region.longitude ? this.state.region.longitude : -122.4486,
-                      latitudeDelta: this.state.region.latitudeDelta ? this.state.region.latitudeDelta : 0.025,
-                      longitudeDelta: this.state.region.longitudeDelta ? this.state.region.longitudeDelta : 0.025,
-                    }}
-                    pitchEnabled={false} 
-                    rotateEnabled={false} 
-                    zoomEnabled={false} 
-                    scrollEnabled={false}
-                    >
-                      {this.state.searchedAddress ?
-                      <Marker 
-                        coordinate={{
-                          latitude: this.state.region.latitude,
-                          longitude: this.state.region.longitude
-                        }}   
-                      />
-                      : null }
-                    </MapView> */}
 
-                    {/* <View style={styles.numHoriz}>
-                    <View style={styles.numContainer}>
-                      <Text style={styles.number} type="bold">2</Text>
-                    </View>
-                    <Text style={styles.numTitle}>Stand Out!</Text>
-                  </View> */}
                   <View style={{paddingHorizontal: 16}}>
                     <Input 
-                      placeholder='Name your space...'         label="Space Name"
+                      placeholder='Name your space...'         
+                      label="Space Name"
                       name="space name"                 
-                      onChangeText= {(spaceName) => this.setState({spaceName})}
+                      onChangeText= {val => this.checkForChanges("spaceName", val)}
                       value={this.state.spaceName}
                       maxLength = {40}
                       keyboardType='default'
@@ -736,7 +629,7 @@ renderDotsView = (numItems, position) =>{
                       placeholder='Add a bio...'         
                       label="Space Bio (optional)"
                       name="space bio"                 
-                      onChangeText= {(spaceBio) => this.setState({spaceBio})}
+                      onChangeText= {val => this.checkForChanges("spaceBio", val)}
                       value={this.state.spaceBio}
                       mask="multiline"
                       numLines={4}
@@ -746,37 +639,13 @@ renderDotsView = (numItems, position) =>{
                     />
                     
                   </View>
-                  {/* <View style={styles.numHoriz}>
-                    <View style={styles.numContainer}>
-                      <Text style={styles.number} type="bold">3</Text>
-                    </View>
-                    <Text style={styles.numTitle}>Upload Photo</Text>
-                  </View> */}
                  
-
-                    {/* <Input 
-                      placeholder='Please park to the far right of the driveway...'         
-                      label="Message for Guests (optional)"
-                      name="guest message"                 onChangeText= {(spaceName) => this.setState({spaceName})}
-                      value={this.state.spaceName}
-                      mask="multiline"
-                      numLines={4}
-                      maxLength = {300}
-                      keyboardType='default'
-                      // error={}
-                    /> */}
-                    {/* <View style={styles.numHoriz}>
-                      <View style={styles.numContainer}>
-                        <Text style={styles.number} type="bold">4</Text>
-                      </View>
-                      <Text style={styles.numTitle}>Choose your price</Text>
-                    </View> */}
                   <View style={{paddingHorizontal: 16}}>
                     <Input 
                         placeholder='$1.25'         
                         label="Cost Per Hour"
                         name="cost"             
-                        onChangeText= {(spacePrice) => this.setState({spacePrice})}
+                        onChangeText= {val => this.checkForChanges("spacePrice", val)}
                         value={this.state.spacePrice}
                         mask="USD"
                         maxLength = {6}
@@ -804,7 +673,7 @@ renderDotsView = (numItems, position) =>{
                    
                 </KeyboardAwareScrollView>
                 <View style={{paddingHorizontal: 16, marginBottom: 32, height: 60, alignItems: 'center', justifyContent: 'center'}}>
-                  <Button style={{backgroundColor: "#FF8708"}} textStyle={{color:"#FFFFFF"}} disabled={this.state.savingSpace} onPress={() => this.submitSpace()}>Save Changes</Button>
+                  <Button style={ this.state.changesMade ? {backgroundColor: "#FF8708"} : {backgroundColor:  Colors.mist900}} textStyle={this.state.changesMade ? {color:"#FFFFFF"} : {color: Colors.cosmos300}} disabled={!this.state.changesMade} onPress={() => this.submitSpace()}>Save Changes</Button>
                 </View>
            
 
