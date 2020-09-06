@@ -189,7 +189,9 @@ export default class DayAvailabilityPicker extends React.Component{
             activeDayBlock[0].end = timeSelected;
             removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
 
+
             this.setState({dailyStaging: removedSelectedDay})
+            // console.log(removedSelectedDay)
         }
 
         // Error checking schedule
@@ -445,7 +447,7 @@ export default class DayAvailabilityPicker extends React.Component{
                                             style={{minWidth: 145}}
                                             label="Start Time"
                                     
-                                            selectedValue={this.convertToCommonTime(option.start)}
+                                            selectedValue={Platform.OS == 'ios' ? this.convertToCommonTime(option.start) : option.start}
                                             onValueChange={(x) => this.changeStartTime(x, this.state.dailyStaging[this.state.activeDay].dayValue, option.id)}
                                         >
                                             {Platform.OS === 'ios' ?
@@ -472,7 +474,7 @@ export default class DayAvailabilityPicker extends React.Component{
                                         <Dropdown 
                                             style={{minWidth: 145}}
                                             label="End Time"
-                                            selectedValue={this.convertToCommonTime(option.end)}
+                                            selectedValue={Platform.OS == 'ios' ? this.convertToCommonTime(option.end) : option.end}
                                             onValueChange={(x) => this.changeEndTime(x, this.state.dailyStaging[this.state.activeDay].dayValue, option.id)}
                                         
                                         >

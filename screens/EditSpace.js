@@ -165,7 +165,7 @@ class editSpace extends Component {
     }
 
     openEditModal = () => {
-      this.setState({editModalOpen: !this.state.editModalOpen, changesMade: false})
+      this.setState({editModalOpen: !this.state.editModalOpen})
     }
 
 
@@ -673,9 +673,9 @@ renderDotsView = (numItems, position) =>{
                     </View>
                    
                 </KeyboardAwareScrollView>
-                <View style={{paddingHorizontal: 16, marginBottom: 32, height: 60, alignItems: 'center', justifyContent: 'center'}}>
+                <SafeAreaView style={{paddingHorizontal: 16, marginBottom: 24, height: 60, alignItems: 'center', justifyContent: 'center'}}>
                   <Button style={ this.state.changesMade ? {backgroundColor: "#FF8708"} : {backgroundColor:  Colors.mist900}} textStyle={this.state.changesMade ? {color:"#FFFFFF"} : {color: Colors.cosmos300}} disabled={!this.state.changesMade} onPress={() => this.submitSpace()}>Save Changes</Button>
-                </View>
+                </SafeAreaView>
            
 
                   
