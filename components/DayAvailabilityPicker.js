@@ -9,7 +9,7 @@ import TopBar from '../components/TopBar'
 import Icon from '../components/Icon'
 import Dropdown from '../components/Dropdown'
 import ClickableChip from '../components/ClickableChip'
-import ModalSelector from 'react-native-modal-selector'
+import DropdownItem from '../components/DropdownItem'
 
 import Times from '../constants/TimesAvailable'
 
@@ -183,7 +183,7 @@ export default class DayAvailabilityPicker extends React.Component{
 
             this.setState({dailyStaging: removedSelectedDay})
       
-            // console.log(removedSelectedDay)
+            // console.log(timeSelected)
         }else{
             timeSelected = input
             activeDayBlock[0].end = timeSelected;
@@ -191,7 +191,7 @@ export default class DayAvailabilityPicker extends React.Component{
 
 
             this.setState({dailyStaging: removedSelectedDay})
-            // console.log(removedSelectedDay)
+            // console.log(timeSelected)
         }
 
         // Error checking schedule
@@ -248,7 +248,7 @@ export default class DayAvailabilityPicker extends React.Component{
      
         removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
 
-        this.setState({dailyStaging: removedSelectedDay})
+        // this.setState({dailyStaging: removedSelectedDay})
         this.testValidAvailability()
 
 
@@ -261,12 +261,29 @@ export default class DayAvailabilityPicker extends React.Component{
         // Showcases only current active day and availability
         var activeDay = newDaily.filter(x => x.dayValue == this.state.dailyStaging[this.state.activeDay].dayValue);
 
+        // let hoursString = t.substring(0,2)
+        // let minutesString = t.substring(2)
+
+        // if(startTime.substring(0,2) == '00'){
+        //     var prevDayIndex = this.state.dailyStaging[this.state.activeDay].data.indexOf((parseInt(startTime.subString(0,2)) + 1) + parseInt(startTime.substring(2))+1);
+        // }else{
+            
+        // }
+
+        // console.log(prevDayIndex)
+        
+
+   
+
+
         activeDay[0].data.push({
             "available": true,
             "end": endTime,
             "id": null,
             "start": startTime,
         })
+
+        // console.log(activeDay[0].data.indexOf({end: endTime}))
 
         activeDay[0].data.sort((a, b) => {parseInt(a.start) - parseInt(b.start)})
 
@@ -287,18 +304,20 @@ export default class DayAvailabilityPicker extends React.Component{
 
         // console.log(removedSelectedDay)
 
-        this.setState({dailyStaging: removedSelectedDay})
+        // this.setState({dailyStaging: removedSelectedDay})
 
     }
 
     createTimeSpan = (option) => {
-        if(this.state.dailyStaging[this.state.activeDay].data.length == 1){
-            if(this.state.dailyStaging[this.state.activeDay].data[0].end == "2359"){
-                var newDaily = this.state.dailyStaging;
+        var newDaily = this.state.dailyStaging;
                 // Showcases only current active day and availability
                 var activeDay = newDaily.filter(x => x.dayValue == this.state.dailyStaging[this.state.activeDay].dayValue);
                 // Removes active day from array of all days and availability
                 var removedSelectedDay = newDaily.filter(x => x.dayValue != this.state.dailyStaging[this.state.activeDay].dayValue);
+
+        if(this.state.dailyStaging[this.state.activeDay].data.length == 1){
+            if(this.state.dailyStaging[this.state.activeDay].data[0].end == "2359"){
+                
 
 
                 activeDay[0].data[0] = {
@@ -311,20 +330,80 @@ export default class DayAvailabilityPicker extends React.Component{
                 removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
 
 
-                this.setState({dailyStaging:  removedSelectedDay})
+                // this.setState({dailyStaging:  removedSelectedDay})
                 this.addTimeSlot("1200", "2359")
             }else{
                 this.addTimeSlot(Times[0].start[Times[1].end.indexOf(this.state.dailyStaging[this.state.activeDay].data[0].end) + 1],"2359")
+
+                
+
+                // For Android issue (works on iOS also, but Android messes with End Times)
+                let newPost = this.state.dailyStaging[this.state.activeDay].data.filter(x => x.start !== option.start)
+                let prevPost = jstonthis.state.dailyStaging[this.state.activeDay].data.filter(x => x.start == option.start)
+                let prevIndex = this.state.dailyStaging[this.state.activeDay].data.indexOf(prevPost[0])
+                let nextIndex = this.state.dailyStaging[this.state.activeDay].data.indexOf(newPost[0])
+
+                let newEnd = Times[1].end[Times[0].start.indexOf(this.state.dailyStaging[this.state.activeDay].data[nextIndex].start) - 1];
+
+                activeDay[0].data[prevIndex].end = newEnd;
+                
+
+                // removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
+
+                
+
+               
+
+             
+
+                
+
+            
+            
+
+
+                // if(Platform.OS == 'android'){
+                //     activeDay[0].data[0] = {
+                //         "available": this.state.dailyStaging[this.state.activeDay].data[0].available,
+                //         "end": this.state.dailyStaging[this.state.activeDay].data[0].end,
+                //         "id": this.state.dailyStaging[this.state.activeDay].data[0].id,
+                //         "start": "0000",
+                //     }
+    
+                //     removedSelectedDay.splice(activeDay[0].dayValue, 0, activeDay[0]);
+
+                //     this.setState({dailyStaging:  removedSelectedDay})
+                // }
             }
         }else{
             let nextDayIndex = this.state.dailyStaging[this.state.activeDay].data.indexOf(option) + 1;
 
             // See if it is the last option where we add an end time
             if(nextDayIndex + 1 > this.state.dailyStaging[this.state.activeDay].data.length){
-                this.addTimeSlot(Times[0].start[Times[1].end.indexOf(option.end) + 1], "2359")
+                if(Platform.OS == 'ios'){
+                    this.addTimeSlot(Times[0].start[Times[1].end.indexOf(option.end) + 1], "2359")
+                }else{
+                    this.addTimeSlot(Times[0].start[Times[1].end.indexOf(option.end) + 1], "2359")
+                    
+                    // console.log(activeDay[0].data.sort((a, b) => parseInt(a.start) - parseInt(b.start)))
+                    console.log(nextDayIndex)
+                }
+
+                
             }else{
-                this.addTimeSlot(Times[0].start[Times[1].end.indexOf(option.end) + 1],
-            Times[1].end[Times[0].start.indexOf(this.state.dailyStaging[this.state.activeDay].data[nextDayIndex].start) - 1])
+                if(Platform.OS == 'ios'){
+                   
+                    this.addTimeSlot(Times[0].start[Times[1].end.indexOf(option.end) + 1], Times[1].end[Times[0].start.indexOf(this.state.dailyStaging[this.state.activeDay].data[nextDayIndex].start) - 1])
+
+           
+                }else{
+              
+                    this.addTimeSlot(Times[0].start[Times[1].end.indexOf(option.end) + 1], Times[1].end[Times[0].start.indexOf(this.state.dailyStaging[this.state.activeDay].data[nextDayIndex].start) - 1])
+
+                    // console.log(activeDay[0].data.sort((a, b) => parseInt(a.start) - parseInt(b.start)))
+                    console.log(nextDayIndex)
+                }
+                
             }
 
         }
@@ -450,24 +529,22 @@ export default class DayAvailabilityPicker extends React.Component{
                                             selectedValue={Platform.OS == 'ios' ? this.convertToCommonTime(option.start) : option.start}
                                             onValueChange={(x) => this.changeStartTime(x, this.state.dailyStaging[this.state.activeDay].dayValue, option.id)}
                                         >
-                                            {Platform.OS === 'ios' ?
+                                            {
+                                         
                                                 this.state.dailyStaging[this.state.activeDay].data[i - 1] ?
                                                     startTimes.filter(x => parseInt(x.label) > parseInt(this.state.dailyStaging[this.state.activeDay].data[i - 1].end) && parseInt(x.label) < parseInt(this.state.dailyStaging[this.state.activeDay].data[i].end)).map(x => {
-                                                        return({key: x.key, label: x.labelFormatted, baseValue: x.label})
+                                                        return(
+                                                            Platform.OS == "android" ? <DropdownItem key={x.key} value={x.label} label={x.labelFormatted}/> : {key: x.key, label: x.labelFormatted, baseValue: x.label}
+                                                        )
                                                     })
                                                 :
                                                     startTimes.filter(x => parseInt(x.label) < parseInt(this.state.dailyStaging[this.state.activeDay].data[i].end)).map(x => {
-                                                        return({key: x.key, label: x.labelFormatted, baseValue: x.label})
+                                                        return(
+                                                        Platform.OS == "android" ? <DropdownItem key={x.key} value={x.label} label={x.labelFormatted}/> : {key: x.key, label: x.labelFormatted, baseValue: x.label}
+                                                        )
                                                     })
-                                            :   
-                                                this.state.dailyStaging[this.state.activeDay].data[i - 1] ?
-                                                    startTimes.filter(x => parseInt(x.label) > parseInt(this.state.dailyStaging[this.state.activeDay].data[i - 1].end)).map(x => {
-                                                        return(<Picker.Item key={x.key} label={x.labelFormatted} value={x.label} />)
-                                                    }) 
-                                                :
-                                                    startTimes.filter(x => parseInt(x.label) < parseInt(this.state.dailyStaging[this.state.activeDay].data[i].end)).map(x => {
-                                                    return(<Picker.Item key={x.key} label={x.labelFormatted} value={x.label} />)
-                                                    })  
+                                         
+                                                
                                             }
                                         </Dropdown>
 
@@ -478,24 +555,20 @@ export default class DayAvailabilityPicker extends React.Component{
                                             onValueChange={(x) => this.changeEndTime(x, this.state.dailyStaging[this.state.activeDay].dayValue, option.id)}
                                         
                                         >
-                                            {Platform.OS === 'ios' ?
+                                            {
                                                 this.state.dailyStaging[this.state.activeDay].data[i + 1] ?
                                                 endTimes.filter(x => parseInt(x.label) > parseInt(option.start) && parseInt(this.state.dailyStaging[this.state.activeDay].data[i + 1].start) > parseInt(x.label)).map(x => {
-                                                    return({key: x.key, label: x.labelFormatted, baseValue: x.label})
+                                                    return(
+                                                        Platform.OS == "android" ? <DropdownItem key={x.key} value={x.label} label={x.labelFormatted} /> : {key: x.key, label: x.labelFormatted, baseValue: x.label}
+                                                    )
                                                 })
                                                 :
                                             endTimes.filter(x => parseInt(x.label) > parseInt(option.start)).map(x => {
-                                                return({key: x.key, label: x.labelFormatted, baseValue: x.label})
+                                                return(
+                                                    Platform.OS == "android" ?<DropdownItem key={x.key} value={x.label} label={x.labelFormatted}/>: {key: x.key, label: x.labelFormatted, baseValue: x.label}
+                                                )
                                             })
-                                            :  
-                                                this.state.dailyStaging[this.state.activeDay].data[i + 1] ? 
-                                                endTimes.filter(x => parseInt(x.label) > parseInt(option.start) && parseInt(this.state.dailyStaging[this.state.activeDay].data[i + 1].start) > parseInt(x.label)).map(x => {
-                                                    return(<Picker.Item key={x.key} label={x.labelFormatted} value={x.label} />)
-                                                })  
-                                                :
-                                                endTimes.filter(x => parseInt(x.label) > parseInt(option.start)).map(x => {
-                                                    return(<Picker.Item key={x.key} label={x.labelFormatted} value={x.label} />)
-                                                }) 
+                                           
                                             }
                                         </Dropdown>
                         

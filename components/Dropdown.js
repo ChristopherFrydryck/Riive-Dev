@@ -7,43 +7,46 @@ import Color from '../constants/Colors'
 import SafeAreaView from 'react-native-safe-area-view'
 import Colors from '../constants/Colors'
 
-const Dropdown = ({ flex, error, enabled, label, selectedValue, onValueChange, data, ...props}) => {
-    const style = enabled ? [styles.dd, props.style || {}] : [styles.dd_disabled, props.style || {}]
-    const allProps = Object.assign({}, props,{style:style})
 
-    const {height} = Dimensions.get('window');
+class Dropdown extends React.PureComponent{
+
+    render(){
+
+        const style = this.props.enabled ? [styles.dd, this.props.style || {}] : [styles.dd_disabled, this.props.style || {}]
+        const allProps = Object.assign({}, this.props,{style:style})
+        const {height} = Dimensions.get('window');
 
     if(Platform.OS === 'android'){
         return(
-            <View style={{flex: flex}}>
+            <View style={{flex: this.props.flex}}>
                 <View style={styles.container}>
-                    <Text style={enabled ? styles.label : styles.label_disabled}>{label}</Text>
-                    <Picker {...allProps} enabled={enabled} selectedValue={selectedValue} onValueChange={onValueChange}>
-                        {props.children}
+                    <Text style={this.props.enabled ? styles.label : styles.label_disabled}>{this.props.label}</Text>
+                    <Picker {...allProps} enabled={this.props.enabled} selectedValue={this.props.selectedValue} onValueChange={this.props.onValueChange}>
+                        {this.props.children}
                     </Picker>
                 </View>
-                <Text style={styles.error}>{error}</Text>
+                <Text style={styles.error}>{this.props.error}</Text>
             </View>
         )
     }else{
         return(
             
-            <View style={{flex: flex}}>
+            <View style={{flex: this.props.flex}}>
                 <SafeAreaView />
                 <View style={styles.container}>
-                    <Text style={enabled ? styles.label : styles.label_disabled}>{label}</Text>
+                    <Text style={this.props.enabled ? styles.label : styles.label_disabled}>{this.props.label}</Text>
                     <ModalSelector
-                        disabled = {!enabled}
+                        disabled = {!this.props.enabled}
                         accessible={true}
                         supportedOrientations={['portrait']}
                         scrollViewAccessibilityLabel={'Scrollable options'}
                         cancelButtonAccessibilityLabel={'Cancel Button'}
-                        onChange={onValueChange}
+                        onChange={this.props.onValueChange}
                         overlayStyle={{paddingTop: '15%'}}
-                        data={props.children}
+                        data={this.props.children}
                     >
                     <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-                        <Text style={enabled ? styles.result : styles.result_disabled}>{selectedValue}</Text>
+                        <Text style={this.props.enabled ? styles.result : styles.result_disabled}>{this.props.selectedValue}</Text>
                         <Icon 
                             iconName="caretdown"
                             iconLib="AntDesign"
@@ -54,11 +57,24 @@ const Dropdown = ({ flex, error, enabled, label, selectedValue, onValueChange, d
                     </View>   
                     </ModalSelector>
                 </View>
-                <Text style={styles.error}>{error}</Text>
+                <Text style={styles.error}>{this.props.error}</Text>
             </View>
         )
     }
+    }
 }
+
+// // CONVERTED TO PURE COMPONENT
+// class Dropdown extends React.PureComponent {
+//     render(){
+//         return(
+//             <dropdown {...all}>
+//                 {this.props.children}
+//             </dropdown>
+//         )
+//     }
+
+// }
 
 const styles = StyleSheet.create({
     container:{

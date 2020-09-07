@@ -17,8 +17,6 @@
       <change beforePath="$PROJECT_DIR$/.gradle/4.10.2/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.2/taskHistory/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.10.2/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.2/taskHistory/taskHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebug/tmp/debug/dex-renamer-state.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebug/tmp/debug/dex-renamer-state.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/host/exp/exponent/MainActivity.class" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/host/exp/exponent/MainActivity.class" afterDir="false" />
@@ -28,8 +26,8 @@
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/transforms/dexMerger/debug/0/classes2.dex" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/transforms/dexMerger/debug/0/classes2.dex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/outputs/apk/debug/app-debug.apk" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/outputs/apk/debug/app-debug.apk" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/host/exp/exponent/generated/DetachBuildConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/host/exp/exponent/generated/DetachBuildConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Riive.xcworkspace/xcuserdata/christopherfrydryck.xcuserdatad/UserInterfaceState.xcuserstate" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Riive.xcworkspace/xcuserdata/christopherfrydryck.xcuserdatad/UserInterfaceState.xcuserstate" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../screens/AddSpace.js" beforeDir="false" afterPath="$PROJECT_DIR$/../screens/AddSpace.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/DayAvailabilityPicker.js" beforeDir="false" afterPath="$PROJECT_DIR$/../components/DayAvailabilityPicker.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/Dropdown.js" beforeDir="false" afterPath="$PROJECT_DIR$/../components/Dropdown.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -96,12 +94,12 @@
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-          <provider editor-type-id="android-manifest" />
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="570">
               <caret line="38" column="70" selection-start-line="38" selection-start-column="70" selection-end-line="38" selection-end-column="70" />
             </state>
           </provider>
+          <provider editor-type-id="android-manifest" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -161,6 +159,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane" />
+      <pane id="PackagesPane" />
       <pane id="AndroidView">
         <subPane>
           <expand>
@@ -172,9 +173,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="ProjectPane" />
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -279,11 +277,12 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1680" height="956" extended-state="6" />
+    <frame x="474" y="25" width="840" height="956" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.48979592" visible="true" weight="0.15506716" />
-      <window_info id="Structure" order="2" sideWeight="0.5102041" side_tool="true" visible="true" weight="0.15506716" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.48822606" visible="true" weight="0.15413533" />
+      <window_info id="Structure" order="2" sideWeight="0.51177394" side_tool="true" visible="true" weight="0.15413533" />
       <window_info id="Favorites" order="3" sideWeight="0.50517243" side_tool="true" weight="0.15538847" />
       <window_info id="Build Variants" order="4" sideWeight="0.50517243" side_tool="true" weight="0.15538847" />
       <window_info id="Image Layers" order="5" />
@@ -295,10 +294,10 @@
       <window_info anchor="bottom" id="TODO" order="2" sideWeight="0.4993895" weight="0.3298611" />
       <window_info anchor="bottom" id="Debug" order="3" />
       <window_info anchor="bottom" id="Terminal" order="4" sideWeight="0.4981685" weight="0.3287037" />
-      <window_info anchor="bottom" id="Event Log" order="5" sideWeight="0.45970696" side_tool="true" visible="true" weight="0.2627315" />
+      <window_info anchor="bottom" id="Event Log" order="5" sideWeight="0.46115288" side_tool="true" visible="true" weight="0.2627315" />
       <window_info anchor="bottom" id="Version Control" order="6" sideWeight="0.498779" weight="0.3287037" />
-      <window_info active="true" anchor="bottom" id="Build" order="7" sideWeight="0.54029304" visible="true" weight="0.2627315" />
-      <window_info anchor="bottom" id="Android Profiler" order="8" show_stripe_button="false" />
+      <window_info active="true" anchor="bottom" id="Build" order="7" sideWeight="0.5388471" visible="true" weight="0.2627315" />
+      <window_info anchor="bottom" id="Android Profiler" order="8" />
       <window_info anchor="bottom" id="Find" order="9" />
       <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" weight="0.32967034" />
       <window_info anchor="right" id="Capture Analysis" order="1" />
@@ -333,12 +332,12 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider editor-type-id="android-manifest" />
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="570">
           <caret line="38" column="70" selection-start-line="38" selection-start-column="70" selection-end-line="38" selection-end-column="70" />
         </state>
       </provider>
+      <provider editor-type-id="android-manifest" />
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/host/exp/exponent/MainApplication.java">
       <provider selected="true" editor-type-id="text-editor">
