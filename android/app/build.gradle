@@ -216,7 +216,7 @@ dependencies {
         // 'unimodules-face-detector-interface',
         // 'expo-face-detector'
 
-        // Adding a name here will also remove the package
+        // Adding a name here will also remove the packagelayout/error_activity_new
         // from auto-generated BasePackageList.java
       ]
   ])

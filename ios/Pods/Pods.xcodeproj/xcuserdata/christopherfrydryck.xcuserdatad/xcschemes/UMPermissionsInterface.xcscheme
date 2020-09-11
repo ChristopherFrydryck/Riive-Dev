@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F7845084F0CF03F54107EEF7411760AD"
-               BuildableName = "UMPermissionsInterface"
+               BuildableName = "libUMPermissionsInterface.a"
                BlueprintName = "UMPermissionsInterface"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>

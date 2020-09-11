@@ -101,7 +101,6 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "${PODS_ROOT}/Amplitude-iOS/Amplitude/ComodoCaLimitedRsaCertificationAuthority.der"
   install_resource "${PODS_ROOT}/Amplitude-iOS/Amplitude/ComodoRsaCA.der"
   install_resource "${PODS_ROOT}/Amplitude-iOS/Amplitude/ComodoRsaDomainValidationCA.der"
-  install_resource "${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle"
   install_resource "${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle"
   install_resource "${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle"
   install_resource "${PODS_CONFIGURATION_BUILD_DIR}/Stripe/Stripe.bundle"
@@ -111,7 +110,6 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "${PODS_ROOT}/Amplitude-iOS/Amplitude/ComodoCaLimitedRsaCertificationAuthority.der"
   install_resource "${PODS_ROOT}/Amplitude-iOS/Amplitude/ComodoRsaCA.der"
   install_resource "${PODS_ROOT}/Amplitude-iOS/Amplitude/ComodoRsaDomainValidationCA.der"
-  install_resource "${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle"
   install_resource "${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle"
   install_resource "${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle"
   install_resource "${PODS_CONFIGURATION_BUILD_DIR}/Stripe/Stripe.bundle"
@@ -128,7 +126,7 @@ rm -f "$RESOURCES_TO_COPY"
 if [[ -n "${WRAPPER_EXTENSION}" ]] && [ "`xcrun --find actool`" ] && [ -n "${XCASSET_FILES:-}" ]
 then
   # Find all other xcassets (this unfortunately includes those of path pods and other targets).
-  OTHER_XCASSETS=$(find "$PWD" -iname "*.xcassets" -type d)
+  OTHER_XCASSETS=$(find -L "$PWD" -iname "*.xcassets" -type d)
   while read line; do
     if [[ $line != "${PODS_ROOT}*" ]]; then
       XCASSET_FILES+=("$line")

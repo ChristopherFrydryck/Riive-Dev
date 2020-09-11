@@ -3,11 +3,10 @@
     "name": "Riive",
     "slug": "RiiveParking",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
+    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "androidStatusBarColor": "#FF8708",
     "androidStatusBar": {

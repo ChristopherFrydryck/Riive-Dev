@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Google Inc. All rights reserved.
+ * Copyright 2016 Google LLC. All rights reserved.
  *
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -21,9 +21,10 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-  GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:-33.868
-                                                          longitude:151.2086
-                                                               zoom:6];
+  // Seattle coordinates
+  GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:47.6089945
+                                                          longitude:-122.3410462
+                                                               zoom:14];
   GMSMapView *view = [GMSMapView mapWithFrame:CGRectZero camera:camera];
   view.delegate = self;
   self.view = view;

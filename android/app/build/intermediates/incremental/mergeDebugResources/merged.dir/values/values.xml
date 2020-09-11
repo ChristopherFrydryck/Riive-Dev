@@ -185,7 +185,7 @@
     <color name="material_blue_grey_900">#ff263238</color>
     <color name="material_blue_grey_950">#ff21272b</color>
     <color name="material_deep_teal_200">#ff80cbc4</color>
-    <color name="material_deep_teal_500">#ff009688</color>
+    <color name="material_deep_teal_500">#ff008577</color>
     <color name="material_grey_100">#fff5f5f5</color>
     <color name="material_grey_300">#ffe0e0e0</color>
     <color name="material_grey_50">#fffafafa</color>
@@ -292,6 +292,9 @@
     <dimen name="abc_edit_text_inset_horizontal_material">4dp</dimen>
     <dimen name="abc_edit_text_inset_top_material">10dp</dimen>
     <dimen name="abc_floating_window_z">16dp</dimen>
+    <dimen name="abc_list_item_height_large_material">80dp</dimen>
+    <dimen name="abc_list_item_height_material">64dp</dimen>
+    <dimen name="abc_list_item_height_small_material">48dp</dimen>
     <dimen name="abc_list_item_padding_horizontal_material">@dimen/abc_action_bar_content_inset_material</dimen>
     <dimen name="abc_panel_menu_list_width">296dp</dimen>
     <dimen name="abc_progress_bar_height_material">4dp</dimen>
@@ -514,6 +517,39 @@
     <dimen name="tooltip_y_offset_touch">16dp</dimen>
     <drawable name="notification_template_icon_bg">#3333B5E5</drawable>
     <drawable name="notification_template_icon_low_bg">#0cffffff</drawable>
+    <item name="accessibility_action_clickable_span" type="id"/>
+    <item name="accessibility_custom_action_0" type="id"/>
+    <item name="accessibility_custom_action_1" type="id"/>
+    <item name="accessibility_custom_action_10" type="id"/>
+    <item name="accessibility_custom_action_11" type="id"/>
+    <item name="accessibility_custom_action_12" type="id"/>
+    <item name="accessibility_custom_action_13" type="id"/>
+    <item name="accessibility_custom_action_14" type="id"/>
+    <item name="accessibility_custom_action_15" type="id"/>
+    <item name="accessibility_custom_action_16" type="id"/>
+    <item name="accessibility_custom_action_17" type="id"/>
+    <item name="accessibility_custom_action_18" type="id"/>
+    <item name="accessibility_custom_action_19" type="id"/>
+    <item name="accessibility_custom_action_2" type="id"/>
+    <item name="accessibility_custom_action_20" type="id"/>
+    <item name="accessibility_custom_action_21" type="id"/>
+    <item name="accessibility_custom_action_22" type="id"/>
+    <item name="accessibility_custom_action_23" type="id"/>
+    <item name="accessibility_custom_action_24" type="id"/>
+    <item name="accessibility_custom_action_25" type="id"/>
+    <item name="accessibility_custom_action_26" type="id"/>
+    <item name="accessibility_custom_action_27" type="id"/>
+    <item name="accessibility_custom_action_28" type="id"/>
+    <item name="accessibility_custom_action_29" type="id"/>
+    <item name="accessibility_custom_action_3" type="id"/>
+    <item name="accessibility_custom_action_30" type="id"/>
+    <item name="accessibility_custom_action_31" type="id"/>
+    <item name="accessibility_custom_action_4" type="id"/>
+    <item name="accessibility_custom_action_5" type="id"/>
+    <item name="accessibility_custom_action_6" type="id"/>
+    <item name="accessibility_custom_action_7" type="id"/>
+    <item name="accessibility_custom_action_8" type="id"/>
+    <item name="accessibility_custom_action_9" type="id"/>
     <item name="accessibility_hint" type="id"/>
     <item name="accessibility_role" type="id"/>
     <item name="action_bar_activity_content" type="id"/>
@@ -548,6 +584,11 @@
     <item name="snackbar_action" type="id"/>
     <item name="snackbar_text" type="id"/>
     <item name="split_action_bar" type="id"/>
+    <item name="tag_accessibility_actions" type="id"/>
+    <item name="tag_accessibility_clickable_spans" type="id"/>
+    <item name="tag_accessibility_heading" type="id"/>
+    <item name="tag_accessibility_pane_title" type="id"/>
+    <item name="tag_screen_reader_focusable" type="id"/>
     <item name="tag_transition_group" type="id"/>
     <item name="tag_unhandled_key_event_manager" type="id"/>
     <item name="tag_unhandled_key_listeners" type="id"/>
@@ -603,18 +644,6 @@
     <string name="abc_activitychooserview_choose_application">Choose an app</string>
     <string name="abc_capital_off">OFF</string>
     <string name="abc_capital_on">ON</string>
-    <string name="abc_font_family_body_1_material">sans-serif</string>
-    <string name="abc_font_family_body_2_material">sans-serif-medium</string>
-    <string name="abc_font_family_button_material">sans-serif-medium</string>
-    <string name="abc_font_family_caption_material">sans-serif</string>
-    <string name="abc_font_family_display_1_material">sans-serif</string>
-    <string name="abc_font_family_display_2_material">sans-serif</string>
-    <string name="abc_font_family_display_3_material">sans-serif</string>
-    <string name="abc_font_family_display_4_material">sans-serif-light</string>
-    <string name="abc_font_family_headline_material">sans-serif</string>
-    <string name="abc_font_family_menu_material">sans-serif</string>
-    <string name="abc_font_family_subhead_material">sans-serif</string>
-    <string name="abc_font_family_title_material">sans-serif-medium</string>
     <string name="abc_menu_alt_shortcut_label">Alt+</string>
     <string name="abc_menu_ctrl_shortcut_label">Ctrl+</string>
     <string name="abc_menu_delete_shortcut_label">delete</string>
@@ -1557,11 +1586,13 @@
         <item name="textAppearanceListItem">@style/TextAppearance.AppCompat.Subhead</item>
         <item name="textAppearanceListItemSmall">@style/TextAppearance.AppCompat.Subhead</item>
         <item name="textAppearanceListItemSecondary">@style/TextAppearance.AppCompat.Body1</item>
-        <item name="listPreferredItemHeight">64dp</item>
-        <item name="listPreferredItemHeightSmall">48dp</item>
-        <item name="listPreferredItemHeightLarge">80dp</item>
+        <item name="listPreferredItemHeight">@dimen/abc_list_item_height_material</item>
+        <item name="listPreferredItemHeightSmall">@dimen/abc_list_item_height_small_material</item>
+        <item name="listPreferredItemHeightLarge">@dimen/abc_list_item_height_large_material</item>
         <item name="listPreferredItemPaddingLeft">@dimen/abc_list_item_padding_horizontal_material</item>
         <item name="listPreferredItemPaddingRight">@dimen/abc_list_item_padding_horizontal_material</item>
+        <item name="listPreferredItemPaddingStart">@dimen/abc_list_item_padding_horizontal_material</item>
+        <item name="listPreferredItemPaddingEnd">@dimen/abc_list_item_padding_horizontal_material</item>
 
         <!-- Spinner styles -->
         <item name="spinnerStyle">@style/Widget.AppCompat.Spinner</item>
@@ -1599,6 +1630,7 @@
         <item name="editTextBackground">@drawable/abc_edit_text_material</item>
         <item name="editTextColor">?android:attr/textColorPrimary</item>
         <item name="autoCompleteTextViewStyle">@style/Widget.AppCompat.AutoCompleteTextView</item>
+        <item name="android:textViewStyle">@style/Widget.AppCompat.TextView</item>
 
         <!-- Color palette -->
         <item name="colorPrimaryDark">@color/primary_dark_material_dark</item>
@@ -1752,11 +1784,13 @@
         <item name="textAppearanceListItem">@style/TextAppearance.AppCompat.Subhead</item>
         <item name="textAppearanceListItemSmall">@style/TextAppearance.AppCompat.Subhead</item>
         <item name="textAppearanceListItemSecondary">@style/TextAppearance.AppCompat.Body1</item>
-        <item name="listPreferredItemHeight">64dp</item>
-        <item name="listPreferredItemHeightSmall">48dp</item>
-        <item name="listPreferredItemHeightLarge">80dp</item>
+        <item name="listPreferredItemHeight">@dimen/abc_list_item_height_material</item>
+        <item name="listPreferredItemHeightSmall">@dimen/abc_list_item_height_small_material</item>
+        <item name="listPreferredItemHeightLarge">@dimen/abc_list_item_height_large_material</item>
         <item name="listPreferredItemPaddingLeft">@dimen/abc_list_item_padding_horizontal_material</item>
         <item name="listPreferredItemPaddingRight">@dimen/abc_list_item_padding_horizontal_material</item>
+        <item name="listPreferredItemPaddingStart">@dimen/abc_list_item_padding_horizontal_material</item>
+        <item name="listPreferredItemPaddingEnd">@dimen/abc_list_item_padding_horizontal_material</item>
 
         <!-- Spinner styles -->
         <item name="spinnerStyle">@style/Widget.AppCompat.Spinner</item>
@@ -1794,6 +1828,7 @@
         <item name="editTextBackground">@drawable/abc_edit_text_material</item>
         <item name="editTextColor">?android:attr/textColorPrimary</item>
         <item name="autoCompleteTextViewStyle">@style/Widget.AppCompat.AutoCompleteTextView</item>
+        <item name="android:textViewStyle">@style/Widget.AppCompat.TextView</item>
 
         <!-- Color palette -->
         <item name="colorPrimaryDark">@color/primary_dark_material_light</item>
@@ -2060,10 +2095,12 @@
     <style name="Base.Widget.AppCompat.ButtonBar.AlertDialog"/>
     <style name="Base.Widget.AppCompat.CompoundButton.CheckBox" parent="android:Widget.CompoundButton.CheckBox">
         <item name="android:button">?android:attr/listChoiceIndicatorMultiple</item>
+        <item name="buttonCompat">?attr/listChoiceIndicatorMultipleAnimated</item>
         <item name="android:background">?attr/controlBackground</item>
     </style>
     <style name="Base.Widget.AppCompat.CompoundButton.RadioButton" parent="android:Widget.CompoundButton.RadioButton">
         <item name="android:button">?android:attr/listChoiceIndicatorSingle</item>
+        <item name="buttonCompat">?attr/listChoiceIndicatorSingleAnimated</item>
         <item name="android:background">?attr/controlBackground</item>
     </style>
     <style name="Base.Widget.AppCompat.CompoundButton.Switch" parent="android:Widget.CompoundButton">
@@ -2219,6 +2256,7 @@
     <style name="Base.Widget.AppCompat.Spinner.Underlined">
         <item name="android:background">@drawable/abc_spinner_textfield_background_material</item>
     </style>
+    <style name="Base.Widget.AppCompat.TextView" parent="android:Widget.TextView"/>
     <style name="Base.Widget.AppCompat.TextView.SpinnerItem" parent="android:Widget.TextView.SpinnerItem">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem</item>
         <item name="android:paddingLeft">8dp</item>
@@ -2507,10 +2545,21 @@
         <item name="android:textAppearanceSmallInverse">@style/TextAppearance.AppCompat.Small.Inverse</item>
 
         <item name="android:listChoiceIndicatorSingle">@drawable/abc_btn_radio_material</item>
+        <item name="listChoiceIndicatorSingleAnimated">@drawable/abc_btn_radio_material_anim</item>
         <item name="android:listChoiceIndicatorMultiple">@drawable/abc_btn_check_material</item>
+        <item name="listChoiceIndicatorMultipleAnimated">@drawable/abc_btn_check_material_anim</item>
 
+        <!-- List attributes -->
+        <item name="android:textAppearanceListItem">@style/TextAppearance.AppCompat.Subhead</item>
+        <item name="android:textAppearanceListItemSmall">@style/TextAppearance.AppCompat.Subhead</item>
+        <!-- textAppearanceListItemSecondary is 21+ only so not safe to apply here-->
+        <item name="android:listPreferredItemHeight">@dimen/abc_list_item_height_material</item>
+        <item name="android:listPreferredItemHeightSmall">@dimen/abc_list_item_height_small_material</item>
+        <item name="android:listPreferredItemHeightLarge">@dimen/abc_list_item_height_large_material</item>
         <item name="android:listPreferredItemPaddingLeft">@dimen/abc_list_item_padding_horizontal_material</item>
         <item name="android:listPreferredItemPaddingRight">@dimen/abc_list_item_padding_horizontal_material</item>
+        <item name="android:listPreferredItemPaddingStart">@dimen/abc_list_item_padding_horizontal_material</item>
+        <item name="android:listPreferredItemPaddingEnd">@dimen/abc_list_item_padding_horizontal_material</item>
 
         <item name="android:actionModeCutDrawable">?actionModeCutDrawable</item>
         <item name="android:actionModeCopyDrawable">?actionModeCopyDrawable</item>
@@ -2566,10 +2615,21 @@
         <item name="android:textAppearanceSmallInverse">@style/TextAppearance.AppCompat.Small.Inverse</item>
 
         <item name="android:listChoiceIndicatorSingle">@drawable/abc_btn_radio_material</item>
+        <item name="listChoiceIndicatorSingleAnimated">@drawable/abc_btn_radio_material_anim</item>
         <item name="android:listChoiceIndicatorMultiple">@drawable/abc_btn_check_material</item>
+        <item name="listChoiceIndicatorMultipleAnimated">@drawable/abc_btn_check_material_anim</item>
 
+        <!-- List attributes -->
+        <item name="android:textAppearanceListItem">@style/TextAppearance.AppCompat.Subhead</item>
+        <item name="android:textAppearanceListItemSmall">@style/TextAppearance.AppCompat.Subhead</item>
+        <!-- textAppearanceListItemSecondary is 21+ only so not safe to apply here-->
+        <item name="android:listPreferredItemHeight">@dimen/abc_list_item_height_material</item>
+        <item name="android:listPreferredItemHeightSmall">@dimen/abc_list_item_height_small_material</item>
+        <item name="android:listPreferredItemHeightLarge">@dimen/abc_list_item_height_large_material</item>
         <item name="android:listPreferredItemPaddingLeft">@dimen/abc_list_item_padding_horizontal_material</item>
         <item name="android:listPreferredItemPaddingRight">@dimen/abc_list_item_padding_horizontal_material</item>
+        <item name="android:listPreferredItemPaddingStart">@dimen/abc_list_item_padding_horizontal_material</item>
+        <item name="android:listPreferredItemPaddingEnd">@dimen/abc_list_item_padding_horizontal_material</item>
 
         <item name="android:actionModeCutDrawable">?actionModeCutDrawable</item>
         <item name="android:actionModeCopyDrawable">?actionModeCopyDrawable</item>
@@ -3077,6 +3137,11 @@
     <style name="ThemeOverlay.AppCompat.ActionBar" parent="Base.ThemeOverlay.AppCompat.ActionBar"/>
     <style name="ThemeOverlay.AppCompat.Dark" parent="Base.ThemeOverlay.AppCompat.Dark"/>
     <style name="ThemeOverlay.AppCompat.Dark.ActionBar" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="ThemeOverlay.AppCompat.DayNight" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="ThemeOverlay.AppCompat.DayNight.ActionBar">
+        <item name="colorControlNormal">?android:attr/textColorPrimary</item>
+        <item name="searchViewStyle">@style/Widget.AppCompat.SearchView.ActionBar</item>
+    </style>
     <style name="ThemeOverlay.AppCompat.Dialog" parent="Base.ThemeOverlay.AppCompat.Dialog"/>
     <style name="ThemeOverlay.AppCompat.Dialog.Alert" parent="Base.ThemeOverlay.AppCompat.Dialog.Alert"/>
     <style name="ThemeOverlay.AppCompat.Light" parent="Base.ThemeOverlay.AppCompat.Light"/>
@@ -3225,6 +3290,7 @@
     <style name="Widget.AppCompat.Spinner.DropDown"/>
     <style name="Widget.AppCompat.Spinner.DropDown.ActionBar"/>
     <style name="Widget.AppCompat.Spinner.Underlined" parent="Base.Widget.AppCompat.Spinner.Underlined"/>
+    <style name="Widget.AppCompat.TextView" parent="Base.Widget.AppCompat.TextView"/>
     <style name="Widget.AppCompat.TextView.SpinnerItem" parent="Base.Widget.AppCompat.TextView.SpinnerItem"/>
     <style name="Widget.AppCompat.Toolbar" parent="Base.Widget.AppCompat.Toolbar"/>
     <style name="Widget.AppCompat.Toolbar.Button.Navigation" parent="Base.Widget.AppCompat.Toolbar.Button.Navigation"/>
@@ -3857,6 +3923,12 @@
     <declare-styleable name="AppCompatTextView">
         <!-- Present the text in ALL CAPS. This may use a small-caps form when available. -->
         <attr format="reference|boolean" name="textAllCaps"/>
+        <!-- Set the textLocale by a comma-separated language tag string,
+             for example "ja-JP,zh-CN". This attribute only takes effect on API 21 and above.
+             Before API 24, only the first language tag is used. Starting from API 24,
+             the string will be converted into a {@link android.os.LocaleList} and then used by
+             {@link android.widget.TextView} -->
+        <attr format="string" name="textLocale"/>
         <attr name="android:textAppearance"/>
         <!-- Specify the type of auto-size. Note that this feature is not supported by EditText,
         works only for TextView. -->
@@ -3890,6 +3962,38 @@
         <!-- Distance from the bottom of the TextView to the last text baseline. If set, this
              overrides the value set for paddingBottom. -->
         <attr format="dimension" name="lastBaselineToBottomHeight"/>
+        <!-- OpenType font variation settings, available after api 26. -->
+        <attr format="string" name="fontVariationSettings"/>
+        <!-- Compound drawables allowing the use of vector drawable when running on older versions
+             of the platform. -->
+        <attr format="reference" name="drawableLeftCompat"/>
+        <attr format="reference" name="drawableTopCompat"/>
+        <attr format="reference" name="drawableRightCompat"/>
+        <attr format="reference" name="drawableBottomCompat"/>
+        <attr format="reference" name="drawableStartCompat"/>
+        <attr format="reference" name="drawableEndCompat"/>
+        <!-- Tint to apply to the compound (left, top, etc.) drawables. -->
+        <attr format="color" name="drawableTint"/>
+        <!-- Blending mode used to apply the compound (left, top, etc.) drawables tint. -->
+        <attr name="drawableTintMode">
+            <!-- The tint is drawn on top of the drawable.
+                 [Sa + (1 - Sa)*Da, Rc = Sc + (1 - Sa)*Dc] -->
+            <enum name="src_over" value="3"/>
+            <!-- The tint is masked by the alpha channel of the drawable. The drawable’s
+                 color channels are thrown out. [Sa * Da, Sc * Da] -->
+            <enum name="src_in" value="5"/>
+            <!-- The tint is drawn above the drawable, but with the drawable’s alpha
+                 channel masking the result. [Da, Sc * Da + (1 - Sa) * Dc] -->
+            <enum name="src_atop" value="9"/>
+            <!-- Multiplies the color and alpha channels of the drawable with those of
+                 the tint. [Sa * Da, Sc * Dc] -->
+            <enum name="multiply" value="14"/>
+            <!-- [Sa + Da - Sa * Da, Sc + Dc - Sc * Dc] -->
+            <enum name="screen" value="15"/>
+            <!-- Combines the tint and drawable color and alpha channels, clamping the
+                 result to valid color values. Saturate(S + D) -->
+            <enum name="add" value="16"/>
+        </attr>
     </declare-styleable>
     <declare-styleable name="AppCompatTheme">
 
@@ -4136,6 +4240,11 @@
         <!-- The preferred padding along the right edge of list items. -->
         <attr format="dimension" name="listPreferredItemPaddingRight"/>
 
+        <!-- The preferred padding along the start edge of list items. -->
+        <attr format="dimension" name="listPreferredItemPaddingStart"/>
+        <!-- The preferred padding along the end edge of list items. -->
+        <attr format="dimension" name="listPreferredItemPaddingEnd"/>
+
         <!-- ListPopupWindow compatibility -->
         <attr format="reference" name="dropDownListViewStyle"/>
         <attr format="reference" name="listPopupWindowStyle"/>
@@ -4271,6 +4380,17 @@
         <attr format="reference|color" name="colorError"/>
 
         <attr format="string" name="viewInflaterClass"/>
+
+        <!-- ===================== -->
+        <!-- Animated list choice indicators -->
+        <!-- ===================== -->
+        <eat-comment/>
+
+        <!-- Animated Drawable to use for single choice indicators. -->
+        <attr format="reference" name="listChoiceIndicatorMultipleAnimated"/>
+        <!-- Animated Drawable to use for multiple choice indicators. -->
+        <attr format="reference" name="listChoiceIndicatorSingleAnimated"/>
+
     </declare-styleable>
     <declare-styleable name="BottomAppBar"><attr name="backgroundTint"/><attr name="fabAlignmentMode">
       
@@ -4389,6 +4509,8 @@
     </declare-styleable>
     <declare-styleable name="CompoundButton">
         <attr name="android:button"/>
+        <!-- Compat attr to load backported drawable types -->
+        <attr format="reference" name="buttonCompat"/>
         <!-- Tint to apply to the button drawable. -->
         <attr format="color" name="buttonTint"/>
 
@@ -4665,7 +4787,27 @@
         <attr name="android:ttcIndex"/>
     </declare-styleable>
     <declare-styleable name="ForegroundLinearLayout"><attr name="android:foreground"/><attr name="android:foregroundGravity"/><attr format="boolean" name="foregroundInsidePadding"/></declare-styleable>
-    <declare-styleable name="GenericDraweeHierarchy"><attr format="integer" name="fadeDuration"/><attr format="float" name="viewAspectRatio"/><attr format="reference" name="placeholderImage"/><attr name="placeholderImageScaleType">
+    <declare-styleable name="GenericDraweeHierarchy">
+
+    <!-- NOTE: If adding a new attr here, also add to SimpleDraweeView below -->
+    <eat-comment/>
+
+    <!-- Fade duration in milliseconds. -->
+    <attr format="integer" name="fadeDuration"/>
+
+    <!-- Aspect ratio (width / height) of the view, not necessarily of the images. -->
+    <attr format="float" name="viewAspectRatio"/>
+
+    <!-- Image branches -
+    Scale-type values must match those in GenericDraweeHierarchyInflater.getScaleTypeFromXml.
+    (GenericDraweeHierarchyInflater.java).
+    For drawables that should not be scaled, such as those with the android:tileMode
+    attribute set, use the value 'none'. -->
+
+    <!-- A drawable or color to be be used as a placeholder. -->
+    <attr format="reference" name="placeholderImage"/>
+    <!-- Scale type of the placeholder image. Ignored if placeholderImage is not specified. -->
+    <attr name="placeholderImageScaleType">
       <enum name="none" value="-1"/>
       <enum name="fitXY" value="0"/>
       <enum name="fitStart" value="1"/>
@@ -4676,7 +4818,12 @@
       <enum name="centerCrop" value="6"/>
       <enum name="focusCrop" value="7"/>
       <enum name="fitBottomStart" value="8"/>
-    </attr><attr format="reference" name="retryImage"/><attr name="retryImageScaleType">
+    </attr>
+
+    <!-- A drawable to be be used as a retry image. -->
+    <attr format="reference" name="retryImage"/>
+    <!-- Scale type of the retry image. Ignored if retryImage is not specified. -->
+    <attr name="retryImageScaleType">
       <enum name="none" value="-1"/>
       <enum name="fitXY" value="0"/>
       <enum name="fitStart" value="1"/>
@@ -4687,7 +4834,12 @@
       <enum name="centerCrop" value="6"/>
       <enum name="focusCrop" value="7"/>
       <enum name="fitBottomStart" value="8"/>
-    </attr><attr format="reference" name="failureImage"/><attr name="failureImageScaleType">
+    </attr>
+
+    <!-- A drawable to be be used as a failure image. -->
+    <attr format="reference" name="failureImage"/>
+    <!-- Scale type of the failure image. Ignored if failureImage is not specified. -->
+    <attr name="failureImageScaleType">
       <enum name="none" value="-1"/>
       <enum name="fitXY" value="0"/>
       <enum name="fitStart" value="1"/>
@@ -4698,7 +4850,12 @@
       <enum name="centerCrop" value="6"/>
       <enum name="focusCrop" value="7"/>
       <enum name="fitBottomStart" value="8"/>
-    </attr><attr format="reference" name="progressBarImage"/><attr name="progressBarImageScaleType">
+    </attr>
+
+    <!-- A drawable to be be used as a progress bar. -->
+    <attr format="reference" name="progressBarImage"/>
+    <!-- Scale type of the progress bar. Ignored if progressBarImage is not specified. -->
+    <attr name="progressBarImageScaleType">
       <enum name="none" value="-1"/>
       <enum name="fitXY" value="0"/>
       <enum name="fitStart" value="1"/>
@@ -4709,7 +4866,12 @@
       <enum name="centerCrop" value="6"/>
       <enum name="focusCrop" value="7"/>
       <enum name="fitBottomStart" value="8"/>
-    </attr><attr format="integer" name="progressBarAutoRotateInterval"/><attr name="actualImageScaleType">
+    </attr>
+    <!-- Progress bar Auto Rotate interval in milliseconds -->
+    <attr format="integer" name="progressBarAutoRotateInterval"/>
+
+    <!-- Scale type of the actual image. -->
+    <attr name="actualImageScaleType">
       <enum name="none" value="-1"/>
       <enum name="fitXY" value="0"/>
       <enum name="fitStart" value="1"/>
@@ -4720,7 +4882,50 @@
       <enum name="centerCrop" value="6"/>
       <enum name="focusCrop" value="7"/>
       <enum name="fitBottomStart" value="8"/>
-    </attr><attr format="reference" name="backgroundImage"/><attr format="reference" name="overlayImage"/><attr format="reference" name="pressedStateOverlayImage"/><attr format="boolean" name="roundAsCircle"/><attr format="dimension" name="roundedCornerRadius"/><attr format="boolean" name="roundTopLeft"/><attr format="boolean" name="roundTopRight"/><attr format="boolean" name="roundBottomRight"/><attr format="boolean" name="roundBottomLeft"/><attr format="boolean" name="roundTopStart"/><attr format="boolean" name="roundTopEnd"/><attr format="boolean" name="roundBottomStart"/><attr format="boolean" name="roundBottomEnd"/><attr format="color" name="roundWithOverlayColor"/><attr format="dimension" name="roundingBorderWidth"/><attr format="color" name="roundingBorderColor"/><attr format="dimension" name="roundingBorderPadding"/></declare-styleable>
+    </attr>
+
+    <!-- A drawable or color to be used as a background. -->
+    <attr format="reference" name="backgroundImage"/>
+
+    <!-- A drawable or color to be used as an overlay. -->
+    <attr format="reference" name="overlayImage"/>
+
+    <!-- A drawable or color to be used as a pressed-state-overlay -->
+    <attr format="reference" name="pressedStateOverlayImage"/>
+
+    <!-- Rounding params -
+    Declares attributes for rounding shape, mode and border. -->
+
+    <!-- Round as circle. -->
+    <attr format="boolean" name="roundAsCircle"/>
+    <!-- Rounded corner radius. Ignored if roundAsCircle is used. -->
+    <attr format="dimension" name="roundedCornerRadius"/>
+    <!-- Round the top-left corner. Ignored if roundAsCircle is used. -->
+    <attr format="boolean" name="roundTopLeft"/>
+    <!-- Round the top-right corner. Ignored if roundAsCircle is used. -->
+    <attr format="boolean" name="roundTopRight"/>
+    <!-- Round the bottom-right corner. Ignored if roundAsCircle is used. -->
+    <attr format="boolean" name="roundBottomRight"/>
+    <!-- Round the bottom-left corner. Ignored if roundAsCircle is used. -->
+    <attr format="boolean" name="roundBottomLeft"/>
+    <!-- Round the top-start edge. Ignored if roundAsCircle is used. -->
+    <attr format="boolean" name="roundTopStart"/>
+    <!-- Round the top-end edge. Ignored if roundAsCircle is used. -->
+    <attr format="boolean" name="roundTopEnd"/>
+    <!-- Round the bottom-start edge. Ignored if roundAsCircle is used. -->
+    <attr format="boolean" name="roundBottomStart"/>
+    <!-- Round the bottom-end edge. Ignored if roundAsCircle is used. -->
+    <attr format="boolean" name="roundBottomEnd"/>
+    <!-- Round by overlying color. -->
+    <attr format="color" name="roundWithOverlayColor"/>
+    <!-- Rounding border width-->
+    <attr format="dimension" name="roundingBorderWidth"/>
+    <!-- Rounding border color -->
+    <attr format="color" name="roundingBorderColor"/>
+    <!-- Rounding border padding -->
+    <attr format="dimension" name="roundingBorderPadding"/>
+
+  </declare-styleable>
     <declare-styleable name="GradientColor">
         <!-- Start color of the gradient. -->
         <attr name="android:startColor"/>
@@ -5188,7 +5393,97 @@
 
 <attr format="reference|string" name="scopeUris"/>
 </declare-styleable>
-    <declare-styleable name="SimpleDraweeView"><attr format="string" name="actualImageUri"/><attr format="reference" name="actualImageResource"/><attr name="fadeDuration"/><attr name="viewAspectRatio"/><attr name="placeholderImage"/><attr name="placeholderImageScaleType"/><attr name="retryImage"/><attr name="retryImageScaleType"/><attr name="failureImage"/><attr name="failureImageScaleType"/><attr name="progressBarImage"/><attr name="progressBarImageScaleType"/><attr name="progressBarAutoRotateInterval"/><attr name="actualImageScaleType"/><attr name="backgroundImage"/><attr name="overlayImage"/><attr name="pressedStateOverlayImage"/><attr name="roundAsCircle"/><attr name="roundedCornerRadius"/><attr name="roundTopLeft"/><attr name="roundTopRight"/><attr name="roundBottomRight"/><attr name="roundBottomLeft"/><attr name="roundTopStart"/><attr name="roundTopEnd"/><attr name="roundBottomStart"/><attr name="roundBottomEnd"/><attr name="roundWithOverlayColor"/><attr name="roundingBorderWidth"/><attr name="roundingBorderColor"/><attr name="roundingBorderPadding"/></declare-styleable>
+    <declare-styleable name="SimpleDraweeView" parent="GenericDraweeHierarchy">
+
+    <!-- An image uri . -->
+    <attr format="string" name="actualImageUri"/>
+    <!-- An image reference -->
+    <attr format="reference" name="actualImageResource"/>
+
+    <!-- Attributes inherited from GenericDraweeHierarchy -->
+    <eat-comment/>
+
+    <!-- Fade duration in milliseconds. -->
+    <attr name="fadeDuration"/>
+
+    <!-- Aspect ratio (width / height) of the view, not necessarily of the images. -->
+    <attr name="viewAspectRatio"/>
+
+    <!-- Image branches -
+    Scale-type values must match those in GenericDraweeHierarchyInflater.getScaleTypeFromXml.
+    (GenericDraweeHierarchyInflater.java).
+    For drawables that should not be scaled, such as those with the android:tileMode
+    attribute set, use the value 'none'. -->
+
+    <!-- A drawable or color to be be used as a placeholder. -->
+    <attr name="placeholderImage"/>
+    <!-- Scale type of the placeholder image. Ignored if placeholderImage is not specified. -->
+    <attr name="placeholderImageScaleType"/>
+
+    <!-- A drawable to be be used as a retry image. -->
+    <attr name="retryImage"/>
+    <!-- Scale type of the retry image. Ignored if retryImage is not specified. -->
+    <attr name="retryImageScaleType"/>
+
+    <!-- A drawable to be be used as a failure image. -->
+    <attr name="failureImage"/>
+    <!-- Scale type of the failure image. Ignored if failureImage is not specified. -->
+    <attr name="failureImageScaleType"/>
+
+
+    <!-- A drawable to be be used as a progress bar. -->
+    <attr name="progressBarImage"/>
+    <!-- Scale type of the progress bar. Ignored if progressBarImage is not specified. -->
+    <attr name="progressBarImageScaleType"/>
+
+    <!-- Progress bar Auto Rotate interval in milliseconds -->
+    <attr name="progressBarAutoRotateInterval"/>
+
+    <!-- Scale type of the actual image. -->
+    <attr name="actualImageScaleType"/>
+
+    <!-- A drawable or color to be used as a background. -->
+    <attr name="backgroundImage"/>
+
+    <!-- A drawable or color to be used as an overlay. -->
+    <attr name="overlayImage"/>
+
+    <!-- A drawable or color to be used as a pressed-state-overlay -->
+    <attr name="pressedStateOverlayImage"/>
+
+    <!-- Rounding params -
+    Declares attributes for rounding shape, mode and border. -->
+
+    <!-- Round as circle. -->
+    <attr name="roundAsCircle"/>
+    <!-- Rounded corner radius. Ignored if roundAsCircle is used. -->
+    <attr name="roundedCornerRadius"/>
+    <!-- Round the top-left corner. Ignored if roundAsCircle is used. -->
+    <attr name="roundTopLeft"/>
+    <!-- Round the top-right corner. Ignored if roundAsCircle is used. -->
+    <attr name="roundTopRight"/>
+    <!-- Round the bottom-right corner. Ignored if roundAsCircle is used. -->
+    <attr name="roundBottomRight"/>
+    <!-- Round the bottom-left corner. Ignored if roundAsCircle is used. -->
+    <attr name="roundBottomLeft"/>
+    <!-- Round the top-start edge. Ignored if roundAsCircle is used. -->
+    <attr name="roundTopStart"/>
+    <!-- Round the top-end edge. Ignored if roundAsCircle is used. -->
+    <attr name="roundTopEnd"/>
+    <!-- Round the bottom-start edge. Ignored if roundAsCircle is used. -->
+    <attr name="roundBottomStart"/>
+    <!-- Round the bottom-end edge. Ignored if roundAsCircle is used. -->
+    <attr name="roundBottomEnd"/>
+    <!-- Round by overlying color. -->
+    <attr name="roundWithOverlayColor"/>
+    <!-- Rounding border width-->
+    <attr name="roundingBorderWidth"/>
+    <!-- Rounding border color -->
+    <attr name="roundingBorderColor"/>
+    <!-- Rounding border padding -->
+    <attr name="roundingBorderPadding"/>
+
+  </declare-styleable>
     <declare-styleable name="Snackbar"><attr format="reference" name="snackbarStyle"/><attr format="reference" name="snackbarButtonStyle"/></declare-styleable>
     <declare-styleable name="SnackbarLayout"><attr name="android:maxWidth"/><attr name="elevation"/><attr format="dimension" name="maxActionInlineWidth"/></declare-styleable>
     <declare-styleable name="Spinner">
@@ -5331,14 +5626,23 @@
         <attr name="android:textColorHint"/>
         <attr name="android:textColorLink"/>
         <attr name="android:textStyle"/>
+        <attr name="android:textFontWeight"/>
         <attr name="android:typeface"/>
         <attr name="android:fontFamily"/>
         <attr name="fontFamily"/>
         <attr name="textAllCaps"/>
+        <!-- Set the textLocale by a comma-separated language tag string,
+             for example "ja-JP,zh-CN". This attribute only takes effect on API 21 and above.
+             Before API 24, only the first language tag is used. Starting from API 24,
+             the string will be converted into a {@link android.os.LocaleList} and then used by
+             {@link android.widget.TextView} -->
+        <attr name="textLocale"/>
         <attr name="android:shadowColor"/>
         <attr name="android:shadowDy"/>
         <attr name="android:shadowDx"/>
         <attr name="android:shadowRadius"/>
+        <!-- OpenType font variation settings, available aftear api 26. -->
+        <attr name="fontVariationSettings"/>
     </declare-styleable>
     <declare-styleable name="TextInputLayout"><attr name="android:textColorHint"/><attr name="android:hint"/><attr format="boolean" name="hintEnabled"/><attr format="boolean" name="hintAnimationEnabled"/><attr format="reference" name="hintTextAppearance"/><attr format="string" name="helperText"/><attr format="boolean" name="helperTextEnabled"/><attr format="reference" name="helperTextTextAppearance"/><attr format="boolean" name="errorEnabled"/><attr format="reference" name="errorTextAppearance"/><attr format="boolean" name="counterEnabled"/><attr format="integer" name="counterMaxLength"/><attr format="reference" name="counterTextAppearance"/><attr format="reference" name="counterOverflowTextAppearance"/><attr format="boolean" name="passwordToggleEnabled"/><attr format="reference" name="passwordToggleDrawable"/><attr format="string" name="passwordToggleContentDescription"/><attr format="color" name="passwordToggleTint"/><attr name="passwordToggleTintMode">
       
@@ -5395,6 +5699,8 @@
         <attr name="contentInsetEndWithActions"/>
         <attr format="dimension" name="maxButtonHeight"/>
         <attr name="buttonGravity">
+            <!-- Place object in the vertical center of its container, not changing its size. -->
+            <flag name="center_vertical" value="0x10"/>
             <!-- Push object to the top of its container, not changing its size. -->
             <flag name="top" value="0x30"/>
             <!-- Push object to the bottom of its container, not changing its size. -->
@@ -5424,6 +5730,8 @@
         <!-- A color to apply to the subtitle string. -->
         <attr format="color" name="subtitleTextColor"/>
         <attr name="android:minHeight"/>
+        <!-- Menu resource to inflate to be shown in the toolbar -->
+        <attr format="reference" name="menu"/>
     </declare-styleable>
     <declare-styleable name="View">
         <!-- Sets the padding, in pixels, of the start edge; see {@link android.R.attr#padding}. -->

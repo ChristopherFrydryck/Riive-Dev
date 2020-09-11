@@ -103,5 +103,18 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>WorkSans-Black.otf</string>
+		<string>WorkSans-Bold.otf</string>
+		<string>WorkSans-ExtraBold.otf</string>
+		<string>WorkSans-ExtraLight.otf</string>
+		<string>WorkSans-Italic.otf</string>
+		<string>WorkSans-Light.otf</string>
+		<string>WorkSans-Medium.otf</string>
+		<string>WorkSans-Regular.otf</string>
+		<string>WorkSans-SemiBold.otf</string>
+		<string>WorkSans-Thin.otf</string>
+	</array>
 </dict>
 </plist>

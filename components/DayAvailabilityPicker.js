@@ -339,7 +339,7 @@ export default class DayAvailabilityPicker extends React.Component{
 
                 // For Android issue (works on iOS also, but Android messes with End Times)
                 let newPost = this.state.dailyStaging[this.state.activeDay].data.filter(x => x.start !== option.start)
-                let prevPost = jstonthis.state.dailyStaging[this.state.activeDay].data.filter(x => x.start == option.start)
+                let prevPost = this.state.dailyStaging[this.state.activeDay].data.filter(x => x.start == option.start)
                 let prevIndex = this.state.dailyStaging[this.state.activeDay].data.indexOf(prevPost[0])
                 let nextIndex = this.state.dailyStaging[this.state.activeDay].data.indexOf(newPost[0])
 

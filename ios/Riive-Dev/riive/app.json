@@ -3,7 +3,7 @@
     "name": "Riive",
     "slug": "RiiveParking",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
+    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android",
@@ -14,7 +14,7 @@
       "barStyle": "light-content",
       "backgroundColor": "#FF8708"
     },
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {

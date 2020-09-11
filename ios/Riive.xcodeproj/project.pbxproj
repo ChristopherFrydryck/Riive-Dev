@@ -22,6 +22,16 @@
 		B5DB04801F3A684600E91581 /* shell-app-manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = B5DB047E1F3A684600E91581 /* shell-app-manifest.json */; };
 		B5DB04811F3A684600E91581 /* shell-app.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B5DB047F1F3A684600E91581 /* shell-app.bundle */; };
 		D3FCF316245C4C4B9CAAD054 /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F249A11530A4672AF8B0715 /* libRNFirebase.a */; };
+		365590F4ABFD4D9C99C3AF07 /* WorkSans-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = E2E11916852D4DE7A298CA93 /* WorkSans-Black.otf */; };
+		C5EA0F028BF041409C4939FD /* WorkSans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = F156353C5792448F9973480B /* WorkSans-Bold.otf */; };
+		F5F7B2B46ED54B6CB971D386 /* WorkSans-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 29C2288C62224994BE23A646 /* WorkSans-ExtraBold.otf */; };
+		1EB48F42C1F84960A09A08AF /* WorkSans-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = FB28552D8F4149409B562AC1 /* WorkSans-ExtraLight.otf */; };
+		1D46018CAF034770AF7B8F0C /* WorkSans-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4D05460585B94354AA3B11DA /* WorkSans-Italic.otf */; };
+		93686D0DF032458CA7B60550 /* WorkSans-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 915166776FF844E49FC6D67B /* WorkSans-Light.otf */; };
+		169C5D68F1CD4019A1F374BD /* WorkSans-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 15FEA0101AD94DF3AB247247 /* WorkSans-Medium.otf */; };
+		C05D4E7D55774F09AFB1FD4A /* WorkSans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 50A1AC4C862C4FA7A4A778EB /* WorkSans-Regular.otf */; };
+		4CC2189287044164BCB7B76D /* WorkSans-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 380661F4759F42BB8408C21E /* WorkSans-SemiBold.otf */; };
+		B6B2D6E2A4834986917DB7A0 /* WorkSans-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = DD5FDBC4A9774BACBEF100EF /* WorkSans-Thin.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +66,16 @@
 		B5DB047E1F3A684600E91581 /* shell-app-manifest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "shell-app-manifest.json"; sourceTree = "<group>"; };
 		B5DB047F1F3A684600E91581 /* shell-app.bundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "shell-app.bundle"; sourceTree = "<group>"; };
 		C443DB45CB054094D5224883 /* libPods-riive.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-riive.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E2E11916852D4DE7A298CA93 /* WorkSans-Black.otf */ = {isa = PBXFileReference; name = "WorkSans-Black.otf"; path = "../assets/fonts/WorkSans-Black.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F156353C5792448F9973480B /* WorkSans-Bold.otf */ = {isa = PBXFileReference; name = "WorkSans-Bold.otf"; path = "../assets/fonts/WorkSans-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		29C2288C62224994BE23A646 /* WorkSans-ExtraBold.otf */ = {isa = PBXFileReference; name = "WorkSans-ExtraBold.otf"; path = "../assets/fonts/WorkSans-ExtraBold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		FB28552D8F4149409B562AC1 /* WorkSans-ExtraLight.otf */ = {isa = PBXFileReference; name = "WorkSans-ExtraLight.otf"; path = "../assets/fonts/WorkSans-ExtraLight.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4D05460585B94354AA3B11DA /* WorkSans-Italic.otf */ = {isa = PBXFileReference; name = "WorkSans-Italic.otf"; path = "../assets/fonts/WorkSans-Italic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		915166776FF844E49FC6D67B /* WorkSans-Light.otf */ = {isa = PBXFileReference; name = "WorkSans-Light.otf"; path = "../assets/fonts/WorkSans-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		15FEA0101AD94DF3AB247247 /* WorkSans-Medium.otf */ = {isa = PBXFileReference; name = "WorkSans-Medium.otf"; path = "../assets/fonts/WorkSans-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		50A1AC4C862C4FA7A4A778EB /* WorkSans-Regular.otf */ = {isa = PBXFileReference; name = "WorkSans-Regular.otf"; path = "../assets/fonts/WorkSans-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		380661F4759F42BB8408C21E /* WorkSans-SemiBold.otf */ = {isa = PBXFileReference; name = "WorkSans-SemiBold.otf"; path = "../assets/fonts/WorkSans-SemiBold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		DD5FDBC4A9774BACBEF100EF /* WorkSans-Thin.otf */ = {isa = PBXFileReference; name = "WorkSans-Thin.otf"; path = "../assets/fonts/WorkSans-Thin.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +134,7 @@
 				06AE490D23A09AF70075E8DA /* Recovered References */,
 				2855B4A62075CFD365DC936D /* Pods */,
 				EEF6BC3D849AD938FAE5F082 /* Frameworks */,
+				47D0635DE2754B9A82820053 /* Resources */,
 			);
 			sourceTree = "<group>";
 		};
@@ -161,6 +182,24 @@
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
+		};
+		47D0635DE2754B9A82820053 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				E2E11916852D4DE7A298CA93 /* WorkSans-Black.otf */,
+				F156353C5792448F9973480B /* WorkSans-Bold.otf */,
+				29C2288C62224994BE23A646 /* WorkSans-ExtraBold.otf */,
+				FB28552D8F4149409B562AC1 /* WorkSans-ExtraLight.otf */,
+				4D05460585B94354AA3B11DA /* WorkSans-Italic.otf */,
+				915166776FF844E49FC6D67B /* WorkSans-Light.otf */,
+				15FEA0101AD94DF3AB247247 /* WorkSans-Medium.otf */,
+				50A1AC4C862C4FA7A4A778EB /* WorkSans-Regular.otf */,
+				380661F4759F42BB8408C21E /* WorkSans-SemiBold.otf */,
+				DD5FDBC4A9774BACBEF100EF /* WorkSans-Thin.otf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -252,6 +291,16 @@
 				B5DB04801F3A684600E91581 /* shell-app-manifest.json in Resources */,
 				B5DB04811F3A684600E91581 /* shell-app.bundle in Resources */,
 				B56386511DB9693800A0598C /* Assets.xcassets in Resources */,
+				365590F4ABFD4D9C99C3AF07 /* WorkSans-Black.otf in Resources */,
+				C5EA0F028BF041409C4939FD /* WorkSans-Bold.otf in Resources */,
+				F5F7B2B46ED54B6CB971D386 /* WorkSans-ExtraBold.otf in Resources */,
+				1EB48F42C1F84960A09A08AF /* WorkSans-ExtraLight.otf in Resources */,
+				1D46018CAF034770AF7B8F0C /* WorkSans-Italic.otf in Resources */,
+				93686D0DF032458CA7B60550 /* WorkSans-Light.otf in Resources */,
+				169C5D68F1CD4019A1F374BD /* WorkSans-Medium.otf in Resources */,
+				C05D4E7D55774F09AFB1FD4A /* WorkSans-Regular.otf in Resources */,
+				4CC2189287044164BCB7B76D /* WorkSans-SemiBold.otf in Resources */,
+				B6B2D6E2A4834986917DB7A0 /* WorkSans-Thin.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,7 +368,6 @@
 				"${PODS_ROOT}/Amplitude-iOS/Amplitude/ComodoCaLimitedRsaCertificationAuthority.der",
 				"${PODS_ROOT}/Amplitude-iOS/Amplitude/ComodoRsaCA.der",
 				"${PODS_ROOT}/Amplitude-iOS/Amplitude/ComodoRsaDomainValidationCA.der",
-				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
 				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/Stripe/Stripe.bundle",
@@ -330,7 +378,6 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ComodoCaLimitedRsaCertificationAuthority.der",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ComodoRsaCA.der",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ComodoRsaDomainValidationCA.der",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Stripe.bundle",
@@ -388,7 +435,9 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				CREATE_INFOPLIST_SECTION_IN_BINARY = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DONT_GENERATE_INFOPLIST_FILE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -445,7 +494,9 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				CREATE_INFOPLIST_SECTION_IN_BINARY = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DONT_GENERATE_INFOPLIST_FILE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
