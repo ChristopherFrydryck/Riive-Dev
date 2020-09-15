@@ -312,19 +312,19 @@
     <orderEntry type="module" module-name="android-expo-image-picker" />
     <orderEntry type="module" module-name="android-react-native-firebase" />
     <orderEntry type="module" module-name="android-expo-permissions" />
-    <orderEntry type="module" module-name="android-expo-web-browser" />
+    <orderEntry type="module" module-name="expo-web-browser-android-expo-web-browser" />
     <orderEntry type="module" module-name="android-expo-app-auth" />
     <orderEntry type="module" module-name="android-expo-google-sign-in" />
-    <orderEntry type="module" module-name="android-expo-location" />
+    <orderEntry type="module" module-name="expo-location-android-expo-location" />
     <orderEntry type="module" module-name="android-expo-file-system" />
     <orderEntry type="module" module-name="android-unimodules-core" />
     <orderEntry type="module" module-name="android-unimodules-react-native-adapter" />
-    <orderEntry type="module" module-name="android-expo-app-loader-provider" />
-    <orderEntry type="module" module-name="expo-error-recovery" />
+    <orderEntry type="module" module-name="expo-app-loader-provider-android-expo-app-loader-provider" />
+    <orderEntry type="module" module-name="android-expo-error-recovery" />
     <orderEntry type="module" module-name="android-expo-font" />
-    <orderEntry type="module" module-name="android-expo-keep-awake" />
+    <orderEntry type="module" module-name="expo-keep-awake-android-expo-keep-awake" />
     <orderEntry type="module" module-name="android-expo-linear-gradient" />
-    <orderEntry type="module" module-name="android-expo-sqlite" />
+    <orderEntry type="module" module-name="expo-sqlite-android-expo-sqlite" />
     <orderEntry type="module" module-name="android-unimodules-barcode-scanner-interface" />
     <orderEntry type="module" module-name="android-unimodules-camera-interface" />
     <orderEntry type="module" module-name="android-unimodules-constants-interface" />
