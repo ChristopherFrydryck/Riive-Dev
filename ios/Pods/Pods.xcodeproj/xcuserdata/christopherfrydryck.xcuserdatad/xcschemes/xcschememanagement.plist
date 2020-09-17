@@ -135,12 +135,12 @@
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>22</integer>
+			<integer>21</integer>
 		</dict>
 		<key>EXSplashScreen.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>21</integer>
+			<integer>22</integer>
 		</dict>
 		<key>EXWebBrowser.xcscheme</key>
 		<dict>
@@ -546,7 +546,7 @@
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>83</integer>
+			<integer>82</integer>
 		</dict>
 		<key>boost-for-react-native.xcscheme</key>
 		<dict>

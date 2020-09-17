@@ -65,7 +65,8 @@
         android:xlargeScreens="true" >
     </supports-screens>
 
-    <uses-permission android:name="host.exp.exponent.permission.C2D_MESSAGE" />
+    <uses-permission android:name="host.exp.exponent.permission.C2D_MESSAGE" /> <!-- Used by react-native-netinfo module -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -94,8 +95,7 @@
     <uses-feature
         android:name="android.hardware.bluetooth"
         android:required="false" /> <!-- Required to access Google Play Licensing -->
-    <uses-permission android:name="com.android.vending.CHECK_LICENSE" /> <!-- Required to check whether Wi-Fi is enabled -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
     <uses-permission android:name="android.permission.STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- for android -->
     <!-- <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/> -->

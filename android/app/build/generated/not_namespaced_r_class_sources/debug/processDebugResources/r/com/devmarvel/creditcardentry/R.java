@@ -12,7 +12,7 @@ public final class R {
     public static final class anim {
         private anim() {}
 
-        public static final int cycle = 0x7f01001e;
+        public static final int cycle = 0x7f010018;
         public static final int shake = 0x7f010023;
     }
     public static final class attr {
@@ -36,7 +36,7 @@ public final class R {
         private color() {}
 
         public static final int null_color = 0x7f0600a3;
-        public static final int text_helper_color = 0x7f0600bb;
+        public static final int text_helper_color = 0x7f0600bc;
     }
     public static final class drawable {
         private drawable() {}
@@ -54,15 +54,15 @@ public final class R {
     public static final class id {
         private id() {}
 
-        public static final int cc_card = 0x7f09006a;
-        public static final int cc_ccv = 0x7f09006b;
-        public static final int cc_entry = 0x7f09006c;
-        public static final int cc_entry_internal = 0x7f09006d;
-        public static final int cc_exp = 0x7f09006e;
-        public static final int cc_form_layout = 0x7f09006f;
-        public static final int cc_four_digits = 0x7f090070;
-        public static final int cc_zip = 0x7f090071;
-        public static final int text_helper = 0x7f090195;
+        public static final int cc_card = 0x7f090068;
+        public static final int cc_ccv = 0x7f090069;
+        public static final int cc_entry = 0x7f09006a;
+        public static final int cc_entry_internal = 0x7f09006b;
+        public static final int cc_exp = 0x7f09006c;
+        public static final int cc_form_layout = 0x7f09006d;
+        public static final int cc_four_digits = 0x7f09006e;
+        public static final int cc_zip = 0x7f09006f;
+        public static final int text_helper = 0x7f09019a;
     }
     public static final class string {
         private string() {}
@@ -79,8 +79,8 @@ public final class R {
     public static final class style {
         private style() {}
 
-        public static final int AppBaseTheme = 0x7f110007;
-        public static final int AppTheme = 0x7f110008;
+        public static final int AppBaseTheme = 0x7f110006;
+        public static final int AppTheme = 0x7f110007;
     }
     public static final class styleable {
         private styleable() {}

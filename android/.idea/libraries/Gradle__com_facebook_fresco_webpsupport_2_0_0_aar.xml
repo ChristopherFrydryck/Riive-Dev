@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.facebook.fresco:webpsupport:2.0.0@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/webpsupport-2.0.0.aar/61e1228f5dde8e090cbcaaa0f7c7d5c3/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/webpsupport-2.0.0.aar/61e1228f5dde8e090cbcaaa0f7c7d5c3/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.facebook.fresco/webpsupport/2.0.0/f738b7f6845d4493ae5d656f25faa292825f516e/webpsupport-2.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -5,6 +5,7 @@
     "ios": "react-native run-ios",
     "web": "expo start --web",
     "test": "jest",
+    "clear": "watchman watch-del-all && rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-* && rm -rf node_modules/ && npm cache clean --force && npm install",
     "postinstall": "jetify"
   },
   "jest": {
@@ -31,7 +32,7 @@
     "expo-google-sign-in": "~8.0.0",
     "expo-image-picker": "~8.0.1",
     "expo-linear-gradient": "~8.0.0",
-    "expokit": "^35.0.3",
+    "expokit": "^36.0.1",
     "firebase": "^6.5.0",
     "mobx": "^5.13.0",
     "mobx-react": "^5.4.3",
