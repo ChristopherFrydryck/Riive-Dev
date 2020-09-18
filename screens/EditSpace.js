@@ -138,6 +138,10 @@ class editSpace extends Component {
             spacePriceCents: space.spacePriceCents,
             numSpaces: space.numSpaces,
 
+            hidden: space.hidden,
+            toBeDeleted: space.toBeDeleted,
+            visits: space.visits,
+
             daily: space.availability
             
         }
@@ -433,6 +437,9 @@ class editSpace extends Component {
                 numSpaces: this.state.numSpaces,
                 availability: this.state.daily,
                 updated: createdTime,
+                hidden: this.state.hidden,
+                toBeDeleted: this.state.toBeDeleted,
+                visits: this.state.visits,
                })
 
                
@@ -453,6 +460,9 @@ class editSpace extends Component {
                   availability: this.state.daily,
                   created: spaceFromDB.created,
                   updated: createdTime,
+                  hidden: this.state.hidden,
+                  toBeDeleted: this.state.toBeDeleted,
+                  visits: this.state.visits,
                }
                // add space to mobx UserStore
               //  await this.props.UserStore.listings.push({
@@ -765,6 +775,7 @@ renderDotsView = (numItems, position) =>{
                             <Text style={{fontSize: 16, color: Colors.cosmos300, marginRight: 24}}>{this.state.spaceBio}</Text> 
                         </View>
                         : null}
+                       
 
                       
                         <View style={{marginTop: 32}}>

@@ -26,11 +26,11 @@ const db = admin.firestore();
                   return db.collection('users').doc(request.body.FBID).get()
                   .then(doc => {
                     if(!doc.exists){
-                        console.log("User doesn't exist")
+                        return console.log("User doesn't exist")
                     }else{
                         // console.log(customer)
                         // console.log(doc.data())
-                        db.collection('users').doc(request.body.FBID).update({
+                        return db.collection('users').doc(request.body.FBID).update({
                             stripeID: customer.id,
                         })
                         .then(() => response.send(customer))
@@ -56,11 +56,11 @@ const db = admin.firestore();
             }else{
                 return db.collection('users').doc(request.body.FBID).get().then(doc => {
                   if(!doc.exists){
-                      console.log("User doesn't exist")
+                      return console.log("User doesn't exist")
                   }else{
                       // console.log(customer)
                       // console.log(doc.data())
-                      console.log("Success sending stuff")
+                      return console.log("Success sending stuff")
                       .then(() => response.send(card))
                   }
                 }).catch(err => {
@@ -84,9 +84,9 @@ const db = admin.firestore();
                 }else{
                     return db.collection('users').doc(request.body.FBID).get().then(doc => {
                     if(!doc.exists){
-                        console.log("User doesn't exist")
+                        return console.log("User doesn't exist")
                     }else{
-                        console.log("Success deleting card stuff")
+                        return console.log("Success deleting card stuff")
                         .then(() => response.send(confirmation))
                     }
                     }).catch(err => {
@@ -96,6 +96,17 @@ const db = admin.firestore();
             }
           );
     })
+
+    exports.updateUserInfo = functions.firestore
+    .document('users/{user-Id}')
+    .onUpdate((snap, context) => {
+        console.log("Changed user data!")
+    })
+
+
+    
+
+    
 
 
         

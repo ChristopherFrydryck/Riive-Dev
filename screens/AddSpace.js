@@ -380,7 +380,10 @@ class addSpace extends Component {
                       spacePriceCents: spaceCents,
                       numSpaces: this.state.numSpaces,
                       availability: this.state.daily,
-                      created: createdTime
+                      created: createdTime,
+                      hidden: false,
+                      toBeDeleted: false,
+                      visits: []
                  
                })
 
@@ -396,7 +399,10 @@ class addSpace extends Component {
                   spacePriceCents: spaceCents,
                   numSpaces: this.state.numSpaces,
                   availability: this.state.daily,
-                  created: createdTime
+                  created: createdTime,
+                  hidden: false,
+                  toBeDeleted: false,
+                  visits: []
                })
 
                   // navigate back to profile
