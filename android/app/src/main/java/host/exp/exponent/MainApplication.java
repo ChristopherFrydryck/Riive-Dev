@@ -46,8 +46,8 @@ public class MainApplication extends ExpoApplication implements AppLoaderPackage
             // new RNGestureHandlerPackage(),
             new RNFirebasePackage(),
             new RNFetchBlobPackage(),
-            new StripeReactPackage(),
-            new MapsPackage()
+            new StripeReactPackage()
+//            new MapsPackage()
     );
   }
 

@@ -49,12 +49,12 @@ const providers = {
 };
 
 
+if (!firebase.apps.length) {
 
-
-// Initlialized FB Vars
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-const firebaseAppAuth = firebaseApp.auth();
-
+  // Initlialized FB Vars
+  var firebaseApp = firebase.initializeApp(firebaseConfig);
+  var firebaseAppAuth = firebaseApp.auth();
+}
 
 
 

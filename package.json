@@ -5,6 +5,7 @@
     "ios": "react-native run-ios",
     "web": "expo start --web",
     "test": "jest",
+    "clear": "watchman watch-del-all && rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-* && rm -rf node_modules/ && npm cache clean --force && npm install",
     "postinstall": "jetify"
   },
   "jest": {
@@ -20,6 +21,7 @@
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
     "@react-native-community/picker": "^1.6.5",
+    "@react-native-community/viewpager": "^2.0.2",
     "android": "^0.0.8",
     "axios": "^0.19.0",
     "braces": "^3.0.2",
@@ -31,7 +33,7 @@
     "expo-google-sign-in": "~8.0.0",
     "expo-image-picker": "~8.0.1",
     "expo-linear-gradient": "~8.0.0",
-    "expokit": "^35.0.3",
+    "expokit": "^36.0.1",
     "firebase": "^6.5.0",
     "mobx": "^5.13.0",
     "mobx-react": "^5.4.3",
@@ -61,9 +63,9 @@
     "react-native-swipeable-row": "^0.8.1",
     "react-native-unimodules": "^0.9.1",
     "react-native-web": "^0.11.7",
-    "react-navigation": "^4.0.0",
+    "react-navigation": "^4.4.0",
     "react-navigation-stack": "^1.9.4",
-    "react-navigation-tabs": "^1.2.0",
+    "react-navigation-tabs": "^2.8.13",
     "react-scripts": "^3.3.0",
     "react-with-firebase-auth": "^1.0.4",
     "rn-fetch-blob": "0.10.16",

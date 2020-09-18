@@ -11,6 +11,23 @@
                         "startOffsets": "55,125,209,293,389,491,593,687",
                         "endColumns": "69,83,83,95,101,101,93,88",
                         "endOffsets": "120,204,288,384,486,588,682,771"
+                    },
+                    "to": {
+                        "startLines": "3,4,5,6,7,8,9,10",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "94,164,248,332,428,530,632,726",
+                        "endColumns": "69,83,83,95,101,101,93,88",
+                        "endOffsets": "159,243,327,423,525,627,721,810"
+                    }
+                },
+                {
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/expoview-36.0.0.aar/27c6a0004fcf75872bd82e3a28afdc6e/res/values-night-v8/values-night-v8.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "38",
+                        "endOffsets": "89"
                     }
                 }
             ]

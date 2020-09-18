@@ -1,4 +1,5 @@
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
+import ViewPager from '@react-native-community/viewpager';
 import Colors from '../constants/Colors'
 
 import PrivacyPolicy from '../screens/LegalScreens/PrivacyPolicy'

@@ -85,6 +85,7 @@
     <bool name="abc_action_bar_embed_tabs">true</bool>
     <bool name="abc_allow_stacked_button_bar">false</bool>
     <bool name="abc_config_actionMenuItemAllCaps">true</bool>
+    <bool name="dark_mode">false</bool>
     <bool name="mtrl_btn_textappearance_all_caps">true</bool>
     <color name="abc_input_method_navigation_guard">@android:color/black</color>
     <color name="abc_search_url_text_normal">#7fa87f</color>
@@ -114,7 +115,6 @@
     <color name="cardview_light_background">#FFFFFFFF</color>
     <color name="cardview_shadow_end_color">#03000000</color>
     <color name="cardview_shadow_start_color">#37000000</color>
-    <color name="catalyst_redbox_background">#eecc0000</color>
     <color name="colorAccent">#005eff</color>
     <color name="colorAccentDark">#FFFFFF</color>
     <color name="colorAccentLight">#1b73b4</color>
@@ -143,6 +143,7 @@
     <color name="com_facebook_likeboxcountview_text_color">#6a7180</color>
     <color name="com_facebook_likeview_text_color">#6a7180</color>
     <color name="com_facebook_messenger_blue">#0084ff</color>
+    <color name="com_facebook_share_button_text_color">#FFFFFF</color>
     <color name="com_smart_login_code">#3C6499</color>
     <color name="common_google_signin_btn_text_dark_default">@android:color/white</color>
     <color name="common_google_signin_btn_text_dark_disabled">#1F000000</color>
@@ -213,6 +214,7 @@
     <color name="primary_text_default_material_light">#de000000</color>
     <color name="primary_text_disabled_material_dark">#4Dffffff</color>
     <color name="primary_text_disabled_material_light">#39000000</color>
+    <color name="reactandroid_catalyst_redbox_background">#eecc0000</color>
     <color name="ripple_material_dark">#33ffffff</color>
     <color name="ripple_material_light">#1f000000</color>
     <color name="secondary_text_default_material_dark">#b3ffffff</color>
@@ -361,6 +363,13 @@
     <dimen name="com_facebook_profilepictureview_preset_size_large">180dp</dimen>
     <dimen name="com_facebook_profilepictureview_preset_size_normal">100dp</dimen>
     <dimen name="com_facebook_profilepictureview_preset_size_small">50dp</dimen>
+    <dimen name="com_facebook_share_button_compound_drawable_padding">12dp</dimen>
+    <dimen name="com_facebook_share_button_padding_bottom">12dp</dimen>
+    <dimen name="com_facebook_share_button_padding_left">12dp</dimen>
+    <dimen name="com_facebook_share_button_padding_right">16dp</dimen>
+    <dimen name="com_facebook_share_button_padding_top">12dp</dimen>
+    <dimen name="com_facebook_share_button_text_size">16.0sp</dimen>
+    <dimen name="com_facebook_tooltip_horizontal_padding">10dp</dimen>
     <dimen name="compat_button_inset_horizontal_material">4dp</dimen>
     <dimen name="compat_button_inset_vertical_material">6dp</dimen>
     <dimen name="compat_button_padding_horizontal_material">8dp</dimen>
@@ -550,8 +559,6 @@
     <item name="accessibility_custom_action_7" type="id"/>
     <item name="accessibility_custom_action_8" type="id"/>
     <item name="accessibility_custom_action_9" type="id"/>
-    <item name="accessibility_hint" type="id"/>
-    <item name="accessibility_role" type="id"/>
     <item name="action_bar_activity_content" type="id"/>
     <item name="action_bar_spinner" type="id"/>
     <item name="action_menu_divider" type="id"/>
@@ -578,7 +585,15 @@
     <item name="parent_matrix" type="id"/>
     <item name="progress_circular" type="id"/>
     <item name="progress_horizontal" type="id"/>
-    <item name="react_test_id" type="id"/>
+    <item name="reactandroid_accessibility_actions" type="id"/>
+    <item name="reactandroid_accessibility_hint" type="id"/>
+    <item name="reactandroid_accessibility_label" type="id"/>
+    <item name="reactandroid_accessibility_role" type="id"/>
+    <item name="reactandroid_accessibility_state" type="id"/>
+    <item name="reactandroid_accessibility_states" type="id"/>
+    <item name="reactandroid_react_test_id" type="id"/>
+    <item name="reactandroid_view_tag_instance_handle" type="id"/>
+    <item name="reactandroid_view_tag_native_id" type="id"/>
     <item name="save_non_transition_alpha" type="id"/>
     <item name="save_overlay_view" type="id"/>
     <item name="snackbar_action" type="id"/>
@@ -606,8 +621,6 @@
     <item name="transition_transform" type="id"/>
     <item name="up" type="id"/>
     <item name="view_offset_helper" type="id"/>
-    <item name="view_tag_instance_handle" type="id"/>
-    <item name="view_tag_native_id" type="id"/>
     <integer name="abc_config_activityDefaultDur">220</integer>
     <integer name="abc_config_activityShortDur">150</integer>
     <integer name="app_bar_elevation_anim_duration">150</integer>
@@ -626,6 +639,8 @@
     <integer name="mtrl_btn_anim_duration_ms">100</integer>
     <integer name="mtrl_chip_anim_duration">100</integer>
     <integer name="mtrl_tab_indicator_anim_duration_ms">250</integer>
+    <integer name="react_native_dev_server_port">8081</integer>
+    <integer name="react_native_inspector_proxy_port">8081</integer>
     <integer name="show_password_duration">200</integer>
     <integer name="status_bar_notification_info_maxnum">999</integer>
     <string name="CreditCardFormCardNumberHint">1234 5678 9012 3456</string>
@@ -712,7 +727,6 @@
     <string name="address_state_required">Please enter your state</string>
     <string name="address_zip_invalid">Your ZIP code is invalid.</string>
     <string name="address_zip_postal_invalid">Your ZIP/Postal code is invalid</string>
-    <string name="adjustable_description" translatable="false">Adjustable</string>
     <string name="allow_experience_permissions">Allow</string>
     <string name="amex_short">Amex</string>
     <string name="android_pay_unavaliable">Android Pay unavailable on your device.</string>
@@ -721,30 +735,6 @@
     <string name="bottom_sheet_behavior" translatable="false">com.google.android.material.bottomsheet.BottomSheetBehavior</string>
     <string name="cardNumber">Card Number</string>
     <string name="card_number_hint">1234 1234 1234 1234</string>
-    <string name="catalyst_copy_button" project="catalyst" translatable="false">Copy\n</string>
-    <string name="catalyst_debugjs" project="catalyst" translatable="false">Debug JS Remotely</string>
-    <string name="catalyst_debugjs_nuclide" project="catalyst" translatable="false">Debug JS in Nuclide</string>
-    <string name="catalyst_debugjs_nuclide_failure" project="catalyst" translatable="false">The request to attach Nuclide could not reach Metro Bundler!</string>
-    <string name="catalyst_debugjs_off" project="catalyst" translatable="false">Stop Remote JS Debugging</string>
-    <string name="catalyst_dismiss_button" project="catalyst" translatable="false">Dismiss\n(ESC)</string>
-    <string name="catalyst_element_inspector" project="catalyst" translatable="false">Toggle Inspector</string>
-    <string name="catalyst_heap_capture" project="catalyst" translatable="false">Capture Heap</string>
-    <string name="catalyst_hot_module_replacement" project="catalyst" translatable="false">Enable Hot Reloading</string>
-    <string name="catalyst_hot_module_replacement_off" project="catalyst" translatable="false">Disable Hot Reloading</string>
-    <string name="catalyst_jsload_error" project="catalyst" translatable="false">Unable to download JS bundle. Did you forget to start the development server or connect your device?</string>
-    <string name="catalyst_live_reload" project="catalyst" translatable="false">Enable Live Reload</string>
-    <string name="catalyst_live_reload_off" project="catalyst" translatable="false">Disable Live Reload</string>
-    <string name="catalyst_loading_from_url" project="catalyst" translatable="false">Loading from %1$s…</string>
-    <string name="catalyst_perf_monitor" project="catalyst" translatable="false">Show Perf Monitor</string>
-    <string name="catalyst_perf_monitor_off" project="catalyst" translatable="false">Hide Perf Monitor</string>
-    <string name="catalyst_poke_sampling_profiler" project="catalyst" translatable="false">Start/Stop Sampling Profiler</string>
-    <string name="catalyst_reload_button" project="catalyst" translatable="false">Reload\n(R,\u00A0R)</string>
-    <string name="catalyst_reloadjs" project="catalyst" translatable="false">Reload</string>
-    <string name="catalyst_remotedbg_error" project="catalyst" translatable="false">Unable to connect with remote debugger</string>
-    <string name="catalyst_remotedbg_message" project="catalyst" translatable="false">Connecting to remote debugger</string>
-    <string name="catalyst_report_button" project="catalyst" translatable="false">Report</string>
-    <string name="catalyst_settings" project="catalyst" translatable="false">Dev Settings</string>
-    <string name="catalyst_settings_title" project="catalyst" translatable="false">Catalyst Dev Settings</string>
     <string name="character_counter_content_description">Character limit exceeded %1$d of %2$d</string>
     <string name="character_counter_pattern" translatable="false">%1$d / %2$d</string>
     <string name="com_facebook_device_auth_instructions">Visit &lt;b>facebook.com/device&lt;/b> and enter the code shown above.</string>
@@ -760,14 +750,14 @@
     <string name="com_facebook_loginview_log_in_button_long">Log in with Facebook</string>
     <string name="com_facebook_loginview_log_out_action">Log out</string>
     <string name="com_facebook_loginview_log_out_button">Log out</string>
-    <string name="com_facebook_loginview_logged_in_as">Logged in as: <ns1:g id="user name">%1$s</ns1:g></string>
+    <string name="com_facebook_loginview_logged_in_as">Logged in as: %1$s</string>
     <string name="com_facebook_loginview_logged_in_using_facebook">Logged in using Facebook</string>
     <string name="com_facebook_send_button_text">Send</string>
     <string name="com_facebook_share_button_text">Share</string>
     <string name="com_facebook_smart_device_instructions">To connect your account, open the Facebook app on your mobile device and check for notifications.</string>
     <string name="com_facebook_smart_device_instructions_or">- OR -</string>
     <string name="com_facebook_smart_login_confirmation_cancel">Not you?</string>
-    <string name="com_facebook_smart_login_confirmation_continue_as">Continue as <ns1:g id="user name">%1$s</ns1:g></string>
+    <string name="com_facebook_smart_login_confirmation_continue_as">Continue as %1$s</string>
     <string name="com_facebook_smart_login_confirmation_title">Confirm Login</string>
     <string name="com_facebook_tooltip_default">You\'re in control - choose what info you want to share with apps.</string>
     <string msgid="2523291102206661146" name="common_google_play_services_enable_button">Enable</string>
@@ -832,10 +822,7 @@
     <string name="google_app_id" translatable="false">1:888723186328:android:a4518cf53ee488a722a6ed</string>
     <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCsZup3roSbxSJHTnQ4cqYSU4-UHzK5XTQ</string>
     <string name="google_storage_bucket" translatable="false">riive-parking.appspot.com</string>
-    <string name="header_description" translatable="false">Heading</string>
     <string name="hide_bottom_view_on_scroll_behavior" translatable="false">com.google.android.material.behavior.HideBottomViewOnScrollBehavior</string>
-    <string name="image_button_description" translatable="false">Button, Image</string>
-    <string name="image_description" translatable="false">Image</string>
     <string name="info_activity_name">Info</string>
     <string name="info_app_name_placeholder">App Name</string>
     <string name="info_clear_data">Clear Data</string>
@@ -851,7 +838,6 @@
     <string name="invalid_expiry_year">Your card\'s expiration year is invalid.</string>
     <string name="invalid_shipping_information">Invalid Shipping Address</string>
     <string name="invalid_zip">Your postal code is incomplete.</string>
-    <string name="link_description" translatable="false">Link</string>
     <string name="messenger_send_button_text">Send</string>
     <string name="mtrl_chip_close_icon_content_description">Remove %1$s</string>
     <string name="no_payment_methods">No payment methods.</string>
@@ -868,7 +854,8 @@
     <string name="perm_camera_roll_read">reading camera roll</string>
     <string name="perm_camera_roll_write">modifying camera roll</string>
     <string name="perm_coarse_location">coarse location</string>
-    <string name="perm_contacts">reading contacts</string>
+    <string name="perm_contacts_read">reading contacts</string>
+    <string name="perm_contacts_write">modifying contacts</string>
     <string name="perm_fine_location">fine location</string>
     <string name="perm_system_brightness">system brightness</string>
     <string name="persistent_notification_channel_desc">Persistent notifications that provide debug info about open experiences</string>
@@ -878,8 +865,60 @@
     <string name="preference_file_key">host.exp.exponent.SharedPreferences</string>
     <string name="price_free">Free</string>
     <string name="project_id" translatable="false">riive-parking</string>
+    <string name="reactandroid_alert_description" translatable="false">Alert</string>
+    <string name="reactandroid_catalyst_change_bundle_location" project="catalyst" translatable="false">Change Bundle Location</string>
+    <string name="reactandroid_catalyst_copy_button" project="catalyst" translatable="false">Copy\n</string>
+    <string name="reactandroid_catalyst_debug" project="catalyst" translatable="false">Debug</string>
+    <string name="reactandroid_catalyst_debug_chrome" project="catalyst" translatable="false">Debug with Chrome</string>
+    <string name="reactandroid_catalyst_debug_chrome_stop" project="catalyst" translatable="false">Stop Chrome Debugging</string>
+    <string name="reactandroid_catalyst_debug_connecting" project="catalyst" translatable="false">Connecting to debugger...</string>
+    <string name="reactandroid_catalyst_debug_error" project="catalyst" translatable="false">Failed to connect to debugger!</string>
+    <string name="reactandroid_catalyst_debug_nuclide" project="catalyst" translatable="false">Debug with Nuclide</string>
+    <string name="reactandroid_catalyst_debug_nuclide_error" project="catalyst" translatable="false">Failed to communicate with the bundler to enabling debugging with Nuclide.</string>
+    <string name="reactandroid_catalyst_debug_stop" project="catalyst" translatable="false">Stop Debugging</string>
+    <string name="reactandroid_catalyst_dismiss_button" project="catalyst" translatable="false">Dismiss\n(ESC)</string>
+    <string name="reactandroid_catalyst_heap_capture" project="catalyst" translatable="false">Capture Heap</string>
+    <string name="reactandroid_catalyst_hot_reloading" project="catalyst" translatable="false">Enable Fast Refresh</string>
+    <string name="reactandroid_catalyst_hot_reloading_auto_disable" project="catalyst" translatable="false">Disabling Fast Refresh because it requires a development bundle.</string>
+    <string name="reactandroid_catalyst_hot_reloading_auto_enable" project="catalyst" translatable="false">Switching to development bundle in order to enable Fast Refresh.</string>
+    <string name="reactandroid_catalyst_hot_reloading_stop" project="catalyst" translatable="false">Disable Fast Refresh</string>
+    <string name="reactandroid_catalyst_inspector" project="catalyst" translatable="false">Toggle Inspector</string>
+    <string name="reactandroid_catalyst_loading_from_url" project="catalyst" translatable="false">Loading from %1$s…</string>
+    <string name="reactandroid_catalyst_perf_monitor" project="catalyst" translatable="false">Show Perf Monitor</string>
+    <string name="reactandroid_catalyst_perf_monitor_stop" project="catalyst" translatable="false">Hide Perf Monitor</string>
+    <string name="reactandroid_catalyst_reload" project="catalyst" translatable="false">Reload</string>
+    <string name="reactandroid_catalyst_reload_button" project="catalyst" translatable="false">Reload\n(R,\u00A0R)</string>
+    <string name="reactandroid_catalyst_reload_error" project="catalyst" translatable="false">Failed to load bundle. Try restarting the bundler or reconnecting your device.</string>
+    <string name="reactandroid_catalyst_report_button" project="catalyst" translatable="false">Report</string>
+    <string name="reactandroid_catalyst_sample_profiler_disable" project="catalyst" translatable="false">Disable Sampling Profiler</string>
+    <string name="reactandroid_catalyst_sample_profiler_enable" project="catalyst" translatable="false">Enable Sampling Profiler</string>
+    <string name="reactandroid_catalyst_settings" project="catalyst" translatable="false">Settings</string>
+    <string name="reactandroid_catalyst_settings_title" project="catalyst" translatable="false">Debug Settings</string>
+    <string name="reactandroid_combobox_description" translatable="false">Combo Box</string>
+    <string name="reactandroid_header_description" translatable="false">Heading</string>
+    <string name="reactandroid_image_description" translatable="false">Image</string>
+    <string name="reactandroid_imagebutton_description" translatable="false">Button, Image</string>
+    <string name="reactandroid_link_description" translatable="false">Link</string>
+    <string name="reactandroid_menu_description" translatable="false">Menu</string>
+    <string name="reactandroid_menubar_description" translatable="false">Menu Bar</string>
+    <string name="reactandroid_menuitem_description" translatable="false">Menu Item</string>
+    <string name="reactandroid_progressbar_description" translatable="false">Progress Bar</string>
+    <string name="reactandroid_radiogroup_description" translatable="false">Radio Group</string>
+    <string name="reactandroid_rn_tab_description" translatable="false">Tab</string>
+    <string name="reactandroid_scrollbar_description" translatable="false">Scroll Bar</string>
+    <string name="reactandroid_search_description" translatable="false">Search Field</string>
+    <string name="reactandroid_spinbutton_description" translatable="false">Spin Button</string>
+    <string name="reactandroid_state_busy_description" translatable="false">busy</string>
+    <string name="reactandroid_state_collapsed_description" translatable="false">collapsed</string>
+    <string name="reactandroid_state_expanded_description" translatable="false">expanded</string>
+    <string name="reactandroid_state_mixed_description" translatable="false">mixed</string>
+    <string name="reactandroid_state_off_description" translatable="false">off</string>
+    <string name="reactandroid_state_on_description" translatable="false">on</string>
+    <string name="reactandroid_summary_description" translatable="false">Summary</string>
+    <string name="reactandroid_tablist_description" translatable="false">Tab List</string>
+    <string name="reactandroid_timer_description" translatable="false">Timer</string>
+    <string name="reactandroid_toolbar_description" translatable="false">Tool Bar</string>
     <string name="save">Save</string>
-    <string name="search_description" translatable="false">Search Field</string>
     <string name="search_menu_title">Search</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="title_add_a_card">Add a Card</string>
@@ -896,10 +935,6 @@
     <style name="Animation.AppCompat.Dialog" parent="Base.Animation.AppCompat.Dialog"/>
     <style name="Animation.AppCompat.DropDownUp" parent="Base.Animation.AppCompat.DropDownUp"/>
     <style name="Animation.AppCompat.Tooltip" parent="Base.Animation.AppCompat.Tooltip"/>
-    <style name="Animation.Catalyst.RedBox" parent="@android:style/Animation">
-    <item name="android:windowEnterAnimation">@anim/catalyst_push_up_in</item>
-    <item name="android:windowExitAnimation">@anim/catalyst_push_up_out</item>
-  </style>
     <style name="Animation.Design.BottomSheetDialog" parent="Animation.AppCompat.Dialog">
     <item name="android:windowEnterAnimation">@anim/design_bottom_sheet_slide_in</item>
     <item name="android:windowExitAnimation">@anim/design_bottom_sheet_slide_out</item>
@@ -2353,12 +2388,6 @@
       <item name="android:hint">@string/cvc</item>
       <item name="android:layout_width">match_parent</item>
   </style>
-    <style name="CalendarDatePickerDialog" ns2:targetApi="lollipop" parent="Theme.AppCompat.Light.Dialog">
-        <item name="android:datePickerStyle">@style/CalendarDatePickerStyle</item>
-    </style>
-    <style name="CalendarDatePickerStyle" ns2:targetApi="lollipop" parent="android:Widget.Material.Light.DatePicker">
-        <item name="android:datePickerMode">calendar</item>
-    </style>
     <style name="CardNumber" parent="@style/TextField">
       <item name="android:layout_width">fill_parent</item>
       <item name="android:inputType">numberDecimal</item>
@@ -2371,12 +2400,6 @@
     </style>
     <style name="CardView.Light">
         <item name="cardBackgroundColor">@color/cardview_light_background</item>
-    </style>
-    <style name="ClockTimePickerDialog" ns2:targetApi="lollipop" parent="Theme.AppCompat.Light.Dialog">
-      <item name="android:timePickerStyle">@style/ClockTimePickerStyle</item>
-    </style>
-    <style name="ClockTimePickerStyle" ns2:targetApi="lollipop" parent="android:Widget.Material.Light.TimePicker">
-      <item name="android:timePickerMode">clock</item>
     </style>
     <style name="Currency" parent="@style/Spinner">
       <item name="android:entries">@array/currency_array</item>
@@ -2393,14 +2416,6 @@
     <item name="android:colorControlHighlight">
       @color/white
     </item>
-  </style>
-    <style name="DialogAnimationFade">
-    <item name="android:windowEnterAnimation">@anim/catalyst_fade_in</item>
-    <item name="android:windowExitAnimation">@anim/catalyst_fade_out</item>
-  </style>
-    <style name="DialogAnimationSlide">
-    <item name="android:windowEnterAnimation">@anim/catalyst_slide_up</item>
-    <item name="android:windowExitAnimation">@anim/catalyst_slide_down</item>
   </style>
     <style name="ExpMonth" parent="@style/Spinner">
       <item name="android:entries">@array/month_array</item>
@@ -2665,6 +2680,83 @@
         <item name="android:dropDownItemStyle">@style/Widget.AppCompat.DropDownItem.Spinner</item>
     </style>
     <style name="Platform.Widget.AppCompat.Spinner" parent="android:Widget.Holo.Spinner"/>
+    <style name="ReactAndroidAnimation.Catalyst.RedBox" parent="@android:style/Animation">
+    <item name="android:windowEnterAnimation">@anim/reactandroid_catalyst_push_up_in</item>
+    <item name="android:windowExitAnimation">@anim/reactandroid_catalyst_push_up_out</item>
+  </style>
+    <style name="ReactAndroidCalendarDatePickerDialog" ns2:targetApi="lollipop" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:datePickerStyle">@style/ReactAndroidCalendarDatePickerStyle</item>
+    </style>
+    <style name="ReactAndroidCalendarDatePickerStyle" ns2:targetApi="lollipop" parent="android:Widget.Material.Light.DatePicker">
+        <item name="android:datePickerMode">calendar</item>
+    </style>
+    <style name="ReactAndroidClockTimePickerDialog" ns2:targetApi="lollipop" parent="Theme.AppCompat.Light.Dialog">
+      <item name="android:timePickerStyle">@style/ReactAndroidClockTimePickerStyle</item>
+    </style>
+    <style name="ReactAndroidClockTimePickerStyle" ns2:targetApi="lollipop" parent="android:Widget.Material.Light.TimePicker">
+      <item name="android:timePickerMode">clock</item>
+    </style>
+    <style name="ReactAndroidDialogAnimationFade">
+    <item name="android:windowEnterAnimation">@anim/reactandroid_catalyst_fade_in</item>
+    <item name="android:windowExitAnimation">@anim/reactandroid_catalyst_fade_out</item>
+  </style>
+    <style name="ReactAndroidDialogAnimationSlide">
+    <item name="android:windowEnterAnimation">@anim/reactandroid_catalyst_slide_up</item>
+    <item name="android:windowExitAnimation">@anim/reactandroid_catalyst_slide_down</item>
+  </style>
+    <style name="ReactAndroidRedboxButton">
+    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_weight">1</item>
+    <item name="android:layout_margin">4dp</item>
+    <item name="android:background">@null</item>
+    <item name="android:gravity">center</item>
+    <item name="android:textColor">#dddddd</item>
+    <item name="android:textSize">14sp</item>
+  </style>
+    <style name="ReactAndroidSpinnerDatePickerDialog" ns2:targetApi="lollipop" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:datePickerStyle">@style/ReactAndroidSpinnerDatePickerStyle</item>
+    </style>
+    <style name="ReactAndroidSpinnerDatePickerStyle" ns2:targetApi="lollipop" parent="android:Widget.Material.Light.DatePicker">
+        <item name="android:datePickerMode">spinner</item>
+    </style>
+    <style name="ReactAndroidSpinnerTimePickerDialog" ns2:targetApi="lollipop" parent="Theme.AppCompat.Light.Dialog">
+      <item name="android:timePickerStyle">@style/ReactAndroidSpinnerTimePickerStyle</item>
+    </style>
+    <style name="ReactAndroidSpinnerTimePickerStyle" ns2:targetApi="lollipop" parent="android:Widget.Material.Light.TimePicker">
+      <item name="android:timePickerMode">spinner</item>
+    </style>
+    <style name="ReactAndroidTheme"/>
+    <style name="ReactAndroidTheme.Catalyst"/>
+    <style name="ReactAndroidTheme.Catalyst.RedBox">
+    <item name="android:windowBackground">@color/reactandroid_catalyst_redbox_background</item>
+    <item name="android:windowAnimationStyle">@style/ReactAndroidAnimation.Catalyst.RedBox</item>
+    <item name="android:inAnimation">@android:anim/fade_in</item>
+    <item name="android:outAnimation">@android:anim/fade_out</item>
+    <item name="android:textColor">@android:color/white</item>
+  </style>
+    <style name="ReactAndroidTheme.FullScreenDialog">
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:windowIsFloating">false</item>
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    <item name="android:statusBarColor">@android:color/transparent</item>
+  </style>
+    <style name="ReactAndroidTheme.FullScreenDialogAnimatedFade" parent="ReactAndroidTheme.FullScreenDialog">
+    <item name="android:windowAnimationStyle">@style/ReactAndroidDialogAnimationFade</item>
+  </style>
+    <style name="ReactAndroidTheme.FullScreenDialogAnimatedSlide" parent="ReactAndroidTheme.FullScreenDialog">
+    <item name="android:windowAnimationStyle">@style/ReactAndroidDialogAnimationSlide</item>
+  </style>
+    <style name="ReactAndroidTheme.ReactNative.AppCompat.Light" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+    <style name="ReactAndroidTheme.ReactNative.AppCompat.Light.NoActionBar.FullScreen" parent="@style/ReactAndroidTheme.ReactNative.AppCompat.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
     <style name="RtlOverlay.DialogWindowTitle.AppCompat" parent="Base.DialogWindowTitle.AppCompat">
     </style>
     <style name="RtlOverlay.Widget.AppCompat.ActionBar.TitleItem" parent="android:Widget">
@@ -2730,23 +2822,11 @@
       <item name="android:background">@drawable/spinner_background_holo_dark</item>
       <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
   </style>
-    <style name="SpinnerDatePickerDialog" ns2:targetApi="lollipop" parent="Theme.AppCompat.Light.Dialog">
-        <item name="android:datePickerStyle">@style/SpinnerDatePickerStyle</item>
-    </style>
-    <style name="SpinnerDatePickerStyle" ns2:targetApi="lollipop" parent="android:Widget.Material.Light.DatePicker">
-        <item name="android:datePickerMode">spinner</item>
-    </style>
     <style name="SpinnerItem" parent="@android:style/Widget.TextView.SpinnerItem">
       
       <item name="android:textAppearance">@style/TextAppearance.SpinnerItem</item>
       <item name="android:textColor">@color/spinnerItem</item>
   </style>
-    <style name="SpinnerTimePickerDialog" ns2:targetApi="lollipop" parent="Theme.AppCompat.Light.Dialog">
-      <item name="android:timePickerStyle">@style/SpinnerTimePickerStyle</item>
-    </style>
-    <style name="SpinnerTimePickerStyle" ns2:targetApi="lollipop" parent="android:Widget.Material.Light.TimePicker">
-      <item name="android:timePickerMode">spinner</item>
-    </style>
     <style name="StripeDefaultTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="colorAccent">@color/accent_color_default</item>
         <item name="colorControlNormal">@color/control_normal_color_default</item>
@@ -3017,14 +3097,6 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="Theme.Catalyst"/>
-    <style name="Theme.Catalyst.RedBox">
-    <item name="android:windowBackground">@color/catalyst_redbox_background</item>
-    <item name="android:windowAnimationStyle">@style/Animation.Catalyst.RedBox</item>
-    <item name="android:inAnimation">@android:anim/fade_in</item>
-    <item name="android:outAnimation">@android:anim/fade_out</item>
-    <item name="android:textColor">@android:color/white</item>
-  </style>
     <style name="Theme.Design" parent="Theme.AppCompat">
   </style>
     <style name="Theme.Design.BottomSheetDialog" parent="Theme.AppCompat.Dialog">
@@ -3067,19 +3139,6 @@
   </style>
     <style name="Theme.Exponent.Splash" parent="Theme.Exponent.Light">
       <item name="android:windowBackground">@drawable/splash_background</item>
-  </style>
-    <style name="Theme.FullScreenDialog">
-    <item name="android:windowNoTitle">true</item>
-    <item name="android:windowIsFloating">false</item>
-    <item name="android:windowBackground">@android:color/transparent</item>
-    <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-    <item name="android:statusBarColor">@android:color/transparent</item>
-  </style>
-    <style name="Theme.FullScreenDialogAnimatedFade" parent="Theme.FullScreenDialog">
-    <item name="android:windowAnimationStyle">@style/DialogAnimationFade</item>
-  </style>
-    <style name="Theme.FullScreenDialogAnimatedSlide" parent="Theme.FullScreenDialog">
-    <item name="android:windowAnimationStyle">@style/DialogAnimationSlide</item>
   </style>
     <style name="Theme.MaterialComponents" parent="Base.Theme.MaterialComponents"/>
     <style name="Theme.MaterialComponents.BottomSheetDialog" parent="Theme.MaterialComponents.Dialog">
@@ -3124,15 +3183,6 @@
     <item name="windowActionBar">false</item>
     <item name="windowNoTitle">true</item>
   </style>
-    <style name="Theme.ReactNative.AppCompat.Light" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="android:textColor">@android:color/black</item>
-    </style>
-    <style name="Theme.ReactNative.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.ReactNative.AppCompat.Light">
-        <item name="android:windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-    </style>
     <style name="ThemeOverlay.AppCompat" parent="Base.ThemeOverlay.AppCompat"/>
     <style name="ThemeOverlay.AppCompat.ActionBar" parent="Base.ThemeOverlay.AppCompat.ActionBar"/>
     <style name="ThemeOverlay.AppCompat.Dark" parent="Base.ThemeOverlay.AppCompat.Dark"/>
@@ -3586,9 +3636,9 @@
         <item name="android:textStyle">bold</item>
     </style>
     <style name="com_facebook_activity_theme" parent="@style/Theme.AppCompat.NoActionBar">
-      <item name="android:windowIsTranslucent">true</item>
-      <item name="android:windowBackground">@android:color/transparent</item>
-      <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
     <style name="com_facebook_auth_dialog" parent="@style/Theme.AppCompat.Dialog">
         <item name="android:windowIsTranslucent">true</item>
@@ -3601,7 +3651,6 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:fontFamily">roboto</item>
         <item name="android:gravity">center</item>
-        <item name="android:drawablePadding">12dp</item>
         <item name="android:singleLine">false</item>
         <item name="android:textColor">@color/com_facebook_device_auth_text</item>
         <item name="android:textSize">16sp</item>
@@ -3643,16 +3692,6 @@
         <item name="android:drawableLeft">@null</item>
         <item name="android:textColor">#4b5164</item>
     </style>
-    <style name="redboxButton">
-    <item name="android:layout_width">0dp</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_weight">1</item>
-    <item name="android:layout_margin">4dp</item>
-    <item name="android:background">@null</item>
-    <item name="android:gravity">center</item>
-    <item name="android:textColor">#dddddd</item>
-    <item name="android:textSize">14sp</item>
-  </style>
     <style name="tooltip_bubble_text">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:gravity">left</item>
@@ -5885,37 +5924,7 @@
 
 </attr>
 </declare-styleable>
-    <declare-styleable name="com_facebook_like_view"><attr format="color" name="com_facebook_foreground_color"/><attr format="string" name="com_facebook_object_id"/><attr name="com_facebook_object_type">
-            
-            <enum name="unknown" value="0"/>
-            <enum name="open_graph" value="1"/>
-            <enum name="page" value="2"/>
-        </attr><attr name="com_facebook_style">
-            
-            <enum name="standard" value="0"/>
-            <enum name="button" value="1"/>
-            <enum name="box_count" value="2"/>
-        </attr><attr name="com_facebook_auxiliary_view_position">
-            
-            <enum name="bottom" value="0"/>
-            <enum name="inline" value="1"/>
-            <enum name="top" value="2"/>
-        </attr><attr name="com_facebook_horizontal_alignment">
-            
-            <enum name="center" value="0"/>
-            <enum name="left" value="1"/>
-            <enum name="right" value="2"/>
-        </attr></declare-styleable>
-    <declare-styleable name="com_facebook_login_view"><attr format="boolean" name="com_facebook_confirm_logout"/><attr format="string" name="com_facebook_login_text"/><attr format="string" name="com_facebook_logout_text"/><attr name="com_facebook_tooltip_mode">
-            
-            <enum name="automatic" value="0"/>
-            <enum name="display_always" value="1"/>
-            <enum name="never_display" value="2"/>
-        </attr></declare-styleable>
-    <declare-styleable name="com_facebook_profile_picture_view"><attr name="com_facebook_preset_size">
-            
-            <enum name="small" value="-2"/>
-            <enum name="normal" value="-3"/>
-            <enum name="large" value="-4"/>
-        </attr><attr format="boolean" name="com_facebook_is_cropped"/></declare-styleable>
+    <declare-styleable name="com_facebook_like_view"><attr format="color" name="com_facebook_foreground_color"/><attr format="string" name="com_facebook_object_id"/><attr name="com_facebook_object_type"><enum name="unknown" value="0"/><enum name="open_graph" value="1"/><enum name="page" value="2"/></attr><attr name="com_facebook_style"><enum name="standard" value="0"/><enum name="button" value="1"/><enum name="box_count" value="2"/></attr><attr name="com_facebook_auxiliary_view_position"><enum name="bottom" value="0"/><enum name="inline" value="1"/><enum name="top" value="2"/></attr><attr name="com_facebook_horizontal_alignment"><enum name="center" value="0"/><enum name="left" value="1"/><enum name="right" value="2"/></attr></declare-styleable>
+    <declare-styleable name="com_facebook_login_view"><attr format="boolean" name="com_facebook_confirm_logout"/><attr format="string" name="com_facebook_login_text"/><attr format="string" name="com_facebook_logout_text"/><attr name="com_facebook_tooltip_mode"><enum name="automatic" value="0"/><enum name="display_always" value="1"/><enum name="never_display" value="2"/></attr></declare-styleable>
+    <declare-styleable name="com_facebook_profile_picture_view"><attr name="com_facebook_preset_size"><enum name="small" value="-2"/><enum name="normal" value="-3"/><enum name="large" value="-4"/></attr><attr format="boolean" name="com_facebook_is_cropped"/></declare-styleable>
 </resources>
