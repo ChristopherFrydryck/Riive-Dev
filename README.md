@@ -8,62 +8,12 @@ This app is built on React Native and expo.  To test the app, first run `npm ins
 To run the app, open the ios folder in Xcode and android in Android Studio, followed by building and running.
 
 ## To be completed:
-+ Ability to add a location (In progress)
-+ ~~Add edit payment screen~~
-+ Add settings and promo screen
-+ ~~Integrate tipsi-stripe for PCI compliance payment vendor~~
-+ ~~Begin google maps integration~~
++ Ability to add/edit a location (In progress)
++ Ability to delete a space and remove it in one week from time of deletion
++ Begin query work on map in homescreen
++ Add a visits section on locations
 
 Of course there is more, but these are key milestones.
 
-## Changelog
-```json
-{
-    "versions": [{
-        "release": "1.0.0",
-        "major": 1,
-        "minor": 0,
-        "patch": 0,
-        "isBeta": false,
-        "isReleased": true,
-        "contributors": [{
-            "name": "Christopher Frydryck",
-            "email": "chris@riive.net",
-            "userID": "e8clD1B96thKlXRSA2lKUQW74mU2",
-            "photo": "https://firebasestorage.googleapis.com/v0/b/riive-parking.appspot.com/o/users%2Fe8clD1B96thKlXRSA2lKUQW74mU2%2Fprofile-pic?alt=media&token=f79aed94-2030-4ef7-b72b-65b01d6bf414"
-        }],
-        "description": "",
-        "added": "",
-        "changed": "",
-        "deprecated": "",
-        "removed": "",
-        "fixed": "",
-        "security": "",
-        "date": "Tue 25 Sep 2020 22:07:13 GMT-0400",
-        "dateUnix": 1601093235528
-    },
-    {
-        "release": "1.0.1",
-        "major": 1,
-        "minor": 0,
-        "patch": 1,
-        "isBeta": true,
-        "isReleased": false,
-        "contributors": [{
-            "name": "Christopher Frydryck",
-            "email": "chris@riive.net",
-            "userID": "e8clD1B96thKlXRSA2lKUQW74mU2",
-            "photo": "https://firebasestorage.googleapis.com/v0/b/riive-parking.appspot.com/o/users%2Fe8clD1B96thKlXRSA2lKUQW74mU2%2Fprofile-pic?alt=media&token=f79aed94-2030-4ef7-b72b-65b01d6bf414"
-        }],
-        "description": "",
-        "added": "",
-        "changed": "",
-        "deprecated": "",
-        "removed": "",
-        "fixed": "",
-        "security": "",
-        "date": "Tue 16 Sep 2020 13:07:41 GMT-0400",
-        "dateUnix": 1700283261000
-    }]
-}
-```
+## Versions
+You can view our JSON releases [here](https://firebasestorage.googleapis.com/v0/b/riive-parking.appspot.com/o/dev-team%2Fchangelog.json?alt=media&token=80e1c506-e715-4fa9-aa56-aab48b3fd3fb).
