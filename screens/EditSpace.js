@@ -138,11 +138,14 @@ class editSpace extends Component {
             spacePriceCents: space.spacePriceCents,
             numSpaces: space.numSpaces,
 
+            daily: space.availability,
+
+            // Integrated version 1.0.0
             hidden: space.hidden,
             toBeDeleted: space.toBeDeleted,
             visits: space.visits,
 
-            daily: space.availability
+            
             
         }
     }
@@ -151,6 +154,8 @@ class editSpace extends Component {
       // Set Status Bar page info here!
       const db = firebase.firestore();
       const ref = db.collection("spaces").doc();
+
+
 
       this._isMounted = true;
      this._navListener = this.props.navigation.addListener('didFocus', () => {
@@ -482,7 +487,8 @@ class editSpace extends Component {
                   // navigate back to profile
                   this.props.navigation.navigate("Profile")
                   this.setState({savingSpace: false})
-                }catch{
+                }catch(e){
+                  console.log(e)
                   this.setState({savingSpace: false})
                 }
         
