@@ -16,4 +16,4 @@ To run the app, open the ios folder in Xcode and android in Android Studio, foll
 Of course there is more, but these are key milestones.
 
 ## Versions
-You can view our JSON releases [here](https://firebasestorage.googleapis.com/v0/b/riive-parking.appspot.com/o/dev-team%2Fchangelog.json?alt=media&token=80e1c506-e715-4fa9-aa56-aab48b3fd3fb).
+You can view our JSON releases [here](https://firebasestorage.googleapis.com/v0/b/riive-parking.appspot.com/o/dev-team%2Fchangelog.json?alt=media&token=76e826e1-7e0d-44d6-9f4c-9055b8b84c09).
