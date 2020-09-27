@@ -114,7 +114,12 @@ class addSpace extends Component {
               {dayName: "Thursday", abbrName:"Thu", dayValue: 4, data: [{available: true, id: 500, start: '0000', end: '2359'}]},
               {dayName: "Friday", abbrName:"Fri", dayValue: 5, data: [{available: true, id: 600, start: '0000', end: '2359'}]},
               {dayName: "Saturday", abbrName:"Sat", dayValue: 6, data: [{available: true, id: 700, start: '0000', end: '2359'}]},
-            ]
+            ],
+
+             // Integrated version 1.0.0
+             hidden: false,
+             toBeDeleted: false,
+             visits: 0,
             
         }
     }
