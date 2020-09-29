@@ -723,18 +723,17 @@ class Profile extends Component{
                    
                     <ScrollView style={{marginTop: 40}}>
                         <View style={styles.contentBox}>
-                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 16, paddingRight: 16}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 16}}>
                                 {listings == undefined || listings.length <= 1 ? <Text style={styles.categoryTitle}>My Space</Text> : <Text style={{fontSize: 20, marginRight: 'auto'}}>My Spaces</Text>}
                                 <ClickableChip
                                     bgColor='rgba(255, 193, 76, 0.3)' // Colors.Tango300 with opacity of 30%
                                     onPress={() => this.props.navigation.navigate("AddSpace")}
                                     textColor={Colors.tango700}
                                 >+ Space</ClickableChip>
-                            </View>
-                            <View>
-                                {listings == undefined ? null : <SpacesList/>}
-                            </View>
-                            
+                            </View>                            
+                        </View>
+                        <View>
+                            {listings == undefined ? null : <SpacesList/>}
                         </View>
                         <View style={styles.contentBox}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 16, paddingRight: 16}}>
