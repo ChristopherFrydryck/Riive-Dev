@@ -99,12 +99,18 @@ class SpacesList extends React.Component{
 
 
        let cardStyle
-
-       if(index == 0){
-           cardStyle = [styles.li, styles.li_first]
+       if(orderedData.length > 1){
+            if(index == 0){
+                cardStyle = [styles.li, styles.li_first]
+            }if(index === orderedData.length - 1){
+                cardStyle = [styles.li, styles.li_last]
+            }else{
+                cardStyle = styles.li
+            }
        }else{
            cardStyle = styles.li
        }
+       
 
         return(
         <TouchableOpacity
@@ -189,7 +195,7 @@ class SpacesList extends React.Component{
                     horizontal={true}
                     snapToAlignment={"center"}
                     // snapToInterval={Dimensions.get("window").width * 0.75 + (16 * (orderedData.length - 2) + 48)/orderedData.length}
-                    snapToOffsets={[...Array(orderedData.length)].map((x, i) => i * (width*.75) - 32 + 16*i)}
+                    snapToOffsets={[...Array(orderedData.length)].map((x, i) => i * (width*.75) - 40 + 16*i)}
                     decelerationRate={"fast"}
                     bounces={true}
                     showsHorizontalScrollIndicator={false}
