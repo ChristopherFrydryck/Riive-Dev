@@ -495,7 +495,8 @@ resetPassword = () =>{
           throw("No user found")
         }
     }).then((doc) => {
-      if(doc.data().listings.length > 0){
+      const length = doc.data().listings.length;
+      if( length > 0 && length <= 10){
         db.collection('listings').where(firebase.firestore.FieldPath.documentId(), "in", doc.data().listings).get().then((qs) => {
           let listingsData = [];
           for(let i = 0; i < qs.docs.length; i++){
@@ -503,6 +504,26 @@ resetPassword = () =>{
           }
           this.props.UserStore.listings = listingsData;
       }).then(() => this.props.navigation.navigate("Home"))
+
+
+    }else if(length > 0 && length > 10){
+      let listings = doc.data().listings;
+      let allArrs = [];
+      var listingsData = [];
+      while(listings.length > 0){
+        allArrs.push(listings.splice(0, 10))
+      }
+      for(let i = 0; i < allArrs.length; i++){
+        db.collection('listings').where(firebase.firestore.FieldPath.documentId(), "in", allArrs[i]).get().then((qs) => {
+          for(let i = 0; i < qs.docs.length; i++){
+            listingsData.push(qs.docs[i].data())
+          }
+        }).then(() => {
+          this.props.UserStore.listings = listingsData;
+          this.props.navigation.navigate('Home')
+        })
+      }
+    
     }else{
        this.props.navigation.navigate('Home')
     }
