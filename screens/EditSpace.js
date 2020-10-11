@@ -432,6 +432,7 @@ class editSpace extends Component {
               
               await db.collection("listings").doc(this.state.postID).update({
                 listingID: this.state.postID,
+                hostID: this.props.UserStore.userID,
                 address: this.state.address,
                 region: this.state.region,
                 photo: this.state.photo,
@@ -454,6 +455,7 @@ class editSpace extends Component {
 
                this.props.UserStore.listings[spaceIndex] = {
                   listingID: this.state.postID,
+                  hostID: this.props.UserStore.userID,
                   address: this.state.address,
                   region: this.state.region,
                   photo: this.state.photo,

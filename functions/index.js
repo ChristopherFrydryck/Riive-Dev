@@ -104,6 +104,19 @@ const fs = require('fs')
           );
     })
 
+    exports.deleteSpace = functions.firestore.document('listings/{listingID}').onDelete((snap, context) => {
+        const { listingID } = context.params;
+        const bucket = admin.storage().bucket('gs://riive-parking.appspot.com');
+
+        bucket.deleteFiles({
+            prefix: `listings/${listingID}`
+        })
+
+        // console.log(listingID)
+        return null;
+    })
+    
+
   
 
     exports.updateUserInfo = functions.firestore

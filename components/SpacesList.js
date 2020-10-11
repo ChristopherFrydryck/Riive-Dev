@@ -108,7 +108,7 @@ class SpacesList extends React.Component{
                 cardStyle = styles.li
             }
        }else{
-           cardStyle = styles.li
+           cardStyle = styles.li_single
        }
        
 
@@ -174,13 +174,12 @@ class SpacesList extends React.Component{
         // console.log((16 * (orderedData.length - 2) + 48)/orderedData.length)
 
         if(spotsLoaded && this.state.data.length == 1){
-
         return(
         <View style={styles.container}>
                         
-            {this.renderSpaceCard(this.state.data[0])} 
+            {this.renderSpaceCard(this.state.data[0], 0)} 
                
-            </View>
+        </View>
             
         )}else if(spotsLoaded && this.state.data.length > 1){
    
@@ -230,6 +229,19 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 4,
         borderTopRightRadius: 4,
        
+    },
+    li_single:{
+        width: Dimensions.get("window").width *.95,
+        marginLeft: 8,
+        marginRight: 8,
+        backgroundColor: 'white',
+        shadowColor: '#000', 
+          shadowOpacity: 0.6, 
+          shadowOffset:{width: 2, height: 2}, 
+          shadowRadius: 3, 
+          elevation: 12,
+          borderRadius: 4,
+          marginVertical: 8
     },
     li: {
         width: Dimensions.get("window").width * .75,

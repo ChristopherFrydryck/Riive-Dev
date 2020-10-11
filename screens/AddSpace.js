@@ -376,6 +376,7 @@ class addSpace extends Component {
                  await db.collection("listings").doc(this.state.postID).set({
                   
                       listingID: this.state.postID,
+                      hostID: this.props.UserStore.userID,
                       address: this.state.address,
                       region: this.state.region,
                       photo: this.state.photo,
@@ -395,6 +396,7 @@ class addSpace extends Component {
                // add space to mobx UserStore
                await this.props.UserStore.listings.push({
                   listingID: this.state.postID,
+                  hostID: this.props.UserStore.userID,
                   address: this.state.address,
                   region: this.state.region,
                   photo: this.state.photo,
