@@ -691,9 +691,9 @@ renderDotsView = (numItems, position) =>{
                     </View>
                    
                 </KeyboardAwareScrollView>
-                <SafeAreaView style={{paddingHorizontal: 16, marginBottom: 24, height: 60, alignItems: 'center', justifyContent: 'center'}}>
-                  <Button style={ this.state.changesMade ? {backgroundColor: "#FF8708"} : {backgroundColor:  Colors.mist900}} textStyle={this.state.changesMade ? {color:"#FFFFFF"} : {color: Colors.cosmos300}} disabled={!this.state.changesMade} onPress={() => this.submitSpace()}>Save Changes</Button>
-                </SafeAreaView>
+                <View style={{paddingHorizontal: 16, marginBottom: 24, height: 60, alignItems: 'center', justifyContent: 'center'}}>
+                  <Button style={ this.state.changesMade ? {backgroundColor: "#FF8708", height: 48} : {backgroundColor:  Colors.mist900, height: 48}} textStyle={this.state.changesMade ? {color:"#FFFFFF"} : {color: Colors.cosmos300}} disabled={!this.state.changesMade} onPress={() => this.submitSpace()}>Save Changes</Button>
+                </View>
            
 
                   

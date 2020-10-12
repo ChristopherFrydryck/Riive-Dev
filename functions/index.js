@@ -111,6 +111,9 @@ const fs = require('fs')
         bucket.deleteFiles({
             prefix: `listings/${listingID}`
         })
+        db.collection("users").doc(snap.data().hostID).update({
+            listings: admin.firestore.FieldValue.arrayRemove(listingID)
+    })
 
         // console.log(listingID)
         return null;

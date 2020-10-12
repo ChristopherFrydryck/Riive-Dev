@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, ScrollView, StatusBar, Platform, StyleSheet, SafeAreaView, Dimensions, KeyboardAvoidingView, FlatList, Switch, Modal, Picker} from 'react-native';
+import { View, ScrollView, StatusBar, Platform, StyleSheet, SafeAreaView, Dimensions, KeyboardAvoidingView, FlatList, Switch, Modal, Picker, YellowBox} from 'react-native';
 import Text from '../components/Txt'
 import MapInput, { PROVIDER_GOOGLE } from '../components/MapInput'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -128,6 +128,9 @@ class addSpace extends Component {
       // Set Status Bar page info here!
       const db = firebase.firestore();
       const ref = db.collection("spaces").doc();
+
+      YellowBox.ignoreWarnings([ 'VirtualizedLists should never be nested']);
+
       this.setState({postID: ref.id})
       this._isMounted = true;
      this._navListener = this.props.navigation.addListener('didFocus', () => {
@@ -550,7 +553,8 @@ clearAddress = () => {
 
     return (
       <KeyboardAwareScrollView
-      keyboardShouldPersistTaps="handled"
+      keyboardShouldPersistTaps='always'
+      automaticallyAdjustContentInsets={false}
       contentContainerStyle={{ flexGrow: 1 }} scrollEnabled
       enableOnAndroid={true}
       extraScrollHeight={150} //iOS
