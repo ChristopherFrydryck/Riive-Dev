@@ -82,10 +82,12 @@ class addSpace extends Component {
             },
             
             searchedAddress: false,
+            addressValid: false,
             nameValid: false,
             bioValid: true,
             priceValid: false,
 
+            addressError: '',
             nameError: '',
             bioError: '',
             priceError: '',
@@ -133,7 +135,7 @@ class addSpace extends Component {
 
       this.setState({postID: ref.id})
       this._isMounted = true;
-     this._navListener = this.props.navigation.addListener('didFocus', () => {
+      this._navListener = this.props.navigation.addListener('didFocus', () => {
          StatusBar.setBarStyle('dark-content', true);
          Platform.OS === 'android' && StatusBar.setBackgroundColor('white');
        });
@@ -305,6 +307,12 @@ class addSpace extends Component {
 
     let nameValid = nameValidation.test(this.state.spaceName)
     let bioValid = this.state.spaceBio.split("").length > 0 ? bioValidation.test(this.state.spaceBio) : true;
+
+    if(this.state.searchedAddress && this.state.addressError.split("").length){
+      this.setState({addressError: ""})
+    }else{
+      this.setState({addressError: "Provide a valid street address"})
+    }
 
     if(this.state.spacePrice){
       let spaceCentsArray = this.state.spacePrice.split(".")
@@ -486,33 +494,33 @@ onSelectAddress = (det) => {
   var country = det.address_components.filter(x => x.types.includes('country'))[0]
   var zip = det.address_components.filter(x => x.types.includes('postal_code'))[0]
 
-  
-
-
-  
-
-
-  this.setState(prevState => ({
-    searchedAddress: true,
-    region:{
-      latitude: det.geometry.location.lat,
-      longitude: det.geometry.location.lng,
-      latitudeDelta: .006,
-      longitudeDelta: .006
-    },
-    address:{
-      ...prevState.address,
-      full: det.formatted_address,
-      number: number.long_name,
-      street: street.long_name,
-      city: city.long_name,
-      county: county.long_name,
-      state: state.long_name,
-      state_abbr: state.short_name,
-      country: country.long_name,
-      zip: zip.long_name,
-    }
-  }))
+  if(number && street && city && county && state){
+    this.setState(prevState => ({
+      searchedAddress: true,
+      region:{
+        latitude: det.geometry.location.lat,
+        longitude: det.geometry.location.lng,
+        latitudeDelta: .006,
+        longitudeDelta: .006
+      },
+      address:{
+        ...prevState.address,
+        full: det.formatted_address,
+        number: number.long_name,
+        street: street.long_name,
+        city: city.long_name,
+        county: county.long_name,
+        state: state.long_name,
+        state_abbr: state.short_name,
+        country: country.long_name,
+        zip: zip.long_name,
+      }
+    }))
+    this.setState({addressError: ""})
+  }else{
+    this.setState({addressError: "Select a valid street address"})
+    this.clearAddress();
+  }
 
 
 
@@ -628,7 +636,8 @@ clearAddress = () => {
             }}
             GooglePlacesSearchQuery={{
               rankby: 'distance',
-              type: 'geocode'
+              types: 'address',
+              components: "country:us"
             }}
             // GooglePlacesDetailsQuery={{ fields: 'geometry', }}
             nearbyPlacesAPI={'GoogleReverseGeocoding'}
@@ -670,6 +679,7 @@ clearAddress = () => {
               
             }}
             />
+            <Text style={styles.error}>{this.state.addressError}</Text>
             <View style={{flex: 1, flexDirection: "row"}}>
             <Input
             flex={0.35}
@@ -960,6 +970,14 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     width: 'auto'
 },
+error: {
+  paddingTop: 0,
+  paddingBottom: 0,
+  color: 'red',
+  fontSize: 14,
+  fontWeight: '400',
+  width: 'auto'
+}
 })
   
 
