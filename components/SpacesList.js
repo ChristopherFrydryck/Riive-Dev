@@ -87,9 +87,9 @@ class SpacesList extends React.Component{
                 availability: spot.availability,
 
                 // Integrated version 1.0.0
-                hidden: spot.hidden ? spot.hidden : false,
-                toBeDeleted: spot.toBeDeleted ? spot.toBeDeleted : false,
-                visits: spot.visits ? spot.visits : 0,
+                hidden: spot.hidden,
+                toBeDeleted: spot.toBeDeleted,
+                visits: spot.visits,
             })
             // console.log(this.props.ComponentStore.selectedSpot[0].spaceName)
             this.props.navigation.navigate("EditSpace")

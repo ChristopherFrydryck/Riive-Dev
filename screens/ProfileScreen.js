@@ -86,7 +86,7 @@ class Profile extends Component{
             selectedImageURI: "",
             verificationSnackbarVisible: false,
             menuVisible: false,
-
+            
             isRefreshing: false,
         }
 
@@ -142,12 +142,14 @@ class Profile extends Component{
         this.setState({isRefreshing: true})
 
         doc.get().then(doc => {
+            const listingsSorted = doc.data().listings.sort()
+            const listingsIDMobXSorted = this.props.UserStore.listings.map(x => x.listingID).sort()
             const length = doc.data().listings.length;
+            
+           
 
-            if(length !== this.props.UserStore.listings.length){
-                console.log("Needs Update")
+      
                 if( length > 0 && length <= 10){
-                    console.log("Less Than 10 Listings")
                     db.collection('listings').where(firebase.firestore.FieldPath.documentId(), "in", doc.data().listings).get().then((qs) => {
                     let listingsData = [];
                     
@@ -178,7 +180,7 @@ class Profile extends Component{
                 }
             }else{
                 this.props.UserStore.listings = [];
-            }}
+            }
         })
         this.setState({isRefreshing: false})
     }
