@@ -553,7 +553,7 @@ clearAddress = () => {
 
     return (
       <KeyboardAwareScrollView
-      keyboardShouldPersistTaps='always'
+      keyboardShouldPersistTaps="handled"
       automaticallyAdjustContentInsets={false}
       contentContainerStyle={{ flexGrow: 1 }} scrollEnabled
       enableOnAndroid={true}
@@ -584,11 +584,11 @@ clearAddress = () => {
       </Modal>
 
 
-         <KeyboardAvoidingView 
+         <View
          
-         behavior={Platform.OS === 'ios' ? "padding" : null} 
-            keyboardVerticalOffset={250}
-            enabled 
+            // behavior={Platform.OS === 'ios' ? "padding" : null} 
+            // keyboardVerticalOffset={250}
+            // enabled 
           >
         
        
@@ -903,7 +903,7 @@ clearAddress = () => {
 
             </View>
             
-        </KeyboardAvoidingView>
+        </View>
       {/* </ScrollView> */}
       </KeyboardAwareScrollView>
     );

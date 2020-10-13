@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Share, ActivityIndicator, Dimensions, StatusBar, StyleSheet, ScrollView, Modal, Platform, SafeAreaView} from 'react-native'
+import {View, Share, ActivityIndicator, Dimensions, StatusBar, StyleSheet, ScrollView, Modal, Platform, SafeAreaView, RefreshControl} from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import {NavigationActions} from 'react-navigation'
 import Input from '../components/Input'
@@ -86,6 +86,8 @@ class Profile extends Component{
             selectedImageURI: "",
             verificationSnackbarVisible: false,
             menuVisible: false,
+
+            isRefreshing: false,
         }
 
         
@@ -100,6 +102,7 @@ class Profile extends Component{
 
     componentDidMount(){
         // Set Status Bar page info here!
+        
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             StatusBar.setBarStyle('light-content', true);
             Platform.OS === 'android' && StatusBar.setBackgroundColor(Colors.tango900);
@@ -120,22 +123,65 @@ class Profile extends Component{
 
     this.getPermissionAsync();
 
+
     firebase.auth().currentUser.emailVerified ? 
         this.setState({verificationSnackbarVisible: false}) 
         : this.setState({verificationSnackbarVisible: true}) 
-
-
-    
-
-
-       
     
     }
 
     componentWillUnmount() {
         // Unmount status bar info
         this._navListener.remove();
-      }
+    }
+
+    updateProfile = () => {
+        const db = firebase.firestore();
+        const doc = db.collection('users').doc(this.props.UserStore.userID);
+
+        this.setState({isRefreshing: true})
+
+        doc.get().then(doc => {
+            const length = doc.data().listings.length;
+
+            if(length !== this.props.UserStore.listings.length){
+                console.log("Needs Update")
+                if( length > 0 && length <= 10){
+                    console.log("Less Than 10 Listings")
+                    db.collection('listings').where(firebase.firestore.FieldPath.documentId(), "in", doc.data().listings).get().then((qs) => {
+                    let listingsData = [];
+                    
+                    for(let i = 0; i < qs.docs.length; i++){
+                        listingsData.push(qs.docs[i].data())
+                    }
+                    
+                    this.props.UserStore.listings = listingsData;
+             })
+
+            }else if(length > 0 && length > 10){
+                let listings = doc.data().listings;
+                let allArrs = [];
+                var listingsData = [];
+
+                while(listings.length > 0){
+                    allArrs.push(listings.splice(0, 10))
+                }
+      
+                for(let i = 0; i < allArrs.length; i++){
+                    db.collection('listings').where(firebase.firestore.FieldPath.documentId(), "in", allArrs[i]).get().then((qs) => {
+                        for(let i = 0; i < qs.docs.length; i++){
+                            listingsData.push(qs.docs[i].data())
+                        } 
+                    }).then(() => {
+                        this.props.UserStore.listings = listingsData;
+                    })
+                }
+            }else{
+                this.props.UserStore.listings = [];
+            }}
+        })
+        this.setState({isRefreshing: false})
+    }
 
 
     getPermissionAsync = async () => {
@@ -721,7 +767,8 @@ class Profile extends Component{
                     }
 
                    
-                    <ScrollView style={{marginTop: 40}}>
+                    <ScrollView style={{marginTop: 40}} refreshControl={<RefreshControl refreshing={this.state.isRefreshing} onRefresh={this.updateProfile}/>}>
+                        
                         <View style={styles.contentBox}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 16}}>
                                 {listings == undefined || listings.length <= 1 ? <Text style={styles.categoryTitle}>My Space</Text> : <Text style={{fontSize: 20, marginRight: 'auto'}}>My Spaces</Text>}
@@ -733,7 +780,7 @@ class Profile extends Component{
                             </View>                            
                         </View>
                         <View>
-                            {listings == undefined ? null : <SpacesList/>}
+                            {listings == undefined ? null : <SpacesList listings={this.props.UserStore.listings}/>}
                         </View>
                         <View style={styles.contentBox}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 16, paddingRight: 16}}>

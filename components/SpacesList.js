@@ -42,6 +42,16 @@ class SpacesList extends React.Component{
         this.fadeAnimation();
     }
 
+    componentDidUpdate(prevProps){
+        if(prevProps.listings !== this.props.UserStore.listings){
+            this.setState({          
+                data: this.props.UserStore.listings
+            });
+        }
+    }
+
+ 
+
     fadeAnimation = () => {
         Animated.loop(
             Animated.sequence([

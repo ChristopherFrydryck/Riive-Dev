@@ -110,13 +110,14 @@ const fs = require('fs')
 
         bucket.deleteFiles({
             prefix: `listings/${listingID}`
-        })
-        db.collection("users").doc(snap.data().hostID).update({
-            listings: admin.firestore.FieldValue.arrayRemove(listingID)
-    })
+        }).then(() => {
+            return db.collection("users").doc(snap.data().hostID).update({
+                listings: admin.firestore.FieldValue.arrayRemove(listingID)
+            })
+        }).then(() => {
+            return null
+        }).catch(e => {return e})
 
-        // console.log(listingID)
-        return null;
     })
     
 
