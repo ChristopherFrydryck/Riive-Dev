@@ -115,13 +115,14 @@ class Profile extends Component{
     // alert(this.props.UserStore.memberTime)
     const db = firebase.firestore();
     const doc = db.collection('users').doc(this.props.UserStore.userID);
+
+
    
 
-    if(this.props.UserStore.signInProvider == "password"){
-        this.setState({editableTextInput: true})
-    }else{ this.setState({editableTextInput: false}) }
+    
 
     this.getPermissionAsync();
+    this.updateProfile();
 
 
     firebase.auth().currentUser.emailVerified ? 
@@ -462,13 +463,6 @@ class Profile extends Component{
         const initals = this.props.UserStore.firstname.charAt(0).toUpperCase() + "" + this.props.UserStore.lastname.charAt(0).toUpperCase()
         const {firstname, lastname, vehicles, payments, listings} = this.props.UserStore 
         var {height, width} = Dimensions.get('window');
-
-
-       
-
-        const db = firebase.firestore();
-        const doc = db.collection('users').doc(this.props.UserStore.email);
-
    
 
         return(
