@@ -146,10 +146,33 @@ class Profile extends Component{
             const listingsSorted = doc.data().listings.sort()
             const listingsIDMobXSorted = this.props.UserStore.listings.map(x => x.listingID).sort()
             const length = doc.data().listings.length;
-            
-           
 
-      
+            const vehiclesIDSorted = doc.data().vehicles.map(x => x.VehicleID).sort((a, b) => a.VehicleID > b.VehicleID)
+            const vehiclesIDMobXSorted = this.props.UserStore.vehicles.map(x => x.VehicleID).sort((a, b) => a.VehicleID > b.VehicleID)
+            const vehicleData = doc.data().vehicles.sort((a, b) => a.VehicleID > b.VehicleID)
+            const vehicleDataMobx = this.props.UserStore.vehicles.map(x => x).sort((a, b) => a.VehicleID > b.VehicleID)
+
+            const paymentsIDSorted = doc.data().payments.map(x => x.PaymentID).sort((a, b) => a.PaymentID > b.PaymentID)
+            const paymentsIDMobXSorted = this.props.UserStore.payments.map(x => x.PaymentID).sort((a, b) => a.PaymentID > b.PaymentID)
+            const paymentData = doc.data().payments.sort((a, b) => a.PaymentID > b.PaymentID)
+            const paymentDataMobx = this.props.UserStore.payments.map(x => x).sort((a, b) => a.PaymentID > b.PaymentID)
+   
+            // Check if vehicles are updated
+            if(vehiclesIDSorted.length === vehiclesIDMobXSorted.length && vehiclesIDSorted.every((value, index) => value === vehiclesIDMobXSorted[index]) && JSON.stringify(vehicleData) === JSON.stringify(vehicleDataMobx)){
+                // do nothing
+            }else{
+                this.props.UserStore.vehicles = doc.data().vehicles
+            }
+
+
+            // Check if payments are updated
+            if(paymentsIDSorted.length === paymentsIDMobXSorted.length && paymentsIDSorted.every((value, index) => value === paymentsIDMobXSorted[index]) && JSON.stringify(paymentData) === JSON.stringify(paymentDataMobx)){
+                // do nothing
+            }else{
+                this.props.UserStore.payments = doc.data().payments
+            }
+            
+            // Check if spaces are updated
                 if( length > 0 && length <= 10){
                     db.collection('listings').where(firebase.firestore.FieldPath.documentId(), "in", doc.data().listings).get().then((qs) => {
                     let listingsData = [];
