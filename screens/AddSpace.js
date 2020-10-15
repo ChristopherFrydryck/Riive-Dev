@@ -354,7 +354,7 @@ class addSpace extends Component {
 
     const db = firebase.firestore();
 
-    console.log(this.state.postID)
+  
 
 
     

@@ -27,7 +27,8 @@ export default class Home extends Component{
         super(props);
 
         this.state = {
-            searchedAddress: null,
+            inputFocus: false,
+            searchedAddress: false,
             region: {
                 latitude: null,
                 longitude: null,
@@ -56,7 +57,8 @@ export default class Home extends Component{
                     ...prevState.region,
                     latitude: location.coords.latitude,
                     longitude: location.coords.longitude
-                }
+                },
+                
             }))
 
           } catch (error) {
@@ -64,6 +66,40 @@ export default class Home extends Component{
           }
     
         }
+
+        onSelectAddress = (det) => {
+            this.setState(prevState => ({
+                region: {
+                    ...prevState.region,
+                    latitude: det.geometry.location.lat,
+                    longitude: det.geometry.location.lng
+                },
+                searchedAddress: true
+            }));
+         
+
+        }
+
+        onRegionChange = (region) => {
+            this.setState({
+                region: {
+                    latitudeDelta: region.latitudeDelta,
+                    longitudeDelta: region.longitudeDelta,
+                    latitude: region.latitude,
+                    longitude: region.longitude
+                },
+            })
+        }
+
+        clearAddress = () => {
+            this.GooglePlacesRef.setAddressText("")
+            this.setState(prevState => ({
+                searchedAddress: false,
+                region: {
+                    ...prevState.region
+                }
+            }))
+          }
       
 
         componentWillUnmount() {
@@ -72,88 +108,16 @@ export default class Home extends Component{
           }
 
     render(){
+        const {width, height} = Dimensions.get('window')
         const {firstname, email} = this.props.UserStore
         return(
-                <SafeAreaView>
-                    <GooglePlacesAutocomplete
-                        placeholder='Your Address...'
-                        returnKeyType={'search'}
-                        ref={(instance) => { this.GooglePlacesRef = instance }}
-                        currentLocation={false}
-                        minLength={2}
-                        autoFocus={false}
-                        listViewDisplayed={false}
-                        fetchDetails={true}
-                        onPress={(data, details = null) => this.onSelectAddress(details)}
-                        textInputProps={{
-                        clearButtonMode: 'never'
-                        }}
-                        renderRightButton={() => 
-                        <Icon 
-                        iconName="x"
-                        iconColor={Colors.cosmos500}
-                        iconSize={24}
-                        onPress={() => this.clearAddress()}
-                        style={{marginTop: 8, display: this.state.searchedAddress ? "flex" : "none"}}
-                        />}
-                        query={{
-                        key: 'AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c',
-                        language: 'en'
-                        }}
-                        GooglePlacesSearchQuery={{
-                        rankby: 'distance',
-                        types: 'address',
-                        components: "country:us"
-                        }}
-                        // GooglePlacesDetailsQuery={{ fields: 'geometry', }}
-                        nearbyPlacesAPI={'GoogleReverseGeocoding'}
-                        debounce={200}
-                        predefinedPlacesAlwaysVisible={true}
-                        enablePoweredByContainer={false}
-                        
-                        
-                        styles={{
-                        container: {
-                            zIndex: 999,
-                            border: 'none',
-                            marginBottom: 8,
-                        },
-                        textInputContainer: {
-                            zIndex: 999,
-                            width: '100%',
-                            display: 'flex',
-                            alignSelf: 'center',
-                            backgroundColor: "white",
-                            marginTop: -6,
-                            borderColor: '#eee',
-                            borderBottomWidth: 2,
-                            borderTopWidth: 0,
-                            backgroundColor: "none"
-                        },
-                        textInput: {
-                            zIndex: 999,
-                            paddingRight: 0,
-                            paddingLeft: 0,
-                            paddingBottom: 0,
-                            color: '#333',
-                            fontSize: 18,
-                            width: '100%'
-                        },
-                        description: {
-                            zIndex: 999,
-                            fontWeight: 'bold'
-                        },
-                        predefinedPlacesDescription: {
-                            zIndex: 999,
-                            color: '#1faadb'
-                        }
-                        
-                        }}
-                    />
+                <SafeAreaView contentContainerStyle={{ flexGrow: 1 }}>
+                    
                     <MapView
                         provider={MapView.PROVIDER_GOOGLE}
                         mapStyle={DayMap}
                         style={styles.mapStyle}
+                        onRegionChangeComplete={region => this.onRegionChange(region)}
                         region={{
                             latitude: this.state.region.latitude ? this.state.region.latitude : 37.8020,
                             longitude: this.state.region.longitude ? this.state.region.longitude : -122.4486,
@@ -174,12 +138,74 @@ export default class Home extends Component{
                         />
                         : null }
                         </MapView>
+                {/* <View style={{ backgroundColor: 'green', flex: 1, marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0}}> */}
+                  <View style={{height: this.state.inputFocus ? 235 : 'auto'}}>
+                  <GooglePlacesAutocomplete
+                      placeholder='Search by destination...'
+                      returnKeyType={'done'}  
+                      autofocus={false}
+                      ref={(instance) => { this.GooglePlacesRef = instance }}
+                      currentLocation={false}
+                      minLength={2}
+                      listViewDisplayed={false}
+                      fetchDetails={true}
+                      onPress={(data, details = null) => this.onSelectAddress(details)}
+                      textInputProps={{
+                        onFocus: () => {
+                            this.setState({
+                                inputFocus: true,
+                            })
+                        },
+                        onBlur: () => {
+                            this.setState({
+                                inputFocus: false
+                            })
+                        },
+                        clearButtonMode: 'never'
+                      }}
+                      renderRightButton={() => 
+                        <Icon 
+                            iconName="x"
+                            iconColor={Colors.cosmos500}
+                            iconSize={24}
+                            onPress={() => this.clearAddress()}
+                            style={{marginTop: 8, display: this.state.searchedAddress ? "flex" : "none"}}
+                        />
+                      }
+                      query={{
+                        key: 'AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c',
+                        language: 'en'
+                      }}
+                      GooglePlacesSearchQuery={{
+                          rankby: 'distance',
+                          types: 'address',
+                          components: "country:us"
+                      }}
+                      // GooglePlacesDetailsQuery={{ fields: 'geometry', }}
+                      nearbyPlacesAPI={'GoogleReverseGeocoding'}
+                      debounce={200}
+                      predefinedPlacesAlwaysVisible={true}
+                      enablePoweredByContainer={false}
+                      
+
+                      styles={{
+                          listView:{
+                            
+                            backgroundColor: 'white'
+                          }
+                      }}
+                      
+                      
+                  />
+                   </View>
+                       
                 </SafeAreaView>
         )
     }
 }
 const styles = StyleSheet.create({
     mapStyle:{
+        zIndex: -999,
         position: "absolute",
         width: Dimensions.get('window').width,
         height: Dimensions.get("window").height,
