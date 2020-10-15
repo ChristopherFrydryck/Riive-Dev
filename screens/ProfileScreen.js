@@ -117,19 +117,24 @@ class Profile extends Component{
     const doc = db.collection('users').doc(this.props.UserStore.userID);
 
 
-   
-
     
 
     this.getPermissionAsync();
     this.updateProfile();
 
-
-    firebase.auth().currentUser.emailVerified ? 
+    const user = firebase.auth().currentUser;
+    
+   
+    user.reload().then(() => {
+        user.emailVerified ? 
         this.setState({verificationSnackbarVisible: false}) 
         : this.setState({verificationSnackbarVisible: true}) 
+    })
+    
     
     }
+
+   
 
     componentWillUnmount() {
         // Unmount status bar info
@@ -141,6 +146,10 @@ class Profile extends Component{
         const doc = db.collection('users').doc(this.props.UserStore.userID);
 
         this.setState({isRefreshing: true})
+
+        firebase.auth().currentUser.reload();
+       
+
 
         doc.get().then(doc => {
             const listingsSorted = doc.data().listings.sort()
@@ -390,11 +399,15 @@ class Profile extends Component{
     updateAccountInfo = () => {
         const db = firebase.firestore();
         const doc = db.collection('users').doc(this.props.UserStore.userID);
-        
+        const user = firebase.auth().currentUser;
 
+        user.reload();
+        
+        
         if (this.state.phoneUpdate !== this.props.UserStore.phone){
             if (this.state.phoneUpdate.match(regexPhone) || this.state.phoneUpdate == ""){
                 this.props.UserStore.phone = this.state.phoneUpdate;
+
                 doc.update({ phone: this.props.UserStore.phone})
                 this.setState({phoneError: '', submitted: true})
                 setTimeout(() => this.setState({submitted: false}), 3000)
@@ -432,7 +445,8 @@ class Profile extends Component{
     }
 
     resendVerification = () => {
-        firebase.auth().currentUser.sendEmailVerification().then(() => {
+        const user = firebase.auth().currentUser;
+        user.sendEmailVerification().then(() => {
             setTimeout(() => this.setState({verificationSnackbarVisible: false}), 500)
         }).catch((e) => {
             alert(e)
