@@ -29,12 +29,23 @@ export default class Home extends Component{
         this.state = {
             inputFocus: false,
             searchedAddress: false,
+            mapScrolled: false,
             region: {
-                latitude: null,
-                longitude: null,
-                latitudeDelta: null,
-                longitudeDelta: null,
+                searched: {
+                    latitude: null,
+                    longitude: null,
+                    latitudeDelta: null,
+                    longitudeDelta: null,
+                },
+                current: {
+                    latitude: null,
+                    longitude: null,
+                    latitudeDelta: null,
+                    longitudeDelta: null,
+                }
+                
               },
+
         }
 
     }
@@ -55,8 +66,11 @@ export default class Home extends Component{
             this.setState(prevState => ({
                 region: {
                     ...prevState.region,
-                    latitude: location.coords.latitude,
-                    longitude: location.coords.longitude
+                    current: {
+                        ...prevState.region.current,
+                        latitude: location.coords.latitude,
+                        longitude: location.coords.longitude
+                    }
                 },
                 
             }))
@@ -70,10 +84,19 @@ export default class Home extends Component{
         onSelectAddress = (det) => {
             this.setState(prevState => ({
                 region: {
-                    ...prevState.region,
-                    latitude: det.geometry.location.lat,
-                    longitude: det.geometry.location.lng
+                    current: {
+                        ...prevState.region.current,
+                        latitude: det.geometry.location.lat,
+                        longitude: det.geometry.location.lng
+                    },
+                    searched:{
+                        ...prevState.region.current,
+                        latitude: det.geometry.location.lat,
+                        longitude: det.geometry.location.lng
+                    }
+                    
                 },
+                mapScrolled: false,
                 searchedAddress: true
             }));
          
@@ -81,14 +104,18 @@ export default class Home extends Component{
         }
 
         onRegionChange = (region) => {
-            this.setState({
+            this.setState(prevState => ({
                 region: {
-                    latitudeDelta: region.latitudeDelta,
-                    longitudeDelta: region.longitudeDelta,
-                    latitude: region.latitude,
-                    longitude: region.longitude
+                    ...prevState.region,
+                    current: {
+                        latitudeDelta: region.latitudeDelta,
+                        longitudeDelta: region.longitudeDelta,
+                        latitude: region.latitude,
+                        longitude: region.longitude
+                    }
                 },
-            })
+                mapScrolled: true,
+            }))
         }
 
         clearAddress = () => {
@@ -96,7 +123,10 @@ export default class Home extends Component{
             this.setState(prevState => ({
                 searchedAddress: false,
                 region: {
-                    ...prevState.region
+                    ...prevState.region,
+                    searched: {
+                        ...prevState.region.current
+                    },
                 }
             }))
           }
@@ -119,10 +149,13 @@ export default class Home extends Component{
                         style={styles.mapStyle}
                         onRegionChangeComplete={region => this.onRegionChange(region)}
                         region={{
-                            latitude: this.state.region.latitude ? this.state.region.latitude : 37.8020,
-                            longitude: this.state.region.longitude ? this.state.region.longitude : -122.4486,
-                            latitudeDelta: this.state.region.latitudeDelta ? this.state.region.latitudeDelta : 0.025,
-                            longitudeDelta: this.state.region.longitudeDelta ? this.state.region.longitudeDelta : 0.025,
+                            latitude: this.state.region.searched.latitude && !this.state.mapScrolled ? this.state.region.searched.latitude : this.state.region.current.latitude ? this.state.region.current.latitude : 37.8020,
+
+                            longitude: this.state.region.searched.longitude && !this.state.mapScrolled ? this.state.region.searched.longitude : this.state.region.current.longitude ? this.state.region.current.longitude : -122.4486,
+
+                            latitudeDelta: this.state.region.searched.latitudeDelta && !this.state.mapScrolled ? this.state.region.searched.latitudeDelta : this.state.region.current.latitudeDelta ? this.state.region.current.latitudeDelta : 0.025,
+
+                            longitudeDelta: this.state.region.searched.longitudeDelta && !this.state.mapScrolled ? this.state.region.searched.longitudeDelta : this.state.region.current.longitudeDelta ? this.state.region.current.longitudeDelta : 0.025,
                         }}
                         pitchEnabled={false} 
                         rotateEnabled={false} 
@@ -132,8 +165,8 @@ export default class Home extends Component{
                         {this.state.searchedAddress ?
                         <Marker 
                             coordinate={{
-                            latitude: this.state.region.latitude,
-                            longitude: this.state.region.longitude
+                            latitude: this.state.region.searched.latitude,
+                            longitude: this.state.region.searched.longitude
                             }}   
                         />
                         : null }
