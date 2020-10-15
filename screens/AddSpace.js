@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, ScrollView, StatusBar, Platform, StyleSheet, SafeAreaView, Dimensions, KeyboardAvoidingView, FlatList, Switch, Modal, Picker} from 'react-native';
+import { View, ScrollView, StatusBar, Platform, StyleSheet, SafeAreaView, Dimensions, KeyboardAvoidingView, FlatList, Switch, Modal, Picker, YellowBox} from 'react-native';
 import Text from '../components/Txt'
 import MapInput, { PROVIDER_GOOGLE } from '../components/MapInput'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -82,10 +82,12 @@ class addSpace extends Component {
             },
             
             searchedAddress: false,
+            addressValid: false,
             nameValid: false,
             bioValid: true,
             priceValid: false,
 
+            addressError: '',
             nameError: '',
             bioError: '',
             priceError: '',
@@ -114,7 +116,12 @@ class addSpace extends Component {
               {dayName: "Thursday", abbrName:"Thu", dayValue: 4, data: [{available: true, id: 500, start: '0000', end: '2359'}]},
               {dayName: "Friday", abbrName:"Fri", dayValue: 5, data: [{available: true, id: 600, start: '0000', end: '2359'}]},
               {dayName: "Saturday", abbrName:"Sat", dayValue: 6, data: [{available: true, id: 700, start: '0000', end: '2359'}]},
-            ]
+            ],
+
+             // Integrated version 1.0.0
+             hidden: false,
+             toBeDeleted: false,
+             visits: 0,
             
         }
     }
@@ -123,9 +130,12 @@ class addSpace extends Component {
       // Set Status Bar page info here!
       const db = firebase.firestore();
       const ref = db.collection("spaces").doc();
+
+      YellowBox.ignoreWarnings([ 'VirtualizedLists should never be nested']);
+
       this.setState({postID: ref.id})
       this._isMounted = true;
-     this._navListener = this.props.navigation.addListener('didFocus', () => {
+      this._navListener = this.props.navigation.addListener('didFocus', () => {
          StatusBar.setBarStyle('dark-content', true);
          Platform.OS === 'android' && StatusBar.setBackgroundColor('white');
        });
@@ -298,6 +308,12 @@ class addSpace extends Component {
     let nameValid = nameValidation.test(this.state.spaceName)
     let bioValid = this.state.spaceBio.split("").length > 0 ? bioValidation.test(this.state.spaceBio) : true;
 
+    if(this.state.searchedAddress && this.state.addressError.split("").length){
+      this.setState({addressError: ""})
+    }else{
+      this.setState({addressError: "Provide a valid street address"})
+    }
+
     if(this.state.spacePrice){
       let spaceCentsArray = this.state.spacePrice.split(".")
       let spaceCents = parseInt(spaceCentsArray[0].slice(1) + spaceCentsArray[1])
@@ -338,7 +354,7 @@ class addSpace extends Component {
 
     const db = firebase.firestore();
 
-    console.log(this.state.postID)
+  
 
 
     
@@ -371,6 +387,7 @@ class addSpace extends Component {
                  await db.collection("listings").doc(this.state.postID).set({
                   
                       listingID: this.state.postID,
+                      hostID: this.props.UserStore.userID,
                       address: this.state.address,
                       region: this.state.region,
                       photo: this.state.photo,
@@ -380,13 +397,17 @@ class addSpace extends Component {
                       spacePriceCents: spaceCents,
                       numSpaces: this.state.numSpaces,
                       availability: this.state.daily,
-                      created: createdTime
+                      created: createdTime,
+                      hidden: false,
+                      toBeDeleted: false,
+                      visits: []
                  
                })
 
                // add space to mobx UserStore
                await this.props.UserStore.listings.push({
                   listingID: this.state.postID,
+                  hostID: this.props.UserStore.userID,
                   address: this.state.address,
                   region: this.state.region,
                   photo: this.state.photo,
@@ -396,7 +417,10 @@ class addSpace extends Component {
                   spacePriceCents: spaceCents,
                   numSpaces: this.state.numSpaces,
                   availability: this.state.daily,
-                  created: createdTime
+                  created: createdTime,
+                  hidden: false,
+                  toBeDeleted: false,
+                  visits: []
                })
 
                   // navigate back to profile
@@ -470,33 +494,33 @@ onSelectAddress = (det) => {
   var country = det.address_components.filter(x => x.types.includes('country'))[0]
   var zip = det.address_components.filter(x => x.types.includes('postal_code'))[0]
 
-  
-
-
-  
-
-
-  this.setState(prevState => ({
-    searchedAddress: true,
-    region:{
-      latitude: det.geometry.location.lat,
-      longitude: det.geometry.location.lng,
-      latitudeDelta: .006,
-      longitudeDelta: .006
-    },
-    address:{
-      ...prevState.address,
-      full: det.formatted_address,
-      number: number.long_name,
-      street: street.long_name,
-      city: city.long_name,
-      county: county.long_name,
-      state: state.long_name,
-      state_abbr: state.short_name,
-      country: country.long_name,
-      zip: zip.long_name,
-    }
-  }))
+  if(number && street && city && county && state){
+    this.setState(prevState => ({
+      searchedAddress: true,
+      region:{
+        latitude: det.geometry.location.lat,
+        longitude: det.geometry.location.lng,
+        latitudeDelta: .006,
+        longitudeDelta: .006
+      },
+      address:{
+        ...prevState.address,
+        full: det.formatted_address,
+        number: number.long_name,
+        street: street.long_name,
+        city: city.long_name,
+        county: county.long_name,
+        state: state.long_name,
+        state_abbr: state.short_name,
+        country: country.long_name,
+        zip: zip.long_name,
+      }
+    }))
+    this.setState({addressError: ""})
+  }else{
+    this.setState({addressError: "Select a valid street address"})
+    this.clearAddress();
+  }
 
 
 
@@ -538,6 +562,7 @@ clearAddress = () => {
     return (
       <KeyboardAwareScrollView
       keyboardShouldPersistTaps="handled"
+      automaticallyAdjustContentInsets={false}
       contentContainerStyle={{ flexGrow: 1 }} scrollEnabled
       enableOnAndroid={true}
       extraScrollHeight={150} //iOS
@@ -567,11 +592,11 @@ clearAddress = () => {
       </Modal>
 
 
-         <KeyboardAvoidingView 
+         <View
          
-         behavior={Platform.OS === 'ios' ? "padding" : null} 
-            keyboardVerticalOffset={250}
-            enabled 
+            // behavior={Platform.OS === 'ios' ? "padding" : null} 
+            // keyboardVerticalOffset={250}
+            // enabled 
           >
         
        
@@ -611,7 +636,8 @@ clearAddress = () => {
             }}
             GooglePlacesSearchQuery={{
               rankby: 'distance',
-              type: 'geocode'
+              types: 'address',
+              components: "country:us"
             }}
             // GooglePlacesDetailsQuery={{ fields: 'geometry', }}
             nearbyPlacesAPI={'GoogleReverseGeocoding'}
@@ -653,6 +679,7 @@ clearAddress = () => {
               
             }}
             />
+            <Text style={styles.error}>{this.state.addressError}</Text>
             <View style={{flex: 1, flexDirection: "row"}}>
             <Input
             flex={0.35}
@@ -886,7 +913,7 @@ clearAddress = () => {
 
             </View>
             
-        </KeyboardAvoidingView>
+        </View>
       {/* </ScrollView> */}
       </KeyboardAwareScrollView>
     );
@@ -943,6 +970,14 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     width: 'auto'
 },
+error: {
+  paddingTop: 0,
+  paddingBottom: 0,
+  color: 'red',
+  fontSize: 14,
+  fontWeight: '400',
+  width: 'auto'
+}
 })
   
 

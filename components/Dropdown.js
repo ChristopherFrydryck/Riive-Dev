@@ -129,8 +129,8 @@ const styles = StyleSheet.create({
         paddingTop: 3,
         paddingBottom: 0,
         color: 'red',
-        fontSize: 12,
-        fontWeight: '300',
+        fontSize: 14,
+        fontWeight: '400',
         width: 'auto'
     }
 })

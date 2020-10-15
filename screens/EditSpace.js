@@ -138,7 +138,14 @@ class editSpace extends Component {
             spacePriceCents: space.spacePriceCents,
             numSpaces: space.numSpaces,
 
-            daily: space.availability
+            daily: space.availability,
+
+            // Integrated version 1.0.0
+            hidden: space.hidden,
+            toBeDeleted: space.toBeDeleted,
+            visits: space.visits,
+
+            
             
         }
     }
@@ -147,6 +154,8 @@ class editSpace extends Component {
       // Set Status Bar page info here!
       const db = firebase.firestore();
       const ref = db.collection("spaces").doc();
+
+
 
       this._isMounted = true;
      this._navListener = this.props.navigation.addListener('didFocus', () => {
@@ -423,6 +432,7 @@ class editSpace extends Component {
               
               await db.collection("listings").doc(this.state.postID).update({
                 listingID: this.state.postID,
+                hostID: this.props.UserStore.userID,
                 address: this.state.address,
                 region: this.state.region,
                 photo: this.state.photo,
@@ -433,6 +443,9 @@ class editSpace extends Component {
                 numSpaces: this.state.numSpaces,
                 availability: this.state.daily,
                 updated: createdTime,
+                hidden: this.state.hidden,
+                toBeDeleted: this.state.toBeDeleted,
+                visits: this.state.visits,
                })
 
                
@@ -442,6 +455,7 @@ class editSpace extends Component {
 
                this.props.UserStore.listings[spaceIndex] = {
                   listingID: this.state.postID,
+                  hostID: this.props.UserStore.userID,
                   address: this.state.address,
                   region: this.state.region,
                   photo: this.state.photo,
@@ -453,6 +467,9 @@ class editSpace extends Component {
                   availability: this.state.daily,
                   created: spaceFromDB.created,
                   updated: createdTime,
+                  hidden: this.state.hidden,
+                  toBeDeleted: this.state.toBeDeleted,
+                  visits: this.state.visits,
                }
                // add space to mobx UserStore
               //  await this.props.UserStore.listings.push({
@@ -472,7 +489,8 @@ class editSpace extends Component {
                   // navigate back to profile
                   this.props.navigation.navigate("Profile")
                   this.setState({savingSpace: false})
-                }catch{
+                }catch(e){
+                  console.log(e)
                   this.setState({savingSpace: false})
                 }
         
@@ -673,9 +691,9 @@ renderDotsView = (numItems, position) =>{
                     </View>
                    
                 </KeyboardAwareScrollView>
-                <SafeAreaView style={{paddingHorizontal: 16, marginBottom: 24, height: 60, alignItems: 'center', justifyContent: 'center'}}>
-                  <Button style={ this.state.changesMade ? {backgroundColor: "#FF8708"} : {backgroundColor:  Colors.mist900}} textStyle={this.state.changesMade ? {color:"#FFFFFF"} : {color: Colors.cosmos300}} disabled={!this.state.changesMade} onPress={() => this.submitSpace()}>Save Changes</Button>
-                </SafeAreaView>
+                <View style={{paddingHorizontal: 16, marginBottom: 24, height: 60, alignItems: 'center', justifyContent: 'center'}}>
+                  <Button style={ this.state.changesMade ? {backgroundColor: "#FF8708", height: 48} : {backgroundColor:  Colors.mist900, height: 48}} textStyle={this.state.changesMade ? {color:"#FFFFFF"} : {color: Colors.cosmos300}} disabled={!this.state.changesMade} onPress={() => this.submitSpace()}>Save Changes</Button>
+                </View>
            
 
                   
@@ -765,6 +783,7 @@ renderDotsView = (numItems, position) =>{
                             <Text style={{fontSize: 16, color: Colors.cosmos300, marginRight: 24}}>{this.state.spaceBio}</Text> 
                         </View>
                         : null}
+                       
 
                       
                         <View style={{marginTop: 32}}>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Share, ActivityIndicator, Dimensions, StatusBar, StyleSheet, ScrollView, Modal, Platform, SafeAreaView} from 'react-native'
+import {View, Share, ActivityIndicator, Dimensions, StatusBar, StyleSheet, ScrollView, Modal, Platform, SafeAreaView, RefreshControl} from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import {NavigationActions} from 'react-navigation'
 import Input from '../components/Input'
@@ -86,6 +86,8 @@ class Profile extends Component{
             selectedImageURI: "",
             verificationSnackbarVisible: false,
             menuVisible: false,
+            
+            isRefreshing: false,
         }
 
         
@@ -100,6 +102,7 @@ class Profile extends Component{
 
     componentDidMount(){
         // Set Status Bar page info here!
+        
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             StatusBar.setBarStyle('light-content', true);
             Platform.OS === 'android' && StatusBar.setBackgroundColor(Colors.tango900);
@@ -112,30 +115,108 @@ class Profile extends Component{
     // alert(this.props.UserStore.memberTime)
     const db = firebase.firestore();
     const doc = db.collection('users').doc(this.props.UserStore.userID);
-   
 
-    if(this.props.UserStore.signInProvider == "password"){
-        this.setState({editableTextInput: true})
-    }else{ this.setState({editableTextInput: false}) }
+
+    
 
     this.getPermissionAsync();
+    this.updateProfile();
 
-    firebase.auth().currentUser.emailVerified ? 
+    const user = firebase.auth().currentUser;
+    
+   
+    user.reload().then(() => {
+        user.emailVerified ? 
         this.setState({verificationSnackbarVisible: false}) 
         : this.setState({verificationSnackbarVisible: true}) 
-
-
+    })
     
-
-
-       
     
     }
+
+   
 
     componentWillUnmount() {
         // Unmount status bar info
         this._navListener.remove();
-      }
+    }
+
+    updateProfile = () => {
+        const db = firebase.firestore();
+        const doc = db.collection('users').doc(this.props.UserStore.userID);
+
+        this.setState({isRefreshing: true})
+
+        firebase.auth().currentUser.reload();
+       
+
+
+        doc.get().then(doc => {
+            const listingsSorted = doc.data().listings.sort()
+            const listingsIDMobXSorted = this.props.UserStore.listings.map(x => x.listingID).sort()
+            const length = doc.data().listings.length;
+
+            const vehiclesIDSorted = doc.data().vehicles.map(x => x.VehicleID).sort((a, b) => a.VehicleID > b.VehicleID)
+            const vehiclesIDMobXSorted = this.props.UserStore.vehicles.map(x => x.VehicleID).sort((a, b) => a.VehicleID > b.VehicleID)
+            const vehicleData = doc.data().vehicles.sort((a, b) => a.VehicleID > b.VehicleID)
+            const vehicleDataMobx = this.props.UserStore.vehicles.map(x => x).sort((a, b) => a.VehicleID > b.VehicleID)
+
+            const paymentsIDSorted = doc.data().payments.map(x => x.PaymentID).sort((a, b) => a.PaymentID > b.PaymentID)
+            const paymentsIDMobXSorted = this.props.UserStore.payments.map(x => x.PaymentID).sort((a, b) => a.PaymentID > b.PaymentID)
+            const paymentData = doc.data().payments.sort((a, b) => a.PaymentID > b.PaymentID)
+            const paymentDataMobx = this.props.UserStore.payments.map(x => x).sort((a, b) => a.PaymentID > b.PaymentID)
+   
+            // Check if vehicles are updated
+            if(vehiclesIDSorted.length === vehiclesIDMobXSorted.length && vehiclesIDSorted.every((value, index) => value === vehiclesIDMobXSorted[index]) && JSON.stringify(vehicleData) === JSON.stringify(vehicleDataMobx)){
+                // do nothing
+            }else{
+                this.props.UserStore.vehicles = doc.data().vehicles
+            }
+
+
+            // Check if payments are updated
+            if(paymentsIDSorted.length === paymentsIDMobXSorted.length && paymentsIDSorted.every((value, index) => value === paymentsIDMobXSorted[index]) && JSON.stringify(paymentData) === JSON.stringify(paymentDataMobx)){
+                // do nothing
+            }else{
+                this.props.UserStore.payments = doc.data().payments
+            }
+            
+            // Check if spaces are updated
+                if( length > 0 && length <= 10){
+                    db.collection('listings').where(firebase.firestore.FieldPath.documentId(), "in", doc.data().listings).get().then((qs) => {
+                    let listingsData = [];
+                    
+                    for(let i = 0; i < qs.docs.length; i++){
+                        listingsData.push(qs.docs[i].data())
+                    }
+                    
+                    this.props.UserStore.listings = listingsData;
+             })
+
+            }else if(length > 0 && length > 10){
+                let listings = doc.data().listings;
+                let allArrs = [];
+                var listingsData = [];
+
+                while(listings.length > 0){
+                    allArrs.push(listings.splice(0, 10))
+                }
+      
+                for(let i = 0; i < allArrs.length; i++){
+                    db.collection('listings').where(firebase.firestore.FieldPath.documentId(), "in", allArrs[i]).get().then((qs) => {
+                        for(let i = 0; i < qs.docs.length; i++){
+                            listingsData.push(qs.docs[i].data())
+                        } 
+                    }).then(() => {
+                        this.props.UserStore.listings = listingsData;
+                    })
+                }
+            }else{
+                this.props.UserStore.listings = [];
+            }
+        })
+        this.setState({isRefreshing: false})
+    }
 
 
     getPermissionAsync = async () => {
@@ -318,11 +399,15 @@ class Profile extends Component{
     updateAccountInfo = () => {
         const db = firebase.firestore();
         const doc = db.collection('users').doc(this.props.UserStore.userID);
-        
+        const user = firebase.auth().currentUser;
 
+        user.reload();
+        
+        
         if (this.state.phoneUpdate !== this.props.UserStore.phone){
             if (this.state.phoneUpdate.match(regexPhone) || this.state.phoneUpdate == ""){
                 this.props.UserStore.phone = this.state.phoneUpdate;
+
                 doc.update({ phone: this.props.UserStore.phone})
                 this.setState({phoneError: '', submitted: true})
                 setTimeout(() => this.setState({submitted: false}), 3000)
@@ -360,7 +445,8 @@ class Profile extends Component{
     }
 
     resendVerification = () => {
-        firebase.auth().currentUser.sendEmailVerification().then(() => {
+        const user = firebase.auth().currentUser;
+        user.sendEmailVerification().then(() => {
             setTimeout(() => this.setState({verificationSnackbarVisible: false}), 500)
         }).catch((e) => {
             alert(e)
@@ -414,13 +500,6 @@ class Profile extends Component{
         const initals = this.props.UserStore.firstname.charAt(0).toUpperCase() + "" + this.props.UserStore.lastname.charAt(0).toUpperCase()
         const {firstname, lastname, vehicles, payments, listings} = this.props.UserStore 
         var {height, width} = Dimensions.get('window');
-
-
-       
-
-        const db = firebase.firestore();
-        const doc = db.collection('users').doc(this.props.UserStore.email);
-
    
 
         return(
@@ -721,20 +800,20 @@ class Profile extends Component{
                     }
 
                    
-                    <ScrollView style={{marginTop: 40}}>
+                    <ScrollView style={{marginTop: 40}} refreshControl={<RefreshControl refreshing={this.state.isRefreshing} onRefresh={this.updateProfile}/>}>
+                        
                         <View style={styles.contentBox}>
-                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 16, paddingRight: 16}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 16}}>
                                 {listings == undefined || listings.length <= 1 ? <Text style={styles.categoryTitle}>My Space</Text> : <Text style={{fontSize: 20, marginRight: 'auto'}}>My Spaces</Text>}
                                 <ClickableChip
                                     bgColor='rgba(255, 193, 76, 0.3)' // Colors.Tango300 with opacity of 30%
                                     onPress={() => this.props.navigation.navigate("AddSpace")}
                                     textColor={Colors.tango700}
                                 >+ Space</ClickableChip>
-                            </View>
-                            <View>
-                                {listings == undefined ? null : <SpacesList/>}
-                            </View>
-                            
+                            </View>                            
+                        </View>
+                        <View>
+                            {listings == undefined ? null : <SpacesList listings={this.props.UserStore.listings}/>}
                         </View>
                         <View style={styles.contentBox}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 16, paddingRight: 16}}>

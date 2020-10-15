@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "staging": "riive-parking",
+    "default": "riive-parking"
+  }
+}

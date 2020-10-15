@@ -25,6 +25,7 @@ let spot = {
     zip = "15044",
     priceHR = 125,
     currency = 'usd',
+    schedule
     spaces = [
          availability = [{
             day: 01/01/2020,

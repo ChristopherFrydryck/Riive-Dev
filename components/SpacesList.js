@@ -42,6 +42,16 @@ class SpacesList extends React.Component{
         this.fadeAnimation();
     }
 
+    componentDidUpdate(prevProps){
+        if(prevProps.listings !== this.props.UserStore.listings){
+            this.setState({          
+                data: this.props.UserStore.listings
+            });
+        }
+    }
+
+ 
+
     fadeAnimation = () => {
         Animated.loop(
             Animated.sequence([
@@ -75,6 +85,11 @@ class SpacesList extends React.Component{
                 spacePriceCents: spot.spacePriceCents,
                 numSpaces: spot.numSpaces,
                 availability: spot.availability,
+
+                // Integrated version 1.0.0
+                hidden: spot.hidden,
+                toBeDeleted: spot.toBeDeleted,
+                visits: spot.visits,
             })
             // console.log(this.props.ComponentStore.selectedSpot[0].spaceName)
             this.props.navigation.navigate("EditSpace")
@@ -93,12 +108,24 @@ class SpacesList extends React.Component{
         let currentActive = orderedData[index].availability[dayToday].data.filter((x) => parseInt(x.start.substring(0,2)) <= hourToday && parseInt(x.end.substring(0,2)) >= hourToday)
 
 
+       let cardStyle
+       if(orderedData.length > 1){
+            if(index == 0){
+                cardStyle = [styles.li, styles.li_first]
+            }if(index === orderedData.length - 1){
+                cardStyle = [styles.li, styles.li_last]
+            }else{
+                cardStyle = styles.li
+            }
+       }else{
+           cardStyle = styles.li_single
+       }
        
 
         return(
         <TouchableOpacity
         key={spot.listingID}
-        style={index == 0 ? styles.li_first : styles.li}
+        style={cardStyle}
         onPress = {() => this.selectSpace(spot)}
         >
         <View style={styles.image}>
@@ -152,15 +179,17 @@ class SpacesList extends React.Component{
         var dayToday = new Date().getDay()
         var hourToday = new Date().getHours()
         var orderedData = this.state.data.slice().sort((a, b) => b.created - a.created)
+        var {width} = Dimensions.get('window');
+
+        // console.log((16 * (orderedData.length - 2) + 48)/orderedData.length)
 
         if(spotsLoaded && this.state.data.length == 1){
-
         return(
         <View style={styles.container}>
                         
-            {this.renderSpaceCard(this.state.data[0])} 
+            {this.renderSpaceCard(this.state.data[0], 0)} 
                
-            </View>
+        </View>
             
         )}else if(spotsLoaded && this.state.data.length > 1){
    
@@ -173,9 +202,11 @@ class SpacesList extends React.Component{
                     renderItem={({item, index}) => this.renderSpaceCard(item, index)}
                     keyExtractor={item => item.listingID}
                     horizontal={true}
-                    snapToAlignment={"start"}
-                    snapToInterval={Dimensions.get("window").width * 0.80 + 16}
+                    snapToAlignment={"center"}
+                    // snapToInterval={Dimensions.get("window").width * 0.75 + (16 * (orderedData.length - 2) + 48)/orderedData.length}
+                    snapToOffsets={[...Array(orderedData.length)].map((x, i) => i * (width*.75) - 40 + 16*i)}
                     decelerationRate={"fast"}
+                    bounces={true}
                     showsHorizontalScrollIndicator={false}
                     pagingEnabled
                 />
@@ -201,9 +232,7 @@ class SpacesList extends React.Component{
 
 const styles = StyleSheet.create({
     container:{
-        marginHorizontal: 16,
         marginTop: 8,
-     
     },
     image: {
         overflow: 'hidden',
@@ -211,9 +240,23 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 4,
        
     },
+    li_single:{
+        width: Dimensions.get("window").width *.95,
+        marginLeft: 8,
+        marginRight: 8,
+        backgroundColor: 'white',
+        shadowColor: '#000', 
+          shadowOpacity: 0.6, 
+          shadowOffset:{width: 2, height: 2}, 
+          shadowRadius: 3, 
+          elevation: 12,
+          borderRadius: 4,
+          marginVertical: 8
+    },
     li: {
-        width: Dimensions.get("window").width * .8,
-        marginHorizontal: 8,
+        width: Dimensions.get("window").width * .75,
+        marginLeft: 8,
+        marginRight: 8,
         backgroundColor: 'white',
         shadowColor: '#000', 
           shadowOpacity: 0.6, 
@@ -226,19 +269,12 @@ const styles = StyleSheet.create({
        
     },
     li_first: {
-        width: Dimensions.get("window").width * .8,
-        marginRight: 8,
-        marginLeft: 4,
-        backgroundColor: 'white',
-        shadowColor: '#000', 
-          shadowOpacity: 0.6, 
-          shadowOffset:{width: 2, height: 2}, 
-          shadowRadius: 3, 
-          elevation: 12,
-          borderRadius: 4,
-          marginVertical: 8
-         
         
+        marginLeft: 16,
+    },
+    li_last: {
+        marginRight: 16,
+
     }
 })
 

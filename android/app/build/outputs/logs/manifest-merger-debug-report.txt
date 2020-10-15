@@ -28,7 +28,7 @@ MERGED from [:expo-image-loader] /Users/christopherfrydryck/Documents/Dev/Riive-
 MERGED from [:expo-image-picker] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/expo-image-picker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-25:12
 MERGED from [:expo-keep-awake] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/expo-keep-awake/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:expo-linear-gradient] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/expo-linear-gradient/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
-MERGED from [:expo-location] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/expo-location/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-21:12
+MERGED from [:expo-location] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/expo-location/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-22:12
 MERGED from [:expo-permissions] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/react-native-unimodules/node_modules/expo-permissions/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:expo-sqlite] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/expo-sqlite/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:expo-web-browser] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/expo-web-browser/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
@@ -442,7 +442,7 @@ REJECTED from [com.facebook.react:react-native:36.0.0] /Users/christopherfrydryc
 REJECTED from [:expo-app-auth] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/expo-app-auth/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:11:5-17:19
 REJECTED from [:expo-file-system] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/react-native-unimodules/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:17:5-28:19
 REJECTED from [:expo-image-picker] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/expo-image-picker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:11:5-23:19
-REJECTED from [:expo-location] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/expo-location/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:15:5-19:19
+REJECTED from [:expo-location] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/expo-location/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:16:5-20:19
 REJECTED from [com.google.firebase:firebase-core:16.0.9] /Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/firebase-core-16.0.9.aar/2ed81c41fd5bb685fdda2ffe88879145/AndroidManifest.xml:7:5-20
 REJECTED from [com.google.firebase:firebase-analytics:17.2.0] /Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/firebase-analytics-17.2.0.aar/049c38f4ab90d878b68791ed9826145b/AndroidManifest.xml:7:5-20
 REJECTED from [com.google.android.gms:play-services-auth:16.0.1] /Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/jetified-play-services-auth-16.0.1.aar/80249638bb4af245781cb632321d8eb5/AndroidManifest.xml:22:5-37:19
@@ -1295,10 +1295,14 @@ uses-permission#android.permission.STORAGE
 ADDED from [:expo-file-system] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/react-native-unimodules/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:15:5-66
 	android:name
 		ADDED from [:expo-file-system] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/react-native-unimodules/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:15:22-63
-uses-permission#android.permission.FOREGROUND_SERVICE
-ADDED from [:expo-location] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/expo-location/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:13:5-77
+uses-permission#android.permission.ACCESS_BACKGROUND_LOCATION
+ADDED from [:expo-location] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/expo-location/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:13:5-85
 	android:name
-		ADDED from [:expo-location] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/expo-location/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:13:22-74
+		ADDED from [:expo-location] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/expo-location/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:13:22-82
+uses-permission#android.permission.FOREGROUND_SERVICE
+ADDED from [:expo-location] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/expo-location/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:14:5-77
+	android:name
+		ADDED from [:expo-location] /Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/node_modules/expo-location/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:14:22-74
 uses-permission#com.sec.android.provider.badge.permission.READ
 ADDED from [me.leolin:ShortcutBadger:1.1.4] /Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/54b8abbd19169413778b7801c072748a/AndroidManifest.xml:19:5-86
 	android:name

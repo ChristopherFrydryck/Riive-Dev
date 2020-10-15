@@ -463,12 +463,8 @@ resetPassword = () =>{
         doc.get().then((doc) => {
           if (doc.exists){
 
-
-              db.collection('listings').where(firebase.firestore.FieldPath.documentId(), "in", doc.data().listings).get().then((qs) => {
-                  let listingsData = [];
-                  for(let i = 0; i < qs.docs.length; i++){
-                    listingsData.push(qs.docs[i].data())
-                  }
+          
+             
                   // alert(`${doc.id} => ${doc.data().fullname}`);
                   this.props.UserStore.fullname = doc.data().fullname;
                   this.props.UserStore.phone = doc.data().phone;
@@ -477,26 +473,61 @@ resetPassword = () =>{
                   this.props.UserStore.photo = doc.data().photo;
                   this.props.UserStore.joinedDate = firebase.auth().currentUser.metadata.creationTime
                   this.props.UserStore.vehicles = doc.data().vehicles;
-                  this.props.UserStore.listings = listingsData;
+                  this.props.UserStore.listings = [];
                   this.props.UserStore.payments = doc.data().payments;
                   this.props.UserStore.searchHistory = doc.data().searchHistory;
 
                   // ID if user signed in via email or google
                   this.props.UserStore.signInProvider = firebase.auth().currentUser.providerData[0].providerId;
-                  ;
-              }).then(() => {
+                  
+              
                   // in case a user reverts their email change via profile update
                   db.collection("users").doc(this.props.UserStore.userID).update({
                     email: this.props.UserStore.email,
                 })
                   // Upon setting the MobX State Observer, navigate to home
                   this.props.navigation.navigate('Home')
-              })
+              
+                  return doc;
 
 
         }else{
-          alert("No user found")
+          throw("No user found")
         }
+    }).then((doc) => {
+      const length = doc.data().listings.length;
+      if( length > 0 && length <= 10){
+        db.collection('listings').where(firebase.firestore.FieldPath.documentId(), "in", doc.data().listings).get().then((qs) => {
+          let listingsData = [];
+          for(let i = 0; i < qs.docs.length; i++){
+            listingsData.push(qs.docs[i].data())
+          }
+          this.props.UserStore.listings = listingsData;
+      }).then(() => this.props.navigation.navigate("Home"))
+
+
+    }else if(length > 0 && length > 10){
+      let listings = doc.data().listings;
+      let allArrs = [];
+      var listingsData = [];
+      while(listings.length > 0){
+        allArrs.push(listings.splice(0, 10))
+      }
+      for(let i = 0; i < allArrs.length; i++){
+        db.collection('listings').where(firebase.firestore.FieldPath.documentId(), "in", allArrs[i]).get().then((qs) => {
+          for(let i = 0; i < qs.docs.length; i++){
+            listingsData.push(qs.docs[i].data())
+          }
+        }).then(() => {
+          this.props.UserStore.listings = listingsData;
+          this.props.navigation.navigate('Home')
+        })
+      }
+    
+    }else{
+       this.props.navigation.navigate('Home')
+    }
+       
     }).catch((e) => {
       alert("Failed to grab user data. Please try again. " + e)
     })
