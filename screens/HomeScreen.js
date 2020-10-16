@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Fragment, View, ActivityIndicator, SafeAreaView, StatusBar, Platform, StyleSheet, Dimensions} from 'react-native'
+import {Fragment, View, ActivityIndicator, SafeAreaView, StatusBar, Platform, StyleSheet, Dimensions, Animated} from 'react-native'
 import Button from '../components/Button'
 import Text from '../components/Txt'
 import Icon from '../components/Icon'
@@ -27,6 +27,9 @@ export default class Home extends Component{
         super(props);
 
         this.state = {
+            rippleFadeAnimation: new Animated.Value(1),
+            rippleScaleAnimation: new Animated.Value(0.8),
+
             inputFocus: false,
             searchedAddress: false,
             mapScrolled: false,
@@ -43,42 +46,100 @@ export default class Home extends Component{
                     latitudeDelta: null,
                     longitudeDelta: null,
                 }
-                
               },
+              currentLocation: {
+                  description: "Current Location",
+                  geometry: {
+                      location: {
+                          lat: null,
+                          lng: null,
+                      }
+                  }
+              }
 
         }
 
     }
 
-    async componentDidMount(){
+   async componentDidMount(){
          // Set Status Bar page info here!
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             StatusBar.setBarStyle('dark-content', true);
             Platform.OS === 'android' && StatusBar.setBackgroundColor('white');
           });
 
-          try {
-            let { status } = await Location.requestPermissionsAsync();
-            if (status !== 'granted') {
-              return;
-            }
-            let location = await Location.getCurrentPositionAsync({});
-            this.setState(prevState => ({
-                region: {
-                    ...prevState.region,
-                    current: {
-                        ...prevState.region.current,
-                        latitude: location.coords.latitude,
-                        longitude: location.coords.longitude
-                    }
-                },
-                
-            }))
+          this.rippleAnimation();
 
-          } catch (error) {
-            console.log(error);
-          }
+          await this.getCurrentLocation(true);
+          this._interval = setInterval(() => {this.getCurrentLocation(false)}, 20000)
     
+        }
+
+        rippleAnimation = () => {
+            Animated.loop(
+                    Animated.parallel([
+                        Animated.timing(
+                            this.state.rippleFadeAnimation,
+                            {
+                                toValue: 0,
+                                duration: 1300,
+                            }),
+                        Animated.timing(
+                            this.state.rippleScaleAnimation,
+                                {
+                                    toValue: 10,
+                                    duration: 2000,
+                                }),
+                    ]),
+            ).start()
+        }
+
+        getCurrentLocation = async(isFirstTime) => {
+            try {
+                let { status } = await Location.requestPermissionsAsync();
+                if (status !== 'granted') {
+                  return;
+                }
+                let location = await Location.getCurrentPositionAsync({});
+                if(isFirstTime){
+                    this.setState(prevState => ({
+                        region: {
+                            ...prevState.region,
+                            current: {
+                                ...prevState.region.current,
+                                latitude: location.coords.latitude,
+                                longitude: location.coords.longitude
+                            }
+                        },
+                        currentLocation:{
+                            ...prevState.currentLocation,
+                            geometry: {
+                                location: {
+                                    lat: location.coords.latitude,
+                                    lng: location.coords.longitude,
+                                }
+                            }
+                        }
+                        
+                    }))
+                }else{
+                    this.setState(prevState => ({
+                        currentLocation:{
+                            ...prevState.currentLocation,
+                            geometry: {
+                                location: {
+                                    lat: location.coords.latitude,
+                                    lng: location.coords.longitude,
+                                }
+                            }
+                        }
+                    }))
+                }
+                
+    
+              } catch (error) {
+                console.log(error);
+              }
         }
 
         onSelectAddress = (det) => {
@@ -135,11 +196,13 @@ export default class Home extends Component{
         componentWillUnmount() {
              // Unmount status bar info
             this._navListener.remove();
+            clearInterval(this._interval)
           }
 
     render(){
         const {width, height} = Dimensions.get('window')
         const {firstname, email} = this.props.UserStore
+        
         return(
                 <SafeAreaView contentContainerStyle={{ flexGrow: 1 }}>
                     
@@ -162,6 +225,33 @@ export default class Home extends Component{
                         zoomEnabled={true} 
                         scrollEnabled={true}
                         >
+                        {this.state.currentLocation.geometry.location.lat && this.state.currentLocation.geometry.location.lng ? 
+                       
+                        <Marker 
+                            anchor={{x: 0.5, y: 0.5}}
+                            centerOffset={{x: 12, y: 12}}
+                            coordinate={{
+                                latitude: this.state.currentLocation.geometry.location.lat,
+                                longitude: this.state.currentLocation.geometry.location.lng
+                            }} 
+                            style={{position: 'relative', width: 150, height: 150, alignItems: 'center', justifyContent: 'center'}}
+                        >
+                            {Platform.OS == "android" ?
+                            <View style={[styles.circleMarker, {}]}>
+                                <Animated.View style={[styles.circleMarker, { top: 0, left: 0, opacity: this.state.rippleFadeAnimation, transform:[{scale: this.state.rippleScaleAnimation},]}]}></Animated.View>
+                            </View>
+                            :
+                            <View style={{width: 150, height: 150}}>
+                                <View style={[styles.circleMarker,{ left: 63, top: 63}]}>
+                                    <Animated.View style={[styles.circleMarker, { top: 0, left: 0, opacity: this.state.rippleFadeAnimation, transform:[{scale: this.state.rippleScaleAnimation}]}]}></Animated.View>
+                                </View>
+                            </View>
+                            }
+                            
+                          
+                        </Marker>
+                     
+                        : null}
                         {this.state.searchedAddress ?
                         <Marker 
                             coordinate={{
@@ -219,7 +309,7 @@ export default class Home extends Component{
                       debounce={200}
                       predefinedPlacesAlwaysVisible={true}
                       enablePoweredByContainer={false}
-                      
+                      predefinedPlaces={[this.state.currentLocation]}
 
                       styles={{
                           listView:{
@@ -242,5 +332,15 @@ const styles = StyleSheet.create({
         position: "absolute",
         width: Dimensions.get('window').width,
         height: Dimensions.get("window").height,
-    }  
+    },
+    circleMarker:{
+        position: 'absolute',
+        // top: (50+25)/2 + 4,
+        // left: (50+25)/2 + 4,
+        overflow: 'visible',
+        height: 24,
+        width: 24,
+        backgroundColor: Colors.apollo300, 
+        borderRadius: Dimensions.get('window').width/2, 
+    } 
 })
