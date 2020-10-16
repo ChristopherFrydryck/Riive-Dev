@@ -23,6 +23,8 @@ import Colors from '../constants/Colors'
 @inject("UserStore")
 @observer
 export default class Home extends Component{
+    _interval = 0;
+
     constructor(props){
         super(props);
 
@@ -71,7 +73,7 @@ export default class Home extends Component{
           this.rippleAnimation();
 
           await this.getCurrentLocation(true);
-          this._interval = setInterval(() => {this.getCurrentLocation(false)}, 20000)
+          this._interval = setInterval(() => {this.getCurrentLocation(false)}, 2000)
     
         }
 
@@ -204,7 +206,7 @@ export default class Home extends Component{
         const {firstname, email} = this.props.UserStore
         
         return(
-                <SafeAreaView contentContainerStyle={{ flexGrow: 1 }}>
+                <SafeAreaView style={{flex: 1}}>
                     
                     <MapView
                         provider={MapView.PROVIDER_GOOGLE}
@@ -228,8 +230,7 @@ export default class Home extends Component{
                         {this.state.currentLocation.geometry.location.lat && this.state.currentLocation.geometry.location.lng ? 
                        
                         <Marker 
-                            anchor={{x: 0.5, y: 0.5}}
-                            centerOffset={{x: 12, y: 12}}
+                            anchor={{x: 0.5, y: 0.5}} // For Android          
                             coordinate={{
                                 latitude: this.state.currentLocation.geometry.location.lat,
                                 longitude: this.state.currentLocation.geometry.location.lng
@@ -262,7 +263,7 @@ export default class Home extends Component{
                         : null }
                         </MapView>
                 {/* <View style={{ backgroundColor: 'green', flex: 1, marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0}}> */}
-                  <View style={{height: this.state.inputFocus ? 235 : 'auto'}}>
+                  {/* <View style={{}}> */}
                   <GooglePlacesAutocomplete
                       placeholder='Search by destination...'
                       returnKeyType={'done'}  
@@ -278,11 +279,13 @@ export default class Home extends Component{
                             this.setState({
                                 inputFocus: true,
                             })
+                            clearInterval(this._interval)
                         },
                         onBlur: () => {
                             this.setState({
                                 inputFocus: false
                             })
+                            this._interval = setInterval(() => {this.getCurrentLocation(false)}, 2000)
                         },
                         clearButtonMode: 'never'
                       }}
@@ -312,15 +315,20 @@ export default class Home extends Component{
                       predefinedPlaces={[this.state.currentLocation]}
 
                       styles={{
+                          container:{
+                          
+                          },
                           listView:{
-                            
+                            position: 'absolute',
+                            top: 40,
+                            zIndex: 99,
                             backgroundColor: 'white'
                           }
                       }}
                       
                       
                   />
-                   </View>
+                   {/* </View> */}
                        
                 </SafeAreaView>
         )
@@ -330,7 +338,7 @@ const styles = StyleSheet.create({
     mapStyle:{
         zIndex: -999,
         position: "absolute",
-        width: Dimensions.get('window').width,
+        width: Dimensions.get("window").width,
         height: Dimensions.get("window").height,
     },
     circleMarker:{
@@ -338,8 +346,8 @@ const styles = StyleSheet.create({
         // top: (50+25)/2 + 4,
         // left: (50+25)/2 + 4,
         overflow: 'visible',
-        height: 24,
-        width: 24,
+        height: 20,
+        width: 20,
         backgroundColor: Colors.apollo300, 
         borderRadius: Dimensions.get('window').width/2, 
     } 
