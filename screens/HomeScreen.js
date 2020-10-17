@@ -73,7 +73,7 @@ export default class Home extends Component{
           this.rippleAnimation();
 
           await this.getCurrentLocation(true);
-          this._interval = setInterval(() => {this.getCurrentLocation(false)}, 2000)
+          this._interval = setInterval(() => {this.getCurrentLocation(false)}, 5000)
     
         }
 
@@ -285,7 +285,7 @@ export default class Home extends Component{
                             this.setState({
                                 inputFocus: false
                             })
-                            this._interval = setInterval(() => {this.getCurrentLocation(false)}, 2000)
+                            this._interval = setInterval(() => {this.getCurrentLocation(false)}, 5000)
                         },
                         clearButtonMode: 'never'
                       }}
@@ -295,7 +295,7 @@ export default class Home extends Component{
                             iconColor={Colors.cosmos500}
                             iconSize={24}
                             onPress={() => this.clearAddress()}
-                            style={{marginTop: 8, display: this.state.searchedAddress ? "flex" : "none"}}
+                            style={{ position: this.state.searchedAddress ? 'absolute' : "relative", right: 0, padding: 10, backgroundColor: 'white', display: this.state.searchedAddress ? "flex" : "none"}}
                         />
                       }
                       query={{
@@ -316,14 +316,48 @@ export default class Home extends Component{
 
                       styles={{
                           container:{
-                          
+                            zIndex: 999,
+                            marginTop: 20,
+                            alignItems: "center",
+                          },
+                          textInputContainer:{
+                            width: width - 24,
+                            backgroundColor: "white",
+                            height: 48,
+                            borderTopWidth: 0,
+                            borderBottomWidth: 0,
+                            borderRadius: width/2, 
+                            overflow: 'hidden',
+
+                            shadowColor: '#000', 
+                            shadowOpacity: 0.6, 
+                            shadowOffset:{width: 6, height: 6}, 
+                            shadowRadius: 3, 
+                            elevation: 12,
+                          },
+                          textInput:{
+                              marginTop: 0, 
+                              height: 48,
+                              
                           },
                           listView:{
+                            paddingVertical: 8,
+                            borderRadius: 9,
                             position: 'absolute',
-                            top: 40,
+                            width: width - 24,
+                            top: 56,
                             zIndex: 99,
                             backgroundColor: 'white'
-                          }
+                          },
+                          predefinedPlacesDescription:{
+                            color: Colors.fortune700,
+                          },
+                          separator:{
+                            marginVertical: 8,
+                          },
+                        //   row:{
+                        //       marginTop: 32, 
+                        //   }
                       }}
                       
                       
