@@ -295,7 +295,8 @@ export default class Home extends Component{
                             iconColor={Colors.cosmos500}
                             iconSize={24}
                             onPress={() => this.clearAddress()}
-                            style={{ position: this.state.searchedAddress ? 'absolute' : "relative", right: 0, padding: 10, backgroundColor: 'white', display: this.state.searchedAddress ? "flex" : "none"}}
+                            style={{ position: "relative", 
+                            borderRadius: width/2, padding: 10, display: this.state.searchedAddress ? "flex" : "none"}}
                         />
                       }
                       query={{
@@ -327,21 +328,22 @@ export default class Home extends Component{
                             borderTopWidth: 0,
                             borderBottomWidth: 0,
                             borderRadius: width/2, 
-                            overflow: 'hidden',
-
+                            // overflow: 'hidden',
+                            // Shadow
                             shadowColor: '#000', 
-                            shadowOpacity: 0.6, 
-                            shadowOffset:{width: 6, height: 6}, 
-                            shadowRadius: 3, 
+                            shadowOpacity: 0.4, 
+                            shadowOffset:{width: 1, height: 1}, 
+                            shadowRadius: 4, 
                             elevation: 12,
                           },
                           textInput:{
                               marginTop: 0, 
-                              height: 48,
-                              
+                              height: 40,
+                              alignSelf: 'center',
+                              paddingRight: 0,
                           },
                           listView:{
-                            paddingVertical: 8,
+                            paddingVertical: 6,
                             borderRadius: 9,
                             position: 'absolute',
                             width: width - 24,
@@ -353,7 +355,7 @@ export default class Home extends Component{
                             color: Colors.fortune700,
                           },
                           separator:{
-                            marginVertical: 8,
+                            marginVertical: 2,
                           },
                         //   row:{
                         //       marginTop: 32, 
