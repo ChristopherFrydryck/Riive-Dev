@@ -206,8 +206,11 @@ export default class Home extends Component{
         const {firstname, email} = this.props.UserStore
         
         return(
-                <SafeAreaView style={{flex: 1}}>
-                    
+                <SafeAreaView style={{flex: 3}}>
+                    <View style={{paddingHorizontal: 16, paddingBottom: 36, display: 'flex', justifyContent: 'center'}}>
+                        <Text type="semiBold" numberOfLines={1} style={{fontSize: 24, paddingTop: 8}}>Hello, {firstname || "traveler"}</Text>
+                    </View>
+                    <View style={{flex: 1}}>
                     <MapView
                         provider={MapView.PROVIDER_GOOGLE}
                         mapStyle={DayMap}
@@ -262,108 +265,116 @@ export default class Home extends Component{
                         />
                         : null }
                         </MapView>
+                        <View style={{zIndex: 999, position: 'absolute', top: -16}}>
+                            <GooglePlacesAutocomplete
+                            placeholder='Search by destination...'
+                            returnKeyType={'done'}  
+                            resu
+                            autofocus={false}
+                            ref={(instance) => { this.GooglePlacesRef = instance }}
+                            currentLocation={false}
+                            minLength={2}
+                            listViewDisplayed={false}
+                            fetchDetails={true}
+                            onPress={(data, details = null) => this.onSelectAddress(details)}
+                            textInputProps={{
+                                onFocus: () => {
+                                    this.setState({
+                                        inputFocus: true,
+                                    })
+                                    clearInterval(this._interval)
+                                },
+                                onBlur: () => {
+                                    this.setState({
+                                        inputFocus: false
+                                    })
+                                    this._interval = setInterval(() => {this.getCurrentLocation(false)}, 5000)
+                                },
+                                clearButtonMode: 'never'
+                            }}
+                            renderRightButton={() => 
+                                <Icon 
+                                    iconName="x"
+                                    iconColor={Colors.cosmos500}
+                                    iconSize={24}
+                                    onPress={() => this.clearAddress()}
+                                    style={{ position: "relative", 
+                                    borderRadius: width/2, padding: 10, display: this.state.searchedAddress ? "flex" : "none"}}
+                                />
+                            }
+                            query={{
+                                key: 'AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c',
+                                language: 'en'
+                            }}
+                            GooglePlacesSearchQuery={{
+                                rankby: 'distance',
+                                types: 'address',
+                                components: "country:us"
+                            }}
+                            // GooglePlacesDetailsQuery={{ fields: 'geometry', }}
+                            nearbyPlacesAPI={'GoogleReverseGeocoding'}
+                            debounce={200}
+                            predefinedPlacesAlwaysVisible={true}
+                            enablePoweredByContainer={false}
+                            predefinedPlaces={[this.state.currentLocation]}
+
+                            styles={{
+                                container:{
+                                    justifySelf: 'content',
+                                    width: width,
+                                    alignItems: "center",
+                                },
+                                textInputContainer:{
+                                    width: width - 24,
+                                    backgroundColor: "white",
+                                    height: 48,
+                                    borderTopWidth: 0,
+                                    borderBottomWidth: 0,
+                                    borderRadius: width/2, 
+                                    // Shadow
+                                    shadowColor: '#000', 
+                                    shadowOpacity: 0.4, 
+                                    shadowOffset:{width: 1, height: 1}, 
+                                    shadowRadius: 4, 
+                                    elevation: 12,
+                                },
+                                textInput:{
+                                    marginTop: 0, 
+                                    height: 40,
+                                    alignSelf: 'center',
+                                    paddingRight: 0,
+                                },
+                                listView:{
+                                    paddingVertical: 6,
+                                    borderRadius: 9,
+                                    // position: 'absolute',
+                                    top: 8,
+                                    width: width - 24,
+                                    zIndex: 999,
+                                    backgroundColor: 'white',
+                                    // Shadow
+                                    shadowColor: '#000', 
+                                    shadowOpacity: 0.4, 
+                                    shadowOffset:{width: 1, height: 1}, 
+                                    shadowRadius: 4, 
+                                    elevation: 12,
+                                },
+                                predefinedPlacesDescription:{
+                                    color: Colors.fortune700,
+                                },
+                                separator:{
+                                    marginVertical: 2,
+                                },
+                                //   row:{
+                                //       marginTop: 32, 
+                                //   }
+                            }}                      
+                            />
+                        </View>
+                        </View>
                 {/* <View style={{ backgroundColor: 'green', flex: 1, marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0}}> */}
                   {/* <View style={{}}> */}
-                  <GooglePlacesAutocomplete
-                      placeholder='Search by destination...'
-                      returnKeyType={'done'}  
-                      autofocus={false}
-                      ref={(instance) => { this.GooglePlacesRef = instance }}
-                      currentLocation={false}
-                      minLength={2}
-                      listViewDisplayed={false}
-                      fetchDetails={true}
-                      onPress={(data, details = null) => this.onSelectAddress(details)}
-                      textInputProps={{
-                        onFocus: () => {
-                            this.setState({
-                                inputFocus: true,
-                            })
-                            clearInterval(this._interval)
-                        },
-                        onBlur: () => {
-                            this.setState({
-                                inputFocus: false
-                            })
-                            this._interval = setInterval(() => {this.getCurrentLocation(false)}, 5000)
-                        },
-                        clearButtonMode: 'never'
-                      }}
-                      renderRightButton={() => 
-                        <Icon 
-                            iconName="x"
-                            iconColor={Colors.cosmos500}
-                            iconSize={24}
-                            onPress={() => this.clearAddress()}
-                            style={{ position: "relative", 
-                            borderRadius: width/2, padding: 10, display: this.state.searchedAddress ? "flex" : "none"}}
-                        />
-                      }
-                      query={{
-                        key: 'AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c',
-                        language: 'en'
-                      }}
-                      GooglePlacesSearchQuery={{
-                          rankby: 'distance',
-                          types: 'address',
-                          components: "country:us"
-                      }}
-                      // GooglePlacesDetailsQuery={{ fields: 'geometry', }}
-                      nearbyPlacesAPI={'GoogleReverseGeocoding'}
-                      debounce={200}
-                      predefinedPlacesAlwaysVisible={true}
-                      enablePoweredByContainer={false}
-                      predefinedPlaces={[this.state.currentLocation]}
-
-                      styles={{
-                          container:{
-                            zIndex: 999,
-                            marginTop: 20,
-                            alignItems: "center",
-                          },
-                          textInputContainer:{
-                            width: width - 24,
-                            backgroundColor: "white",
-                            height: 48,
-                            borderTopWidth: 0,
-                            borderBottomWidth: 0,
-                            borderRadius: width/2, 
-                            // overflow: 'hidden',
-                            // Shadow
-                            shadowColor: '#000', 
-                            shadowOpacity: 0.4, 
-                            shadowOffset:{width: 1, height: 1}, 
-                            shadowRadius: 4, 
-                            elevation: 12,
-                          },
-                          textInput:{
-                              marginTop: 0, 
-                              height: 40,
-                              alignSelf: 'center',
-                              paddingRight: 0,
-                          },
-                          listView:{
-                            paddingVertical: 6,
-                            borderRadius: 9,
-                            position: 'absolute',
-                            width: width - 24,
-                            top: 56,
-                            zIndex: 99,
-                            backgroundColor: 'white'
-                          },
-                          predefinedPlacesDescription:{
-                            color: Colors.fortune700,
-                          },
-                          separator:{
-                            marginVertical: 2,
-                          },
-                        //   row:{
-                        //       marginTop: 32, 
-                        //   }
-                      }}
-                      
-                      
-                  />
+  
                    {/* </View> */}
                        
                 </SafeAreaView>
@@ -373,9 +384,8 @@ export default class Home extends Component{
 const styles = StyleSheet.create({
     mapStyle:{
         zIndex: -999,
-        position: "absolute",
-        width: Dimensions.get("window").width,
-        height: Dimensions.get("window").height,
+        position: "relative",
+        flex: 1,
     },
     circleMarker:{
         position: 'absolute',
