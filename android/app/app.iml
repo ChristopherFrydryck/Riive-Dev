@@ -308,7 +308,7 @@
     <orderEntry type="module" module-name="expo-web-browser" />
     <orderEntry type="module" module-name="expo-app-auth" />
     <orderEntry type="module" module-name="expo-google-sign-in" />
-    <orderEntry type="module" module-name="expo-location" />
+    <orderEntry type="module" module-name="android-expo-location" />
     <orderEntry type="module" module-name="expo-file-system" />
     <orderEntry type="module" module-name="unimodules-core" />
     <orderEntry type="module" module-name="unimodules-react-native-adapter" />

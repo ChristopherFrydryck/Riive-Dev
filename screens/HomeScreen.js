@@ -10,6 +10,8 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import * as Font from 'expo-font'
 import * as Location from 'expo-location'
 
+import SearchFilter from '../components/SearchFilter'
+
 import * as firebase from 'firebase'
 import 'firebase/firestore';
 
@@ -19,6 +21,7 @@ import 'firebase/firestore';
 import {inject, observer} from 'mobx-react/native'
 import UserStore from '../stores/userStore'
 import Colors from '../constants/Colors'
+import { TouchableOpacity } from 'react-native'
 
 @inject("UserStore")
 @observer
@@ -35,6 +38,8 @@ export default class Home extends Component{
             inputFocus: false,
             searchedAddress: false,
             mapScrolled: false,
+            searchFilterOpen: true,
+            searchInputValue: '',
             region: {
                 searched: {
                     latitude: null,
@@ -66,8 +71,14 @@ export default class Home extends Component{
    async componentDidMount(){
          // Set Status Bar page info here!
         this._navListener = this.props.navigation.addListener('didFocus', () => {
-            StatusBar.setBarStyle('dark-content', true);
-            Platform.OS === 'android' && StatusBar.setBackgroundColor('white');
+            if(this.state.searchFilterOpen){
+                StatusBar.setBarStyle('light-content', true);
+                Platform.OS === 'android' && StatusBar.setBackgroundColor(Colors.tango900);
+            }else{
+                StatusBar.setBarStyle('dark-content', true);
+                Platform.OS === 'android' && StatusBar.setBackgroundColor('white');
+            }
+           
           });
 
           this.rippleAnimation();
@@ -137,6 +148,7 @@ export default class Home extends Component{
                         }
                     }))
                 }
+               
                 
     
               } catch (error) {
@@ -160,7 +172,9 @@ export default class Home extends Component{
                     
                 },
                 mapScrolled: false,
-                searchedAddress: true
+                searchedAddress: true,
+                searchInputValue: det.description == "Current Location" ? "Current Location" : det.name,
+
             }));
          
 
@@ -190,7 +204,8 @@ export default class Home extends Component{
                     searched: {
                         ...prevState.region.current
                     },
-                }
+                },
+                searchInputValue: '',
             }))
           }
       
@@ -206,9 +221,15 @@ export default class Home extends Component{
         const {firstname, email} = this.props.UserStore
         
         return(
-                <SafeAreaView style={{flex: 3}}>
-                    <View style={{paddingHorizontal: 16, paddingBottom: 36, display: 'flex', justifyContent: 'center'}}>
-                        <Text type="semiBold" numberOfLines={1} style={{fontSize: 24, paddingTop: 8}}>Hello, {firstname || "traveler"}</Text>
+                <SafeAreaView style={{flex: 1, position: 'relative', backgroundColor: this.state.searchFilterOpen ? Colors.tango500 : 'white'}}>
+                        <SearchFilter visible={this.state.searchFilterOpen} currentSearch={this.state.searchInputValue}/>
+
+
+                    <View style={{paddingHorizontal: 16, paddingBottom: 36, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "space-between"}}>
+                        <Text type="semiBold" numberOfLines={1} style={{flex: 4,fontSize: 24, paddingTop: 8}}>Hello, {firstname || "traveler"}</Text>
+                        <TouchableOpacity onPress={() => this.setState({searchFilterOpen: !this.state.searchFilterOpen})} style={{borderLeftWidth: 5, borderLeftColor: 'red', paddingLeft: 8, marginLeft: 8, flex: 2}}>
+                            <Text numberOfLines={2} style={{fontSize: 12}}>Today{"\n"}12:00PM to 4:00PM</Text>
+                        </TouchableOpacity>
                     </View>
                     <View style={{flex: 1}}>
                     <MapView
@@ -265,18 +286,18 @@ export default class Home extends Component{
                         />
                         : null }
                         </MapView>
-                        <View style={{zIndex: 999, position: 'absolute', top: -16}}>
+                        <View style={{zIndex: 9, position: 'absolute', top: -16}}>
                             <GooglePlacesAutocomplete
                             placeholder='Search by destination...'
                             returnKeyType={'done'}  
-                            resu
+                            
                             autofocus={false}
                             ref={(instance) => { this.GooglePlacesRef = instance }}
                             currentLocation={false}
                             minLength={2}
                             listViewDisplayed={false}
                             fetchDetails={true}
-                            onPress={(data, details = null) => this.onSelectAddress(details)}
+                            onPress={(data, details = null) => {console.log(details); this.onSelectAddress(details)}}
                             textInputProps={{
                                 onFocus: () => {
                                     this.setState({
@@ -333,7 +354,7 @@ export default class Home extends Component{
                                     borderRadius: width/2, 
                                     // Shadow
                                     shadowColor: '#000', 
-                                    shadowOpacity: 0.4, 
+                                    shadowOpacity: 0.2, 
                                     shadowOffset:{width: 1, height: 1}, 
                                     shadowRadius: 4, 
                                     elevation: 12,
@@ -350,11 +371,11 @@ export default class Home extends Component{
                                     // position: 'absolute',
                                     top: 8,
                                     width: width - 24,
-                                    zIndex: 999,
+                                    zIndex: 9,
                                     backgroundColor: 'white',
                                     // Shadow
                                     shadowColor: '#000', 
-                                    shadowOpacity: 0.4, 
+                                    shadowOpacity: 0.2, 
                                     shadowOffset:{width: 1, height: 1}, 
                                     shadowRadius: 4, 
                                     elevation: 12,
