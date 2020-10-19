@@ -20,7 +20,7 @@ export default class SearchFilter extends React.Component{
         this.currentIndex = 0;
         this._updateIndex = this._updateIndex.bind(this);
         this.viewabilityConfig = {
-        itemVisiblePercentThreshold: 50
+        itemVisiblePercentThreshold: 5
         };
 
     }
@@ -115,18 +115,18 @@ export default class SearchFilter extends React.Component{
                                     return this.renderDays(item, index)
                                 
                             }}
-                            keyExtractor={item => item.index}
+                            keyExtractor={item => item.index.toString()}
                             horizontal={true}
-                            pagingEnabled={true}
+                            
                             showsHorizontalScrollIndicator={false}
                             snapToAlignment={"start"}
-                            removeClippedSubviews={false}
-                            // snapToInterval={width*.16}
-                            contentInset={{ left: -20, right: -20}}
+                          
+                     
+                            contentInset={{right: -40}}
 
-                            contentContainerStyle={ Platform.OS == 'android' ? {marginLeft: -20, } : null}
+                            contentContainerStyle={ Platform.OS == 'android' ? {marginLeft: -20, marginRight: -40} : {marginLeft: -20, }}
 
-                            snapToOffsets ={Platform.OS == 'ios' ? [...Array(this.state.dayData.filter(x => x.isEnabled).length)].map((x, i) => i * (width*.16) + 20 ) : [...Array(this.state.dayData.filter(x => x.isEnabled).length)].map((x, i) => i * (width*.16) ) }
+                            snapToOffsets ={[...Array(this.state.dayData.filter(x => x.isEnabled).length)].map((x, i) => i * (width*.16) ) }
 
                             ListHeaderComponent={() => {
                                 let res = this.state.dayData.filter((x, i)=> !x.isEnabled && i < 4).map(x => {
@@ -154,11 +154,10 @@ export default class SearchFilter extends React.Component{
                             // onEndReached={() => this._scrollToIndex(4)}
                             // onEndThreshold={3}
                             bounces={false}
-                            
                             getItemLayout={(data, index) => (
                                 {length: width * .16, offset: (width*.16)*index - 40, index}
                             )}
-                            initialScrollIndex={0}
+                            initialScrollIndex={this.currentIndex}
                             // onScrollToIndexFailed = {(e) => {console.log(e)}}
                             decelerationRate={0}
                             onViewableItemsChanged={this._updateIndex}
