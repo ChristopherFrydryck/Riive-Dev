@@ -14,16 +14,18 @@ export default class SearchFilter extends React.Component{
         super(props);
 
         this.state = {
-            dayData: [],
+            dayData: this.getDays(),
         }
 
+        this.currentIndex = 0;
+        this._updateIndex = this._updateIndex.bind(this);
+        this.viewabilityConfig = {
+        itemVisiblePercentThreshold: 50
+        };
+
     }
 
-    componentDidMount() {
-        this.setState({
-            dayData: this.getDays()
-        })
-    }
+    
 
     getDays = () => {
         const numInvalidDaysOnEachSide = 3
@@ -54,7 +56,7 @@ export default class SearchFilter extends React.Component{
     renderDays = (day, index) => {
         const styleDay = day.isEnabled ? styles.enabledDay : styles.disabledDay;
         return(
-            <View key={index} style={{display: 'flex', flexDirection: 'column', width: Dimensions.get('window').width / 6., alignItems: 'center'}}>
+            <View key={index} style={{display: 'flex', flexDirection: 'column', flex: 1, alignItems: 'center', width: Dimensions.get('window').width * .16, height: 40,}}>
                 <Text style={styleDay}>{day.dayNameAbbr}</Text>
                 <Text style={[styleDay, {fontSize: 24}]}>{day.dateName}</Text>
                 <Text style={styleDay}>{day.monthNameAbbr}</Text>
@@ -63,20 +65,105 @@ export default class SearchFilter extends React.Component{
         )
     }
 
+    getInvalidDays = (days) => {
+        const dayData = this.state.dayData;
+        const response = null;
+        if(days === 'before'){
+            
+        }else{
+            dayData.filter((x, i)=> !x.isEnabled && i > 6)
+            for(let i = 0; i < dayData.length; i++){
+                response += this.renderDays(dayData[i], dayData[i].index)
+            }
+        }
+        return response;
+    }
+
+    _updateIndex({ viewableItems }) {
+        // getting the first element visible index
+        if(viewableItems.length > 0){
+            this.currentIndex = viewableItems[0].index;
+            console.log(viewableItems[0].item.dayName)
+        }
+          
+    }
+
+    _scrollToIndex(index){
+        console.log("HELLO")
+        this._flatList.scrollToIndex({
+            animated: true,
+            index: index,
+            viewOffset: Dimensions.get('window').width / 2 -40
+        })
+    }
+
     render(){
         let {visible, currentSearch} = this.props;
-        
+        let {width, height} = Dimensions.get('window');
         return(
             <Fragment>            
                 <View style={[styles.container, {display: visible ? "flex" : "none"}]}>
                     <View style={[styles.section,{backgroundColor: Colors.tango500, flex: 1}]}>
-                        <Text style={styles.searchTitle} numberOfLines={1}>{currentSearch.length > 0 ? currentSearch : "No search yet"}</Text> 
+                        <View style={styles.padding}>
+                            <Text style={styles.searchTitle} numberOfLines={1}>{currentSearch.length > 0 ? currentSearch : "No search yet"}</Text> 
+                        </View>
                         <FlatList 
-                            data={this.state.dayData}
-                            renderItem={({item, index}) => this.renderDays(item, index)}
+                            ref={(ref) => { this._flatList = ref; }}
+                            data={this.state.dayData.filter(x => x.isEnabled)}
+                            renderItem={({item, index}) => {
+                                
+                                    return this.renderDays(item, index)
+                                
+                            }}
                             keyExtractor={item => item.index}
                             horizontal={true}
-                            snapToAlignment={"center"}
+                            pagingEnabled={true}
+                            showsHorizontalScrollIndicator={false}
+                            snapToAlignment={"start"}
+                            removeClippedSubviews={false}
+                            // snapToInterval={width*.16}
+                            contentInset={{ left: -20, right: -20}}
+
+                            contentContainerStyle={ Platform.OS == 'android' ? {marginLeft: -20, } : null}
+
+                            snapToOffsets ={Platform.OS == 'ios' ? [...Array(this.state.dayData.filter(x => x.isEnabled).length)].map((x, i) => i * (width*.16) + 20 ) : [...Array(this.state.dayData.filter(x => x.isEnabled).length)].map((x, i) => i * (width*.16) ) }
+
+                            ListHeaderComponent={() => {
+                                let res = this.state.dayData.filter((x, i)=> !x.isEnabled && i < 4).map(x => {
+                                    return this.renderDays(x, x.index)
+                                })
+                                return (
+                                    <View style={{flexDirection: 'row'}}>{res}</View>
+                                )
+                            }
+                                
+                            }
+
+                            ListFooterComponent={() => {
+                                let res = this.state.dayData.filter((x, i)=> !x.isEnabled && i > 6).map(x => {
+                                    return this.renderDays(x, x.index)
+                                })
+                                return (
+                                    <View style={{flexDirection: 'row'}}>{res}</View>
+                                )
+                            }
+                                
+                            }
+                            
+
+                            // onEndReached={() => this._scrollToIndex(4)}
+                            // onEndThreshold={3}
+                            bounces={false}
+                            
+                            getItemLayout={(data, index) => (
+                                {length: width * .16, offset: (width*.16)*index - 40, index}
+                            )}
+                            initialScrollIndex={0}
+                            // onScrollToIndexFailed = {(e) => {console.log(e)}}
+                            decelerationRate={0}
+                            onViewableItemsChanged={this._updateIndex}
+                            viewabilityConfig={this.viewabilityConfig}
+                          
                         />
                         <View style={styles.triangle} />
                     </View>
@@ -104,6 +191,9 @@ const styles = StyleSheet.create({
         width: Dimensions.get("window").width,
     },
     section:{
+        // paddingHorizontal: 16,
+    },
+    padding:{
         paddingHorizontal: 16,
     },
     searchTitle:{
