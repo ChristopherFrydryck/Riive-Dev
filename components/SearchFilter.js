@@ -122,9 +122,9 @@ export default class SearchFilter extends React.Component{
                             snapToAlignment={"start"}
                           
                      
-                            contentInset={{right: -40}}
+                            // contentInset={{right: 10}}
 
-                            contentContainerStyle={ Platform.OS == 'android' ? {marginLeft: -20, marginRight: -40} : {marginLeft: -20, }}
+                            contentContainerStyle={ Platform.OS == 'android' ? {marginLeft: -20} : {marginLeft: -20, }}
 
                             snapToOffsets ={[...Array(this.state.dayData.filter(x => x.isEnabled).length)].map((x, i) => i * (width*.16) ) }
 
@@ -144,11 +144,17 @@ export default class SearchFilter extends React.Component{
                                     return this.renderDays(x, x.index)
                                 })
                                 return (
-                                    <View style={{flexDirection: 'row'}}>{res}</View>
+                                    <View style={{flexDirection: 'row', width: width / 2}}>{res}</View>
                                 )
                             }
                                 
                             }
+
+                            ListFooterComponentStyle={{
+                                width: width / 2 - 55,
+                                flexGrow: 1,
+                                overflow: 'visible'
+                            }}
                             
 
                             // onEndReached={() => this._scrollToIndex(4)}
