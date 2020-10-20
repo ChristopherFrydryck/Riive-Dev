@@ -1,13 +1,16 @@
 import React, { Fragment } from 'react'
-import {View, StyleSheet, Switch, Modal, SafeAreaView, Dimensions, Animated, Picker, Platform} from 'react-native'
+import {View, StyleSheet, Switch, Modal, SafeAreaView, Dimensions, Animated, Picker, Platform, FlatList, TouchableOpacity} from 'react-native'
+
+// import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
 
 import Text from './Txt'
 import Colors from '../constants/Colors'
 import Button from '../components/Button'
 import Icon from '../components/Icon'
 import { PropTypes } from 'mobx-react/native'
-import { TouchableOpacity } from 'react-native'
-import { FlatList } from 'react-native'
+
+
 
 export default class SearchFilter extends React.Component{
     constructor(props){
@@ -15,6 +18,10 @@ export default class SearchFilter extends React.Component{
 
         this.state = {
             dayData: this.getDays(),
+
+            xSlide: new Animated.Value(20),
+            arriveActive: true,
+
         }
 
         this.currentIndex = 0;
@@ -56,13 +63,28 @@ export default class SearchFilter extends React.Component{
     renderDays = (day, index) => {
         const styleDay = day.isEnabled ? styles.enabledDay : styles.disabledDay;
         return(
-            <View key={index} style={{display: 'flex', flexDirection: 'column', flex: 1, alignItems: 'center', width: Dimensions.get('window').width * .16, height: 40,}}>
+            <View key={index} style={{display: 'flex', flexDirection: 'column', flex: 1, alignItems: 'center', width: Dimensions.get('window').width * .16}}>
                 <Text style={styleDay}>{day.dayNameAbbr}</Text>
                 <Text style={[styleDay, {fontSize: 24}]}>{day.dateName}</Text>
                 <Text style={styleDay}>{day.monthNameAbbr}</Text>
             </View>
             
         )
+    }
+
+    slide = () => {
+        const {width} = Dimensions.get('window')
+        if(this.state.arriveActive){
+            Animated.spring(this.state.xSlide, {
+                toValue: width/2 + 20
+            }).start()
+            this.setState({arriveActive: false})
+        }else{
+            Animated.spring(this.state.xSlide, {
+                toValue: 20
+            }).start()
+            this.setState({arriveActive: true})
+        }
     }
 
     getInvalidDays = (days) => {
@@ -103,9 +125,9 @@ export default class SearchFilter extends React.Component{
         return(
             <Fragment>            
                 <View style={[styles.container, {display: visible ? "flex" : "none"}]}>
-                    <View style={[styles.section,{backgroundColor: Colors.tango500, flex: 1}]}>
+                    <View style={[styles.section,{backgroundColor: Colors.tango500, flex: 0, paddingBottom: 24}]}>
                         <View style={styles.padding}>
-                            <Text style={styles.searchTitle} numberOfLines={1}>{currentSearch.length > 0 ? currentSearch : "No search yet"}</Text> 
+                            <Text style={styles.searchTitle} numberOfLines={1}>{currentSearch.length > 0 ? "Parking near " + currentSearch : "No search yet"}</Text> 
                         </View>
                         <FlatList 
                             ref={(ref) => { this._flatList = ref; }}
@@ -126,7 +148,7 @@ export default class SearchFilter extends React.Component{
 
                             contentContainerStyle={ Platform.OS == 'android' ? {marginLeft: -20} : {marginLeft: -20, }}
 
-                            snapToOffsets ={[...Array(this.state.dayData.filter(x => x.isEnabled).length)].map((x, i) => i * (width*.16) ) }
+                            snapToOffsets ={[...Array(this.state.dayData.filter(x => x.isEnabled).length)].map((x, i) => i * (width*.16)) }
 
                             ListHeaderComponent={() => {
                                 let res = this.state.dayData.filter((x, i)=> !x.isEnabled && i < 4).map(x => {
@@ -173,7 +195,22 @@ export default class SearchFilter extends React.Component{
                         <View style={styles.triangle} />
                     </View>
                     <View style={[styles.section, {flex: 1, backgroundColor: 'white'}]}>
-
+                        <View style={{ flexDirection: 'row', height: 32}}>
+                                <TouchableOpacity onPress={() => this.slide()} style={{flex: 1}}>
+                                    <Text style={{fontSize: 20, textAlign: 'center', color: this.state.arriveActive ? 'black' : Colors.cosmos300}}>Arrive</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => this.slide()} style={{flex: 1}}>
+                                    <Text style={{fontSize: 20, textAlign: 'center', color: this.state.arriveActive ? Colors.cosmos300 : 'black'}}>Depart</Text>
+                                </TouchableOpacity>
+                                <Animated.View style={{borderBottomWidth: 3, borderBottomColor: Colors.apollo500, position: 'absolute', width: width/2.5, height: 35, transform:[{translateX: this.state.xSlide}]
+                            }} />
+                        </View>
+                            {/* <View style={{
+                            paddingLeft: 2, 
+                            width: 2, 
+                            flex: 1, 
+                            backgroundColor: 'green', borderLeftWidth: 7, borderRightWidth: 7, borderColor: 'white'}}></View> */}
+                            
                     </View>
                 </View>
             </Fragment>
@@ -192,7 +229,7 @@ SearchFilter.defaultProps = {
 const styles = StyleSheet.create({
     container: {
         zIndex: 99,
-        flex: 1,
+        flex: 1.5,
         width: Dimensions.get("window").width,
     },
     section:{
@@ -202,7 +239,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
     },
     searchTitle:{
-        fontSize: 18,
+        fontSize: 20,
+        paddingTop: 8,
+        paddingBottom: 16,
     },
     enabledDay:{
      
@@ -214,14 +253,14 @@ const styles = StyleSheet.create({
     triangle: {
         position: 'absolute',
         bottom: 0,
-        left: Dimensions.get('window').width/2 - 20,
+        left: Dimensions.get('window').width/2 - 15,
         width: 0,
         height: 0,
         backgroundColor: 'transparent',
         borderStyle: 'solid',
-        borderLeftWidth: 20,
-        borderRightWidth: 20,
-        borderBottomWidth: 25,
+        borderLeftWidth: 15,
+        borderRightWidth: 15,
+        borderBottomWidth: 20,
         borderLeftColor: 'transparent',
         borderRightColor: 'transparent',
         borderBottomColor: 'white'
