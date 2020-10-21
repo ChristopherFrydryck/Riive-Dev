@@ -1,14 +1,13 @@
 import React, { Fragment } from 'react'
 import {View, StyleSheet, Switch, Modal, SafeAreaView, Dimensions, Animated, Picker, Platform, FlatList, TouchableOpacity} from 'react-native'
 
-// import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
+
 
 
 import Text from './Txt'
 import Colors from '../constants/Colors'
-import Button from '../components/Button'
-import Icon from '../components/Icon'
-import { PropTypes } from 'mobx-react/native'
+import Times from '../constants/TimesAvailable'
 
 
 
@@ -16,21 +15,43 @@ export default class SearchFilter extends React.Component{
     constructor(props){
         super(props);
 
+        var startTimes = [];
+        for (var i = 0 ; i < Times[0].start.length; i++){
+           startTimes.push({key: i, label: Times[0].start[i], labelFormatted: this.convertToCommonTime(Times[0].start[i])})
+        }
+
+        var endTimes = []
+        for (var i = 0 ; i < Times[1].end.length; i++){
+            endTimes.push({key: i, label: Times[1].end[i], labelFormatted: this.convertToCommonTime(Times[1].end[i])})
+         }
+
         this.state = {
             dayData: this.getDays(),
+            startTimes: startTimes,
+            endTimes: endTimes,
 
             xSlide: new Animated.Value(20),
             arriveActive: true,
 
-        }
+            arriveValue: startTimes[24],
 
+        }
+        this.timeWidth = 48;
         this.currentIndex = 0;
         this._updateIndex = this._updateIndex.bind(this);
+        this._updateIndexTimes = this._updateIndexTimes.bind(this);
         this.viewabilityConfig = {
         itemVisiblePercentThreshold: 5
         };
 
+       
+
     }
+
+    componentDidMount(){
+        this.goToIndexArrivals(this.state.arriveValue.key)
+    }
+
 
     
 
@@ -44,7 +65,7 @@ export default class SearchFilter extends React.Component{
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         var next11 = new Array(7+numInvalidDaysOnEachSide*2)
 
-        for( i = 0; i < next11.length; i++){
+        for(let i = 0; i < next11.length; i++){
             next11[i] = {
                 index: i,
                 dayName: days[(d.getDay()+i)%7],
@@ -72,7 +93,57 @@ export default class SearchFilter extends React.Component{
         )
     }
 
-    slide = () => {
+    renderTimes = (item, index, activeIndex, stateLength) => {
+            let hourStyle = null;
+            // if(index === activeIndex){
+            //     if(index === 0){
+            //         hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+            //     }else if(index % 2 === 0){
+            //         hourStyle = [styles.wholeHour, styles.activeHour]
+            //     }else if(index === stateLength - 1){
+            //         hourStyle = [styles.halfHour, styles.activeHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+            //     }else{
+            //         hourStyle = [styles.halfHour, styles.activeHour]
+            //     }
+            // }else{
+            //     if(index === 0){
+            //         hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+            //     }else if(index % 2 === 0){
+            //         hourStyle = styles.wholeHour
+            //     }else if(index === stateLength - 1){
+            //         hourStyle = [styles.halfHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+            //     }else{
+            //         hourStyle = styles.halfHour
+            //     }
+            // // }
+            // return(
+            //     <View style={{backgroundColor: '#af4591ae', flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
+            //         <View style={hourStyle}/>
+            //             {index % 2 === 0 ? 
+            //                 <View style={{flexDirection: 'row'}}>
+            //                     <Text style={styles.timeText}>A</Text>
+            //                     <Text>{item.labelFormatted.slice(-2)}</Text>
+            //                 </View>
+            //             : null}
+            //     </View>
+            // )
+            console.log("item")
+            return(
+                <View style={{backgroundColor: '#af4591ae',flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
+                <View style={index === 0 ? [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]: item.key % 2 === 0 ? styles.wholeHour : index === this.state.startTimes.length - 1 ? [styles.halfHour, {width: this.timeWidth/2, borderRightWidth: 0}] : styles.halfHour
+                   } />
+                {item.key % 2 === 0 ? 
+                <View style={{flexDirection: 'row', position: 'absolute', width: 48, zIndex: 999, bottom: 0,}}>
+                    <Text style={styles.timeText}>{this.convertToCommonTime(item.label).split(":")[0]}</Text>
+                    <Text>{item.labelFormatted.slice(-2)}</Text>
+                </View>
+                : null}
+            </View>
+            )
+        }
+    
+
+    slideAnimate = () => {
         const {width} = Dimensions.get('window')
         if(this.state.arriveActive){
             Animated.spring(this.state.xSlide, {
@@ -86,6 +157,19 @@ export default class SearchFilter extends React.Component{
             this.setState({arriveActive: true})
         }
     }
+
+    goToIndexArrivals = (i) => {
+        // console.log("Scrolling")
+        // this.arrivalFlatlist.scrollToIndex({animated: true,index: i, viewOffset: Dimensions.get("window").width/2});
+        // this.arrivalFlatlist.scrollToEnd({animated: true})
+
+        
+         const wait = new Promise((resolve) => setTimeout(resolve, 0));
+        wait.then( () => {
+            this.arrivalFlatlist.scrollToIndex({animated: true, index: i, viewOffset: Dimensions.get("window").width/2}); // Throws no errors, has no effect?
+        });
+    }
+
 
     getInvalidDays = (days) => {
         const dayData = this.state.dayData;
@@ -110,18 +194,38 @@ export default class SearchFilter extends React.Component{
           
     }
 
-    _scrollToIndex(index){
-        console.log("HELLO")
-        this._flatList.scrollToIndex({
-            animated: true,
-            index: index,
-            viewOffset: Dimensions.get('window').width / 2 -40
-        })
+    _updateIndexTimes( event ){
+        let e = event.nativeEvent.contentOffset.x;
+        if(e < 24){
+            this.setState({arriveValue: this.state.startTimes[0]})
+        }else{
+            let i = (Math.round(e/48))
+            if(i < this.state.startTimes.length){
+                this.setState({arriveValue: this.state.startTimes[i]})
+            }
+        }
+    }
+
+    convertToCommonTime = (t) => {
+        let hoursString = t.substring(0,2)
+        let minutesString = t.substring(2)
+
+
+        
+        let hours = parseInt(hoursString) == 0 ? "12" : parseInt(hoursString) > 12 ? (parseInt(hoursString) - 12).toString() : parseInt(hoursString);
+        // let minutes = parseInt(minutesString)
+        return(`${hours}:${minutesString} ${parseInt(hoursString) >= 12 ? 'PM' : 'AM'}`)
     }
 
     render(){
         let {visible, currentSearch} = this.props;
         let {width, height} = Dimensions.get('window');
+        let {startTimes, endTimes} = this.state
+        
+        
+        // console.log(startTimes.length)
+        // console.log(endTimes.length)
+
         return(
             <Fragment>            
                 <View style={[styles.container, {display: visible ? "flex" : "none"}]}>
@@ -139,6 +243,7 @@ export default class SearchFilter extends React.Component{
                             }}
                             keyExtractor={item => item.index.toString()}
                             horizontal={true}
+                              
                             
                             showsHorizontalScrollIndicator={false}
                             snapToAlignment={"start"}
@@ -171,16 +276,11 @@ export default class SearchFilter extends React.Component{
                             }
                                 
                             }
-
                             ListFooterComponentStyle={{
                                 width: width / 2 - 55,
                                 flexGrow: 1,
                                 overflow: 'visible'
                             }}
-                            
-
-                            // onEndReached={() => this._scrollToIndex(4)}
-                            // onEndThreshold={3}
                             bounces={false}
                             getItemLayout={(data, index) => (
                                 {length: width * .16, offset: (width*.16)*index - 40, index}
@@ -190,26 +290,101 @@ export default class SearchFilter extends React.Component{
                             decelerationRate={0}
                             onViewableItemsChanged={this._updateIndex}
                             viewabilityConfig={this.viewabilityConfig}
-                          
                         />
                         <View style={styles.triangle} />
                     </View>
-                    <View style={[styles.section, {flex: 1, backgroundColor: 'white'}]}>
-                        <View style={{ flexDirection: 'row', height: 32}}>
-                                <TouchableOpacity onPress={() => this.slide()} style={{flex: 1}}>
-                                    <Text style={{fontSize: 20, textAlign: 'center', color: this.state.arriveActive ? 'black' : Colors.cosmos300}}>Arrive</Text>
+
+                    {/* Arrive / Depart Tab */}
+                    <View style={[styles.section, {flex: 0, backgroundColor: 'white'}]}>
+                        <View style={{ flexDirection: 'row', height: 32, paddingTop: 4}}>
+                                <TouchableOpacity onPress={() => this.slideAnimate()} style={{flex: 1}}>
+                            <Text style={{fontSize: 16, textAlign: 'center', color: this.state.arriveActive ? 'black' : Colors.cosmos300}}>Arrive @ {this.state.arriveValue.labelFormatted}</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => this.slide()} style={{flex: 1}}>
-                                    <Text style={{fontSize: 20, textAlign: 'center', color: this.state.arriveActive ? Colors.cosmos300 : 'black'}}>Depart</Text>
+                                <TouchableOpacity onPress={() => this.slideAnimate()} style={{flex: 1}}>
+                                    <Text style={{fontSize: 16, textAlign: 'center', color: this.state.arriveActive ? Colors.cosmos300 : 'black'}}>Depart</Text>
                                 </TouchableOpacity>
                                 <Animated.View style={{borderBottomWidth: 3, borderBottomColor: Colors.apollo500, position: 'absolute', width: width/2.5, height: 35, transform:[{translateX: this.state.xSlide}]
                             }} />
                         </View>
                             {/* <View style={{
-                            paddingLeft: 2, 
+                            left: width/2 - 2,
                             width: 2, 
-                            flex: 1, 
-                            backgroundColor: 'green', borderLeftWidth: 7, borderRightWidth: 7, borderColor: 'white'}}></View> */}
+                            height: 200,
+                            position: 'absolute',
+                            zIndex: 999,
+                            backgroundColor: 'green',
+                            borderColor: 'transparent'}}></View> */}
+                            <FlatList 
+                                ref={(ref) => { this.arrivalFlatlist = ref; }}
+                                data={this.state.startTimes}
+                                keyExtractor={(item) => item.key.toString()}
+                                onScroll={(event) => { 
+                                    this._updateIndexTimes(event)
+                                }}
+                                getItemLayout={(data, index) => {
+                                    return {
+                                        length: index === 0 ? this.timeWidth/2 : this.timeWidth,
+                                        offset: index === 0 ? 0 : (this.timeWidth * index) + (width/2) + (index*0.5),
+                                        index
+                                    }
+                                }}
+                                horizontal
+                                bounces={false}
+                                initialNumToRender={48}
+                                contentContainerStyle={{marginTop: 24, height: 80}}
+                                ListHeaderComponentStyle={{paddingLeft: width/2}}
+                                ListHeaderComponent={() => {
+                                    return(<View />)
+                                }}
+                                ListFooterComponentStyle={{paddingLeft: width/2}}
+                                ListFooterComponent={() => {
+                                    return(<View />)
+                                }}
+                                pagingEnabled={true}
+                                decelerationRate={0}
+                                showsHorizontalScrollIndicator={false}
+                                snapToOffsets = {[...Array(this.state.startTimes.length)].map((x, i) => i * (this.timeWidth + .5))}
+                                renderItem={({item, index}) => {
+                                    let hourStyle, textStyle;
+                                    if(index === this.state.arriveValue.key){
+                                        textStyle = [styles.timeText, styles.timeTextActive];
+                                        if(index === 0){
+                                            hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                                        }else if(index % 2 === 0){
+                                            hourStyle = [styles.wholeHour, styles.activeHour]
+                                        }else if(index === this.state.startTimes.length - 1){
+                                            hourStyle = [styles.halfHour, styles.activeHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+                                        }else{
+                                            hourStyle = [styles.halfHour, styles.activeHour]
+                                        }
+                                    }else{
+                                        textStyle = styles.timeText;
+                                        if(index === 0){
+                                            hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                                        }else if(index % 2 === 0){
+                                            hourStyle = styles.wholeHour
+                                        }else if(index === this.state.startTimes.length - 1){
+                                            hourStyle = [styles.halfHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+                                        }else{
+                                            hourStyle = styles.halfHour
+                                        }
+                                    }
+                                    return(
+                                        <View style={{flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
+                                            <View style={hourStyle}/>
+                                            {item.key % 2 === 0 ? 
+                                            <View style={{flexDirection: 'row', position: 'absolute', width: 48, zIndex: 999, bottom: 0,}}>
+                                                <Text style={textStyle}>{this.convertToCommonTime(item.label).split(":")[0]}</Text>
+                                                <Text style={textStyle.length > 1 ? styles.timeTextActive : null}>{item.labelFormatted.slice(-2)}</Text>
+                                            </View>
+                                            : null}
+                                        </View>
+                                    )
+                                        // this.renderDays(item, index, this.state.arriveValue.key, this.state.startTimes.length)
+                                    
+                                }}
+                                
+                            />
                             
                     </View>
                 </View>
@@ -264,5 +439,46 @@ const styles = StyleSheet.create({
         borderLeftColor: 'transparent',
         borderRightColor: 'transparent',
         borderBottomColor: 'white'
-      }
+      },
+    wholeHour:{
+        paddingLeft: 1, 
+        overflow: 'visible',
+        width: 48, 
+        height: 40,
+        backgroundColor: Colors.mist900, 
+        borderLeftWidth: 23, 
+        borderRightWidth: 23, 
+        borderColor: 'white',
+        overflow: 'visible',
+        zIndex: 999,
+    },
+    halfHour:{
+        paddingLeft: 1,
+        width: 48, 
+        height: 32,
+        backgroundColor: Colors.mist900, 
+        borderLeftWidth: 24, 
+        borderRightWidth: 24, 
+        borderColor: 'white',
+        zIndex: 99,
+    },
+    activeHour:{
+        backgroundColor: Colors.tango500,
+        ...Platform.select({
+            ios: {
+                height: 52,
+                marginTop: -16,
+            }        
+        }),
+    },
+    timeText:{
+        fontSize: 22,
+        // position: 'absolute',
+        fontWeight: 'bold',
+        elevation: 999,
+        bottom: 0,
+    },
+    timeTextActive:{
+        color: Colors.tango900,
+    }
 })
