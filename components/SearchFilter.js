@@ -21,7 +21,7 @@ export default class SearchFilter extends React.Component{
         }
 
         var endTimes = []
-        for (var i = 0 ; i < Times[1].end.length; i++){
+         for (var i = 0 ; i < Times[1].end.length; i++){
             endTimes.push({key: i, label: Times[1].end[i], labelFormatted: this.convertToCommonTime(Times[1].end[i])})
          }
 
@@ -34,6 +34,7 @@ export default class SearchFilter extends React.Component{
             arriveActive: true,
 
             arriveValue: startTimes[24],
+            departValue: endTimes[31]
 
         }
         this.timeWidth = 48;
@@ -49,7 +50,9 @@ export default class SearchFilter extends React.Component{
     }
 
     componentDidMount(){
-        this.goToIndexArrivals(this.state.arriveValue.key)
+        this.goToIndexArrivals(this.state.arriveValue.key, true)
+
+       
     }
 
 
@@ -90,85 +93,145 @@ export default class SearchFilter extends React.Component{
                 <Text style={styleDay}>{day.monthNameAbbr}</Text>
             </View>
             
-        )
-    }
-
-    renderTimes = (item, index, activeIndex, stateLength) => {
-            let hourStyle = null;
-            // if(index === activeIndex){
-            //     if(index === 0){
-            //         hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
-            //     }else if(index % 2 === 0){
-            //         hourStyle = [styles.wholeHour, styles.activeHour]
-            //     }else if(index === stateLength - 1){
-            //         hourStyle = [styles.halfHour, styles.activeHour, {width: this.timeWidth/2, borderRightWidth: 0}]
-            //     }else{
-            //         hourStyle = [styles.halfHour, styles.activeHour]
-            //     }
-            // }else{
-            //     if(index === 0){
-            //         hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
-            //     }else if(index % 2 === 0){
-            //         hourStyle = styles.wholeHour
-            //     }else if(index === stateLength - 1){
-            //         hourStyle = [styles.halfHour, {width: this.timeWidth/2, borderRightWidth: 0}]
-            //     }else{
-            //         hourStyle = styles.halfHour
-            //     }
-            // // }
-            // return(
-            //     <View style={{backgroundColor: '#af4591ae', flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
-            //         <View style={hourStyle}/>
-            //             {index % 2 === 0 ? 
-            //                 <View style={{flexDirection: 'row'}}>
-            //                     <Text style={styles.timeText}>A</Text>
-            //                     <Text>{item.labelFormatted.slice(-2)}</Text>
-            //                 </View>
-            //             : null}
-            //     </View>
-            // )
-            console.log("item")
-            return(
-                <View style={{backgroundColor: '#af4591ae',flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
-                <View style={index === 0 ? [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]: item.key % 2 === 0 ? styles.wholeHour : index === this.state.startTimes.length - 1 ? [styles.halfHour, {width: this.timeWidth/2, borderRightWidth: 0}] : styles.halfHour
-                   } />
-                {item.key % 2 === 0 ? 
-                <View style={{flexDirection: 'row', position: 'absolute', width: 48, zIndex: 999, bottom: 0,}}>
-                    <Text style={styles.timeText}>{this.convertToCommonTime(item.label).split(":")[0]}</Text>
-                    <Text>{item.labelFormatted.slice(-2)}</Text>
-                </View>
-                : null}
-            </View>
             )
         }
-    
+        
+    renderArriveTimes = (item, index) => {
+        let hourStyle, textStyle;
+            if(index === this.state.arriveValue.key){
+                textStyle = [styles.timeText, styles.timeTextActive];
+                if(index === 0){
+                    hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                }else if(index % 2 === 0){
+                    hourStyle = [styles.wholeHour, styles.activeHour]
+                }else if(index === this.state.startTimes.length - 1){
+                    hourStyle = [styles.halfHour, styles.activeHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+                }else{
+                    hourStyle = [styles.halfHour, styles.activeHour]
+                }
+            }else{
+                textStyle = styles.timeText;
+                if(index === 0){
+                    hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                }else if(index % 2 === 0){
+                    hourStyle = styles.wholeHour
+                }else if(index === this.state.startTimes.length - 1){
+                    hourStyle = [styles.halfHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+                }else{
+                    hourStyle = styles.halfHour
+                }
+            }
+        return(
+            <View style={{display: 'flex', flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
+                <View style={hourStyle}/>
+                    {item.key % 2 === 0 ? 
+                        <View style={{flexDirection: 'row', position: 'absolute', width: 48, zIndex: 999, bottom: 0,}}>
+                            <Text style={textStyle}>{this.convertToCommonTime(item.label).split(":")[0]}</Text>
+                            <Text style={textStyle.length > 1 ? styles.timeTextActive : null}>{item.labelFormatted.slice(-2)}</Text>
+                        </View>
+                    : null}
+            </View>
+        )
+     }
 
-    slideAnimate = () => {
+     renderDepartTimes = (item, index) => {
+            let hourStyle, textStyle;
+            if(index === this.state.departValue.key){
+                textStyle = [styles.timeTextDepart, styles.timeTextActive];
+                if(index === 0){
+                    hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                }else if(index % 2 === 0){
+                    hourStyle = [styles.wholeHour, styles.activeHour]
+                }else if(index === this.state.endTimes.length - 1){
+                    hourStyle = [styles.halfHour, styles.activeHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+                }else{
+                    hourStyle = [styles.halfHour, styles.activeHour]
+                }
+            }else{
+                textStyle = styles.timeTextDepart;
+                if(index === 0){
+                    hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                }else if(index % 2 === 0){
+                    hourStyle = styles.wholeHour
+                }else if(index === this.state.endTimes.length - 1){
+                    hourStyle = [styles.halfHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+                }else{
+                    hourStyle = styles.halfHour
+                }
+            }
+        return(
+            <View style={{display: 'flex', flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
+                <View style={hourStyle}/>
+                    {item.key % 2 === 0 ? 
+                        <View style={{flexDirection: 'row', position: 'absolute', width: 60, zIndex: 999, bottom: 0,}}>
+                            <Text style={textStyle}>{this.convertToCommonTime(item.label).split(" ")[0]}</Text>
+                            <Text style={textStyle.length > 1 ? styles.timeTextActive : null}>{item.labelFormatted.slice(-2)}</Text>
+                        </View>
+                    : null}
+            </View>
+        )
+     }
+
+     renderInvalidDepartTimes = (item, index) => {
+        let hourStyle, textStyle;
+       
+       
+            textStyle = styles.timeTextDepart;
+            if(index === 0){
+                hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+            }else if(index % 2 === 0){
+                hourStyle = styles.wholeHour
+            }else if(index === this.state.endTimes.length - 1){
+                hourStyle = [styles.halfHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+            }else{
+                hourStyle = styles.halfHour
+            }
+        return(
+            <View style={{display: 'flex', flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
+                <View style={hourStyle}/>
+                    {item.key % 2 === 0 ? 
+                        <View style={{flexDirection: 'row', position: 'absolute', width: 60, zIndex: 999, bottom: 0,}}>
+                            <Text style={textStyle}>{this.convertToCommonTime(item.label).split(" ")[0]}</Text>
+                            <Text style={textStyle.length > 1 ? styles.timeTextActive : null}>{item.labelFormatted.slice(-2)}</Text>
+                        </View>
+                    : null}
+            </View>
+        )
+     }
+                                
+                                
+    slideAnimate = async() => {
+            // console.log(`Arr Value before: ${this.state.arriveValue.labelFormatted}`)
         const {width} = Dimensions.get('window')
         if(this.state.arriveActive){
-            Animated.spring(this.state.xSlide, {
+            await Animated.spring(this.state.xSlide, {
                 toValue: width/2 + 20
             }).start()
-            this.setState({arriveActive: false})
+            await this.setState(prevState => ({arriveActive: false, arriveValue: prevState.arriveValue}))
+            await this.goToIndexDepartures(this.state.departValue.key, false)
         }else{
-            Animated.spring(this.state.xSlide, {
+            await Animated.spring(this.state.xSlide, {
                 toValue: 20
             }).start()
-            this.setState({arriveActive: true})
+            await this.setState(prevState => ({arriveActive: true, arriveValue: prevState.arriveValue}))
+            await this.goToIndexArrivals(this.state.arriveValue.key, false)
         }
+        // console.log(`Arr Value after: ${this.state.arriveValue.labelFormatted}`)
     }
 
-    goToIndexArrivals = (i) => {
-        // console.log("Scrolling")
-        // this.arrivalFlatlist.scrollToIndex({animated: true,index: i, viewOffset: Dimensions.get("window").width/2});
-        // this.arrivalFlatlist.scrollToEnd({animated: true})
-
-        
+    goToIndexArrivals = (i, animated) => {
          const wait = new Promise((resolve) => setTimeout(resolve, 0));
         wait.then( () => {
-            this.arrivalFlatlist.scrollToIndex({animated: true, index: i, viewOffset: Dimensions.get("window").width/2}); // Throws no errors, has no effect?
+            this.arrivalFlatlist.scrollToIndex({animated: animated, index: i, viewOffset: Dimensions.get("window").width/2}); // Throws no errors, has no effect?
         });
     }
+
+    goToIndexDepartures = (i, animated) => {
+        const wait = new Promise((resolve) => setTimeout(resolve, 0));
+       wait.then( () => {
+           this.departureFlatlist.scrollToIndex({animated: animated, index: i, viewOffset: Dimensions.get("window").width/2}); // Throws no errors, has no effect?
+       });
+   }
 
 
     getInvalidDays = (days) => {
@@ -194,14 +257,33 @@ export default class SearchFilter extends React.Component{
           
     }
 
-    _updateIndexTimes( event ){
+    _updateIndexTimes = async( event ) => {
         let e = event.nativeEvent.contentOffset.x;
-        if(e < 24){
-            this.setState({arriveValue: this.state.startTimes[0]})
+        if(this.state.arriveActive){
+            if(e < 24){
+                await this.setState({arriveValue: this.state.startTimes[0]})
+            }else{
+                let i = (Math.round(e/48))
+                if(i < this.state.startTimes.length){
+                   await  this.setState({arriveValue: this.state.startTimes[i]})
+                }
+            }
+
+            if(this.state.arriveValue.key > this.state.departValue.key){
+                this.setState({departValue: this.state.endTimes[this.state.arriveValue.key]})
+            }
         }else{
-            let i = (Math.round(e/48))
-            if(i < this.state.startTimes.length){
-                this.setState({arriveValue: this.state.startTimes[i]})
+            if(e < 24){
+                this.setState({departValue: this.state.endTimes[0]})
+            }else{
+                let i = (Math.round(e/48))
+                if(i < this.state.endTimes.length){
+                    this.setState({departValue: this.state.endTimes[i]})
+                }
+            }
+
+            if(this.state.departValue.key <= this.state.arriveValue.key){
+                this.setState({arriveValue: this.state.startTimes[this.state.departValue.key]})
             }
         }
     }
@@ -223,7 +305,7 @@ export default class SearchFilter extends React.Component{
         let {startTimes, endTimes} = this.state
         
         
-        // console.log(startTimes.length)
+        
         // console.log(endTimes.length)
 
         return(
@@ -301,7 +383,7 @@ export default class SearchFilter extends React.Component{
                             <Text style={{fontSize: 16, textAlign: 'center', color: this.state.arriveActive ? 'black' : Colors.cosmos300}}>Arrive @ {this.state.arriveValue.labelFormatted}</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={() => this.slideAnimate()} style={{flex: 1}}>
-                                    <Text style={{fontSize: 16, textAlign: 'center', color: this.state.arriveActive ? Colors.cosmos300 : 'black'}}>Depart</Text>
+                                    <Text style={{fontSize: 16, textAlign: 'center', color: this.state.arriveActive ? Colors.cosmos300 : 'black'}}>Depart @ {this.state.departValue.labelFormatted}</Text>
                                 </TouchableOpacity>
                                 <Animated.View style={{borderBottomWidth: 3, borderBottomColor: Colors.apollo500, position: 'absolute', width: width/2.5, height: 35, transform:[{translateX: this.state.xSlide}]
                             }} />
@@ -314,6 +396,7 @@ export default class SearchFilter extends React.Component{
                             zIndex: 999,
                             backgroundColor: 'green',
                             borderColor: 'transparent'}}></View> */}
+                            {this.state.arriveActive ? 
                             <FlatList 
                                 ref={(ref) => { this.arrivalFlatlist = ref; }}
                                 data={this.state.startTimes}
@@ -345,47 +428,57 @@ export default class SearchFilter extends React.Component{
                                 showsHorizontalScrollIndicator={false}
                                 snapToOffsets = {[...Array(this.state.startTimes.length)].map((x, i) => i * (this.timeWidth + .5))}
                                 renderItem={({item, index}) => {
-                                    let hourStyle, textStyle;
-                                    if(index === this.state.arriveValue.key){
-                                        textStyle = [styles.timeText, styles.timeTextActive];
-                                        if(index === 0){
-                                            hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
-                                        }else if(index % 2 === 0){
-                                            hourStyle = [styles.wholeHour, styles.activeHour]
-                                        }else if(index === this.state.startTimes.length - 1){
-                                            hourStyle = [styles.halfHour, styles.activeHour, {width: this.timeWidth/2, borderRightWidth: 0}]
-                                        }else{
-                                            hourStyle = [styles.halfHour, styles.activeHour]
-                                        }
-                                    }else{
-                                        textStyle = styles.timeText;
-                                        if(index === 0){
-                                            hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
-                                        }else if(index % 2 === 0){
-                                            hourStyle = styles.wholeHour
-                                        }else if(index === this.state.startTimes.length - 1){
-                                            hourStyle = [styles.halfHour, {width: this.timeWidth/2, borderRightWidth: 0}]
-                                        }else{
-                                            hourStyle = styles.halfHour
-                                        }
-                                    }
-                                    return(
-                                        <View style={{flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
-                                            <View style={hourStyle}/>
-                                            {item.key % 2 === 0 ? 
-                                            <View style={{flexDirection: 'row', position: 'absolute', width: 48, zIndex: 999, bottom: 0,}}>
-                                                <Text style={textStyle}>{this.convertToCommonTime(item.label).split(":")[0]}</Text>
-                                                <Text style={textStyle.length > 1 ? styles.timeTextActive : null}>{item.labelFormatted.slice(-2)}</Text>
-                                            </View>
-                                            : null}
-                                        </View>
-                                    )
-                                        // this.renderDays(item, index, this.state.arriveValue.key, this.state.startTimes.length)
+                              
+                                        return this.renderArriveTimes(item, index, this.state.arriveActive)
                                     
                                 }}
                                 
                             />
-                            
+                            :
+                            <FlatList 
+                                ref={(ref) => { this.departureFlatlist = ref; }}
+                                data={this.state.endTimes}
+                                keyExtractor={(item) => item.key.toString()}
+                                onScroll={(event) => { 
+                                    this._updateIndexTimes(event)
+                                }}
+                                getItemLayout={(data, index) => {
+                                    return {
+                                        length: index === 0 ? this.timeWidth/2 : this.timeWidth,
+                                        offset: index === 0 ? 0 : (this.timeWidth * index) + (width/2) + (index*0.5),
+                                        index
+                                    }
+                                }}
+                                horizontal
+                                bounces={false}
+                                initialNumToRender={48}
+                                contentContainerStyle={{marginTop: 24, height: 80}}
+                                ListHeaderComponentStyle={{paddingLeft: width/2}}
+                                ListHeaderComponent={({item, index}) => {
+                                    // let res = this.state.endTimes.filter((x, i)=> x.key < this.state.arriveValue.key).map(x => {
+                                    //     return <Text>{x.labelFormatted}</Text>
+                                    // })
+                                    // return (
+                                    //     <View style={{flexDirection: 'row', width: width / 2}}>{res}</View>
+                                    // )
+                                   return <View />
+                                }}
+                                ListFooterComponentStyle={{paddingLeft: width/2}}
+                                ListFooterComponent={() => {
+                                    return(<View />)
+                                }}
+                                pagingEnabled={true}
+                                decelerationRate={0}
+                                showsHorizontalScrollIndicator={false}
+                                snapToOffsets = {[...Array(this.state.startTimes.length)].map((x, i) => i * (this.timeWidth + .5))}
+                                renderItem={({item, index}) => {
+                              
+                                        return this.renderDepartTimes(item, index, this.state.arriveActive)
+                                    
+                                }}
+                                
+                            />
+                            }
                     </View>
                 </View>
             </Fragment>
@@ -446,8 +539,8 @@ const styles = StyleSheet.create({
         width: 48, 
         height: 40,
         backgroundColor: Colors.mist900, 
-        borderLeftWidth: 23, 
-        borderRightWidth: 23, 
+        borderLeftWidth: 22, 
+        borderRightWidth: 22, 
         borderColor: 'white',
         overflow: 'visible',
         zIndex: 999,
@@ -473,6 +566,20 @@ const styles = StyleSheet.create({
     },
     timeText:{
         fontSize: 22,
+        // position: 'absolute',
+        fontWeight: 'bold',
+        elevation: 999,
+        bottom: 0,
+    },
+    timeTextDepart:{
+    ...Platform.select({
+        ios: {
+            fontSize: 20,
+        },
+        android:{
+            fontSize: 15,
+        },
+        }),
         // position: 'absolute',
         fontWeight: 'bold',
         elevation: 999,
