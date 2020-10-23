@@ -25,6 +25,13 @@ export default class SearchFilter extends React.Component{
             endTimes.push({key: i, label: Times[1].end[i], labelFormatted: this.convertToCommonTime(Times[1].end[i])})
          }
 
+        let date = new Date();
+        let hour = date.getHours()
+        let minute = date.getMinutes();
+
+        let filteredStarts = startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute - 30))
+        let filteredEnds = endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute - 30))
+
         this.state = {
             dayData: this.getDays(),
             startTimes: startTimes,
@@ -34,8 +41,8 @@ export default class SearchFilter extends React.Component{
             arriveActive: true,
 
             dayValue: 0,
-            arriveValue: startTimes[24],
-            departValue: endTimes[31],
+            arriveValue: filteredStarts[0],
+            departValue: filteredEnds[0],
 
             
 
@@ -106,55 +113,83 @@ export default class SearchFilter extends React.Component{
         let minute = date.getMinutes();
        
 
-        let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute - 30))[0]
+        let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute -30))[0]
+
+        // console.log(parseInt(item.label.slice(2)))
+
+        
+   
         
         
 
         let hourStyle, textStyle;
+
+        // If current day
         if(this.state.dayValue == 0){
+            // If item is active
             if(index === this.state.arriveValue.key){
                 textStyle = [styles.timeText, styles.timeTextActive];
+                // if first item in list
                 if(item.key === firstItemCurrentDay.key){
                     hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                // If a whole hour X:00
                 }else if(index % 2 === 0){
                     hourStyle = [styles.wholeHour, styles.activeHour]
+                // If last item in list
                 }else if(index === this.state.startTimes.length - 1){
                     hourStyle = [styles.halfHour, styles.activeHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+                // Every other item
                 }else{
                     hourStyle = [styles.halfHour, styles.activeHour]
                 }
+            // If item is not active
             }else{
                 textStyle = styles.timeText;
+                // if first item in list
                 if(index === firstItemCurrentDay.key){
                     hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                // If a whole hour X:00
                 }else if(index % 2 === 0){
                     hourStyle = styles.wholeHour
+                // If last item in list
                 }else if(index === this.state.startTimes.length - 1){
                     hourStyle = [styles.halfHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+                // Every other item
                 }else{
                     hourStyle = styles.halfHour
                 }
             }
+        // If any day but current day
         }else{
+            // If item is active
             if(index === this.state.arriveValue.key){
                 textStyle = [styles.timeText, styles.timeTextActive];
+                // if first item in list
                 if(item.key === 0){
                     hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                // If a whole hour X:00
                 }else if(index % 2 === 0){
                     hourStyle = [styles.wholeHour, styles.activeHour]
+                // If last item in list
                 }else if(index === this.state.startTimes.length - 1){
                     hourStyle = [styles.halfHour, styles.activeHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+                // Every other item
                 }else{
                     hourStyle = [styles.halfHour, styles.activeHour]
                 }
+            // If item is not active
             }else{
                 textStyle = styles.timeText;
+                // if first item in list
                 if(index === 0){
                     hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                // If a whole hour X:00
                 }else if(index % 2 === 0){
                     hourStyle = styles.wholeHour
+                // If last item in list
                 }else if(index === this.state.startTimes.length - 1){
                     hourStyle = [styles.halfHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+                // Every other item
                 }else{
                     hourStyle = styles.halfHour
                 }
@@ -162,10 +197,8 @@ export default class SearchFilter extends React.Component{
         }   
 
        
-            // console.log(parseInt(item.label)) 
-            
-            // console.log(parseInt(hour+""+minute))
-
+     
+        // If current day
         if(this.state.dayValue === 0){
             if(parseInt(item.label) >= parseInt(hour+""+minute - 30)){
             return(
@@ -179,6 +212,7 @@ export default class SearchFilter extends React.Component{
                         : null}
                 </View>
             )}
+        // If any day but today
         }else{
             return(
                 <View style={{display: 'flex', flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
@@ -195,41 +229,115 @@ export default class SearchFilter extends React.Component{
      }
 
      renderDepartTimes = (item, index) => {
+            let date = new Date();
+            let hour = date.getHours()
+            let minute = date.getMinutes();
+        
+
+            let firstItemCurrentDay = this.state.endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute -30))[0]
+
+
             let hourStyle, textStyle;
+            // If current day
+        if(this.state.dayValue == 0){
+            // If item is active
             if(index === this.state.departValue.key){
-                textStyle = [styles.timeTextDepart, styles.timeTextActive];
-                if(index === 0){
+                textStyle = [styles.timeText, styles.timeTextActive];
+                // if first item in list
+                if(item.key === firstItemCurrentDay.key){
                     hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                // If a whole hour X:00
                 }else if(index % 2 != 0){
                     hourStyle = [styles.wholeHour, styles.activeHour]
-                }else if(index === this.state.endTimes.length - 1){
+                // If last item in list
+                }else if(index === this.state.startTimes.length - 1){
                     hourStyle = [styles.halfHour, styles.activeHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+                // Every other item
                 }else{
                     hourStyle = [styles.halfHour, styles.activeHour]
                 }
+            // If item is not active
             }else{
-                textStyle = styles.timeTextDepart;
-                if(index === 0){
+                textStyle = styles.timeText;
+                // if first item in list
+                if(index === firstItemCurrentDay.key){
                     hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                // If a whole hour X:00
                 }else if(index % 2 != 0){
                     hourStyle = styles.wholeHour
-                }else if(index === this.state.endTimes.length - 1){
+                // If last item in list
+                }else if(index === this.state.startTimes.length - 1){
                     hourStyle = [styles.halfHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+                // Every other item
                 }else{
                     hourStyle = styles.halfHour
                 }
             }
-        return(
-            <View style={{display: 'flex', flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
-                <View style={hourStyle}/>
-                    {item.key % 2 != 0 ? 
-                        <View style={{flexDirection: 'row', position: 'absolute', width: 60, zIndex: 999, bottom: 0,}}>
-                            <Text style={textStyle}>{this.convertToCommonTime(item.label).split(" ")[0]}</Text>
-                            <Text style={textStyle.length > 1 ? styles.timeTextActive : null}>{item.labelFormatted.slice(-2)}</Text>
-                        </View>
-                    : null}
-            </View>
-        )
+        // If any day but current day
+        }else{
+            // If item is active
+            if(index === this.state.departValue.key){
+                textStyle = [styles.timeTextDepart, styles.timeTextActive];
+                // if first item in list
+                if(item.key === 0){
+                    hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                // If a whole hour X:00
+                }else if(index % 2 != 0){
+                    hourStyle = [styles.wholeHour, styles.activeHour]
+                // If last item in list
+                }else if(index === this.state.startTimes.length - 1){
+                    hourStyle = [styles.halfHour, styles.activeHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+                // Every other item
+                }else{
+                    hourStyle = [styles.halfHour, styles.activeHour]
+                }
+            // If item is not active
+            }else{
+                textStyle = styles.timeTextDepart;
+                // if first item in list
+                if(index === 0){
+                    hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                // If a whole hour X:00
+                }else if(index % 2 != 0){
+                    hourStyle = styles.wholeHour
+                // If last item in list
+                }else if(index === this.state.startTimes.length - 1){
+                    hourStyle = [styles.halfHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+                // Every other item
+                }else{
+                    hourStyle = styles.halfHour
+                }
+            }
+        }   
+
+        // If current day
+        if(this.state.dayValue === 0){
+            if(parseInt(item.label) > parseInt(hour+""+minute - 30)){
+                return(
+                    <View style={{display: 'flex', flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
+                        <View style={hourStyle}/>
+                            {item.key % 2 != 0 ? 
+                                <View style={{flexDirection: 'row', position: 'absolute', width: 60, zIndex: 999, bottom: 0,}}>
+                                    <Text style={textStyle}>{this.convertToCommonTime(item.label).split(" ")[0]}</Text>
+                                    <Text style={textStyle.length > 1 ? styles.timeTextActive : null}>{item.labelFormatted.slice(-2)}</Text>
+                                </View>
+                            : null}
+                    </View>
+                )
+            }
+        }else{
+            return(
+                <View style={{display: 'flex', flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
+                        <View style={hourStyle}/>
+                            {item.key % 2 != 0 ? 
+                                <View style={{flexDirection: 'row', position: 'absolute', width: 60, zIndex: 999, bottom: 0,}}>
+                                    <Text style={textStyle}>{this.convertToCommonTime(item.label).split(" ")[0]}</Text>
+                                    <Text style={textStyle.length > 1 ? styles.timeTextActive : null}>{item.labelFormatted.slice(-2)}</Text>
+                                </View>
+                            : null}
+                    </View>
+            )
+        }
      }
 
     
@@ -238,18 +346,43 @@ export default class SearchFilter extends React.Component{
     slideAnimate = async() => {
             // console.log(`Arr Value before: ${this.state.arriveValue.labelFormatted}`)
         const {width} = Dimensions.get('window')
+        let date = new Date();
+            let hour = date.getHours()
+            let minute = date.getMinutes();
+
+        let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute - 30))
+        let firstItemCurrentDayEnd = this.state.endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute - 30))
+
+        
+
         if(this.state.arriveActive){
             await Animated.spring(this.state.xSlide, {
                 toValue: width/2 + 20
             }).start()
             await this.setState(prevState => ({arriveActive: false, arriveValue: prevState.arriveValue}))
-            await this.goToIndexDepartures(this.state.departValue.key, false)
+
+            
+
+            if(this.state.dayValue == 0){
+                let newIndex = firstItemCurrentDayEnd.indexOf(this.state.departValue)
+                await this.goToIndexDepartures(newIndex, false)
+            }else{
+                await this.goToIndexDepartures(this.state.departValue.key, false)
+            }
+            
         }else{
             await Animated.spring(this.state.xSlide, {
                 toValue: 20
             }).start()
             await this.setState(prevState => ({arriveActive: true, arriveValue: prevState.arriveValue}))
-            await this.goToIndexArrivals(this.state.arriveValue.key, false)
+
+            if(this.state.dayValue == 0){
+                let newIndex = firstItemCurrentDay.indexOf(this.state.arriveValue)
+                await this.goToIndexArrivals(newIndex, false)
+            }else{
+                await this.goToIndexArrivals(this.state.arriveValue.key, false)
+            }
+            
         }
         // console.log(`Arr Value after: ${this.state.arriveValue.labelFormatted}`)
     }
@@ -302,6 +435,8 @@ export default class SearchFilter extends React.Component{
 
         let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute - 30))
 
+        let firstItemCurrentDayEnd = this.state.endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute - 30))
+
 
         if(this.state.arriveActive){
             if(this.state.dayValue != 0){
@@ -327,12 +462,23 @@ export default class SearchFilter extends React.Component{
                 this.setState({departValue: this.state.endTimes[this.state.arriveValue.key]})
             }
         }else{
-            if(e < 24){
-                this.setState({departValue: this.state.endTimes[0]})
+            if(this.state.dayValue != 0){
+                if(e < 24){
+                    this.setState({departValue: this.state.endTimes[0]})
+                }else{
+                    let i = (Math.round(e/48))
+                    if(i < this.state.endTimes.length){
+                        this.setState({departValue: this.state.endTimes[i]})
+                    }
+                }
             }else{
-                let i = (Math.round(e/48))
-                if(i < this.state.endTimes.length){
-                    this.setState({departValue: this.state.endTimes[i]})
+                if(e < 24){
+                    this.setState({departValue: firstItemCurrentDayEnd[0]})
+                }else{
+                    let i = (Math.round(e/48))
+                    if(i < this.state.endTimes.length){
+                        this.setState({departValue: firstItemCurrentDayEnd[i]})
+                    }
                 }
             }
 

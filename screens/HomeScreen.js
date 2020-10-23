@@ -38,7 +38,7 @@ export default class Home extends Component{
             inputFocus: false,
             searchedAddress: false,
             mapScrolled: false,
-            searchFilterOpen: false,
+            searchFilterOpen: true,
             searchInputValue: '',
             region: {
                 searched: {
