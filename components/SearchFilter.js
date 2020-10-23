@@ -251,7 +251,7 @@ export default class SearchFilter extends React.Component{
                     hourStyle = [styles.wholeHour, styles.activeHour]
                 // If last item in list
                 }else if(index === this.state.startTimes.length - 1){
-                    hourStyle = [styles.halfHour, styles.activeHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+                    hourStyle = [styles.halfHour, styles.activeHour, {width: this.timeWidth/3, borderRightWidth: 0}]
                 // Every other item
                 }else{
                     hourStyle = [styles.halfHour, styles.activeHour]
