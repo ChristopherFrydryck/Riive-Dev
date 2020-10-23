@@ -33,10 +33,15 @@ export default class SearchFilter extends React.Component{
             xSlide: new Animated.Value(20),
             arriveActive: true,
 
+            dayValue: 0,
             arriveValue: startTimes[24],
-            departValue: endTimes[31]
+            departValue: endTimes[31],
+
+            
 
         }
+
+        
         this.timeWidth = 48;
         this.currentIndex = 0;
         this._updateIndex = this._updateIndex.bind(this);
@@ -49,11 +54,10 @@ export default class SearchFilter extends React.Component{
 
     }
 
-    componentDidMount(){
-        this.goToIndexArrivals(this.state.arriveValue.key, true)
 
-       
-    }
+
+
+
 
 
     
@@ -97,10 +101,44 @@ export default class SearchFilter extends React.Component{
         }
         
     renderArriveTimes = (item, index) => {
+        let date = new Date();
+        let hour = date.getHours()
+        let minute = date.getMinutes();
+       
+
+        let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute - 30))[0]
+        
+        
+
         let hourStyle, textStyle;
+        if(this.state.dayValue == 0){
             if(index === this.state.arriveValue.key){
                 textStyle = [styles.timeText, styles.timeTextActive];
-                if(index === 0){
+                if(item.key === firstItemCurrentDay.key){
+                    hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                }else if(index % 2 === 0){
+                    hourStyle = [styles.wholeHour, styles.activeHour]
+                }else if(index === this.state.startTimes.length - 1){
+                    hourStyle = [styles.halfHour, styles.activeHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+                }else{
+                    hourStyle = [styles.halfHour, styles.activeHour]
+                }
+            }else{
+                textStyle = styles.timeText;
+                if(index === firstItemCurrentDay.key){
+                    hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                }else if(index % 2 === 0){
+                    hourStyle = styles.wholeHour
+                }else if(index === this.state.startTimes.length - 1){
+                    hourStyle = [styles.halfHour, {width: this.timeWidth/2, borderRightWidth: 0}]
+                }else{
+                    hourStyle = styles.halfHour
+                }
+            }
+        }else{
+            if(index === this.state.arriveValue.key){
+                textStyle = [styles.timeText, styles.timeTextActive];
+                if(item.key === 0){
                     hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
                 }else if(index % 2 === 0){
                     hourStyle = [styles.wholeHour, styles.activeHour]
@@ -121,17 +159,39 @@ export default class SearchFilter extends React.Component{
                     hourStyle = styles.halfHour
                 }
             }
-        return(
-            <View style={{display: 'flex', flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
-                <View style={hourStyle}/>
-                    {item.key % 2 === 0 ? 
-                        <View style={{flexDirection: 'row', position: 'absolute', width: 48, zIndex: 999, bottom: 0,}}>
-                            <Text style={textStyle}>{this.convertToCommonTime(item.label).split(":")[0]}</Text>
-                            <Text style={textStyle.length > 1 ? styles.timeTextActive : null}>{item.labelFormatted.slice(-2)}</Text>
-                        </View>
-                    : null}
-            </View>
-        )
+        }   
+
+       
+            // console.log(parseInt(item.label)) 
+            
+            // console.log(parseInt(hour+""+minute))
+
+        if(this.state.dayValue === 0){
+            if(parseInt(item.label) >= parseInt(hour+""+minute - 30)){
+            return(
+                <View style={{display: 'flex', flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
+                    <View style={hourStyle}/>
+                        {item.key % 2 === 0 ? 
+                            <View style={{flexDirection: 'row', position: 'absolute', width: 48, zIndex: 999, bottom: 0,}}>
+                                <Text style={textStyle}>{this.convertToCommonTime(item.label).split(":")[0]}</Text>
+                                <Text style={textStyle.length > 1 ? styles.timeTextActive : null}>{item.labelFormatted.slice(-2)}</Text>
+                            </View>
+                        : null}
+                </View>
+            )}
+        }else{
+            return(
+                <View style={{display: 'flex', flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
+                    <View style={hourStyle}/>
+                        {item.key % 2 === 0 ? 
+                            <View style={{flexDirection: 'row', position: 'absolute', width: 48, zIndex: 999, bottom: 0,}}>
+                                <Text style={textStyle}>{this.convertToCommonTime(item.label).split(":")[0]}</Text>
+                                <Text style={textStyle.length > 1 ? styles.timeTextActive : null}>{item.labelFormatted.slice(-2)}</Text>
+                            </View>
+                        : null}
+                </View>
+            )
+        }
      }
 
      renderDepartTimes = (item, index) => {
@@ -140,7 +200,7 @@ export default class SearchFilter extends React.Component{
                 textStyle = [styles.timeTextDepart, styles.timeTextActive];
                 if(index === 0){
                     hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
-                }else if(index % 2 === 0){
+                }else if(index % 2 != 0){
                     hourStyle = [styles.wholeHour, styles.activeHour]
                 }else if(index === this.state.endTimes.length - 1){
                     hourStyle = [styles.halfHour, styles.activeHour, {width: this.timeWidth/2, borderRightWidth: 0}]
@@ -151,7 +211,7 @@ export default class SearchFilter extends React.Component{
                 textStyle = styles.timeTextDepart;
                 if(index === 0){
                     hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
-                }else if(index % 2 === 0){
+                }else if(index % 2 != 0){
                     hourStyle = styles.wholeHour
                 }else if(index === this.state.endTimes.length - 1){
                     hourStyle = [styles.halfHour, {width: this.timeWidth/2, borderRightWidth: 0}]
@@ -162,7 +222,7 @@ export default class SearchFilter extends React.Component{
         return(
             <View style={{display: 'flex', flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
                 <View style={hourStyle}/>
-                    {item.key % 2 === 0 ? 
+                    {item.key % 2 != 0 ? 
                         <View style={{flexDirection: 'row', position: 'absolute', width: 60, zIndex: 999, bottom: 0,}}>
                             <Text style={textStyle}>{this.convertToCommonTime(item.label).split(" ")[0]}</Text>
                             <Text style={textStyle.length > 1 ? styles.timeTextActive : null}>{item.labelFormatted.slice(-2)}</Text>
@@ -172,32 +232,7 @@ export default class SearchFilter extends React.Component{
         )
      }
 
-     renderInvalidDepartTimes = (item, index) => {
-        let hourStyle, textStyle;
-       
-       
-            textStyle = styles.timeTextDepart;
-            if(index === 0){
-                hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
-            }else if(index % 2 === 0){
-                hourStyle = styles.wholeHour
-            }else if(index === this.state.endTimes.length - 1){
-                hourStyle = [styles.halfHour, {width: this.timeWidth/2, borderRightWidth: 0}]
-            }else{
-                hourStyle = styles.halfHour
-            }
-        return(
-            <View style={{display: 'flex', flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
-                <View style={hourStyle}/>
-                    {item.key % 2 === 0 ? 
-                        <View style={{flexDirection: 'row', position: 'absolute', width: 60, zIndex: 999, bottom: 0,}}>
-                            <Text style={textStyle}>{this.convertToCommonTime(item.label).split(" ")[0]}</Text>
-                            <Text style={textStyle.length > 1 ? styles.timeTextActive : null}>{item.labelFormatted.slice(-2)}</Text>
-                        </View>
-                    : null}
-            </View>
-        )
-     }
+    
                                 
                                 
     slideAnimate = async() => {
@@ -252,23 +287,42 @@ export default class SearchFilter extends React.Component{
         // getting the first element visible index
         if(viewableItems.length > 0){
             this.currentIndex = viewableItems[0].index;
-            console.log(viewableItems[0].item.dayName)
+            this.setState({dayValue: viewableItems[0].item.index - 3})
         }
           
     }
 
     _updateIndexTimes = async( event ) => {
         let e = event.nativeEvent.contentOffset.x;
+
+        let date = new Date();
+        let hour = date.getHours()
+        let minute = date.getMinutes();
+       
+
+        let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute - 30))
+
+
         if(this.state.arriveActive){
-            if(e < 24){
-                await this.setState({arriveValue: this.state.startTimes[0]})
+            if(this.state.dayValue != 0){
+                if(e < 24){
+                    await this.setState({arriveValue: this.state.startTimes[0]})
+                }else{
+                    let i = (Math.round(e/48))
+                    if(i < this.state.startTimes.length){
+                    await  this.setState({arriveValue: this.state.startTimes[i]})
+                    }
+                }
             }else{
-                let i = (Math.round(e/48))
-                if(i < this.state.startTimes.length){
-                   await  this.setState({arriveValue: this.state.startTimes[i]})
+                if(e < 24){
+                    await this.setState({arriveValue: firstItemCurrentDay[0]})
+                }else{
+                    let i = (Math.round(e/48))
+                    if(i < this.state.startTimes.length){
+                    await  this.setState({arriveValue: firstItemCurrentDay[i]})
+                    }
                 }
             }
-
             if(this.state.arriveValue.key > this.state.departValue.key){
                 this.setState({departValue: this.state.endTimes[this.state.arriveValue.key]})
             }
@@ -303,8 +357,9 @@ export default class SearchFilter extends React.Component{
         let {visible, currentSearch} = this.props;
         let {width, height} = Dimensions.get('window');
         let {startTimes, endTimes} = this.state
+
         
-        
+       
         
         // console.log(endTimes.length)
 
@@ -325,7 +380,7 @@ export default class SearchFilter extends React.Component{
                             }}
                             keyExtractor={item => item.index.toString()}
                             horizontal={true}
-                              
+                            on
                             
                             showsHorizontalScrollIndicator={false}
                             snapToAlignment={"start"}
@@ -497,7 +552,7 @@ SearchFilter.defaultProps = {
 const styles = StyleSheet.create({
     container: {
         zIndex: 99,
-        flex: 1.5,
+        flex: 0,
         width: Dimensions.get("window").width,
     },
     section:{

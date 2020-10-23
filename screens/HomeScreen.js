@@ -38,7 +38,7 @@ export default class Home extends Component{
             inputFocus: false,
             searchedAddress: false,
             mapScrolled: false,
-            searchFilterOpen: true,
+            searchFilterOpen: false,
             searchInputValue: '',
             region: {
                 searched: {
@@ -226,7 +226,7 @@ export default class Home extends Component{
 
 
                     <View style={{paddingHorizontal: 16, paddingBottom: 36, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "space-between"}}>
-                        <Text type="semiBold" numberOfLines={1} style={{flex: 4,fontSize: 24, paddingTop: 8}}>Hello, {firstname || "traveler"}</Text>
+                        <Text type="semiBold" numberOfLines={1} style={{flex: this.state.searchFilterOpen ? 0 : 4,fontSize: 24, paddingTop: 8}}>{this.state.searchFilterOpen ? "" : `Hello, ${firstname || 'traveler'}`}</Text>
                         <TouchableOpacity onPress={() => this.setState({searchFilterOpen: !this.state.searchFilterOpen})} style={{borderLeftWidth: 5, borderLeftColor: 'red', paddingLeft: 8, marginLeft: 8, flex: 2}}>
                             <Text numberOfLines={2} style={{fontSize: 12}}>Today{"\n"}12:00PM to 4:00PM</Text>
                         </TouchableOpacity>
