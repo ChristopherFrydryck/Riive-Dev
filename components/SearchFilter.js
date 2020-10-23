@@ -28,9 +28,11 @@ export default class SearchFilter extends React.Component{
         let date = new Date();
         let hour = date.getHours()
         let minute = date.getMinutes();
+        let minutes = minute >= 10 ? minute.toString() : "0" + minute;
 
-        let filteredStarts = startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute - 30))
-        let filteredEnds = endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute - 30))
+
+        let filteredStarts = startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
+        let filteredEnds = endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
 
         this.state = {
             dayData: this.getDays(),
@@ -111,11 +113,12 @@ export default class SearchFilter extends React.Component{
         let date = new Date();
         let hour = date.getHours()
         let minute = date.getMinutes();
+        let minutes = minute >= 10 ? minute.toString() : "0" + minute;
        
 
-        let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute -30))[0]
+        let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) -30)[0]
 
-        // console.log(parseInt(item.label.slice(2)))
+        // console.log(firstItemCurrentDay)
 
         
    
@@ -200,7 +203,7 @@ export default class SearchFilter extends React.Component{
      
         // If current day
         if(this.state.dayValue === 0){
-            if(parseInt(item.label) >= parseInt(hour+""+minute - 30)){
+            if(parseInt(item.label) >= parseInt((hour+""+minutes)- 30)){
             return(
                 <View style={{display: 'flex', flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
                     <View style={hourStyle}/>
@@ -232,9 +235,10 @@ export default class SearchFilter extends React.Component{
             let date = new Date();
             let hour = date.getHours()
             let minute = date.getMinutes();
-        
+            let minutes = minute >= 10 ? minute.toString() : "0" + minute;
+       
 
-            let firstItemCurrentDay = this.state.endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute -30))[0]
+            let firstItemCurrentDay = this.state.endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) -30)[0]
 
 
             let hourStyle, textStyle;
@@ -251,7 +255,7 @@ export default class SearchFilter extends React.Component{
                     hourStyle = [styles.wholeHour, styles.activeHour]
                 // If last item in list
                 }else if(index === this.state.startTimes.length - 1){
-                    hourStyle = [styles.halfHour, styles.activeHour, {width: this.timeWidth/3, borderRightWidth: 0}]
+                    hourStyle = [styles.halfHour, styles.activeHour, {width: this.timeWidth/2, borderRightWidth: 0}]
                 // Every other item
                 }else{
                     hourStyle = [styles.halfHour, styles.activeHour]
@@ -312,7 +316,7 @@ export default class SearchFilter extends React.Component{
 
         // If current day
         if(this.state.dayValue === 0){
-            if(parseInt(item.label) > parseInt(hour+""+minute - 30)){
+            if(parseInt(item.label) > parseInt(hour+""+minutes) - 30){
                 return(
                     <View style={{display: 'flex', flexDirection: 'column', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
                         <View style={hourStyle}/>
@@ -349,9 +353,12 @@ export default class SearchFilter extends React.Component{
         let date = new Date();
             let hour = date.getHours()
             let minute = date.getMinutes();
+            let minutes = minute >= 10 ? minute.toString() : "0" + minute;
+       
 
-        let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute - 30))
-        let firstItemCurrentDayEnd = this.state.endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute - 30))
+
+        let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
+        let firstItemCurrentDayEnd = this.state.endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
 
         
 
@@ -367,7 +374,8 @@ export default class SearchFilter extends React.Component{
                 let newIndex = firstItemCurrentDayEnd.indexOf(this.state.departValue)
                 await this.goToIndexDepartures(newIndex, false)
             }else{
-                await this.goToIndexDepartures(this.state.departValue.key, false)
+                let newIndex = this.state.endTimes.indexOf(this.state.departValue)
+                await this.goToIndexDepartures(newIndex, false)
             }
             
         }else{
@@ -380,7 +388,8 @@ export default class SearchFilter extends React.Component{
                 let newIndex = firstItemCurrentDay.indexOf(this.state.arriveValue)
                 await this.goToIndexArrivals(newIndex, false)
             }else{
-                await this.goToIndexArrivals(this.state.arriveValue.key, false)
+                let newIndex = this.state.startTimes.indexOf(this.state.arriveValue)
+                await this.goToIndexArrivals(newIndex, false)
             }
             
         }
@@ -402,27 +411,42 @@ export default class SearchFilter extends React.Component{
    }
 
 
-    getInvalidDays = (days) => {
-        const dayData = this.state.dayData;
-        const response = null;
-        if(days === 'before'){
-            
-        }else{
-            dayData.filter((x, i)=> !x.isEnabled && i > 6)
-            for(let i = 0; i < dayData.length; i++){
-                response += this.renderDays(dayData[i], dayData[i].index)
-            }
-        }
-        return response;
-    }
 
-    _updateIndex({ viewableItems }) {
+
+    _updateIndex = async({ viewableItems }) => {
         // getting the first element visible index
+        if(!this.state.arriveActive){
+            this.slideAnimate();
+        }
+
+        let date = new Date();
+            let hour = date.getHours()
+            let minute = date.getMinutes();
+            let minutes = minute >= 10 ? minute.toString() : "0" + minute;
+       
+
+
+        let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
+        
+        let prevDayValue = this.state.dayValue;
+        
+        
         if(viewableItems.length > 0){
             this.currentIndex = viewableItems[0].index;
-            this.setState({dayValue: viewableItems[0].item.index - 3})
+            await this.setState({arriveActive: true, dayValue: viewableItems[0].item.index - 3})
         }
-          
+
+
+        if(prevDayValue !== 0 && this.state.dayValue === 0){
+            let newIndex = firstItemCurrentDay.indexOf(this.state.arriveValue);
+            this.goToIndexArrivals(newIndex != -1 ? newIndex : 0, false)
+        }else if(prevDayValue == 0 & this.state.dayValue !== 0){
+            let newIndex = this.state.startTimes.indexOf(this.state.arriveValue);
+            this.goToIndexArrivals(newIndex, false)
+        }
+      
+
+       
     }
 
     _updateIndexTimes = async( event ) => {
@@ -431,11 +455,12 @@ export default class SearchFilter extends React.Component{
         let date = new Date();
         let hour = date.getHours()
         let minute = date.getMinutes();
+        let minutes = minute >= 10 ? minute.toString() : "0" + minute;
        
 
-        let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute - 30))
+        let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) -30)
 
-        let firstItemCurrentDayEnd = this.state.endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minute - 30))
+        let firstItemCurrentDayEnd = this.state.endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
 
 
         if(this.state.arriveActive){
