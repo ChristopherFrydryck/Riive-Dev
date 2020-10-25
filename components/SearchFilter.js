@@ -42,9 +42,16 @@ export default class SearchFilter extends React.Component{
             xSlide: new Animated.Value(20),
             arriveActive: true,
 
+            // Used to know if user is changing date or time
+            scrollingTimes: false,
+
             dayValue: 0,
             arriveValue: filteredStarts[0],
             departValue: filteredEnds[filteredEnds.length/2],
+            arriveIndex: 0,
+            departIndex: filteredEnds.length/2
+
+
 
             
 
@@ -347,65 +354,37 @@ export default class SearchFilter extends React.Component{
     
                                 
                                 
-    slideAnimate = async() => {
+    slideAnimate = (toArrival) => {
             // console.log(`Arr Value before: ${this.state.arriveValue.labelFormatted}`)
         const {width} = Dimensions.get('window')
-        let date = new Date();
-            let hour = date.getHours()
-            let minute = date.getMinutes();
-            let minutes = minute >= 10 ? minute.toString() : "0" + minute;
-       
-
-
-            
-            
-        let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
-        let firstItemCurrentDayEnd = this.state.endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
 
 
 
-        // if(this.state.dayValue == 0){
-        //     let newIndex = await firstItemCurrentDayEnd.indexOf(this.state.departValue)
-        //     await console.log(newIndex)
-        // }else{
-        //     let newIndex = await this.state.endTimes.indexOf(this.state.departValue)
-        //     await console.log(newIndex)
-        // }
+
+        this.getIndex();
         
 
-        if(this.state.arriveActive){
-            await Animated.spring(this.state.xSlide, {
-                toValue: width/2 + 20
-            }).start()
-            await this.setState(prevState => ({arriveActive: false, arriveValue: prevState.arriveValue}))
-
+        if(toArrival){
             
 
-            if(this.state.dayValue == 0){
-                let newIndex = await firstItemCurrentDayEnd.indexOf(this.state.departValue)
-                await this.goToIndexDepartures(newIndex, false)
-            }else{
-                let newIndex = await this.state.endTimes.indexOf(this.state.departValue)
-                await this.goToIndexDepartures(newIndex, false)
-            }
-            
-        }else{
-            await Animated.spring(this.state.xSlide, {
+             Animated.spring(this.state.xSlide, {
                 toValue: 20
             }).start()
-            await this.setState(prevState => ({arriveActive: true, arriveValue: prevState.arriveValue}))
-
-            if(this.state.dayValue == 0){
-                let newIndex = firstItemCurrentDay.indexOf(this.state.arriveValue)
-                await this.goToIndexArrivals(newIndex, false)
-            }else{
-                let newIndex = this.state.startTimes.indexOf(this.state.arriveValue)
-                await this.goToIndexArrivals(newIndex, false)
-            }
+             this.setState(prevState => ({arriveActive: true, arriveValue: prevState.arriveValue, departValue: prevState.departValue}))
+             this.goToIndexArrivals(this.state.arriveIndex, false)
+             
+            
+            
+        }else{
+           
+            Animated.spring(this.state.xSlide, {
+                toValue: width/2 + 20
+            }).start()
+             this.setState(prevState => ({arriveActive: false, arriveValue: prevState.arriveValue, departValue: prevState.departValue}))
+            this.goToIndexDepartures(this.state.departIndex, false)
             
         }
        
-        // console.log(`Arr Value after: ${this.state.arriveValue.labelFormatted}`)
     }
 
     goToIndexArrivals = (i, animated) => {
@@ -416,12 +395,44 @@ export default class SearchFilter extends React.Component{
     }
 
     goToIndexDepartures = (i, animated) => {
-        let prevDepart = this.state.departValue.labelFormatted
-         console.log(prevDepart)
         const wait = new Promise((resolve) => setTimeout(resolve, 0));
        wait.then( () => {
            this.departureFlatlist.scrollToIndex({animated: animated, index: i, viewOffset: Dimensions.get("window").width/2}); // Throws no errors, has no effect?
        });
+   }
+
+   getIndex = async() => {
+        let date = new Date();
+        let hour = date.getHours()
+        let minute = date.getMinutes();
+        let minutes = minute >= 10 ? minute.toString() : "0" + minute;
+    
+        let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
+
+        let firstItemCurrentDayEnd = this.state.endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
+
+        let newIndexArrival, newIndexDeparture
+
+        if(this.state.dayValue === 0){
+            let i = firstItemCurrentDay.indexOf(this.state.arriveValue)
+            newIndexArrival = i === -1 ? 0 : i;
+        }else{
+            newIndexArrival = this.state.startTimes.indexOf(this.state.arriveValue)
+        }
+
+        if(this.state.dayValue === 0){
+            let i = firstItemCurrentDayEnd.indexOf(this.state.departValue)
+            newIndexDeparture = i === -1 ? 0 : i;
+        }else{
+            newIndexDeparture = this.state.endTimes.indexOf(this.state.departValue)
+        }
+
+        await this.setState({arriveIndex: newIndexArrival, departIndex: newIndexDeparture})
+
+        
+
+        
+
    }
 
 
@@ -429,17 +440,6 @@ export default class SearchFilter extends React.Component{
 
     _updateIndex = async({ viewableItems }) => {
         // getting the first element visible index
-
-        
-        if(this.state.arriveActive){
-
-            this.slideAnimate();
-         
-        }
-        
-       
-
-        
 
         let date = new Date();
         let hour = date.getHours()
@@ -454,43 +454,51 @@ export default class SearchFilter extends React.Component{
 
 
         
-        
         let prevDayValue = this.state.dayValue;
+        await this.getIndex()
         
-     
+        
+        // if(!this.state.arriveActive){
+        //    await this.setState({arriveActive: true})
+        //    await this.slideAnimate(true);
+        // }
+       
         // if(viewableItems.length > 0){
             this.currentIndex = viewableItems[0].index;
-            // await this.setState({arriveActive: true, dayValue: viewableItems[0].item.index - 3})
-            await this.setState({arriveActive: false, dayValue: viewableItems[0].item.index - 3})
+            await this.setState(prevState => ({arriveActive: true, dayValue: viewableItems[0].item.index - 3}))
+
         // }
 
-
-        
-        if(this.state.arriveActive){
-            if(prevDayValue !== 0 && this.state.dayValue === 0){
-                let newIndex = firstItemCurrentDay.indexOf(this.state.arriveValue);
-                // await this.setState({departValue: firstItemCurrentDayEnd[newIndex]})
-                await this.goToIndexArrivals(newIndex != -1 ? newIndex : 0, false)
-            }else if(prevDayValue == 0 & this.state.dayValue !== 0){
-                    let newIndex = this.state.startTimes.indexOf(this.state.arriveValue);
-                    await this.goToIndexArrivals(newIndex, false)
-            }
-        }else{
-            if(prevDayValue !== 0 && this.state.dayValue === 0){
-                let newIndex = firstItemCurrentDayEnd.indexOf(this.state.departValue);
-                // await this.setState({departValue: firstItemCurrentDayEnd[newIndex]})
-                await this.goToIndexDepartures(newIndex != -1 ? newIndex : 0, false)
-            }else if(prevDayValue == 0 & this.state.dayValue !== 0){
-                    let newIndex = this.state.endTimes.indexOf(this.state.departValue);
-                    await this.goToIndexDepartures(newIndex, false)
-            }
-        }
-        
-
-        
-      
-
        
+        
+
+
+        
+        if(prevDayValue != 0 && this.state.dayValue === 0){
+               
+            // await this.setState(prevState => ({arriveValue: firstItemCurrentDay[prevState.arriveIndex], departValue: firstItemCurrentDayEnd[prevState.departIndex]}))
+           
+            
+            
+            this.slideAnimate(true)
+            // this.goToIndexDepartures(this.state.departIndex, false)
+            this.goToIndexArrivals(this.state.arriveIndex, false)
+            
+            
+            
+
+        }else{
+            // await this.setState(prevState => ({arriveValue: prevState.arriveValue,departValue: prevState.departValue}))
+
+            this.slideAnimate(true)
+            this.goToIndexArrivals(this.state.arriveIndex, false)
+          
+
+            
+
+            
+        }
+
     }
 
     _updateIndexTimes = async( event ) => {
@@ -501,6 +509,7 @@ export default class SearchFilter extends React.Component{
         let minute = date.getMinutes();
         let minutes = minute >= 10 ? minute.toString() : "0" + minute;
        
+        
 
         let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) -30)
 
@@ -510,49 +519,49 @@ export default class SearchFilter extends React.Component{
         if(this.state.arriveActive){
             if(this.state.dayValue != 0){
                 if(e < 24){
-                    await this.setState({arriveValue: this.state.startTimes[0]})
+                    await this.setState({arriveValue: this.state.startTimes[0], arriveIndex: 0})
                 }else{
                     let i = (Math.round(e/48))
                     if(i < this.state.startTimes.length){
-                    await  this.setState({arriveValue: this.state.startTimes[i]})
+                        await  this.setState({arriveValue: this.state.startTimes[i], arriveIndex: i})
                     }
                 }
             }else{
                 if(e < 24){
-                    await this.setState({arriveValue: firstItemCurrentDay[0]})
+                    await this.setState({arriveValue: firstItemCurrentDay[0], arriveIndex: 0})
                 }else{
                     let i = (Math.round(e/48))
                     if(i < this.state.startTimes.length){
-                    await  this.setState({arriveValue: firstItemCurrentDay[i]})
+                        await  this.setState({arriveValue: firstItemCurrentDay[i], arriveIndex: i})
                     }
                 }
             }
-            if(this.state.arriveValue.key > this.state.departValue.key){
-                this.setState({departValue: this.state.endTimes[this.state.arriveValue.key]})
+            if(this.state.arriveValue.key > this.state.departValue.key && this.state.scrollingTimes){
+                this.setState({departValue: this.state.endTimes[this.state.arriveValue.key], departIndex: this.state.arriveValue.key})
             }
         }else{
             if(this.state.dayValue != 0){
                 if(e < 24){
-                    this.setState({departValue: this.state.endTimes[0]})
+                    this.setState({departValue: this.state.endTimes[0], departIndex: 0})
                 }else{
                     let i = (Math.round(e/48))
                     if(i < this.state.endTimes.length){
-                        this.setState({departValue: this.state.endTimes[i]})
+                        this.setState({departValue: this.state.endTimes[i], departIndex: i})
                     }
                 }
             }else{
                 if(e < 24){
-                    this.setState({departValue: firstItemCurrentDayEnd[0]})
+                    this.setState({departValue: firstItemCurrentDayEnd[0], departIndex: 0})
                 }else{
                     let i = (Math.round(e/48))
                     if(i < this.state.endTimes.length){
-                        this.setState({departValue: firstItemCurrentDayEnd[i]})
+                        this.setState({departValue: firstItemCurrentDayEnd[i], departIndex: i})
                     }
                 }
             }
 
-            if(this.state.departValue.key <= this.state.arriveValue.key){
-                this.setState({arriveValue: this.state.startTimes[this.state.departValue.key]})
+            if(this.state.departValue.key <= this.state.arriveValue.key && this.state.scrollingTimes){
+                this.setState({arriveValue: this.state.startTimes[this.state.departValue.key], arriveIndex: this.state.departValue.key})
             }
         }
     }
@@ -649,10 +658,14 @@ export default class SearchFilter extends React.Component{
                     {/* Arrive / Depart Tab */}
                     <View style={[styles.section, {flex: 0, backgroundColor: 'white'}]}>
                         <View style={{ flexDirection: 'row', height: 32, paddingTop: 4}}>
-                                <TouchableOpacity onPress={() => this.slideAnimate()} style={{flex: 1}}>
+                                <TouchableOpacity onPress={() => {
+                                    
+                                    this.slideAnimate(true)
+
+                                }} style={{flex: 1}}>
                             <Text style={{fontSize: 16, textAlign: 'center', color: this.state.arriveActive ? 'black' : Colors.cosmos300}}>Arrive @ {this.state.arriveValue.labelFormatted}</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => this.slideAnimate()} style={{flex: 1}}>
+                                <TouchableOpacity onPress={() => this.slideAnimate(false)} style={{flex: 1}}>
                                     <Text style={{fontSize: 16, textAlign: 'center', color: this.state.arriveActive ? Colors.cosmos300 : 'black'}}>Depart @ {this.state.departValue.labelFormatted}</Text>
                                 </TouchableOpacity>
                                 <Animated.View style={{borderBottomWidth: 3, borderBottomColor: Colors.apollo500, position: 'absolute', width: width/2.5, height: 35, transform:[{translateX: this.state.xSlide}]
@@ -674,6 +687,8 @@ export default class SearchFilter extends React.Component{
                                 onScroll={(event) => { 
                                     this._updateIndexTimes(event)
                                 }}
+                                onScrollBeginDrag={() => this.setState({scrollingTimes: true})}
+                                onScrollEndDrag={() => this.setState({scrollingTimes: false})}
                                 getItemLayout={(data, index) => {
                                     return {
                                         length: index === 0 ? this.timeWidth/2 : this.timeWidth,
@@ -712,6 +727,8 @@ export default class SearchFilter extends React.Component{
                                 onScroll={(event) => { 
                                     this._updateIndexTimes(event)
                                 }}
+                                onScrollBeginDrag={() => this.setState({scrollingTimes: true})}
+                                onScrollEndDrag={() => this.setState({scrollingTimes: false})}
                                 getItemLayout={(data, index) => {
                                     return {
                                         length: index === 0 ? this.timeWidth/2 : this.timeWidth,
