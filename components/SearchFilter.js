@@ -422,7 +422,7 @@ export default class SearchFilter extends React.Component{
 
         if(this.state.dayValue === 0){
             let i = firstItemCurrentDayEnd.indexOf(this.state.departValue)
-            newIndexDeparture = i === -1 ? 0 : i;
+            newIndexDeparture = i === -1 ? 1 : i;
         }else{
             newIndexDeparture = this.state.endTimes.indexOf(this.state.departValue)
         }
@@ -439,67 +439,33 @@ export default class SearchFilter extends React.Component{
 
 
     _updateIndex = async({ viewableItems }) => {
-        // getting the first element visible index
 
         let date = new Date();
         let hour = date.getHours()
         let minute = date.getMinutes();
         let minutes = minute >= 10 ? minute.toString() : "0" + minute;
-       
-
-
+    
         let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
 
         let firstItemCurrentDayEnd = this.state.endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
-
-
-        
-        let prevDayValue = this.state.dayValue;
-        await this.getIndex()
-        
-        
-        // if(!this.state.arriveActive){
-        //    await this.setState({arriveActive: true})
-        //    await this.slideAnimate(true);
-        // }
-       
-        // if(viewableItems.length > 0){
-            this.currentIndex = viewableItems[0].index;
-            await this.setState(prevState => ({arriveActive: true, dayValue: viewableItems[0].item.index - 3}))
-
-        // }
-
-       
         
 
+        this.currentIndex = viewableItems[0].index;
+        await this.setState(prevState => ({dayValue: viewableItems[0].item.index - 3}))
+        await this.getIndex();
 
-        
-        if(prevDayValue != 0 && this.state.dayValue === 0){
-               
-            // await this.setState(prevState => ({arriveValue: firstItemCurrentDay[prevState.arriveIndex], departValue: firstItemCurrentDayEnd[prevState.departIndex]}))
-           
-            
-            
-            this.slideAnimate(true)
-            // this.goToIndexDepartures(this.state.departIndex, false)
-            this.goToIndexArrivals(this.state.arriveIndex, false)
-            
-            
-            
-
+     
+        if(this.state.dayValue === 0){
+            this.setState({departValue: firstItemCurrentDayEnd[this.state.departIndex]})
         }else{
-            // await this.setState(prevState => ({arriveValue: prevState.arriveValue,departValue: prevState.departValue}))
 
-            this.slideAnimate(true)
-            this.goToIndexArrivals(this.state.arriveIndex, false)
-          
-
-            
-
-            
         }
+        await this.slideAnimate(true)
+        this.goToIndexArrivals(this.state.arriveIndex, false)
+       
 
     }
+    
 
     _updateIndexTimes = async( event ) => {
         let e = event.nativeEvent.contentOffset.x;
@@ -519,69 +485,89 @@ export default class SearchFilter extends React.Component{
         if(this.state.arriveActive){
             // Not current day
             if(this.state.dayValue != 0){
+                // Scroll position first item
                 if(e < 24){
                     await this.setState({arriveValue: this.state.startTimes[0], arriveIndex: 0})
+                // Scroll position any other than first
                 }else{
                     let i = (Math.round(e/48))
+                    // Ensure that scroll position is less than the length of flatlist
                     if(i < this.state.startTimes.length){
                         await  this.setState({arriveValue: this.state.startTimes[i], arriveIndex: i})
+                    // If error occurs where it is longer, set to last item in flatlist
                     }else{
                         await  this.setState({arriveValue: this.state.startTimes[this.state.startTimes.length - 1], arriveIndex: this.state.startTimes.length - 1})
                     }
                 }
-                
+                // Collision handling for arrive/depart times for not current day
                 if(this.state.arriveValue.key > this.state.departValue.key && this.state.scrollingTimes){
                     this.setState({departValue: this.state.endTimes[this.state.arriveValue.key], departIndex: this.state.arriveValue.key})
                 }
+            // Current day
             }else{
+                // Scroll position first item
                 if(e < 24){
                     await this.setState({arriveValue: firstItemCurrentDay[0], arriveIndex: 0})
+                // Scroll position any other than first
                 }else{
                     let i = (Math.round(e/48))
+                     // Ensure that scroll position is less than the length of flatlist
                     if(i < this.state.startTimes.length){
                         await  this.setState({arriveValue: firstItemCurrentDay[i], arriveIndex: i})
+                    // If error occurs where it is longer, set to last item in flatlist
                     }else{
                         await  this.setState({arriveValue: firstItemCurrentDay[firstItemCurrentDay.length - 1], arriveIndex: firstItemCurrentDay.length - 1})
                     }
                 }
-
+                // Collision handling for arrive/depart times for current day
                 if(this.state.arriveValue.key > this.state.departValue.key && this.state.scrollingTimes){
                     let index = firstItemCurrentDay.indexOf(this.state.arriveValue)
-                    this.setState({departValue: firstItemCurrentDayEnd[index], departIndex: index})
+                    this.setState({departValue: firstItemCurrentDayEnd[index + 1], departIndex: index + 1})
                 }
             }
-            
+        // Depart tab active  
         }else{
+            // Not current day
             if(this.state.dayValue != 0){
+                // Scroll position first item
                 if(e < 24){
                     this.setState({departValue: this.state.endTimes[0], departIndex: 0})
+                // Scroll position any other than first
                 }else{
                     let i = (Math.round(e/48))
+                    // Ensure that scroll position is less than the length of flatlist
                     if(i < this.state.endTimes.length){
                         this.setState({departValue: this.state.endTimes[i], departIndex: i})
+                    // If error occurs where it is longer, set to last item in flatlist
                     }else{
                         await  this.setState({departValue: this.state.endTimes[this.state.endTimes.length - 1], arriveIndex: this.state.endTimes.length - 1})
                     }
                 }
 
+                // Collision handling for arrive/depart times for not current day
                 if(this.state.departValue.key <= this.state.arriveValue.key && this.state.scrollingTimes){
                     this.setState({arriveValue: this.state.startTimes[this.state.departValue.key], arriveIndex: this.state.departValue.key})
                 }
+            // Current day
             }else{
+                // Scroll position first item
                 if(e < 24){
                     this.setState({departValue: firstItemCurrentDayEnd[0], departIndex: 0})
+                // Scroll position any other than first
                 }else{
                     let i = (Math.round(e/48))
+                    // Ensure that scroll position is less than the length of flatlist
                     if(i < this.state.endTimes.length){
                         this.setState({departValue: firstItemCurrentDayEnd[i], departIndex: i})
+                    // If error occurs where it is longer, set to last item in flatlist
                     }else{
                         await  this.setState({departValue: firstItemCurrentDayEnd[firstItemCurrentDayEnd.length - 1], departIndex: firstItemCurrentDayEnd.length - 1})
                     }
                 }
-
+                // Collision handling for arrive/depart times for current day
                 if(this.state.arriveValue.key > this.state.departValue.key && this.state.scrollingTimes){
                     let index = firstItemCurrentDayEnd.indexOf(this.state.departValue)
-                    this.setState({arriveValue: firstItemCurrentDay[index], arriveIndex: index})
+                    this.setState({arriveValue: firstItemCurrentDay[index - 1], arriveIndex: index - 1})
                 }
             }
 
