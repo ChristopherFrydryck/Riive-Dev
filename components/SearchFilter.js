@@ -547,7 +547,7 @@ export default class SearchFilter extends React.Component{
 
                 if(this.state.arriveValue.key > this.state.departValue.key && this.state.scrollingTimes){
                     let index = firstItemCurrentDay.indexOf(this.state.arriveValue)
-                    this.setState({departValue: firstItemCurrentDayEnd[index + 1], departIndex: index + 1})
+                    this.setState({departValue: firstItemCurrentDayEnd[index], departIndex: index})
                 }
             }
             
@@ -581,7 +581,7 @@ export default class SearchFilter extends React.Component{
 
                 if(this.state.arriveValue.key > this.state.departValue.key && this.state.scrollingTimes){
                     let index = firstItemCurrentDayEnd.indexOf(this.state.departValue)
-                    this.setState({arriveValue: firstItemCurrentDay[index - 1], arriveIndex: index - 1})
+                    this.setState({arriveValue: firstItemCurrentDay[index], arriveIndex: index})
                 }
             }
 
