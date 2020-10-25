@@ -515,8 +515,9 @@ export default class SearchFilter extends React.Component{
 
         let firstItemCurrentDayEnd = this.state.endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
 
-
+        // Arrive tab active
         if(this.state.arriveActive){
+            // Not current day
             if(this.state.dayValue != 0){
                 if(e < 24){
                     await this.setState({arriveValue: this.state.startTimes[0], arriveIndex: 0})
@@ -524,7 +525,13 @@ export default class SearchFilter extends React.Component{
                     let i = (Math.round(e/48))
                     if(i < this.state.startTimes.length){
                         await  this.setState({arriveValue: this.state.startTimes[i], arriveIndex: i})
+                    }else{
+                        await  this.setState({arriveValue: this.state.startTimes[this.state.startTimes.length - 1], arriveIndex: this.state.startTimes.length - 1})
                     }
+                }
+                
+                if(this.state.arriveValue.key > this.state.departValue.key && this.state.scrollingTimes){
+                    this.setState({departValue: this.state.endTimes[this.state.arriveValue.key], departIndex: this.state.arriveValue.key})
                 }
             }else{
                 if(e < 24){
@@ -533,12 +540,17 @@ export default class SearchFilter extends React.Component{
                     let i = (Math.round(e/48))
                     if(i < this.state.startTimes.length){
                         await  this.setState({arriveValue: firstItemCurrentDay[i], arriveIndex: i})
+                    }else{
+                        await  this.setState({arriveValue: firstItemCurrentDay[firstItemCurrentDay.length - 1], arriveIndex: firstItemCurrentDay.length - 1})
                     }
                 }
+
+                if(this.state.arriveValue.key > this.state.departValue.key && this.state.scrollingTimes){
+                    let index = firstItemCurrentDay.indexOf(this.state.arriveValue)
+                    this.setState({departValue: firstItemCurrentDayEnd[index + 1], departIndex: index + 1})
+                }
             }
-            if(this.state.arriveValue.key > this.state.departValue.key && this.state.scrollingTimes){
-                this.setState({departValue: this.state.endTimes[this.state.arriveValue.key], departIndex: this.state.arriveValue.key})
-            }
+            
         }else{
             if(this.state.dayValue != 0){
                 if(e < 24){
@@ -547,7 +559,13 @@ export default class SearchFilter extends React.Component{
                     let i = (Math.round(e/48))
                     if(i < this.state.endTimes.length){
                         this.setState({departValue: this.state.endTimes[i], departIndex: i})
+                    }else{
+                        await  this.setState({departValue: this.state.endTimes[this.state.endTimes.length - 1], arriveIndex: this.state.endTimes.length - 1})
                     }
+                }
+
+                if(this.state.departValue.key <= this.state.arriveValue.key && this.state.scrollingTimes){
+                    this.setState({arriveValue: this.state.startTimes[this.state.departValue.key], arriveIndex: this.state.departValue.key})
                 }
             }else{
                 if(e < 24){
@@ -556,13 +574,18 @@ export default class SearchFilter extends React.Component{
                     let i = (Math.round(e/48))
                     if(i < this.state.endTimes.length){
                         this.setState({departValue: firstItemCurrentDayEnd[i], departIndex: i})
+                    }else{
+                        await  this.setState({departValue: firstItemCurrentDayEnd[firstItemCurrentDayEnd.length - 1], departIndex: firstItemCurrentDayEnd.length - 1})
                     }
+                }
+
+                if(this.state.arriveValue.key > this.state.departValue.key && this.state.scrollingTimes){
+                    let index = firstItemCurrentDayEnd.indexOf(this.state.departValue)
+                    this.setState({arriveValue: firstItemCurrentDay[index - 1], arriveIndex: index - 1})
                 }
             }
 
-            if(this.state.departValue.key <= this.state.arriveValue.key && this.state.scrollingTimes){
-                this.setState({arriveValue: this.state.startTimes[this.state.departValue.key], arriveIndex: this.state.departValue.key})
-            }
+            
         }
     }
 
@@ -687,8 +710,9 @@ export default class SearchFilter extends React.Component{
                                 onScroll={(event) => { 
                                     this._updateIndexTimes(event)
                                 }}
-                                onScrollBeginDrag={() => this.setState({scrollingTimes: true})}
-                                onScrollEndDrag={() => this.setState({scrollingTimes: false})}
+                                
+                                onMomentumScrollBegin={() => this.setState({scrollingTimes: true})}
+                                onMomentumScrollEnd={() => this.setState({scrollingTimes: false})}
                                 getItemLayout={(data, index) => {
                                     return {
                                         length: index === 0 ? this.timeWidth/2 : this.timeWidth,
@@ -727,8 +751,8 @@ export default class SearchFilter extends React.Component{
                                 onScroll={(event) => { 
                                     this._updateIndexTimes(event)
                                 }}
-                                onScrollBeginDrag={() => this.setState({scrollingTimes: true})}
-                                onScrollEndDrag={() => this.setState({scrollingTimes: false})}
+                                onMomentumScrollBegin={() => this.setState({scrollingTimes: true})}
+                                onMomentumScrollEnd={() => this.setState({scrollingTimes: false})}
                                 getItemLayout={(data, index) => {
                                     return {
                                         length: index === 0 ? this.timeWidth/2 : this.timeWidth,
