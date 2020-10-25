@@ -44,7 +44,7 @@ export default class SearchFilter extends React.Component{
 
             dayValue: 0,
             arriveValue: filteredStarts[0],
-            departValue: filteredEnds[0],
+            departValue: filteredEnds[filteredEnds.length/2],
 
             
 
@@ -134,7 +134,7 @@ export default class SearchFilter extends React.Component{
                 textStyle = [styles.timeText, styles.timeTextActive];
                 // if first item in list
                 if(item.key === firstItemCurrentDay.key){
-                    hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                    hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 21}]
                 // If a whole hour X:00
                 }else if(index % 2 === 0){
                     hourStyle = [styles.wholeHour, styles.activeHour]
@@ -150,7 +150,7 @@ export default class SearchFilter extends React.Component{
                 textStyle = styles.timeText;
                 // if first item in list
                 if(index === firstItemCurrentDay.key){
-                    hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                    hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 21}]
                 // If a whole hour X:00
                 }else if(index % 2 === 0){
                     hourStyle = styles.wholeHour
@@ -169,7 +169,7 @@ export default class SearchFilter extends React.Component{
                 textStyle = [styles.timeText, styles.timeTextActive];
                 // if first item in list
                 if(item.key === 0){
-                    hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                    hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 21}]
                 // If a whole hour X:00
                 }else if(index % 2 === 0){
                     hourStyle = [styles.wholeHour, styles.activeHour]
@@ -185,7 +185,7 @@ export default class SearchFilter extends React.Component{
                 textStyle = styles.timeText;
                 // if first item in list
                 if(index === 0){
-                    hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
+                    hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 21}]
                 // If a whole hour X:00
                 }else if(index % 2 === 0){
                     hourStyle = styles.wholeHour
@@ -357,9 +357,20 @@ export default class SearchFilter extends React.Component{
        
 
 
+            
+            
         let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
         let firstItemCurrentDayEnd = this.state.endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
 
+
+
+        // if(this.state.dayValue == 0){
+        //     let newIndex = await firstItemCurrentDayEnd.indexOf(this.state.departValue)
+        //     await console.log(newIndex)
+        // }else{
+        //     let newIndex = await this.state.endTimes.indexOf(this.state.departValue)
+        //     await console.log(newIndex)
+        // }
         
 
         if(this.state.arriveActive){
@@ -371,10 +382,10 @@ export default class SearchFilter extends React.Component{
             
 
             if(this.state.dayValue == 0){
-                let newIndex = firstItemCurrentDayEnd.indexOf(this.state.departValue)
+                let newIndex = await firstItemCurrentDayEnd.indexOf(this.state.departValue)
                 await this.goToIndexDepartures(newIndex, false)
             }else{
-                let newIndex = this.state.endTimes.indexOf(this.state.departValue)
+                let newIndex = await this.state.endTimes.indexOf(this.state.departValue)
                 await this.goToIndexDepartures(newIndex, false)
             }
             
@@ -393,6 +404,7 @@ export default class SearchFilter extends React.Component{
             }
             
         }
+       
         // console.log(`Arr Value after: ${this.state.arriveValue.labelFormatted}`)
     }
 
@@ -404,6 +416,8 @@ export default class SearchFilter extends React.Component{
     }
 
     goToIndexDepartures = (i, animated) => {
+        let prevDepart = this.state.departValue.labelFormatted
+         console.log(prevDepart)
         const wait = new Promise((resolve) => setTimeout(resolve, 0));
        wait.then( () => {
            this.departureFlatlist.scrollToIndex({animated: animated, index: i, viewOffset: Dimensions.get("window").width/2}); // Throws no errors, has no effect?
@@ -415,35 +429,65 @@ export default class SearchFilter extends React.Component{
 
     _updateIndex = async({ viewableItems }) => {
         // getting the first element visible index
-        if(!this.state.arriveActive){
+
+        
+        if(this.state.arriveActive){
+
             this.slideAnimate();
+         
         }
+        
+       
+
+        
 
         let date = new Date();
-            let hour = date.getHours()
-            let minute = date.getMinutes();
-            let minutes = minute >= 10 ? minute.toString() : "0" + minute;
+        let hour = date.getHours()
+        let minute = date.getMinutes();
+        let minutes = minute >= 10 ? minute.toString() : "0" + minute;
        
 
 
         let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
+
+        let firstItemCurrentDayEnd = this.state.endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
+
+
+        
         
         let prevDayValue = this.state.dayValue;
         
-        
-        if(viewableItems.length > 0){
+     
+        // if(viewableItems.length > 0){
             this.currentIndex = viewableItems[0].index;
-            await this.setState({arriveActive: true, dayValue: viewableItems[0].item.index - 3})
-        }
+            // await this.setState({arriveActive: true, dayValue: viewableItems[0].item.index - 3})
+            await this.setState({arriveActive: false, dayValue: viewableItems[0].item.index - 3})
+        // }
 
 
-        if(prevDayValue !== 0 && this.state.dayValue === 0){
-            let newIndex = firstItemCurrentDay.indexOf(this.state.arriveValue);
-            this.goToIndexArrivals(newIndex != -1 ? newIndex : 0, false)
-        }else if(prevDayValue == 0 & this.state.dayValue !== 0){
-            let newIndex = this.state.startTimes.indexOf(this.state.arriveValue);
-            this.goToIndexArrivals(newIndex, false)
+        
+        if(this.state.arriveActive){
+            if(prevDayValue !== 0 && this.state.dayValue === 0){
+                let newIndex = firstItemCurrentDay.indexOf(this.state.arriveValue);
+                // await this.setState({departValue: firstItemCurrentDayEnd[newIndex]})
+                await this.goToIndexArrivals(newIndex != -1 ? newIndex : 0, false)
+            }else if(prevDayValue == 0 & this.state.dayValue !== 0){
+                    let newIndex = this.state.startTimes.indexOf(this.state.arriveValue);
+                    await this.goToIndexArrivals(newIndex, false)
+            }
+        }else{
+            if(prevDayValue !== 0 && this.state.dayValue === 0){
+                let newIndex = firstItemCurrentDayEnd.indexOf(this.state.departValue);
+                // await this.setState({departValue: firstItemCurrentDayEnd[newIndex]})
+                await this.goToIndexDepartures(newIndex != -1 ? newIndex : 0, false)
+            }else if(prevDayValue == 0 & this.state.dayValue !== 0){
+                    let newIndex = this.state.endTimes.indexOf(this.state.departValue);
+                    await this.goToIndexDepartures(newIndex, false)
+            }
         }
+        
+
+        
       
 
        
@@ -689,7 +733,7 @@ export default class SearchFilter extends React.Component{
                                     // )
                                    return <View />
                                 }}
-                                ListFooterComponentStyle={{paddingLeft: width/2}}
+                                ListFooterComponentStyle={{paddingLeft: width/2 - 20}}
                                 ListFooterComponent={() => {
                                     return(<View />)
                                 }}
