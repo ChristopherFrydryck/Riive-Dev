@@ -32,6 +32,8 @@ export default class Home extends Component{
     constructor(props){
         super(props);
 
+        this.getCurrentLocation(true);
+
 
         var date = new Date();
         var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -96,9 +98,11 @@ export default class Home extends Component{
                 dayValue: (date.getDay())%7,
                 isEnabled: true,
             },
-            timeSearched: [filteredStarts[0], filteredEnds[0]]
+            timeSearched: [filteredStarts[0], filteredEnds[filteredEnds.length / 2]]
 
         }
+
+        this.mapScrolling = false;
 
     }
 
@@ -116,14 +120,18 @@ export default class Home extends Component{
           });
 
           this.rippleAnimation();
-
-
-
-
-
-          await this.getCurrentLocation(true);
-          this._interval = setInterval(() => {this.getCurrentLocation(false)}, 5000)
+          
     
+        }
+
+        mapLocationFunction = (lat, lng) => {
+            this._interval = setInterval(() => {
+                if(this.mapScrolling === false){
+                  this.getCurrentLocation(false)
+                //   console.log("Got new location")
+                }
+              }, 5000)
+              
         }
 
         searchFilterTimeCallback = (timeData) => {
@@ -238,6 +246,7 @@ export default class Home extends Component{
         }
 
         onRegionChange = (region) => {
+            clearInterval(this._interval)
             this.setState(prevState => ({
                 region: {
                     ...prevState.region,
@@ -250,6 +259,9 @@ export default class Home extends Component{
                 },
                 mapScrolled: true,
             }))
+
+            this.mapScrolling = false;
+            this.mapLocationFunction();
         }
 
         clearAddress = () => {
@@ -277,6 +289,7 @@ export default class Home extends Component{
         const {width, height} = Dimensions.get('window')
         const {firstname, email} = this.props.UserStore
 
+    
 
         
         return(
@@ -287,7 +300,7 @@ export default class Home extends Component{
                     <View style={{paddingHorizontal: 16, paddingBottom: 36, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "space-between"}}>
                         <Text type="semiBold" numberOfLines={1} style={{flex: this.state.searchFilterOpen ? 0 : 4,fontSize: 24, paddingTop: 8}}>{this.state.searchFilterOpen ? "" : `Hello, ${firstname || 'traveler'}`}</Text>
                         <TouchableOpacity onPress={() => this.setState({searchFilterOpen: !this.state.searchFilterOpen})} style={{borderLeftWidth: 5, borderLeftColor: 'red', paddingLeft: 8, marginLeft: 8, flex: 2}}>
-                        <Text numberOfLines={2} style={{fontSize: 12}}>{this.state.daySearched.index === 0 ? "Today" : this.state.daySearched.dayName}{"\n"}{this.state.timeSearched[0].labelFormatted} to {this.state.timeSearched[1].labelFormatted}</Text>
+                        <Text numberOfLines={2} style={{fontSize: 12}}>{this.state.daySearched.dayName}{"\n"}{this.state.timeSearched[0].labelFormatted} to {this.state.timeSearched[1].labelFormatted}</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={{flex: 1}}>
@@ -295,15 +308,25 @@ export default class Home extends Component{
                         provider={MapView.PROVIDER_GOOGLE}
                         mapStyle={DayMap}
                         style={styles.mapStyle}
-                        onRegionChangeComplete={region => this.onRegionChange(region)}
+                        onRegionChangeComplete={region =>  this.onRegionChange(region)}
+                        onRegionChange={() => this.mapScrolling = true}
+                        initialRegion={{
+                            latitude: this.state.region.current.latitude || 37.8020,
+
+                            longitude: this.state.region.current.longitude || -122.4486,
+
+                            latitudeDelta:this.state.region.current.latitudeDelta || 0.025,
+
+                            longitudeDelta: this.state.region.current.longitudeDelta || 0.025
+                        }}
                         region={{
-                            latitude: this.state.region.searched.latitude && !this.state.mapScrolled ? this.state.region.searched.latitude : this.state.region.current.latitude ? this.state.region.current.latitude : 37.8020,
+                            latitude: this.state.region.searched.latitude ? this.state.region.searched.latitude : this.state.region.current.latitude ? this.state.region.current.latitude : 37.8020,
 
-                            longitude: this.state.region.searched.longitude && !this.state.mapScrolled ? this.state.region.searched.longitude : this.state.region.current.longitude ? this.state.region.current.longitude : -122.4486,
+                            longitude: this.state.region.searched.longitude ? this.state.region.searched.longitude : this.state.region.current.longitude ? this.state.region.current.longitude : -122.4486,
 
-                            latitudeDelta: this.state.region.searched.latitudeDelta && !this.state.mapScrolled ? this.state.region.searched.latitudeDelta : this.state.region.current.latitudeDelta ? this.state.region.current.latitudeDelta : 0.025,
+                            latitudeDelta: this.state.region.searched.latitudeDelta ? this.state.region.searched.latitudeDelta : this.state.region.current.latitudeDelta ? this.state.region.current.latitudeDelta : 0.025,
 
-                            longitudeDelta: this.state.region.searched.longitudeDelta && !this.state.mapScrolled ? this.state.region.searched.longitudeDelta : this.state.region.current.longitudeDelta ? this.state.region.current.longitudeDelta : 0.025,
+                            longitudeDelta: this.state.region.searched.longitudeDelta  ? this.state.region.searched.longitudeDelta : this.state.region.current.longitudeDelta ? this.state.region.current.longitudeDelta : 0.025,
                         }}
                         pitchEnabled={false} 
                         rotateEnabled={false} 
@@ -368,7 +391,7 @@ export default class Home extends Component{
                                     this.setState({
                                         inputFocus: false
                                     })
-                                    this._interval = setInterval(() => {this.getCurrentLocation(false)}, 5000)
+                                    this.mapLocationFunction();
                                 },
                                 clearButtonMode: 'never'
                             }}
