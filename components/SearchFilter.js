@@ -435,6 +435,8 @@ export default class SearchFilter extends React.Component{
 
    }
 
+   
+
 
 
 
@@ -457,12 +459,11 @@ export default class SearchFilter extends React.Component{
      
         if(this.state.dayValue === 0){
             this.setState({departValue: firstItemCurrentDayEnd[this.state.departIndex]})
-        }else{
-
         }
         await this.slideAnimate(true)
         this.goToIndexArrivals(this.state.arriveIndex, false)
        
+        this.props.dayCallback(this.state.dayData[this.state.dayValue + 3]);
 
     }
     
@@ -522,7 +523,7 @@ export default class SearchFilter extends React.Component{
                 // Collision handling for arrive/depart times for current day
                 if(this.state.arriveValue.key > this.state.departValue.key && this.state.scrollingTimes){
                     let index = firstItemCurrentDay.indexOf(this.state.arriveValue)
-                    this.setState({departValue: firstItemCurrentDayEnd[index + 1], departIndex: index + 1})
+                    this.setState({departValue: firstItemCurrentDayEnd[index], departIndex: index})
                 }
             }
         // Depart tab active  
@@ -567,12 +568,14 @@ export default class SearchFilter extends React.Component{
                 // Collision handling for arrive/depart times for current day
                 if(this.state.arriveValue.key > this.state.departValue.key && this.state.scrollingTimes){
                     let index = firstItemCurrentDayEnd.indexOf(this.state.departValue)
-                    this.setState({arriveValue: firstItemCurrentDay[index - 1], arriveIndex: index - 1})
+                    this.setState({arriveValue: firstItemCurrentDay[index], arriveIndex: index})
                 }
             }
 
             
         }
+        
+        this.props.timeCallback([this.state.arriveValue, this.state.departValue]);
     }
 
     convertToCommonTime = (t) => {

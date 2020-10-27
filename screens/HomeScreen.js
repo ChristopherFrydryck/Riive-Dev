@@ -11,6 +11,7 @@ import * as Font from 'expo-font'
 import * as Location from 'expo-location'
 
 import SearchFilter from '../components/SearchFilter'
+import Times from '../constants/TimesAvailable'
 
 import * as firebase from 'firebase'
 import 'firebase/firestore';
@@ -30,6 +31,28 @@ export default class Home extends Component{
 
     constructor(props){
         super(props);
+
+
+        var date = new Date();
+        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        let hour = date.getHours()
+        let minute = date.getMinutes();
+        let minutes = minute >= 10 ? minute.toString() : "0" + minute;
+
+        var startTimes = [];
+      for (var i = 0 ; i < Times[0].start.length; i++){
+         startTimes.push({key: i, label: Times[0].start[i], labelFormatted: this.convertToCommonTime(Times[0].start[i])})
+      }
+
+      var endTimes = []
+       for (var i = 0 ; i < Times[1].end.length; i++){
+          endTimes.push({key: i, label: Times[1].end[i], labelFormatted: this.convertToCommonTime(Times[1].end[i])})
+       }
+
+        let filteredStarts = startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
+        let filteredEnds = endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
 
         this.state = {
             rippleFadeAnimation: new Animated.Value(1),
@@ -62,7 +85,18 @@ export default class Home extends Component{
                           lng: null,
                       }
                   }
-              }
+              },
+              daySearched: {
+                index: 0,
+                dayName: days[(date.getDay())%7],
+                dayNameAbbr: days[(date.getDay())%7].slice(0,3),
+                monthName: months[date.getMonth()],
+                monthNameAbbr: months[date.getMonth()].slice(0,3),
+                dateName: (date.getDate()),
+                dayValue: (date.getDay())%7,
+                isEnabled: true,
+            },
+            timeSearched: [filteredStarts[0], filteredEnds[0]]
 
         }
 
@@ -83,9 +117,21 @@ export default class Home extends Component{
 
           this.rippleAnimation();
 
+
+
+
+
           await this.getCurrentLocation(true);
           this._interval = setInterval(() => {this.getCurrentLocation(false)}, 5000)
     
+        }
+
+        searchFilterTimeCallback = (timeData) => {
+            this.setState({timeSearched: timeData})
+        }
+
+        searchFilterDayCallback = (dayData) => {
+            this.setState({daySearched: dayData})
         }
 
         rippleAnimation = () => {
@@ -105,6 +151,17 @@ export default class Home extends Component{
                                 }),
                     ]),
             ).start()
+        }
+
+        convertToCommonTime = (t) => {
+            let hoursString = t.substring(0,2)
+            let minutesString = t.substring(2)
+    
+    
+            
+            let hours = parseInt(hoursString) == 0 ? "12" : parseInt(hoursString) > 12 ? (parseInt(hoursString) - 12).toString() : parseInt(hoursString);
+            // let minutes = parseInt(minutesString)
+            return(`${hours}:${minutesString} ${parseInt(hoursString) >= 12 ? 'PM' : 'AM'}`)
         }
 
         getCurrentLocation = async(isFirstTime) => {
@@ -219,16 +276,18 @@ export default class Home extends Component{
     render(){
         const {width, height} = Dimensions.get('window')
         const {firstname, email} = this.props.UserStore
+
+
         
         return(
                 <SafeAreaView style={{flex: 1, position: 'relative', backgroundColor: this.state.searchFilterOpen ? Colors.tango500 : 'white'}}>
-                        <SearchFilter visible={this.state.searchFilterOpen} currentSearch={this.state.searchInputValue}/>
+                        <SearchFilter visible={this.state.searchFilterOpen} currentSearch={this.state.searchInputValue} timeCallback={(data) => this.setState({timeSearched: data})} dayCallback={(data) => this.setState({daySearched: data})}/>
 
 
                     <View style={{paddingHorizontal: 16, paddingBottom: 36, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "space-between"}}>
                         <Text type="semiBold" numberOfLines={1} style={{flex: this.state.searchFilterOpen ? 0 : 4,fontSize: 24, paddingTop: 8}}>{this.state.searchFilterOpen ? "" : `Hello, ${firstname || 'traveler'}`}</Text>
                         <TouchableOpacity onPress={() => this.setState({searchFilterOpen: !this.state.searchFilterOpen})} style={{borderLeftWidth: 5, borderLeftColor: 'red', paddingLeft: 8, marginLeft: 8, flex: 2}}>
-                            <Text numberOfLines={2} style={{fontSize: 12}}>Today{"\n"}12:00PM to 4:00PM</Text>
+                        <Text numberOfLines={2} style={{fontSize: 12}}>{this.state.daySearched.index === 0 ? "Today" : this.state.daySearched.dayName}{"\n"}{this.state.timeSearched[0].labelFormatted} to {this.state.timeSearched[1].labelFormatted}</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={{flex: 1}}>
