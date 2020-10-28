@@ -81,25 +81,26 @@ export default class SearchFilter extends React.Component{
     getDays = () => {
         const numInvalidDaysOnEachSide = 3
         var date = new Date();
-        var oneWeekFromToday = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
+        var oneWeekFromToday = new Date(date.getTime() + 1 * 24 * 60 * 60 * 1000);
         var dTwoDaysAgo = date.setDate(date.getDate() - numInvalidDaysOnEachSide);
         var d = new Date(dTwoDaysAgo);
         var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         var next11 = new Array(7+numInvalidDaysOnEachSide*2)
-
         for(let i = 0; i < next11.length; i++){
+            var iDate = new Date(date.getTime() + (i) * 24 * 60 * 60 * 1000);
             next11[i] = {
                 index: i,
-                dayName: days[(d.getDay()+i)%7],
-                dayNameAbbr: days[(d.getDay()+i)%7].slice(0,3),
-                monthName: months[d.getMonth()],
-                monthNameAbbr: months[d.getMonth()].slice(0,3),
-                dateName: (d.getDate()+i),
-                dayValue: (d.getDay()+i)%7,
+                dayName: days[iDate.getDay()],
+                dayNameAbbr: days[iDate.getDay()].slice(0,3),
+                monthName: months[iDate.getMonth()],
+                monthNameAbbr: months[iDate.getMonth()].slice(0,3),
+                dateName: iDate.getDate(),
+                dayValue: iDate.getDay(),
                 isEnabled: i < numInvalidDaysOnEachSide || i > numInvalidDaysOnEachSide + 6 ? false : true,
 
             }
+            
         }
         return next11
     }

@@ -312,11 +312,8 @@ export default class Home extends Component{
                         onRegionChange={() => this.mapScrolling = true}
                         initialRegion={{
                             latitude: this.state.region.current.latitude || 37.8020,
-
                             longitude: this.state.region.current.longitude || -122.4486,
-
                             latitudeDelta:this.state.region.current.latitudeDelta || 0.025,
-
                             longitudeDelta: this.state.region.current.longitudeDelta || 0.025
                         }}
                         region={{
