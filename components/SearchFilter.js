@@ -11,7 +11,7 @@ import Times from '../constants/TimesAvailable'
 
 
 
-export default class SearchFilter extends React.Component{
+export default class SearchFilter extends React.PureComponent{
     constructor(props){
         super(props);
 
@@ -65,10 +65,26 @@ export default class SearchFilter extends React.Component{
         this.viewabilityConfig = {
         itemVisiblePercentThreshold: 5
         };
+        this.prevVisible = false;
 
-       
+        
 
     }
+
+    componentDidMount(){
+        this.props.dayCallback(this.state.dayData[this.state.dayValue + 3]);
+        this.props.timeCallback([this.state.arriveValue, this.state.departValue]);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if(!prevProps.visible && this.props.visible){
+            this.slideAnimate(true)
+        }
+    }
+
+    
+
+
 
 
 
@@ -464,7 +480,7 @@ export default class SearchFilter extends React.Component{
         await this.slideAnimate(true)
         this.goToIndexArrivals(this.state.arriveIndex, false)
        
-        this.props.dayCallback(this.state.dayData[this.state.dayValue + 3]);
+        await this.props.dayCallback(this.state.dayData[this.state.dayValue + 3]);
 
     }
     
@@ -575,8 +591,9 @@ export default class SearchFilter extends React.Component{
 
             
         }
+
+        await this.props.timeCallback([this.state.arriveValue, this.state.departValue]);
         
-        this.props.timeCallback([this.state.arriveValue, this.state.departValue]);
     }
 
     convertToCommonTime = (t) => {
@@ -599,10 +616,10 @@ export default class SearchFilter extends React.Component{
        
         
         // console.log(endTimes.length)
-
+        if(visible){
         return(
             <Fragment>            
-                <View style={[styles.container, {display: visible ? "flex" : "none"}]}>
+                <View style={[styles.container, {display:  "flex" }]}>
                     <View style={[styles.section,{backgroundColor: Colors.tango500, flex: 0, paddingBottom: 24}]}>
                         <View style={styles.padding}>
                             <Text style={styles.searchTitle} numberOfLines={1}>{currentSearch.length > 0 ? "Parking near " + currentSearch : "No search yet"}</Text> 
@@ -785,6 +802,9 @@ export default class SearchFilter extends React.Component{
             </Fragment>
         
         )
+        }else{
+            return null
+        }
     }
 
 }

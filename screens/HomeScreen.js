@@ -124,7 +124,7 @@ export default class Home extends Component{
     
         }
 
-        mapLocationFunction = (lat, lng) => {
+        mapLocationFunction = () => {
             this._interval = setInterval(() => {
                 if(this.mapScrolling === false){
                   this.getCurrentLocation(false)
@@ -289,17 +289,17 @@ export default class Home extends Component{
         const {width, height} = Dimensions.get('window')
         const {firstname, email} = this.props.UserStore
 
-    
-
+     
         
         return(
                 <SafeAreaView style={{flex: 1, position: 'relative', backgroundColor: this.state.searchFilterOpen ? Colors.tango500 : 'white'}}>
-                        <SearchFilter visible={this.state.searchFilterOpen} currentSearch={this.state.searchInputValue} timeCallback={(data) => this.setState({timeSearched: data})} dayCallback={(data) => this.setState({daySearched: data})}/>
+                    
+                        <SearchFilter visible={this.state.searchFilterOpen} currentSearch={this.state.searchInputValue} timeCallback={(data) => this.searchFilterTimeCallback(data)} dayCallback={(data) => this.searchFilterDayCallback(data)}/>
 
 
                     <View style={{paddingHorizontal: 16, paddingBottom: 36, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "space-between"}}>
                         <Text type="semiBold" numberOfLines={1} style={{flex: this.state.searchFilterOpen ? 0 : 4,fontSize: 24, paddingTop: 8}}>{this.state.searchFilterOpen ? "" : `Hello, ${firstname || 'traveler'}`}</Text>
-                        <TouchableOpacity onPress={() => this.setState({searchFilterOpen: !this.state.searchFilterOpen})} style={{borderLeftWidth: 5, borderLeftColor: 'red', paddingLeft: 8, marginLeft: 8, flex: 2}}>
+                        <TouchableOpacity onPress={() => this.setState(prevState => ({searchFilterOpen: !this.state.searchFilterOpen}))} style={{borderLeftWidth: 5, borderLeftColor: 'red', paddingLeft: 8, marginLeft: 8, flex: 2}}>
                         <Text numberOfLines={2} style={{fontSize: 12}}>{this.state.daySearched.dayName}{"\n"}{this.state.timeSearched[0].labelFormatted} to {this.state.timeSearched[1].labelFormatted}</Text>
                         </TouchableOpacity>
                     </View>
