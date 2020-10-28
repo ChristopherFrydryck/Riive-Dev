@@ -317,13 +317,13 @@ export default class Home extends Component{
                             longitudeDelta: this.state.region.current.longitudeDelta || 0.025
                         }}
                         region={{
-                            latitude: this.state.region.searched.latitude ? this.state.region.searched.latitude : this.state.region.current.latitude ? this.state.region.current.latitude : 37.8020,
+                            latitude: this.state.region.searched.latitude && !this.state.mapScrolled ? this.state.region.searched.latitude : this.state.region.current.latitude ? this.state.region.current.latitude : 37.8020,
 
-                            longitude: this.state.region.searched.longitude ? this.state.region.searched.longitude : this.state.region.current.longitude ? this.state.region.current.longitude : -122.4486,
+                            longitude: this.state.region.searched.longitude  && !this.state.mapScrolled ? this.state.region.searched.longitude : this.state.region.current.longitude ? this.state.region.current.longitude : -122.4486,
 
-                            latitudeDelta: this.state.region.searched.latitudeDelta ? this.state.region.searched.latitudeDelta : this.state.region.current.latitudeDelta ? this.state.region.current.latitudeDelta : 0.025,
+                            latitudeDelta: this.state.region.searched.latitudeDelta  && !this.state.mapScrolled ? this.state.region.searched.latitudeDelta : this.state.region.current.latitudeDelta ? this.state.region.current.latitudeDelta : 0.025,
 
-                            longitudeDelta: this.state.region.searched.longitudeDelta  ? this.state.region.searched.longitudeDelta : this.state.region.current.longitudeDelta ? this.state.region.current.longitudeDelta : 0.025,
+                            longitudeDelta: this.state.region.searched.longitudeDelta  && !this.state.mapScrolled ? this.state.region.searched.longitudeDelta : this.state.region.current.longitudeDelta ? this.state.region.current.longitudeDelta : 0.025,
                         }}
                         pitchEnabled={false} 
                         rotateEnabled={false} 

@@ -623,7 +623,9 @@ export default class SearchFilter extends React.PureComponent{
                     <View style={[styles.section,{backgroundColor: Colors.tango500, flex: 0, paddingBottom: 24}]}>
                         <View style={styles.padding}>
                             <Text style={styles.searchTitle} numberOfLines={1}>{currentSearch.length > 0 ? "Parking near " + currentSearch : "No search yet"}</Text> 
+                        
                         </View>
+                       
                         <FlatList 
                             ref={(ref) => { this._flatList = ref; }}
                             data={this.state.dayData.filter(x => x.isEnabled)}
@@ -803,7 +805,7 @@ export default class SearchFilter extends React.PureComponent{
         
         )
         }else{
-            return null
+            return  null
         }
     }
 
