@@ -79,7 +79,6 @@ export default class SearchFilter extends React.PureComponent{
     componentDidUpdate(prevProps, prevState) {
         if(!prevProps.visible && this.props.visible){
             this.slideAnimate(true)
-            this.goToIndexDays(this.state.dayValue, false)
         }
     }
 
