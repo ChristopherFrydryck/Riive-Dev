@@ -480,7 +480,7 @@ class Profile extends Component{
     //     }) 
     // }
 
-    
+
  
 
     signOut = () => {
