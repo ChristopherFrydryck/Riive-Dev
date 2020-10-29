@@ -79,32 +79,21 @@ export default class SearchFilter extends React.PureComponent{
     componentDidUpdate(prevProps, prevState) {
         if(!prevProps.visible && this.props.visible){
             this.slideAnimate(true)
+            this.goToIndexDays(this.state.dayValue, false)
         }
     }
 
     
 
 
-
-
-
-
-
-
-
-    
-
     getDays = () => {
         const numInvalidDaysOnEachSide = 3
         var date = new Date();
-        var oneWeekFromToday = new Date(date.getTime() + 1 * 24 * 60 * 60 * 1000);
-        var dTwoDaysAgo = date.setDate(date.getDate() - numInvalidDaysOnEachSide);
-        var d = new Date(dTwoDaysAgo);
         var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         var next11 = new Array(7+numInvalidDaysOnEachSide*2)
         for(let i = 0; i < next11.length; i++){
-            var iDate = new Date(date.getTime() + (i) * 24 * 60 * 60 * 1000);
+            var iDate = new Date(date.getTime() + (i - numInvalidDaysOnEachSide) * 24 * 60 * 60 * 1000);
             next11[i] = {
                 index: i,
                 dayName: days[iDate.getDay()],
@@ -141,13 +130,6 @@ export default class SearchFilter extends React.PureComponent{
        
 
         let firstItemCurrentDay = this.state.startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) -30)[0]
-
-        // console.log(firstItemCurrentDay)
-
-        
-   
-        
-        
 
         let hourStyle, textStyle;
 
@@ -375,10 +357,8 @@ export default class SearchFilter extends React.PureComponent{
             // console.log(`Arr Value before: ${this.state.arriveValue.labelFormatted}`)
         const {width} = Dimensions.get('window')
 
-
-
-
         this.getIndex();
+
         
 
         if(toArrival){
@@ -404,17 +384,24 @@ export default class SearchFilter extends React.PureComponent{
        
     }
 
+    goToIndexDays = (i, animated) => {
+        const wait = new Promise((resolve) => setTimeout(resolve, 0));
+        wait.then( () => {
+            this._dayFlatlist.scrollToIndex({animated: animated, index: i, viewOffset: 300}); 
+        });
+    }
+
     goToIndexArrivals = (i, animated) => {
          const wait = new Promise((resolve) => setTimeout(resolve, 0));
         wait.then( () => {
-            this.arrivalFlatlist.scrollToIndex({animated: animated, index: i, viewOffset: Dimensions.get("window").width/2}); // Throws no errors, has no effect?
+            this.arrivalFlatlist.scrollToIndex({animated: animated, index: i, viewOffset: Dimensions.get("window").width/2});
         });
     }
 
     goToIndexDepartures = (i, animated) => {
         const wait = new Promise((resolve) => setTimeout(resolve, 0));
        wait.then( () => {
-           this.departureFlatlist.scrollToIndex({animated: animated, index: i, viewOffset: Dimensions.get("window").width/2}); // Throws no errors, has no effect?
+           this.departureFlatlist.scrollToIndex({animated: animated, index: i, viewOffset: Dimensions.get("window").width/2}); 
        });
    }
 
@@ -627,7 +614,7 @@ export default class SearchFilter extends React.PureComponent{
                         </View>
                        
                         <FlatList 
-                            ref={(ref) => { this._flatList = ref; }}
+                            ref={(ref) => { this._dayFlatlist = ref; }}
                             data={this.state.dayData.filter(x => x.isEnabled)}
                             renderItem={({item, index}) => {
                                 
@@ -636,15 +623,9 @@ export default class SearchFilter extends React.PureComponent{
                             }}
                             keyExtractor={item => item.index.toString()}
                             horizontal={true}
-                            on
-                            
                             showsHorizontalScrollIndicator={false}
-                            snapToAlignment={"start"}
-                          
-                     
-                            // contentInset={{right: 10}}
 
-                            contentContainerStyle={ Platform.OS == 'android' ? {marginLeft: -20} : {marginLeft: -20, }}
+                            contentContainerStyle={{marginLeft: -20}}
 
                             snapToOffsets ={[...Array(this.state.dayData.filter(x => x.isEnabled).length)].map((x, i) => i * (width*.16)) }
 
@@ -675,9 +656,13 @@ export default class SearchFilter extends React.PureComponent{
                                 overflow: 'visible'
                             }}
                             bounces={false}
-                            getItemLayout={(data, index) => (
-                                {length: width * .16, offset: (width*.16)*index - 40, index}
-                            )}
+                            getItemLayout={(data, index) => {
+                                return {
+                                    length: width * .16,
+                                    offset: (width*.16)*index,
+                                    index
+                                }
+                            }}
                             initialScrollIndex={this.currentIndex}
                             // onScrollToIndexFailed = {(e) => {console.log(e)}}
                             decelerationRate={0}

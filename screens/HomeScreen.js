@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
-import {Fragment, View, ActivityIndicator, SafeAreaView, StatusBar, Platform, StyleSheet, Dimensions, Animated} from 'react-native'
+import {Fragment, View, ActivityIndicator, SafeAreaView, StatusBar, Platform, StyleSheet, Dimensions, Animated, TouchableOpacity} from 'react-native'
 import Button from '../components/Button'
 import Text from '../components/Txt'
 import Icon from '../components/Icon'
+import FilterButton from '../components/FilterButton'
 import MapView, {Marker} from 'react-native-maps';
 import DayMap from '../constants/DayMap'
 import NightMap from '../constants/NightMap'
@@ -10,6 +11,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import * as Font from 'expo-font'
 import * as Location from 'expo-location'
 
+import Colors from '../constants/Colors'
 import SearchFilter from '../components/SearchFilter'
 import Times from '../constants/TimesAvailable'
 
@@ -21,8 +23,7 @@ import 'firebase/firestore';
 //MobX Imports
 import {inject, observer} from 'mobx-react/native'
 import UserStore from '../stores/userStore'
-import Colors from '../constants/Colors'
-import { TouchableOpacity } from 'react-native'
+
 
 @inject("UserStore")
 @observer
@@ -297,11 +298,14 @@ export default class Home extends Component{
                         <SearchFilter visible={this.state.searchFilterOpen} currentSearch={this.state.searchInputValue} timeCallback={(data) => this.searchFilterTimeCallback(data)} dayCallback={(data) => this.searchFilterDayCallback(data)}/>
 
 
-                    <View style={{paddingHorizontal: 16, paddingBottom: 36, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "space-between"}}>
+                    <View style={{paddingHorizontal: 16, paddingBottom: this.state.searchFilterOpen ? 0 : 36, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "space-between"}}>
                         <Text type="semiBold" numberOfLines={1} style={{flex: this.state.searchFilterOpen ? 0 : 4,fontSize: 24, paddingTop: 8}}>{this.state.searchFilterOpen ? "" : `Hello, ${firstname || 'traveler'}`}</Text>
-                        <TouchableOpacity onPress={() => this.setState(prevState => ({searchFilterOpen: !this.state.searchFilterOpen}))} style={{borderLeftWidth: 5, borderLeftColor: 'red', paddingLeft: 8, marginLeft: 8, flex: 2}}>
-                        <Text numberOfLines={2} style={{fontSize: 12}}>{this.state.daySearched.dayName}{"\n"}{this.state.timeSearched[0].labelFormatted} to {this.state.timeSearched[1].labelFormatted}</Text>
-                        </TouchableOpacity>
+                        <FilterButton 
+                            onPress={() => this.setState({searchFilterOpen: !this.state.searchFilterOpen})}
+                            searchFilterOpen={this.state.searchFilterOpen}
+                            daySearched={this.state.daySearched}
+                            timeSearched={this.state.timeSearched}
+                        />
                     </View>
                     <View style={{flex: 1}}>
                     <MapView
@@ -420,6 +424,7 @@ export default class Home extends Component{
 
                             styles={{
                                 container:{
+                                    display: this.state.searchFilterOpen ? 'none' : 'flex',
                                     justifySelf: 'content',
                                     width: width,
                                     alignItems: "center",
@@ -496,5 +501,6 @@ const styles = StyleSheet.create({
         width: 20,
         backgroundColor: Colors.apollo300, 
         borderRadius: Dimensions.get('window').width/2, 
-    } 
+    },
+    
 })
