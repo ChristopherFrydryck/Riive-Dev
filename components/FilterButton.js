@@ -3,6 +3,7 @@ import {View, StyleSheet, TouchableOpacity} from 'react-native'
 
 import Text from '../components/Txt'
 import Icon from '../components/Icon'
+import Colors from '../constants/Colors'
 
 export default class FilterButton extends Component{
     render(){
@@ -15,7 +16,7 @@ export default class FilterButton extends Component{
                 </View>
                 
                 :
-                <Text numberOfLines={2} style={{fontSize: 12}}>{`${this.props.daySearched.dayName}  \n${this.props.timeSearched[0].labelFormatted} to ${this.props.timeSearched[1].labelFormatted}`}</Text>
+                <Text numberOfLines={2} style={{fontSize: 13, lineHeight: 16}}>{`${this.props.daySearched.dayName}  \n${this.props.timeSearched[0].labelFormatted} to ${this.props.timeSearched[1].labelFormatted}`}</Text>
                 }
                 
             </TouchableOpacity>
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
         flex: 2,
         alignItems: 'flex-end',
         borderLeftWidth: 5, 
-        borderLeftColor: 'red', 
+        borderLeftColor: Colors.tango900, 
         paddingLeft: 8, 
         marginLeft: 8, 
     },

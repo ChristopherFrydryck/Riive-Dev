@@ -251,7 +251,7 @@ export default class SearchFilter extends React.PureComponent{
         if(this.state.dayValue == 0){
             // If item is active
             if(index === this.state.departValue.key){
-                textStyle = [styles.timeText, styles.timeTextActive];
+                textStyle = [styles.timeTextDepart, styles.timeTextActive];
                 // if first item in list
                 if(item.key === firstItemCurrentDay.key){
                     hourStyle = [styles.wholeHour, styles.activeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
@@ -267,7 +267,7 @@ export default class SearchFilter extends React.PureComponent{
                 }
             // If item is not active
             }else{
-                textStyle = styles.timeText;
+                textStyle = styles.timeTextDepart;
                 // if first item in list
                 if(index === firstItemCurrentDay.key){
                     hourStyle = [styles.wholeHour, {width: this.timeWidth/2, borderLeftWidth: 0, borderRightWidth: 22}]
