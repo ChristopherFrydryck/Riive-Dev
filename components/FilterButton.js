@@ -8,7 +8,7 @@ import Colors from '../constants/Colors'
 export default class FilterButton extends Component{
     render(){
         return(
-            <TouchableOpacity onPress={() => this.setState(this.props.onPress)} style={this.props.searchFilterOpen ? styles.filterButtonOpen : styles.filterButtonClosed}>
+            <TouchableOpacity onPress={() => this.setState(this.props.onPress)} disabled={this.props.disabled ? true : false} style={this.props.searchFilterOpen ? styles.filterButtonOpen : styles.filterButtonClosed}>
                 {this.props.searchFilterOpen ?
                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}}>
                     <Text style={{paddingRight: 8}}>Close Filters</Text>

@@ -302,6 +302,7 @@ export default class Home extends Component{
                         <Text type="semiBold" numberOfLines={1} style={{flex: this.state.searchFilterOpen ? 0 : 4,fontSize: 24, paddingTop: 8}}>{this.state.searchFilterOpen ? "" : `Hello, ${firstname || 'traveler'}`}</Text>
                         <FilterButton 
                             onPress={() => this.setState({searchFilterOpen: !this.state.searchFilterOpen})}
+                            disabled={this.state.timeSearched[0].key > this.state.timeSearched[1].key ? true : false}
                             searchFilterOpen={this.state.searchFilterOpen}
                             daySearched={this.state.daySearched}
                             timeSearched={this.state.timeSearched}
