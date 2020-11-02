@@ -16,7 +16,18 @@ import SearchFilter from '../components/SearchFilter'
 import Times from '../constants/TimesAvailable'
 
 import * as firebase from 'firebase'
+import firebaseConfig from '../firebaseConfig'
+import withFirebaseAuth from 'react-with-firebase-auth'
+import 'firebase/auth';
 import 'firebase/firestore';
+import * as geofirestore from 'geofirestore'
+
+
+
+
+
+
+  
 
 
 
@@ -29,6 +40,11 @@ import UserStore from '../stores/userStore'
 @observer
 export default class Home extends Component{
     _interval = 0;
+
+      
+
+
+
 
     constructor(props){
         super(props);
@@ -160,6 +176,29 @@ export default class Home extends Component{
                                 }),
                     ]),
             ).start()
+        }
+
+        filterResults = () => {
+
+            this.setState({searchFilterOpen: !this.state.searchFilterOpen})
+
+             // Create a Firestore reference
+             const db = firebase.firestore();
+
+             // Create a GeoFirestore reference
+             const GeoFirestore = geofirestore.initializeApp(db);
+ 
+             // Create a GeoCollection reference
+             const geocollection = GeoFirestore.collection('listings');
+ 
+               const query = geocollection.near({ center: new firebase.firestore.GeoPoint(39, -104.), radius: 1000 });
+ 
+               query.get().then((value) => {
+                 // All GeoDocument returned by GeoQuery, like the GeoDocument added above
+                 console.log(value.docs);
+               });
+
+             
         }
 
         convertToCommonTime = (t) => {
@@ -301,7 +340,7 @@ export default class Home extends Component{
                     <View style={{paddingHorizontal: 16, paddingBottom: this.state.searchFilterOpen ? 0 : 36, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "space-between"}}>
                         <Text type="semiBold" numberOfLines={1} style={{flex: this.state.searchFilterOpen ? 0 : 4,fontSize: 24, paddingTop: 8}}>{this.state.searchFilterOpen ? "" : `Hello, ${firstname || 'traveler'}`}</Text>
                         <FilterButton 
-                            onPress={() => this.setState({searchFilterOpen: !this.state.searchFilterOpen})}
+                            onPress={() => this.filterResults()}
                             disabled={this.state.timeSearched[0].key > this.state.timeSearched[1].key ? true : false}
                             searchFilterOpen={this.state.searchFilterOpen}
                             daySearched={this.state.daySearched}

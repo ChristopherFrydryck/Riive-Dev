@@ -27,6 +27,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import * as firebase from 'firebase'
 import 'firebase/firestore';
 import firebaseConfig from '../firebaseConfig'
+import * as geofirestore from 'geofirestore'
 
 
 //MobX Imports
@@ -354,6 +355,13 @@ class addSpace extends Component {
 
     const db = firebase.firestore();
 
+    // Create a GeoFirestore reference
+    const GeoFirestore = geofirestore.initializeApp(db);   
+
+    // Create a GeoCollection reference
+    const geocollection = GeoFirestore.collection('listings');
+ 
+
   
 
 
@@ -384,8 +392,9 @@ class addSpace extends Component {
                       this.state.postID
                     )
                  })
-                 await db.collection("listings").doc(this.state.postID).set({
-                  
+                 
+                 await geocollection.doc(this.state.postID).set({
+                      coordinates: new firebase.firestore.GeoPoint(this.state.region.latitude, this.state.region.longitude),
                       listingID: this.state.postID,
                       hostID: this.props.UserStore.userID,
                       address: this.state.address,

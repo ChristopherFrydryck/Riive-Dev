@@ -36,6 +36,7 @@
     "expo-location": "^9.0.1",
     "expokit": "^36.0.1",
     "firebase": "^6.5.0",
+    "geofirestore": "^4.3.0",
     "mobx": "^5.13.0",
     "mobx-react": "^5.4.3",
     "permissions": "^0.1.0",
