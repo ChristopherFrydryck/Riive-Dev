@@ -155,13 +155,17 @@ export default class Home extends Component{
 
         searchFilterTimeCallback = (timeData) => {
             this.setState({timeSearched: timeData})
-            // console.log(this.state.timeSearched)
+            if(this.state.region.current.latitude && this.state.region.current.longitude){
+                this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.latitudeDelta * 69)
+            }
 
         }
 
         searchFilterDayCallback = (dayData) => {
            this.setState({daySearched: dayData})
-            
+           if(this.state.region.current.latitude && this.state.region.current.longitude){
+            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.latitudeDelta * 69)
+           }
         }
 
         rippleAnimation = () => {
@@ -202,7 +206,7 @@ export default class Home extends Component{
              const GeoFirestore = geofirestore.initializeApp(db);
  
              // Create a GeoCollection reference
-             const geocollection = GeoFirestore.collection('listings');
+             const geocollection = GeoFirestore.collection('listings').limit(40);
  
                const query = geocollection.near({ 
                    center: new firebase.firestore.GeoPoint(lat, lng), 
