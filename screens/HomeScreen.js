@@ -50,7 +50,7 @@ export default class Home extends Component{
     constructor(props){
         super(props);
 
-        this.getCurrentLocation(true);
+       
 
 
         var date = new Date();
@@ -124,7 +124,7 @@ export default class Home extends Component{
 
     }
 
-   async componentDidMount(){
+   componentDidMount(){
          // Set Status Bar page info here!
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             if(this.state.searchFilterOpen){
@@ -138,6 +138,7 @@ export default class Home extends Component{
           });
 
           this.rippleAnimation();
+          this.getCurrentLocation(true);
           
     
         }
@@ -154,10 +155,13 @@ export default class Home extends Component{
 
         searchFilterTimeCallback = (timeData) => {
             this.setState({timeSearched: timeData})
+            // console.log(this.state.timeSearched)
+
         }
 
         searchFilterDayCallback = (dayData) => {
-            this.setState({daySearched: dayData})
+           this.setState({daySearched: dayData})
+            
         }
 
         rippleAnimation = () => {
@@ -182,7 +186,6 @@ export default class Home extends Component{
         filterResults = () => {
 
             this.setState({searchFilterOpen: !this.state.searchFilterOpen})
-
             
 
              
@@ -217,14 +220,6 @@ export default class Home extends Component{
                let resultsFiltered = results.filter(x => !x.hidden && !x.toBeDeleted)
                let resultsFilteredTimeAvail = []
                
-            //    for(let i = 0; i < resultsFiltered.length; i++){
-            //        for(let g = 0; g < resultsFiltered[i].availability[this.state.daySearched.dayValue].data.length; g++){
-            //            let availability = resultsFiltered[i].availability[this.state.daySearched.dayValue].data[g]
-            //            if(parseInt(availability.start) <= parseInt(this.state.timeSearched[0].label) && availability.available || parseInt(availability.end) >= parseInt(this.state.timeSearched[1].label) && availability.available){
-            //                resultsFilteredTimeAvail.push(resultsFiltered[i])
-            //            }
-            //        }
-            //    }
 
             resultsFiltered.forEach((x, i) => {
                 // Gets current day data
@@ -232,20 +227,27 @@ export default class Home extends Component{
                 // Creates new array to assume 
                 let worksArray = new Array;
                 for(let data of avail){
+                    // If specific time slot is marked unavailable, we will check it
                     if(!data.available){
-                        if(parseInt(data.start) > parseInt(this.state.timeSearched[0].label)){
-                            console.log(`${data.start} is greater than or equal to ${this.state.timeSearched[0].label}`)
+                        // Check if start time is out of bounds
+                        if(parseInt(data.start) >= parseInt(this.state.timeSearched[0].label) || parseInt(data.start) >= parseInt(this.state.timeSearched[1].label)){
+                            // console.log(`Start value ${data.start} is invalid within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
+                            worksArray.push(false)
                         }
-                        else if(parseInt(data.end) < parseInt(this.state.timeSearched[1].label)){
-                            console.log(`${data.end} is greater than or equal to ${this.state.timeSearched[1].label}`)
+                        // Check if end time is out of bounds
+                        else if(parseInt(data.end) >= parseInt(this.state.timeSearched[0].label) && parseInt(data.start) <= parseInt(this.state.timeSearched[1].label)){
+                            worksArray.push(false)
+                            // console.log(`End value ${data.end} is invalid within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
+                        // If both start and end time don't interfere with filtered time slots
                         }else{
-                            console.log(`Time slot ${data.id} is marked unavailable but works at start ${data.start} and end ${data.end}`)
+                            worksArray.push(true)
+                            // console.log(`Time slot ${data.id} is marked unavailable but works since ${data.start} and ${data.end} are not within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
                         }
-                        // worksArray.push(false)
+                       
                         // console.log("Time slot " + data.id + " does not work")
                     }else{
-                        // worksArray.push(true)
-                        console.log("Time slot " + data.id + " is marked available")
+                        worksArray.push(true)
+                        // console.log("Time slot " + data.id + " is marked available")
                     }
                 }
 
@@ -254,14 +256,8 @@ export default class Home extends Component{
                 }
             })
 
-
-            // console.log(results.length > 0 ? results[0].availability[this.state.daySearched.dayValue].data.filter(y => parseInt(y.start) <= parseInt(this.state.timeSearched[0].label) && y.available || parseInt(y.end) >= parseInt(this.state.timeSearched[1].label) && y.available) : null)
-
             console.log(results.length > 0 ? resultsFilteredTimeAvail.length : null)
 
-            // parseInt(y.start) >= parseInt(this.state.timeSearched[0].label) && parseInt(y.end) <= parseInt(this.state.timeSearched[1].label)
-
-            //    await console.log(resultsFiltered.length === 0 ? null : resultsFiltered)
         }
 
 
@@ -396,7 +392,6 @@ export default class Home extends Component{
         const {width, height} = Dimensions.get('window')
         const {firstname, email} = this.props.UserStore
 
-     
         
         return(
                 <SafeAreaView style={{flex: 1, position: 'relative', backgroundColor: this.state.searchFilterOpen ? Colors.tango500 : 'white'}}>
