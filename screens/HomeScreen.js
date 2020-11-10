@@ -34,6 +34,7 @@ import * as geofirestore from 'geofirestore'
 //MobX Imports
 import {inject, observer} from 'mobx-react/native'
 import UserStore from '../stores/userStore'
+import { parse } from 'react-native-svg'
 
 
 @inject("UserStore")
@@ -182,6 +183,15 @@ export default class Home extends Component{
 
             this.setState({searchFilterOpen: !this.state.searchFilterOpen})
 
+            
+
+             
+        }
+
+        getResults = async (lat, lng, radius) => {
+
+            let results = [];
+            
              // Create a Firestore reference
              const db = firebase.firestore();
 
@@ -191,15 +201,70 @@ export default class Home extends Component{
              // Create a GeoCollection reference
              const geocollection = GeoFirestore.collection('listings');
  
-               const query = geocollection.near({ center: new firebase.firestore.GeoPoint(39, -104.), radius: 1000 });
+               const query = geocollection.near({ 
+                   center: new firebase.firestore.GeoPoint(lat, lng), 
+                   radius: radius,
+                });
  
-               query.get().then((value) => {
+               await query.get().then((value) => {
                  // All GeoDocument returned by GeoQuery, like the GeoDocument added above
-                 console.log(value.docs);
+                //  console.log(value.docs.data);
+                for (const doc of value.docs) {
+                    // console.log(doc.data())
+                    results.push(doc.data())
+                  }
                });
+               let resultsFiltered = results.filter(x => !x.hidden && !x.toBeDeleted)
+               let resultsFilteredTimeAvail = []
+               
+            //    for(let i = 0; i < resultsFiltered.length; i++){
+            //        for(let g = 0; g < resultsFiltered[i].availability[this.state.daySearched.dayValue].data.length; g++){
+            //            let availability = resultsFiltered[i].availability[this.state.daySearched.dayValue].data[g]
+            //            if(parseInt(availability.start) <= parseInt(this.state.timeSearched[0].label) && availability.available || parseInt(availability.end) >= parseInt(this.state.timeSearched[1].label) && availability.available){
+            //                resultsFilteredTimeAvail.push(resultsFiltered[i])
+            //            }
+            //        }
+            //    }
 
-             
+            resultsFiltered.forEach((x, i) => {
+                // Gets current day data
+                let avail = resultsFiltered[i].availability[this.state.daySearched.dayValue].data
+                // Creates new array to assume 
+                let worksArray = new Array;
+                for(let data of avail){
+                    if(!data.available){
+                        if(parseInt(data.start) > parseInt(this.state.timeSearched[0].label)){
+                            console.log(`${data.start} is greater than or equal to ${this.state.timeSearched[0].label}`)
+                        }
+                        else if(parseInt(data.end) < parseInt(this.state.timeSearched[1].label)){
+                            console.log(`${data.end} is greater than or equal to ${this.state.timeSearched[1].label}`)
+                        }else{
+                            console.log(`Time slot ${data.id} is marked unavailable but works at start ${data.start} and end ${data.end}`)
+                        }
+                        // worksArray.push(false)
+                        // console.log("Time slot " + data.id + " does not work")
+                    }else{
+                        // worksArray.push(true)
+                        console.log("Time slot " + data.id + " is marked available")
+                    }
+                }
+
+                if(!worksArray.includes(false)){
+                    resultsFilteredTimeAvail.push(x)
+                }
+            })
+
+
+            // console.log(results.length > 0 ? results[0].availability[this.state.daySearched.dayValue].data.filter(y => parseInt(y.start) <= parseInt(this.state.timeSearched[0].label) && y.available || parseInt(y.end) >= parseInt(this.state.timeSearched[1].label) && y.available) : null)
+
+            console.log(results.length > 0 ? resultsFilteredTimeAvail.length : null)
+
+            // parseInt(y.start) >= parseInt(this.state.timeSearched[0].label) && parseInt(y.end) <= parseInt(this.state.timeSearched[1].label)
+
+            //    await console.log(resultsFiltered.length === 0 ? null : resultsFiltered)
         }
+
+
 
         convertToCommonTime = (t) => {
             let hoursString = t.substring(0,2)
@@ -281,13 +346,14 @@ export default class Home extends Component{
                 searchInputValue: det.description == "Current Location" ? "Current Location" : det.name,
 
             }));
+            this.getResults(this.state.region.searched.latitude, this.state.region.searched.longitude, this.state.region.searched.latitudeDelta * 69)
          
 
         }
 
-        onRegionChange = (region) => {
-            clearInterval(this._interval)
-            this.setState(prevState => ({
+        onRegionChange = async (region) => {
+            await clearInterval(this._interval)
+            await this.setState(prevState => ({
                 region: {
                     ...prevState.region,
                     current: {
@@ -302,6 +368,7 @@ export default class Home extends Component{
 
             this.mapScrolling = false;
             this.mapLocationFunction();
+            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.latitudeDelta * 69)
         }
 
         clearAddress = () => {
@@ -420,7 +487,7 @@ export default class Home extends Component{
                             minLength={2}
                             listViewDisplayed={false}
                             fetchDetails={true}
-                            onPress={(data, details = null) => {console.log(details); this.onSelectAddress(details)}}
+                            onPress={(data, details = null) => {this.onSelectAddress(details)}}
                             textInputProps={{
                                 onFocus: () => {
                                     this.setState({
