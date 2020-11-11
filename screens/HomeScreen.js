@@ -91,10 +91,10 @@ export default class Home extends Component{
                     longitudeDelta: null,
                 },
                 current: {
-                    latitude: null,
-                    longitude: null,
-                    latitudeDelta: null,
-                    longitudeDelta: null,
+                    latitude: 37.8020,
+                    longitude: -122.4486,
+                    latitudeDelta: 0.025,
+                    longitudeDelta: 0.025,
                 }
               },
               currentLocation: {
@@ -122,6 +122,7 @@ export default class Home extends Component{
 
         this.mapScrolling = false;
         this.results = [];
+      
 
     }
 
@@ -141,7 +142,21 @@ export default class Home extends Component{
           this.rippleAnimation();
           this.getCurrentLocation(true);
           
+          
     
+        }
+
+        componentDidUpdate(prevProps, prevState){
+                try{
+                    let prevLat = prevState.region.current.latitude;
+                    let prevLng = prevState.region.current.longitude;
+
+                    this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, prevLat, prevLng)
+                }catch(e){
+                    console.log(e)
+                }
+            
+     
         }
 
         mapLocationFunction = () => {
@@ -156,17 +171,11 @@ export default class Home extends Component{
 
         searchFilterTimeCallback = (timeData) => {
             this.setState({timeSearched: timeData})
-            if(this.state.region.current.latitude && this.state.region.current.longitude){
-                this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69)
-            }
 
         }
 
         searchFilterDayCallback = (dayData) => {
            this.setState({daySearched: dayData})
-           if(this.state.region.current.latitude && this.state.region.current.longitude){
-            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69)
-           }
         }
 
         rippleAnimation = () => {
@@ -191,12 +200,12 @@ export default class Home extends Component{
         filterResults = () => {
 
             this.setState({searchFilterOpen: !this.state.searchFilterOpen})
-            
+            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, 999999, 999999)
 
              
         }
 
-        getResults = async (lat, lng, radius) => {
+        getResults = async (lat, lng, radius, prevLat, prevLng) => {
 
             let results = [];
             
@@ -213,6 +222,10 @@ export default class Home extends Component{
                    center: new firebase.firestore.GeoPoint(lat, lng), 
                    radius: radius,
                 });
+
+                // console.log(`Lat is ${lat} and prev lat is ${prevLat}`)
+
+               if(lat != prevLat || lng != prevLng){
  
                await query.get().then((value) => {
                  // All GeoDocument returned by GeoQuery, like the GeoDocument added above
@@ -262,6 +275,10 @@ export default class Home extends Component{
             })
 
             this.results = resultsFilteredTimeAvail;
+
+            console.log("Updated points")
+        }
+
 
 
         }
@@ -348,8 +365,6 @@ export default class Home extends Component{
                 searchInputValue: det.description == "Current Location" ? "Current Location" : det.name,
 
             }));
-            this.getResults(this.state.region.searched.latitude, this.state.region.searched.longitude, this.state.region.searched.longitudeDelta * 69)
-         
 
         }
 
@@ -370,7 +385,8 @@ export default class Home extends Component{
 
             this.mapScrolling = false;
             this.mapLocationFunction();
-            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69)
+            
+            
         }
 
         clearAddress = () => {
