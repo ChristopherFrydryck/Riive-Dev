@@ -121,6 +121,7 @@ export default class Home extends Component{
         }
 
         this.mapScrolling = false;
+        this.results = [];
 
     }
 
@@ -156,7 +157,7 @@ export default class Home extends Component{
         searchFilterTimeCallback = (timeData) => {
             this.setState({timeSearched: timeData})
             if(this.state.region.current.latitude && this.state.region.current.longitude){
-                this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.latitudeDelta * 69)
+                this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69)
             }
 
         }
@@ -164,7 +165,7 @@ export default class Home extends Component{
         searchFilterDayCallback = (dayData) => {
            this.setState({daySearched: dayData})
            if(this.state.region.current.latitude && this.state.region.current.longitude){
-            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.latitudeDelta * 69)
+            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69)
            }
         }
 
@@ -260,7 +261,8 @@ export default class Home extends Component{
                 }
             })
 
-            console.log(results.length > 0 ? resultsFilteredTimeAvail.length : null)
+            this.results = resultsFilteredTimeAvail;
+
 
         }
 
@@ -346,7 +348,7 @@ export default class Home extends Component{
                 searchInputValue: det.description == "Current Location" ? "Current Location" : det.name,
 
             }));
-            this.getResults(this.state.region.searched.latitude, this.state.region.searched.longitude, this.state.region.searched.latitudeDelta * 69)
+            this.getResults(this.state.region.searched.latitude, this.state.region.searched.longitude, this.state.region.searched.longitudeDelta * 69)
          
 
         }
@@ -368,7 +370,7 @@ export default class Home extends Component{
 
             this.mapScrolling = false;
             this.mapLocationFunction();
-            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.latitudeDelta * 69)
+            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69)
         }
 
         clearAddress = () => {
@@ -474,6 +476,15 @@ export default class Home extends Component{
                             }}   
                         />
                         : null }
+                        {this.results.map(x => {
+                           return( <Marker 
+                            key={x.listingID}
+                            coordinate={{
+                            latitude: x.region.latitude,
+                            longitude: x.region.longitude
+                            }}   
+                        />)
+                        })}
                         </MapView>
                         <View style={{zIndex: 9, position: 'absolute', top: -16}}>
                             <GooglePlacesAutocomplete

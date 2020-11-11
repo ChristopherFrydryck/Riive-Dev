@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/@react-native-community/cameraroll/android/@react-native-community-cameraroll-android-@react-native-community_cameraroll.iml" filepath="$PROJECT_DIR$/../node_modules/@react-native-community/cameraroll/android/@react-native-community-cameraroll-android-@react-native-community_cameraroll.iml" />
       <module fileurl="file://$PROJECT_DIR$/../node_modules/@react-native-community/cameraroll/android/@react-native-community_cameraroll.iml" filepath="$PROJECT_DIR$/../node_modules/@react-native-community/cameraroll/android/@react-native-community_cameraroll.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/android.iml" filepath="$PROJECT_DIR$/.idea/android.iml" />
       <module fileurl="file://$PROJECT_DIR$/../node_modules/@react-native-community/cameraroll/android/android-@react-native-community_cameraroll.iml" filepath="$PROJECT_DIR$/../node_modules/@react-native-community/cameraroll/android/android-@react-native-community_cameraroll.iml" />
