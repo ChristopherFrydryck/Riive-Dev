@@ -472,6 +472,9 @@ export default class Home extends Component{
                         rotateEnabled={false} 
                         zoomEnabled={true} 
                         scrollEnabled={true}
+                        minZoomLevel={6}
+                        toolbarEnabled={false}
+                        moveOnMarkerPress={false}
                         >
                         {this.state.currentLocation.geometry.location.lat && this.state.currentLocation.geometry.location.lng ? 
                        
