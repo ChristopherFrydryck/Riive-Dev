@@ -248,24 +248,24 @@ export default class Home extends Component{
                     // If specific time slot is marked unavailable, we will check it
                     if(!data.available){
                         // Check if start time is out of bounds
-                        if(parseInt(data.start) >= parseInt(this.state.timeSearched[0].label) || parseInt(data.start) >= parseInt(this.state.timeSearched[1].label)){
-                            // console.log(`Start value ${data.start} is invalid within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
+                        if(parseInt(data.start) >= parseInt(this.state.timeSearched[0].label) && parseInt(data.start) <= parseInt(this.state.timeSearched[1].label)){
+                            console.log(`Start value ${data.start} is invalid within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
                             worksArray.push(false)
                         }
                         // Check if end time is out of bounds
                         else if(parseInt(data.end) >= parseInt(this.state.timeSearched[0].label) && parseInt(data.start) <= parseInt(this.state.timeSearched[1].label)){
                             worksArray.push(false)
-                            // console.log(`End value ${data.end} is invalid within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
+                            console.log(`End value ${data.end} is invalid within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
                         // If both start and end time don't interfere with filtered time slots
                         }else{
                             worksArray.push(true)
-                            // console.log(`Time slot ${data.id} is marked unavailable but works since ${data.start} and ${data.end} are not within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
+                            console.log(`Time slot ${data.id} is marked unavailable but works since ${data.start} and ${data.end} are not within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
                         }
                        
                         // console.log("Time slot " + data.id + " does not work")
                     }else{
                         worksArray.push(true)
-                        // console.log("Time slot " + data.id + " is marked available")
+                        console.log("Time slot " + data.id + " is marked available")
                     }
                 }
 
@@ -276,7 +276,6 @@ export default class Home extends Component{
 
             this.results = resultsFilteredTimeAvail;
 
-            console.log("Updated points")
         }
 
 
