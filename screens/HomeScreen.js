@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Fragment, View, ActivityIndicator, SafeAreaView, StatusBar, Platform, StyleSheet, Dimensions, Animated, TouchableOpacity} from 'react-native'
 import Button from '../components/Button'
 import Text from '../components/Txt'
+import ListingMarker from '../components/ListingMarker'
 import Icon from '../components/Icon'
 import FilterButton from '../components/FilterButton'
 import MapView, {Marker} from 'react-native-maps';
@@ -141,20 +142,28 @@ export default class Home extends Component{
 
           this.rippleAnimation();
           this.getCurrentLocation(true);
+          this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, 99999.9999, 99999.9999)
           
           
     
         }
 
         componentDidUpdate(prevProps, prevState){
-                try{
-                    let prevLat = prevState.region.current.latitude;
-                    let prevLng = prevState.region.current.longitude;
+             
+                   
+            // console.log(`
+            //              lat: ${this.state.region.current.latitude.toFixed(3)}
+            //              lng: ${this.state.region.current.longitude.toFixed(3)}
+            //              lat delt: ${this.state.region.current.latitudeDelta.toFixed(3)}
+            //              lng delt: ${this.state.region.current.longitudeDelta.toFixed(3)}
+            //              ----------------------------------------------------`)
+                    // if(prevLat !== this.state.region.current.latitude || prevLat !== this.state.region.current.longitude){
+                    //     console.log("ComponentDidUpdate")
+                       
+                    // }
 
-                    this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, prevLat, prevLng)
-                }catch(e){
-                    console.log(e)
-                }
+                    
+           
             
      
         }
@@ -200,7 +209,7 @@ export default class Home extends Component{
         filterResults = () => {
 
             this.setState({searchFilterOpen: !this.state.searchFilterOpen})
-            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, 999999, 999999)
+            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, 99999.9999, 99999.9999)
 
              
         }
@@ -216,7 +225,7 @@ export default class Home extends Component{
              const GeoFirestore = geofirestore.initializeApp(db);
  
              // Create a GeoCollection reference
-             const geocollection = GeoFirestore.collection('listings').limit(40);
+             const geocollection = GeoFirestore.collection('listings');
  
                const query = geocollection.near({ 
                    center: new firebase.firestore.GeoPoint(lat, lng), 
@@ -225,7 +234,7 @@ export default class Home extends Component{
 
                 // console.log(`Lat is ${lat} and prev lat is ${prevLat}`)
 
-               if(lat != prevLat || lng != prevLng){
+               if(lat.toFixed(3) != prevLat.toFixed(3) || lng.toFixed(3) != prevLng.toFixed(3)){
  
                await query.get().then((value) => {
                  // All GeoDocument returned by GeoQuery, like the GeoDocument added above
@@ -236,7 +245,7 @@ export default class Home extends Component{
                   }
                });
                let resultsFiltered = results.filter(x => !x.hidden && !x.toBeDeleted)
-               let resultsFilteredTimeAvail = []
+               let resultsFilteredTimeAvail = new Array;
                
 
             resultsFiltered.forEach((x, i) => {
@@ -249,23 +258,23 @@ export default class Home extends Component{
                     if(!data.available){
                         // Check if start time is out of bounds
                         if(parseInt(data.start) >= parseInt(this.state.timeSearched[0].label) && parseInt(data.start) <= parseInt(this.state.timeSearched[1].label)){
-                            console.log(`Start value ${data.start} is invalid within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
+                            // console.log(`Start value ${data.start} is invalid within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
                             worksArray.push(false)
                         }
                         // Check if end time is out of bounds
                         else if(parseInt(data.end) >= parseInt(this.state.timeSearched[0].label) && parseInt(data.start) <= parseInt(this.state.timeSearched[1].label)){
                             worksArray.push(false)
-                            console.log(`End value ${data.end} is invalid within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
+                            // console.log(`End value ${data.end} is invalid within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
                         // If both start and end time don't interfere with filtered time slots
                         }else{
                             worksArray.push(true)
-                            console.log(`Time slot ${data.id} is marked unavailable but works since ${data.start} and ${data.end} are not within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
+                            // console.log(`Time slot ${data.id} is marked unavailable but works since ${data.start} and ${data.end} are not within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
                         }
                        
                         // console.log("Time slot " + data.id + " does not work")
                     }else{
                         worksArray.push(true)
-                        console.log("Time slot " + data.id + " is marked available")
+                        // console.log("Time slot " + data.id + " is marked available")
                     }
                 }
 
@@ -273,7 +282,8 @@ export default class Home extends Component{
                     resultsFilteredTimeAvail.push(x)
                 }
             })
-
+            console.log("updated")
+            console.log("----------")
             this.results = resultsFilteredTimeAvail;
 
         }
@@ -365,9 +375,13 @@ export default class Home extends Component{
 
             }));
 
+            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, 99999.9999, 99999.9999)
         }
 
         onRegionChange = async (region) => {
+            let prevLat = this.state.region.current.latitude;
+            let prevLng = this.state.region.current.longitude;
+
             await clearInterval(this._interval)
             await this.setState(prevState => ({
                 region: {
@@ -385,6 +399,7 @@ export default class Home extends Component{
             this.mapScrolling = false;
             this.mapLocationFunction();
             
+            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, prevLat, prevLng)
             
         }
 
@@ -412,6 +427,7 @@ export default class Home extends Component{
     render(){
         const {width, height} = Dimensions.get('window')
         const {firstname, email} = this.props.UserStore
+
 
         
         return(
@@ -492,13 +508,10 @@ export default class Home extends Component{
                         />
                         : null }
                         {this.results.map(x => {
-                           return( <Marker 
-                            key={x.listingID}
-                            coordinate={{
-                            latitude: x.region.latitude,
-                            longitude: x.region.longitude
-                            }}   
-                        />)
+                           return( <ListingMarker 
+                                    listing={x}
+                                    onPress={() => console.log(x.spaceName)}
+                                    />)
                         })}
                         </MapView>
                         <View style={{zIndex: 9, position: 'absolute', top: -16}}>
