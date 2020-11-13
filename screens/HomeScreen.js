@@ -1,5 +1,6 @@
-import React, {Component} from 'react'
+import React, {Component, createRef} from 'react'
 import {Fragment, View, ActivityIndicator, SafeAreaView, StatusBar, Platform, StyleSheet, Dimensions, Animated, TouchableOpacity} from 'react-native'
+import ActionSheet from "react-native-actions-sheet";
 import Button from '../components/Button'
 import Text from '../components/Txt'
 import ListingMarker from '../components/ListingMarker'
@@ -37,6 +38,8 @@ import {inject, observer} from 'mobx-react/native'
 import UserStore from '../stores/userStore'
 import { parse } from 'react-native-svg'
 
+const actionSheetRef = createRef();
+
 
 @inject("UserStore")
 @observer
@@ -44,6 +47,7 @@ export default class Home extends Component{
     _interval = 0;
 
       
+
 
 
 
@@ -117,12 +121,16 @@ export default class Home extends Component{
                 dayValue: (date.getDay())%7,
                 isEnabled: true,
             },
-            timeSearched: [filteredStarts[0], filteredEnds[filteredEnds.length / 2]]
+            timeSearched: [filteredStarts[0], filteredEnds[filteredEnds.length / 2]],
+            selectedSpace: null,
 
         }
 
         this.mapScrolling = false;
         this.results = [];
+
+
+        
       
 
     }
@@ -212,6 +220,10 @@ export default class Home extends Component{
             this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, 99999.9999, 99999.9999)
 
              
+        }
+
+        clickSpace = (space) => {
+            actionSheetRef.current?.setModalVisible()
         }
 
         getResults = async (lat, lng, radius, prevLat, prevLng) => {
@@ -512,8 +524,9 @@ export default class Home extends Component{
                         : null }
                         {this.results.map(x => {
                            return( <ListingMarker 
+                                    key={x.listingID}
                                     listing={x}
-                                    onPress={() => console.log(x.spaceName)}
+                                    onPress={() => this.clickSpace(x)}
                                     />)
                         })}
                         </MapView>
@@ -629,6 +642,11 @@ export default class Home extends Component{
                   {/* <View style={{}}> */}
   
                    {/* </View> */}
+                   <ActionSheet style={{zIndex: 9999999}}ref = {actionSheetRef}>
+                        <View>
+                        <Text>YOUR CUSTOM COMPONENT INSIDE THE ACTIONSHEET</Text>
+                        </View>
+                    </ActionSheet>
                        
                 </SafeAreaView>
         )
