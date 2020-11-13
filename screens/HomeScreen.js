@@ -239,7 +239,7 @@ export default class Home extends Component{
         
             actionSheetRef.current?.setModalVisible()
 
-            console.log(this.state.selectedSpaceHost)
+            console.log(this.state.selectedSpace)
         }
 
         getResults = async (lat, lng, radius, prevLat, prevLng) => {
@@ -692,6 +692,9 @@ export default class Home extends Component{
                                     </View>
                                     <Text style={{fontSize: 16}}>{this.state.selectedSpace.spacePrice}/hr</Text>
                                     <Text>No ratings yet</Text>
+                                    {this.state.selectedSpace.spaceBio ?
+                                        <Text style={{marginVertical: 16}}>{this.state.selectedSpace.spaceBio}</Text>
+                                    : null}
                                     <Button style = {{backgroundColor: Colors.tango700, height: 48}} textStyle={{color: 'white'}}>Reserve Space</Button>
                                 </View>
                             </View>
