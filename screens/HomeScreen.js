@@ -3,6 +3,7 @@ import {Fragment, View, ActivityIndicator, SafeAreaView, StatusBar, Platform, St
 import ActionSheet from "react-native-actions-sheet";
 import Button from '../components/Button'
 import Text from '../components/Txt'
+import Image from '../components/Image'
 import ListingMarker from '../components/ListingMarker'
 import Icon from '../components/Icon'
 import FilterButton from '../components/FilterButton'
@@ -41,7 +42,7 @@ import { parse } from 'react-native-svg'
 const actionSheetRef = createRef();
 
 
-@inject("UserStore")
+@inject("UserStore", "ComponentStore")
 @observer
 export default class Home extends Component{
     _interval = 0;
@@ -222,8 +223,14 @@ export default class Home extends Component{
              
         }
 
-        clickSpace = (space) => {
+        clickSpace = async (space) => {
+            await this.props.ComponentStore.selectedSpot.clear()
+
+            await this.setState({selectedSpace: space})
+            await this.props.ComponentStore.selectedSpot.push(space)
             actionSheetRef.current?.setModalVisible()
+
+            console.log(this.state.selectedSpace.spaceName)
         }
 
         getResults = async (lat, lng, radius, prevLat, prevLng) => {
@@ -642,9 +649,31 @@ export default class Home extends Component{
                   {/* <View style={{}}> */}
   
                    {/* </View> */}
-                   <ActionSheet style={{zIndex: 9999999}}ref = {actionSheetRef}>
+                   <ActionSheet 
+                    ref = {actionSheetRef}
+                    bounceOnOpen={true}
+                    bounciness={4}
+                    gestureEnabled={true}
+                    containerStyle={{paddingTop: 8}}
+                   >
                         <View>
-                        <Text>YOUR CUSTOM COMPONENT INSIDE THE ACTIONSHEET</Text>
+                            {this.state.selectedSpace ?
+                            <View style={{paddingTop: 8}}>
+                                
+                                <Image 
+                                    aspectRatio={21/9}
+                                    source={{uri: this.state.selectedSpace.photo}}
+                                    backupSource={require('../assets/img/Logo_001.png')}
+                                    resizeMode={'cover'}
+                                /> 
+                                <View style={styles.actionSheetContent}>
+                                    <Text style={{fontSize: 24, flexWrap: 'wrap'}}>{this.state.selectedSpace.spaceName}</Text>
+                                    <Text style={{fontSize: 16}}>{this.state.selectedSpace.spacePrice}/hr</Text>
+                                    <Text>No ratings yet</Text>
+                                    <Button style = {{backgroundColor: Colors.tango700, height: 48}} textStyle={{color: 'white'}}>Reserve Space</Button>
+                                </View>
+                            </View>
+                            : <Text>Loading...</Text>}
                         </View>
                     </ActionSheet>
                        
@@ -668,5 +697,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.apollo300, 
         borderRadius: Dimensions.get('window').width/2, 
     },
-    
+    actionSheetContent:{
+        paddingHorizontal: 16, 
+    }
 })
