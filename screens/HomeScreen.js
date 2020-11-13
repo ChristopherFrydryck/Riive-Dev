@@ -38,6 +38,7 @@ import * as geofirestore from 'geofirestore'
 import {inject, observer} from 'mobx-react/native'
 import UserStore from '../stores/userStore'
 import { parse } from 'react-native-svg'
+import ProfilePic from '../components/ProfilePic';
 
 const actionSheetRef = createRef();
 
@@ -124,6 +125,7 @@ export default class Home extends Component{
             },
             timeSearched: [filteredStarts[0], filteredEnds[filteredEnds.length / 2]],
             selectedSpace: null,
+            selectedSpaceHost: null,
 
         }
 
@@ -228,9 +230,16 @@ export default class Home extends Component{
 
             await this.setState({selectedSpace: space})
             await this.props.ComponentStore.selectedSpot.push(space)
+            const db = firebase.firestore();
+            const hostData = db.collection('users').doc(space.hostID);
+
+            await hostData.get().then(doc => {
+                this.setState({selectedSpaceHost: doc.data()})
+            })
+        
             actionSheetRef.current?.setModalVisible()
 
-            console.log(this.state.selectedSpace.spaceName)
+            console.log(this.state.selectedSpaceHost)
         }
 
         getResults = async (lat, lng, radius, prevLat, prevLng) => {
@@ -657,7 +666,7 @@ export default class Home extends Component{
                     containerStyle={{paddingTop: 8}}
                    >
                         <View>
-                            {this.state.selectedSpace ?
+                            {this.state.selectedSpace && this.state.selectedSpaceHost ?
                             <View style={{paddingTop: 8}}>
                                 
                                 <Image 
@@ -667,7 +676,20 @@ export default class Home extends Component{
                                     resizeMode={'cover'}
                                 /> 
                                 <View style={styles.actionSheetContent}>
-                                    <Text style={{fontSize: 24, flexWrap: 'wrap'}}>{this.state.selectedSpace.spaceName}</Text>
+                                    <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8}}>
+                                        <Text style={{fontSize: 24, flexWrap: 'wrap', paddingRight: 16}}>{this.state.selectedSpace.spaceName}</Text>
+                                        <ProfilePic 
+                                            source={{ uri: this.state.selectedSpaceHost.photo }}
+                                            imgWidth = {32}
+                                            imgHeight = {32}
+                                            initals={this.state.selectedSpaceHost.firstname.charAt(0).toUpperCase() + "" + this.state.selectedSpaceHost.lastname.charAt(0).toUpperCase()}
+                                            style={{backgroundColor:"#FFFFFF"}}
+                                            fontSize={12}
+                                            fontColor="#1D2951"
+                                            // onPress={this.pickImage}
+                                            alt="Your profile picture"
+                                        />
+                                    </View>
                                     <Text style={{fontSize: 16}}>{this.state.selectedSpace.spacePrice}/hr</Text>
                                     <Text>No ratings yet</Text>
                                     <Button style = {{backgroundColor: Colors.tango700, height: 48}} textStyle={{color: 'white'}}>Reserve Space</Button>
