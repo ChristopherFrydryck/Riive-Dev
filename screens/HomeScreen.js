@@ -18,6 +18,8 @@ import Colors from '../constants/Colors'
 import SearchFilter from '../components/SearchFilter'
 import Times from '../constants/TimesAvailable'
 
+import axios from 'axios'
+
 import * as firebase from 'firebase'
 import firebaseConfig from '../firebaseConfig'
 import withFirebaseAuth from 'react-with-firebase-auth'
@@ -41,6 +43,7 @@ import { parse } from 'react-native-svg'
 import ProfilePic from '../components/ProfilePic';
 
 const actionSheetRef = createRef();
+const GOOGLE_API_KEY = "AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c";
 
 
 @inject("UserStore", "ComponentStore")
@@ -126,6 +129,11 @@ export default class Home extends Component{
             timeSearched: [filteredStarts[0], filteredEnds[filteredEnds.length / 2]],
             selectedSpace: null,
             selectedSpaceHost: null,
+
+            locationDifferenceWalking: {
+                distance: null,
+                duration: null,
+            }
 
         }
 
@@ -225,21 +233,36 @@ export default class Home extends Component{
              
         }
 
+        getDistance = (start, end, type) => {
+            try{
+                axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${start}&destinations=${end}&departure_time=now&mode=${type}&key=AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c`).then(x =>{
+                    this.setState({locationDifferenceWalking: {
+                        distance: x.data.rows[0].elements[0].distance.text,
+                        duration: x.data.rows[0].elements[0].duration.text,
+                    }})
+                    return x
+                })
+            }catch(e){
+                console.log(e)
+            }
+        }
+
         clickSpace = async (space) => {
             await this.props.ComponentStore.selectedSpot.clear()
-
             await this.setState({selectedSpace: space})
             await this.props.ComponentStore.selectedSpot.push(space)
             const db = firebase.firestore();
             const hostData = db.collection('users').doc(space.hostID);
-
+            if(this.state.searchInputValue.split("").length > 0){
+                this.getDistance(`${space.region.latitude}, ${space.region.longitude}`, `${this.state.region.searched.latitude}, ${this.state.region.searched.longitude}`, "walking")
+            }
             await hostData.get().then(doc => {
                 this.setState({selectedSpaceHost: doc.data()})
             })
         
             actionSheetRef.current?.setModalVisible()
 
-            console.log(this.state.selectedSpace)
+            // console.log(this.state.selectedSpace)
         }
 
         getResults = async (lat, lng, radius, prevLat, prevLng) => {
@@ -694,6 +717,18 @@ export default class Home extends Component{
                                     <Text>No ratings yet</Text>
                                     {this.state.selectedSpace.spaceBio ?
                                         <Text style={{marginVertical: 16}}>{this.state.selectedSpace.spaceBio}</Text>
+                                    : null}
+                                    {this.state.searchInputValue != '' ? 
+                                        <View style={{flexDirection: 'row', alignItems: 'center', marginRight: 48}}>
+                                            <Icon 
+                                                iconName="walk"
+                                                iconColor={Colors.cosmos500}
+                                                iconSize={24}
+                                                iconLib="MaterialCommunityIcons"
+                                                style={{paddingRight: 8}}
+                                            />
+                                            <Text numberOfLines={1}>{this.state.locationDifferenceWalking.duration} to {this.state.searchInputValue} alsdfj kladsjfl kadsjflk asdklfjafdskadlfkj</Text> 
+                                        </View>
                                     : null}
                                     <Button style = {{backgroundColor: Colors.tango700, height: 48}} textStyle={{color: 'white'}}>Reserve Space</Button>
                                 </View>
