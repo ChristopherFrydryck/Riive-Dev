@@ -706,6 +706,9 @@ export default class Home extends Component{
                     bounciness={4}
                     gestureEnabled={true}
                     containerStyle={{paddingTop: 8}}
+                    extraScroll={40}
+                    initialOffsetFromBottom = {this.state.selectedSpace && this.state.selectedSpace.spaceBio ? .70 : .775}
+                 
                    >
                         <View>
                             {this.state.selectedSpace && this.state.selectedSpaceHost ?
