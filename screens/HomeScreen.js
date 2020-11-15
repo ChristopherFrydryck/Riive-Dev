@@ -252,7 +252,6 @@ export default class Home extends Component{
 
             let arrival = d.getTime();
             
-            console.log(stateName)
             try{
                 axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${start}&destinations=${end}&departure_time=now&mode=${type}&arrival_time=${arrival}&traffic_model=optimistic&key=AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c`).then(x =>{
                     this.setState({[stateName]: {
@@ -272,11 +271,9 @@ export default class Home extends Component{
             await this.props.ComponentStore.selectedSpot.push(space)
             const db = firebase.firestore();
             const hostData = db.collection('users').doc(space.hostID);
+        
             if(this.state.searchInputValue.split("").length > 0){
                 await this.getDistance(`${space.region.latitude}, ${space.region.longitude}`, `${this.state.region.searched.latitude}, ${this.state.region.searched.longitude}`, "walking")
-            }
-            if(this.state.locationDifferenceWalking.duration && this.state.locationDifferenceWalking.duration.split(" ")[1] !== 'mins'){
-                await this.getDistance(`${space.region.latitude}, ${space.region.longitude}`, `${this.state.region.searched.latitude}, ${this.state.region.searched.longitude}`, "driving")
             }
             await hostData.get().then(doc => {
                 this.setState({selectedSpaceHost: doc.data()})
@@ -736,26 +733,24 @@ export default class Home extends Component{
                                         />
                                     </View>
                                     <Text style={{fontSize: 16}}>{this.state.selectedSpace.spacePrice}/hr</Text>
-                                    <Text>No ratings yet</Text>
+                                    <Text style={{marginBottom: 16}}>No ratings yet</Text>
                                     {this.state.selectedSpace.spaceBio ?
-                                        <Text style={{marginVertical: 16}}>{this.state.selectedSpace.spaceBio}</Text>
+                                        <Text style={{marginBottom: 16}}>{this.state.selectedSpace.spaceBio}</Text>
                                     : null}
                                     {this.state.searchInputValue != '' && this.state.locationDifferenceWalking.duration != null ? 
-                                        <View>
+                                        <View style={{flexDirection: 'row', alignItems: 'center', marginRight: 48}}>
+                                             <Icon 
+                                                iconName="walk"
+                                                iconColor={Colors.cosmos500}
+                                                iconSize={24}
+                                                iconLib="MaterialCommunityIcons"
+                                                style={{paddingRight: 8}}
+                                            />
                                             
                                             { this.state.locationDifferenceWalking.duration.split(" ")[1] !== 'mins' ?
-                                                <Text numberOfLines={1}>{this.state.locationDifferenceDriving.duration} to {this.state.searchInputValue}</Text> 
+                                                <Text numberOfLines={1}>Longer than 1 hour to {this.state.searchInputValue}</Text> 
                                                 :
-                                                <View style={{flexDirection: 'row', alignItems: 'center', marginRight: 48}}>
-                                                    <Icon 
-                                                        iconName="walk"
-                                                        iconColor={Colors.cosmos500}
-                                                        iconSize={24}
-                                                        iconLib="MaterialCommunityIcons"
-                                                        style={{paddingRight: 8}}
-                                                    />
-                                                    <Text numberOfLines={1}>{this.state.locationDifferenceWalking.duration} to {this.state.searchInputValue}</Text> 
-                                                </View>
+                                                <Text numberOfLines={1}>{this.state.locationDifferenceWalking.duration} to {this.state.searchInputValue}</Text> 
                                             }
                                         </View>
                                     : null}
