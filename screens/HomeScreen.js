@@ -133,6 +133,10 @@ export default class Home extends Component{
             locationDifferenceWalking: {
                 distance: null,
                 duration: null,
+            },
+            locationDifferenceDriving: {
+                distance: null,
+                duration: null,
             }
 
         }
@@ -234,9 +238,24 @@ export default class Home extends Component{
         }
 
         getDistance = (start, end, type) => {
+            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+            let stringName = `locationDifference${type}`
+            let stateName = stringName.slice(0,18) + stringName.charAt(18).toUpperCase() + stringName.slice(19)
+
+            // Define arrival time by the state of the search start
+            let d = new Date();
+            d.setDate(this.state.daySearched.dateName)
+            d.setMonth(months.indexOf(this.state.daySearched.monthName))
+            d.setHours(parseInt(this.state.timeSearched[0].label.slice(0,2)))
+            d.setMinutes(parseInt(this.state.timeSearched[0].label.slice(2)))
+
+            let arrival = d.getTime();
+            
+            console.log(stateName)
             try{
-                axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${start}&destinations=${end}&departure_time=now&mode=${type}&key=AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c`).then(x =>{
-                    this.setState({locationDifferenceWalking: {
+                axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${start}&destinations=${end}&departure_time=now&mode=${type}&arrival_time=${arrival}&traffic_model=optimistic&key=AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c`).then(x =>{
+                    this.setState({[stateName]: {
                         distance: x.data.rows[0].elements[0].distance.text,
                         duration: x.data.rows[0].elements[0].duration.text,
                     }})
@@ -254,7 +273,10 @@ export default class Home extends Component{
             const db = firebase.firestore();
             const hostData = db.collection('users').doc(space.hostID);
             if(this.state.searchInputValue.split("").length > 0){
-                this.getDistance(`${space.region.latitude}, ${space.region.longitude}`, `${this.state.region.searched.latitude}, ${this.state.region.searched.longitude}`, "walking")
+                await this.getDistance(`${space.region.latitude}, ${space.region.longitude}`, `${this.state.region.searched.latitude}, ${this.state.region.searched.longitude}`, "walking")
+            }
+            if(this.state.locationDifferenceWalking.duration && this.state.locationDifferenceWalking.duration.split(" ")[1] !== 'mins'){
+                await this.getDistance(`${space.region.latitude}, ${space.region.longitude}`, `${this.state.region.searched.latitude}, ${this.state.region.searched.longitude}`, "driving")
             }
             await hostData.get().then(doc => {
                 this.setState({selectedSpaceHost: doc.data()})
@@ -718,16 +740,23 @@ export default class Home extends Component{
                                     {this.state.selectedSpace.spaceBio ?
                                         <Text style={{marginVertical: 16}}>{this.state.selectedSpace.spaceBio}</Text>
                                     : null}
-                                    {this.state.searchInputValue != '' ? 
-                                        <View style={{flexDirection: 'row', alignItems: 'center', marginRight: 48}}>
-                                            <Icon 
-                                                iconName="walk"
-                                                iconColor={Colors.cosmos500}
-                                                iconSize={24}
-                                                iconLib="MaterialCommunityIcons"
-                                                style={{paddingRight: 8}}
-                                            />
-                                            <Text numberOfLines={1}>{this.state.locationDifferenceWalking.duration} to {this.state.searchInputValue} alsdfj kladsjfl kadsjflk asdklfjafdskadlfkj</Text> 
+                                    {this.state.searchInputValue != '' && this.state.locationDifferenceWalking.duration != null ? 
+                                        <View>
+                                            
+                                            { this.state.locationDifferenceWalking.duration.split(" ")[1] !== 'mins' ?
+                                                <Text numberOfLines={1}>{this.state.locationDifferenceDriving.duration} to {this.state.searchInputValue}</Text> 
+                                                :
+                                                <View style={{flexDirection: 'row', alignItems: 'center', marginRight: 48}}>
+                                                    <Icon 
+                                                        iconName="walk"
+                                                        iconColor={Colors.cosmos500}
+                                                        iconSize={24}
+                                                        iconLib="MaterialCommunityIcons"
+                                                        style={{paddingRight: 8}}
+                                                    />
+                                                    <Text numberOfLines={1}>{this.state.locationDifferenceWalking.duration} to {this.state.searchInputValue}</Text> 
+                                                </View>
+                                            }
                                         </View>
                                     : null}
                                     <Button style = {{backgroundColor: Colors.tango700, height: 48}} textStyle={{color: 'white'}}>Reserve Space</Button>
