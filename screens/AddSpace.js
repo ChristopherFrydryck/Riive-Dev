@@ -303,8 +303,8 @@ class addSpace extends Component {
 
   verifyInputs = () => {
 
-    const nameValidation = /^[A-Za-z0-9]+[A-Za-z0-9 %&,()]+[A-Za-z0-9]{1}$/
-    const bioValidation =  /^[A-Za-z0-9]{1}[A-Za-z0-9 .?!;,()$@%&]{1,299}$/;
+    const nameValidation = /^[A-Za-z0-9]+[A-Za-z0-9 %&\-,()]+[A-Za-z0-9]{1}$/
+    const bioValidation =  /^[A-Za-z0-9]{1}[A-Za-z0-9 .?!;,\-()$@%&]{1,299}$/;
 
     let nameValid = nameValidation.test(this.state.spaceName)
     let bioValid = this.state.spaceBio.split("").length > 0 ? bioValidation.test(this.state.spaceBio) : true;
@@ -337,7 +337,7 @@ class addSpace extends Component {
       if(this.state.spaceName.length == 0){
         this.setState({nameError: 'Add a name to your space'})
       }else if(!nameValid){
-        this.setState({nameError: 'Avoid using special characters'})
+        this.setState({nameError: 'Avoid using special characters outside of %&-,()'})
       }
       
     }
@@ -345,7 +345,7 @@ class addSpace extends Component {
     if(bioValid){
       this.setState({bioValid: true, bioError: ''})
     }else{
-      this.setState({bioValid: false, bioError: 'Avoid use of special characters outside of .?!;,()$@%&'})
+      this.setState({bioValid: false, bioError: 'Avoid use of special characters outside of .?!;-,()$@%&'})
     }
   }
 
@@ -754,7 +754,8 @@ clearAddress = () => {
           </View>
           <View style={{paddingHorizontal: 16}}>
             <Input 
-              placeholder='Name your space...'         label="Space Name"
+              placeholder='Name your space...'         
+              label="Space Name"
               name="space name"                 
               onChangeText= {(spaceName) => this.setState({spaceName})}
               value={this.state.spaceName}
