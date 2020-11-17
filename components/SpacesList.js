@@ -174,7 +174,6 @@ class SpacesList extends React.Component{
 
     render(){
         let {spotsLoaded} =  this.props.ComponentStore;
-        let loaders = [];
         var dayToday = new Date().getDay()
         var hourToday = new Date().getHours()
         var orderedData = this.state.data.slice().sort((a, b) => b.created - a.created)
@@ -212,15 +211,13 @@ class SpacesList extends React.Component{
             </View>
             )
         }else{
-            for(let i = 0; i < this.props.UserStore.listings.length; i++){
-                loaders.push(
-                    <SvgAnimatedLinearGradient key={i} width={Dimensions.get('window').width} height="50">
-                        <Rect width={Dimensions.get('window').width} height="40" rx="5" ry="5" />
-                    </SvgAnimatedLinearGradient>
-                )
-            }
             return(
-                <View style={styles.container}>{loaders}</View>
+                <View style={[styles.container, {flexDirection: 'row', justifyContent: 'space-evenly', marginLeft: 16}]}>
+                    <SvgAnimatedLinearGradient width={Dimensions.get('window').width} height="160">
+                        <Rect x="0" width={Dimensions.get('window').width * .75} height="140" rx="4" ry="4" />
+                        <Rect x={Dimensions.get('window').width * .75 + 16} width={Dimensions.get('window').width * .75} height="160" rx="4" ry="4" />
+                    </SvgAnimatedLinearGradient>
+                </View>
             )
         }
     
