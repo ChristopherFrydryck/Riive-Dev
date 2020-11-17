@@ -722,7 +722,7 @@ export default class Home extends Component{
                                 <Image 
                                     aspectRatio={21/9}
                                     source={{uri: this.state.selectedSpace.photo}}
-                                    backupSource={require('../assets/img/Logo_001.png')}
+                                    // backupSource={require('../assets/img/Logo_001.png')}
                                     resizeMode={'cover'}
                                 /> 
                                 <View style={styles.actionSheetContent}>

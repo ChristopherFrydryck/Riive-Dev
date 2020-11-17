@@ -620,7 +620,6 @@ renderDotsView = (numItems, position) =>{
                           style={{width: Dimensions.get("window").width - 32}}
                           aspectRatio={16/9}
                           source={{uri: this.state.photo}}
-                          backupSource={require('../assets/img/Logo_001.png')}
                           resizeMode={'cover'}
                         /> 
                     

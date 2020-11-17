@@ -132,7 +132,6 @@ class SpacesList extends React.Component{
             <Image 
                 aspectRatio={21/9}
                 source={{uri: spot.photo}}
-                backupSource={require('../assets/img/Logo_001.png')}
                 resizeMode={'cover'}
             /> 
             {currentActive[0].available ? 

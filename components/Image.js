@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, Image, Dimensions, ImageBackground, TouchableOpacity } from 'react-native';
+import backupImage from '../assets/img/LoadingImage.jpg'
 
 // Props:
 // source
@@ -35,7 +36,7 @@ class Img extends React.Component{
                 <ImageBackground
                     {...allProps}
                     style={{aspectRatio: this.props.aspectRatio, resizeMode: this.props.resizeMode}}
-                    source={this.state.isReady ? null : this.props.backupSource}
+                    source={this.state.isReady ? null : this.props.backupSource ? this.props.backupSource : backupImage}
                 >
                     <Image 
                         underlayColor = {this.props.underlayColor}
