@@ -20,6 +20,10 @@ import Times from '../constants/TimesAvailable'
 
 import axios from 'axios'
 
+//For Shimmer
+import SvgAnimatedLinearGradient from 'react-native-svg-animated-linear-gradient'
+import Svg, {Circle, Rect} from 'react-native-svg'
+
 import * as firebase from 'firebase'
 import firebaseConfig from '../firebaseConfig'
 import withFirebaseAuth from 'react-with-firebase-auth'
@@ -712,6 +716,7 @@ export default class Home extends Component{
                    >
                         <View>
                             {this.state.selectedSpace && this.state.selectedSpaceHost ?
+                            
                             <View style={{paddingTop: 8}}>
                                 
                                 <Image 
@@ -760,7 +765,27 @@ export default class Home extends Component{
                                     <Button style = {{backgroundColor: Colors.tango700, height: 48}} textStyle={{color: 'white'}}>Reserve Space</Button>
                                 </View>
                             </View>
-                            : <Text>Loading...</Text>}
+                            : 
+                            <View>
+                                <SvgAnimatedLinearGradient width={Dimensions.get('window').width} style={{marginTop: 8}}>
+                                    <Rect width={width} height={width * 2.3333} rx="0" ry="0" />
+                                </SvgAnimatedLinearGradient>
+                                <View style={styles.actionSheetContent}>
+                                    <SvgAnimatedLinearGradient  width={width - 32} height="225" style={{marginTop: 8}}>
+                                        {/* <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}> */}
+                                            <Rect x="0" y="0" width={width *.7} height={32} />
+                                            <Circle x={width - 64} y="0" cx="16" cy="16" r="16"/>
+                                            <Rect x="0" y="40" width="80" height="16" />
+                                            <Rect x="0" y="64" width="64" height="16" />
+                                            <Rect x="0" y="96" width={width} height="16" />
+                                            <Rect x="0" y="120" width={width} height="16" />
+                                            <Rect x="0" y="144" width={width * .4} height="16" />
+                                            <Rect x="0" y="176" width={width} height="40" />
+                                        {/* </View> */}
+                                    </SvgAnimatedLinearGradient>
+                                </View>
+                            </View>
+                            }
                         </View>
                     </ActionSheet>
                        
