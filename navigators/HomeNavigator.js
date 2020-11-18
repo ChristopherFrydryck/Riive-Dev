@@ -7,11 +7,19 @@ import ExternalProfile from '../screens/ExternalProfile'
 
 
 const HomeNavigator = createStackNavigator({
-    Home: Home,
-    ExternalProfile: ExternalProfile,
+    Home: {
+        screen: Home, 
+        navigationOptions: {
+            header: null,
+        },
+    },
+    ExternalProfile: {
+        screen: ExternalProfile, 
+    },
 },
 {
     initialRouteName: "Home",
+    
 });
 
 export default HomeNavigator;

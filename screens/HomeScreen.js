@@ -3,6 +3,7 @@ import {Fragment, View, ActivityIndicator, SafeAreaView, StatusBar, Platform, St
 import ActionSheet from "react-native-actions-sheet";
 import Button from '../components/Button'
 import Text from '../components/Txt'
+import ProfilePic from '../components/ProfilePic';
 import Image from '../components/Image'
 import ListingMarker from '../components/ListingMarker'
 import Icon from '../components/Icon'
@@ -42,9 +43,8 @@ import * as geofirestore from 'geofirestore'
 
 //MobX Imports
 import {inject, observer} from 'mobx-react/native'
-import UserStore from '../stores/userStore'
-import { parse } from 'react-native-svg'
-import ProfilePic from '../components/ProfilePic';
+
+
 
 const actionSheetRef = createRef();
 const GOOGLE_API_KEY = "AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c";
@@ -54,6 +54,8 @@ const GOOGLE_API_KEY = "AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c";
 @observer
 export default class Home extends Component{
     _interval = 0;
+
+    
 
       
 
@@ -490,6 +492,12 @@ export default class Home extends Component{
                 searchInputValue: '',
             }))
           }
+
+          goToHostProfile = () => {
+              this.props.ComponentStore.selectedUser.push(this.state.selectedSpaceHost);
+              actionSheetRef.current?.setModalVisible(false);
+              this.props.navigation.navigate("ExternalProfile")
+          }
       
 
         componentWillUnmount() {
@@ -737,7 +745,7 @@ export default class Home extends Component{
                                             style={{backgroundColor:"#FFFFFF"}}
                                             fontSize={12}
                                             fontColor="#1D2951"
-                                            onPress={() => this.props.navigation.navigate("ExternalProfile")}
+                                            onPress={() => this.goToHostProfile()}
                                             alt="Your profile picture"
                                         />
                                     </View>
