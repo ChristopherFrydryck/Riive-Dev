@@ -711,6 +711,7 @@ export default class Home extends Component{
                     gestureEnabled={true}
                     containerStyle={{paddingTop: 8}}
                     extraScroll={40}
+                    delayActionSheetDrawTime={0}
                     initialOffsetFromBottom = {this.state.selectedSpace && this.state.selectedSpace.spaceBio ? .70 : .775}
                  
                    >
@@ -736,7 +737,7 @@ export default class Home extends Component{
                                             style={{backgroundColor:"#FFFFFF"}}
                                             fontSize={12}
                                             fontColor="#1D2951"
-                                            // onPress={this.pickImage}
+                                            onPress={() => this.props.navigation.navigate("ExternalProfile")}
                                             alt="Your profile picture"
                                         />
                                     </View>

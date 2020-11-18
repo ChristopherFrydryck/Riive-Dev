@@ -5,6 +5,7 @@ import { createBottomTabNavigator }  from 'react-navigation-tabs'
 import  TripsScreen  from '../screens/TripsScreen'
 import HomeScreen from '../screens/HomeScreen'
 import ProfileNavigator from './ProfileNavigator'
+import HomeNavigator from './HomeNavigator'
 
 import TabBarIcon from './TabBarIcon'
 import { TabBar } from 'react-native-tab-view';
@@ -13,7 +14,7 @@ import Colors from '../constants/Colors';
 const navBar =  createBottomTabNavigator(
     {
         Home: {
-            screen: HomeScreen,
+            screen: HomeNavigator,
             navigationOptions: {
                 tabBarLabel: 'Explore',
                 title: 'Welcome!',
@@ -54,10 +55,10 @@ const navBar =  createBottomTabNavigator(
                     />
                 )
             }
-        }
+        },
     },
     {
-        // initialRouteName: "Profile",
+        initialRouteName: "Home",
         tabBarOptions: {
             activeTintColor: Colors.tango900,
             inactiveTintColor: Colors.cosmos300,
