@@ -28,6 +28,7 @@ export default class ExternalProfile extends Component{
 
         this.state = {
             host: this.props.ComponentStore.selectedUser[0],
+            space: this.props.ComponentStore.selectedSpot[0]
         }
     }
 
@@ -44,8 +45,8 @@ export default class ExternalProfile extends Component{
     }
 
     render(){
-        let { host } = this.state;
-        // console.log(host)
+        let { host, space } = this.state;
+        console.log(host)
         if(this.state.host){
             return(
                 <Provider>
@@ -91,20 +92,25 @@ export default class ExternalProfile extends Component{
                             /> */}
                         </TopBar>
                         </LinearGradient>
-                        <View style={{paddingHorizontal: 16}}>
+                        <View style={{flex: 1, paddingHorizontal: 16}}>
+                            <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start'}}>
                             <Image 
                                 aspectRatio={1/1}
                                 source={{uri: host.photo}}
-                                style={{marginTop: -40}}
+                                style={{marginTop: -32}}
                                 width={80}
                                 height={80}
                                 borderRadius={Dimensions.get("window").width / 2}
                                 // backupSource={require('../assets/img/Logo_001.png')}
                                 resizeMode={'cover'}
                             />
-                        <Text>{host.fullname}</Text>
+                                <View style={{ marginLeft: 16, marginTop: -32, }}>
+                                    <Text style = {{fontSize: 20, color: 'white'}}>{host.firstname} {host.lastname.charAt(0).toUpperCase()}.</Text>
+                                    <Text style={{fontSize: 14, marginTop: 8, paddingRight: 48}} numberOfLines={2} elipsizeMode="tail" >Hosting {space.spaceName} {host.listings.length > 1 ?`and ${host.listings.length - 1} others.` : "."}</Text>
+                                </View>
+                            </View>
 
-                        <Button onPress={() => this.props.navigation.goBack()}>Go Back</Button>
+                        {/* <Button onPress={() => this.props.navigation.goBack()}>Go Back</Button> */}
                         {/* <Button onPress={() => this.props.navigation.navigate('Profile')}>Go to Profile</Button> */}
                         </View>
                     </View>

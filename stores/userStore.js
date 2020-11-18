@@ -28,7 +28,7 @@ class UserStore {
     }
 
     @computed get monthJoined() {
-        return this.joinedDate.getMonth();
+        return this.joinedDate;
     }
 
 
