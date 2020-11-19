@@ -4,6 +4,7 @@ import Button from '../components/Button'
 import Text from '../components/Txt'
 import Image from '../components/Image'
 import ProfilePic from '../components/ProfilePic';
+import ExternalSpacesList from '../components/ExternalSpacesList'
 import TopBar from '../components/TopBar'
 import Icon from '../components/Icon'
 import Colors from '../constants/Colors'
@@ -46,7 +47,7 @@ export default class ExternalProfile extends Component{
 
     render(){
         let { host, space } = this.state;
-        console.log(host)
+        // console.log(host)
         if(this.state.host){
             return(
                 <Provider>
@@ -104,15 +105,17 @@ export default class ExternalProfile extends Component{
                                 // backupSource={require('../assets/img/Logo_001.png')}
                                 resizeMode={'cover'}
                             />
-                                <View style={{ marginLeft: 16, marginTop: -32, }}>
-                                    <Text style = {{fontSize: 20, color: 'white'}}>{host.firstname} {host.lastname.charAt(0).toUpperCase()}.</Text>
-                                    <Text style={{fontSize: 14, marginTop: 8, paddingRight: 48}} numberOfLines={2} elipsizeMode="tail" >Hosting {space.spaceName} {host.listings.length > 1 ?`and ${host.listings.length - 1} others.` : "."}</Text>
+                                <View style={{ marginLeft: 16, marginTop: -32, marginRight: 64}}>
+                                    <Text style = {{fontSize: 20, color: 'white'}} type="semiBold">{host.firstname} {host.lastname.charAt(0).toUpperCase()}.</Text>
+                                    <Text style={{fontSize: 14, marginTop: 8, marginRight: 16}} numberOfLines={2} elipsizeMode="tail" >Hosting {space.spaceName} {host.listings.length > 1 ?`and ${host.listings.length - 1} others.` : "."}</Text>
                                 </View>
                             </View>
+                            
 
                         {/* <Button onPress={() => this.props.navigation.goBack()}>Go Back</Button> */}
                         {/* <Button onPress={() => this.props.navigation.navigate('Profile')}>Go to Profile</Button> */}
                         </View>
+                        <ExternalSpacesList listings={host.listings}/>
                     </View>
   
                 </Provider>
