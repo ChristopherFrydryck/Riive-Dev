@@ -358,8 +358,7 @@ export default class Home extends Component{
                     resultsFilteredTimeAvail.push(x)
                 }
             })
-            console.log("updated")
-            console.log("----------")
+       
             this.results = resultsFilteredTimeAvail;
 
         }

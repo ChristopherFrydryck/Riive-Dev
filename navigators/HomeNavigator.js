@@ -4,6 +4,7 @@ import { createStackNavigator } from 'react-navigation-stack'
 
 import Home from '../screens/HomeScreen'
 import ExternalProfile from '../screens/ExternalProfile'
+import ExternalSpace from '../screens/ExternalSpace'
 
 
 const HomeNavigator = createStackNavigator({
@@ -16,6 +17,9 @@ const HomeNavigator = createStackNavigator({
     ExternalProfile: {
         screen: ExternalProfile, 
     },
+    ExternalSpace: {
+        screen: ExternalSpace, 
+    }
 },
 {
     initialRouteName: "Home",

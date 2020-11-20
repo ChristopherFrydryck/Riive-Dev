@@ -34,20 +34,26 @@ function cacheFonts(fonts){
 class ExternalSpacesList extends React.Component{
 
     constructor(props){
+        
         super(props);
+        
         this.state = {
             data: this.props.listings,
             activeTimeFadeAnimation: new Animated.Value(0),
         }
+        
     }
 
     async componentDidMount(){
+        await this.getListings();
         const iconAssets = cacheFonts([FontAwesome.font, MaterialCommunityIcons.font])
         await Promise.all([...iconAssets])
-        this.getListings();
         // this.setState({data: this.props.listings})
         this.props.ComponentStore.spotsLoaded = true;
         this.fadeAnimation();
+       
+
+        
     }
 
     // componentDidUpdate(prevProps){
@@ -63,11 +69,6 @@ class ExternalSpacesList extends React.Component{
         const { data } = this.state;
         const db = firebase.firestore();
    
-
-
-        
-
-       
         // if(doc.exists){
 
             if(data.length > 0 && data.length <= 10){
@@ -142,83 +143,99 @@ class ExternalSpacesList extends React.Component{
                 visits: spot.visits,
             })
            
-            // this.props.navigation.navigate("Home")
+            this.props.navigation.navigate("ExternalSpace")
 
 
     }
 
+   
+
     renderSpaceCard = (spot, index) => {
         var dayToday = new Date().getDay()
         var hourToday = new Date().getHours()
-        var orderedData = this.state.data.slice().sort((a, b) => b.created - a.created)
-
-     
         
+
+        // Check if we have data
+        if(this.state.data[0].listingID){
+            var orderedData = this.state.data.slice().sort((a, b) => b.created - a.created)
+          
+            let currentActive = orderedData[index].availability[dayToday].data.filter((x) => parseInt(x.start.substring(0,2)) <= hourToday && parseInt(x.end.substring(0,2)) >= hourToday);
+
+            let cardStyle
+            if(orderedData.length > 1){
+                    if(index === 0){
+                        cardStyle = [styles.li, styles.li_first]
+                    }else if(index === orderedData.length - 1){
+                        cardStyle = [styles.li, styles.li_last]
+                    }else{
+                        cardStyle = styles.li
+                    }
+            }else{
+                cardStyle = styles.li_single
+            }
+            
+            return(
+                <TouchableOpacity
+                    key={spot.listingID}
+                    style={cardStyle}
+                    onPress = {() => this.selectSpace(spot)}
+                >
+                <View style={styles.image}>
+                    <Image 
+                        aspectRatio={21/9}
+                        source={{uri: spot.photo}}
+                        resizeMode={'cover'}
+                    /> 
+                    {currentActive[0].available ? 
+                        <View style={{flexDirection: 'row', alignItems: 'center', position: 'absolute', top: 12, left: 0, backgroundColor: 'white', paddingVertical: 4, paddingHorizontal: 8, borderTopRightRadius: 4, borderBottomRightRadius: 4}}>
+                            <Animated.View style={{opacity: this.state.activeTimeFadeAnimation, width: 8, height: 8, backgroundColor: Colors.fortune500, borderRadius: Dimensions.get("window").width/2, marginRight: 8}}/>
+                            <Text style={{color: Colors.fortune500}}>Available Now</Text>
+                        </View>
+                        : null}
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', padding: 8}}>
+                    <View style={{flexDirection: "column"}}>
+                        <View style={{ width: 95, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.fortune500, paddingVertical: 4, paddingHorizontal: 4, borderRadius: Dimensions.get("window").width / 2, marginBottom: 8, marginTop: -30}}>
+                            <Text style={{ fontSize: 14, color: Colors.mist300,}}>{spot.spacePrice}/hr</Text>
+                        </View>
+                        <Text style={{fontSize: 16, paddingRight: 24}} numberOfLines={1}>{spot.spaceName}</Text>
+                    </View>
+                    <View style={{position:"absolute", right:0}}>
+                        <Icon 
+                            iconName="chevron-right"
+                            iconColor={Colors.mist900}
+                            iconSize={28}
+                        />
+                    </View>
+
+                </View>
+            
+            
+            </TouchableOpacity> 
+            )
+        }else{
+            return(
+            <View style={[styles.container, {flexDirection: 'row', justifyContent: 'space-evenly', marginLeft: 16}]}>
+                    <SvgAnimatedLinearGradient width={Dimensions.get('window').width} height="160">
+                        <Rect x="0" width={Dimensions.get('window').width * .75} height="140" rx="4" ry="4" />
+                        <Rect x={Dimensions.get('window').width * .75 + 16} width={Dimensions.get('window').width * .75} height="160" rx="4" ry="4" />
+                    </SvgAnimatedLinearGradient>
+                </View>
+            )
+        }
         // let currentActive = orderedData[index].availability[dayToday].data.filter((x) => parseInt(x.start.substring(0,2)) <= hourToday && parseInt(x.end.substring(0,2)) >= hourToday)
 
 
-       let cardStyle
-       if(orderedData.length > 1){
-            if(index === 0){
-                cardStyle = [styles.li, styles.li_first]
-            }else if(index === orderedData.length - 1){
-                cardStyle = [styles.li, styles.li_last]
-            }else{
-                cardStyle = styles.li
-            }
-       }else{
-           cardStyle = styles.li_single
-       }
        
-
-        return(
-        <TouchableOpacity
-            key={spot.listingID}
-            style={cardStyle}
-            onPress = {() => this.selectSpace(spot)}
-        >
-        <View style={styles.image}>
-            <Image 
-                aspectRatio={21/9}
-                source={{uri: spot.photo}}
-                resizeMode={'cover'}
-            /> 
-            {/* {currentActive[0].available ? 
-                <View style={{flexDirection: 'row', alignItems: 'center', position: 'absolute', top: 12, left: 0, backgroundColor: 'white', paddingVertical: 4, paddingHorizontal: 8, borderTopRightRadius: 4, borderBottomRightRadius: 4}}>
-                    <Animated.View style={{opacity: this.state.activeTimeFadeAnimation, width: 8, height: 8, backgroundColor: Colors.fortune500, borderRadius: Dimensions.get("window").width/2, marginRight: 8}}/>
-                    <Text style={{color: Colors.fortune500}}>Available Now</Text>
-                </View>
-                : null} */}
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', padding: 8}}>
-            <View style={{flexDirection: "column"}}>
-                <View style={{ width: 95, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.fortune500, paddingVertical: 4, paddingHorizontal: 4, borderRadius: Dimensions.get("window").width / 2, marginBottom: 8, marginTop: -30}}>
-                    <Text style={{ fontSize: 14, color: Colors.mist300,}}>{spot.spacePrice}/hr</Text>
-                </View>
-                <Text style={{fontSize: 16, paddingRight: 24}} numberOfLines={1}>{spot.spaceName}</Text>
-            </View>
-            <View style={{position:"absolute", right:0}}>
-                <Icon 
-                    iconName="chevron-right"
-                    iconColor={Colors.mist900}
-                    iconSize={28}
-                />
-            </View>
-
-        </View>
-       
-       
-    </TouchableOpacity> 
-        )
     }
 
     render(){
         let {spotsLoaded} =  this.props.ComponentStore;
         var dayToday = new Date().getDay()
         var hourToday = new Date().getHours()
-        var orderedData = this.state.data.slice().sort((a, b) => b.created - a.created).filter(x => x.listingID !== this.props.ComponentStore.selectedSpot[0].listingID)
-        orderedData.unshift(this.props.ComponentStore.selectedSpot[0])
+        var orderedData = this.state.data.slice().sort((a, b) => b.created - a.created)
         var {width} = Dimensions.get('window');
+        
 
         // console.log((16 * (orderedData.length - 2) + 48)/orderedData.length)
 
@@ -237,6 +254,7 @@ class ExternalSpacesList extends React.Component{
             return(
             <View style={styles.container}>
                 <FlatList
+                    ref={(ref) => { this.spacesRef = ref; }}
                     data={orderedData}
                     renderItem={({item, index}) => this.renderSpaceCard(item, index)}
                     keyExtractor={(item, index) => index.toString()}
@@ -250,17 +268,7 @@ class ExternalSpacesList extends React.Component{
                 />
             </View>
             )
-        }else{
-            return(
-                <View style={[styles.container, {flexDirection: 'row', justifyContent: 'space-evenly', marginLeft: 16}]}>
-                    <SvgAnimatedLinearGradient width={Dimensions.get('window').width} height="160">
-                        <Rect x="0" width={Dimensions.get('window').width * .75} height="140" rx="4" ry="4" />
-                        <Rect x={Dimensions.get('window').width * .75 + 16} width={Dimensions.get('window').width * .75} height="160" rx="4" ry="4" />
-                    </SvgAnimatedLinearGradient>
-                </View>
-            )
         }
-    
     }
 }
 
