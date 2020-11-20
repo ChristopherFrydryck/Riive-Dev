@@ -29,8 +29,9 @@ export default class ExternalProfile extends Component{
 
         this.state = {
             host: this.props.ComponentStore.selectedUser[0],
-            space: this.props.ComponentStore.selectedSpot[0]
+            space: this.props.ComponentStore.selectedExternalSpot[0]
         }
+
     }
 
     componentDidMount() {
@@ -115,6 +116,9 @@ export default class ExternalProfile extends Component{
                         {/* <Button onPress={() => this.props.navigation.goBack()}>Go Back</Button> */}
                         {/* <Button onPress={() => this.props.navigation.navigate('Profile')}>Go to Profile</Button> */}
                         </View>
+                        <View style={[styles.container, {marginTop: 8}]}>
+                            {host.listings.length == 0 || host.listings.length <= 1 ? <Text style={styles.categoryTitle}>Hosted Space</Text> : <Text style={{fontSize: 20, marginRight: 'auto'}}>Hosted Spaces</Text>}
+                        </View>
                         <ExternalSpacesList listings={host.listings}/>
                     </View>
   
@@ -128,6 +132,13 @@ export default class ExternalProfile extends Component{
     }
 }
 const styles = StyleSheet.create({
+    container:{
+        paddingHorizontal: 16
+    },
+    categoryTitle: {
+        fontSize: 20, 
+        marginRight: 'auto'
+    },
     headerBox: {
         // position: 'absolute',
         height: Dimensions.get("window").height /9,

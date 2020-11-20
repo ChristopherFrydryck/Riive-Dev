@@ -272,9 +272,9 @@ export default class Home extends Component{
         }
 
         clickSpace = async (space) => {
-            await this.props.ComponentStore.selectedSpot.clear()
+            await this.props.ComponentStore.selectedExternalSpot.clear()
             await this.setState({selectedSpace: space})
-            await this.props.ComponentStore.selectedSpot.push(space)
+            await this.props.ComponentStore.selectedExternalSpot.push(space)
             const db = firebase.firestore();
             const hostData = db.collection('users').doc(space.hostID);
         

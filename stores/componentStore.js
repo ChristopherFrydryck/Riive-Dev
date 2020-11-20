@@ -8,6 +8,7 @@ class ComponentStore {
     @observable selectedVehicle = [];
     @observable selectedPayment = [];
     @observable selectedSpot = [];
+    @observable selectedExternalSpot = [];
     @observable selectedUser = [];
 
 

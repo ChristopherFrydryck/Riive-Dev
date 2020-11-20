@@ -46,12 +46,13 @@ class ExternalSpacesList extends React.Component{
 
     async componentDidMount(){
         await this.getListings();
+        
         const iconAssets = cacheFonts([FontAwesome.font, MaterialCommunityIcons.font])
         await Promise.all([...iconAssets])
         // this.setState({data: this.props.listings})
         this.props.ComponentStore.spotsLoaded = true;
         this.fadeAnimation();
-       
+        
 
         
     }
@@ -68,7 +69,9 @@ class ExternalSpacesList extends React.Component{
     getListings = () => {
         const { data } = this.state;
         const db = firebase.firestore();
-   
+
+        
+        
         // if(doc.exists){
 
             if(data.length > 0 && data.length <= 10){
@@ -124,28 +127,31 @@ class ExternalSpacesList extends React.Component{
 
     selectSpace = (spot) => {
             // console.log(spot.listingID)
-            this.props.ComponentStore.selectedSpot = []
-            this.props.ComponentStore.selectedSpot.push({
-                listingID: spot.listingID,
-                address: spot.address,
-                region: spot.region,
-                photo: spot.photo,
-                spaceName: spot.spaceName,
-                spaceBio: spot.spaceBio,
-                spacePrice: spot.spacePrice,
-                spacePriceCents: spot.spacePriceCents,
-                numSpaces: spot.numSpaces,
-                availability: spot.availability,
-
-                // Integrated version 1.0.0
-                hidden: spot.hidden,
-                toBeDeleted: spot.toBeDeleted,
-                visits: spot.visits,
+            this.props.ComponentStore.selectedExternalSpot = []
+            this.props.ComponentStore.selectedExternalSpot.push({
+                ...spot
             })
            
             this.props.navigation.navigate("ExternalSpace")
 
 
+    }
+
+    scrollToIndex = (listingID) => {
+        if(this.state.data[0].listingID){
+           var orderedData = this.state.data.slice().sort((a, b) => b.created - a.created)
+           let indexPosition = orderedData.map(x => x.listingID).indexOf(listingID)
+            console.log("Valid")
+           if(indexPosition != -1){
+            console.log("Scrolling")
+            this.spacesRef.scrollToIndex({animated: false, index: indexPosition, viewOffset: 0})
+           }else{
+            console.log("Scrolling to 0")
+            this.spacesRef.scrollToIndex({animated: false, index: 0, viewOffset: 0})
+           }
+
+    
+        }
     }
 
    
@@ -154,7 +160,6 @@ class ExternalSpacesList extends React.Component{
         var dayToday = new Date().getDay()
         var hourToday = new Date().getHours()
         
-
         // Check if we have data
         if(this.state.data[0].listingID){
             var orderedData = this.state.data.slice().sort((a, b) => b.created - a.created)
@@ -236,10 +241,11 @@ class ExternalSpacesList extends React.Component{
         var orderedData = this.state.data.slice().sort((a, b) => b.created - a.created)
         var {width} = Dimensions.get('window');
         
+        
 
         // console.log((16 * (orderedData.length - 2) + 48)/orderedData.length)
 
-        if(spotsLoaded && this.state.data.length == 1){
+        if(this.state.data.length == 1){
         return(
         <View style={styles.container}>
                         
@@ -247,7 +253,7 @@ class ExternalSpacesList extends React.Component{
                
         </View>
             
-        )}else if(spotsLoaded && this.state.data.length > 1){
+        )}else if(this.state.data.length > 1){
    
 
            
