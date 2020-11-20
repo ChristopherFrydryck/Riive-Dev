@@ -152,7 +152,7 @@ class ExternalSpacesList extends React.Component{
         var hourToday = new Date().getHours()
         var orderedData = this.state.data.slice().sort((a, b) => b.created - a.created)
 
-        console.log(spot)
+     
         
         // let currentActive = orderedData[index].availability[dayToday].data.filter((x) => parseInt(x.start.substring(0,2)) <= hourToday && parseInt(x.end.substring(0,2)) >= hourToday)
 
@@ -173,9 +173,9 @@ class ExternalSpacesList extends React.Component{
 
         return(
         <TouchableOpacity
-        key={spot.listingID}
-        style={cardStyle}
-        onPress = {() => this.selectSpace(spot)}
+            key={spot.listingID}
+            style={cardStyle}
+            onPress = {() => this.selectSpace(spot)}
         >
         <View style={styles.image}>
             <Image 
@@ -239,7 +239,7 @@ class ExternalSpacesList extends React.Component{
                 <FlatList
                     data={orderedData}
                     renderItem={({item, index}) => this.renderSpaceCard(item, index)}
-                    keyExtractor={item => item.listingID}
+                    keyExtractor={(item, index) => index.toString()}
                     horizontal={true}
                     snapToAlignment={"center"}
                     snapToOffsets={[...Array(orderedData.length)].map((x, i) => i * (width*.75) - 40 + 16*i)}

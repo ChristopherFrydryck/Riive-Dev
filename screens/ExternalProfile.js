@@ -93,7 +93,7 @@ export default class ExternalProfile extends Component{
                             /> */}
                         </TopBar>
                         </LinearGradient>
-                        <View style={{flex: 1, paddingHorizontal: 16}}>
+                        <View style={{flex: 0, paddingHorizontal: 16}}>
                             <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start'}}>
                             <Image 
                                 aspectRatio={1/1}
@@ -107,7 +107,7 @@ export default class ExternalProfile extends Component{
                             />
                                 <View style={{ marginLeft: 16, marginTop: -32, marginRight: 64}}>
                                     <Text style = {{fontSize: 20, color: 'white'}} type="semiBold">{host.firstname} {host.lastname.charAt(0).toUpperCase()}.</Text>
-                                    <Text style={{fontSize: 14, marginTop: 8, marginRight: 16}} numberOfLines={2} elipsizeMode="tail" >Hosting {space.spaceName} {host.listings.length > 1 ?`and ${host.listings.length - 1} others.` : "."}</Text>
+                                    <Text style={{fontSize: 14, marginTop: 8, marginRight: 16}} numberOfLines={2} elipsizeMode="tail" >Hosting {space.spaceName} {host.listings.length > 2 ?`and ${host.listings.length - 1} others.` : host.listings.length !== 0 ? `and ${host.listings.length - 1} other.`: "."}</Text>
                                 </View>
                             </View>
                             

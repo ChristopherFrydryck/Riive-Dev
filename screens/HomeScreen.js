@@ -171,7 +171,7 @@ export default class Home extends Component{
 
           this.rippleAnimation();
           this.getCurrentLocation(true);
-          this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, 99999.9999, 99999.9999)
+          this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.latitudeDelta * 69, 99999.9999, 99999.9999)
           
           
     
@@ -735,14 +735,14 @@ export default class Home extends Component{
                                     resizeMode={'cover'}
                                 /> 
                                 <View style={styles.actionSheetContent}>
-                                    <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8}}>
-                                        <Text style={{fontSize: 24, flexWrap: 'wrap', paddingRight: 16}}>{this.state.selectedSpace.spaceName}</Text>
+                                    <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginTop: 8}}>
+                                        <Text style={{flex: 8, fontSize: 24, flexWrap: 'wrap', paddingRight: 16}} numberOfLines={2}>{this.state.selectedSpace.spaceName}</Text>
                                         <ProfilePic 
                                             source={{ uri: this.state.selectedSpaceHost.photo }}
                                             imgWidth = {32}
                                             imgHeight = {32}
                                             initals={this.state.selectedSpaceHost.firstname.charAt(0).toUpperCase() + "" + this.state.selectedSpaceHost.lastname.charAt(0).toUpperCase()}
-                                            style={{backgroundColor:"#FFFFFF"}}
+                                            style={{backgroundColor:"#FFFFFF", flex: 1}}
                                             fontSize={12}
                                             fontColor="#1D2951"
                                             onPress={() => this.goToHostProfile()}
