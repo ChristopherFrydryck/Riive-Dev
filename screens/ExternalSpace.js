@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, ScrollView, StatusBar, Platform, StyleSheet, SafeAreaView, Dimensions, Animated, TouchableOpacity, KeyboardAvoidingView, FlatList, Switch, Modal, Picker, Alert} from 'react-native';
+import { View, ScrollView, StatusBar, Platform, StyleSheet, SafeAreaView, Dimensions, Animated, TouchableWithoutFeedback, KeyboardAvoidingView, FlatList, Switch, Modal, Picker, Alert} from 'react-native';
 import Text from '../components/Txt'
 
 import MapView, {Marker} from 'react-native-maps';
@@ -113,7 +113,7 @@ class externalSpace extends React.Component {
         if(this.state.host && true){
        
         return(
-            <SafeAreaView>
+            <SafeAreaView  style={{flexGrow: 1}}>
             <View>
                 <ScrollView
                         horizontal={true}
@@ -181,7 +181,7 @@ class externalSpace extends React.Component {
                                 iconSize={16}
                                 style={{marginRight: 8, marginTop: 4}}
                             />
-                            <Text>Hosted by {this.state.host.firstname} {this.state.host.lastname.charAt(0).toUpperCase()}.</Text>
+                            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate("ExternalProfile")}><Text>Hosted by <Text style={{textDecorationLine: 'underline'}}>{this.state.host.firstname} {this.state.host.lastname.charAt(0).toUpperCase()}</Text>.</Text></TouchableWithoutFeedback>
                         </View>
                         {this.props.ComponentStore.selectedExternalSpot[0].spaceBio.split("").length > 0 ? 
                         <View style={{flexDirection: 'row'}}>
@@ -201,11 +201,11 @@ class externalSpace extends React.Component {
 
                       
                         <View style={{marginTop: 32}}>
-                            {/* <DayAvailabilityPicker 
-                                availability={this.props.ComponentStore.selectedExternalSpot[0].daily}
-                                // availabilityCallback={this.availabilityCallbackFunction}
+                            <DayAvailabilityPicker 
+                                availability={this.props.ComponentStore.selectedExternalSpot[0].availability}
+                                availabilityCallback={() => {}}
                                 editable={false}
-                            /> */}
+                            />
                         </View>
                         
                     
