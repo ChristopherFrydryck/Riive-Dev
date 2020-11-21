@@ -56,7 +56,9 @@ export default class Home extends Component{
     _interval = 0;
 
     
-
+    static navigationOptions = {
+        header: null
+    }
       
 
 

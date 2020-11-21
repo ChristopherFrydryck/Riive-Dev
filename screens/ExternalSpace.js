@@ -39,6 +39,18 @@ import {inject, observer} from 'mobx-react/native'
 @observer
 class externalSpace extends React.Component {
 
+    static navigationOptions = ({navigation}) => {
+        const { params = {} } = navigation.state;
+        
+        return{
+          headerTitle: params.title ? params.title : "Loading...",
+          headerTitleStyle:{
+              fontWeight: "300",
+              fontSize: 18,
+          },
+        }
+    };
+
     constructor(props){
         super(props)
 
@@ -50,18 +62,22 @@ class externalSpace extends React.Component {
 
     }
 
-    componentDidMount(){
-       this.getHost();
+    async componentDidMount(){
+       await this.getHost();
+
+       
 
        this._navListener = this.props.navigation.addListener('didFocus', () => {
         StatusBar.setBarStyle('dark-content', true);
         Platform.OS === 'android' && StatusBar.setBackgroundColor('white');
       });
 
-       let add = "Hello"
-       this.props.navigation.setParams({
-        title: add.length > 20 ? add.substring(0,20) + "..." : add,
-     });
+      let {spaceName} = this.props.ComponentStore.selectedExternalSpot[0]
+
+      this.props.navigation.setParams({
+        title: spaceName.length > 30 ? spaceName.substring(0,20) + "..." : spaceName,
+      });
+
     }
 
     getHost = () => {
@@ -113,7 +129,7 @@ class externalSpace extends React.Component {
         if(this.state.host && true){
        
         return(
-            <SafeAreaView  style={{flexGrow: 1}}>
+            <ScrollView  style={{flex: 1}}>
             <View>
                 <ScrollView
                         horizontal={true}
@@ -166,7 +182,7 @@ class externalSpace extends React.Component {
                         {this.renderDotsView(2, this.state.currentActivePhoto)}
                     </View>
                   </View>
-                
+
                   <View style={styles.contentBox}>
                     <View style={{width: 100, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.fortune500, paddingVertical: 4, borderRadius: width, marginBottom: 8}}>
                                 <Text style={{ fontSize: 16, color: Colors.mist300,}}>{this.props.ComponentStore.selectedExternalSpot[0].spacePrice}/hr</Text>
@@ -209,9 +225,8 @@ class externalSpace extends React.Component {
                         </View>
                         
                     
-                  
-                  </View>
-                  </SafeAreaView>
+                    </View>
+                  </ScrollView>
         )
         }else{
             return(

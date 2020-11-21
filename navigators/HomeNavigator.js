@@ -10,9 +10,7 @@ import ExternalSpace from '../screens/ExternalSpace'
 const HomeNavigator = createStackNavigator({
     Home: {
         screen: Home, 
-        navigationOptions: {
-            header: null,
-        },
+       
     },
     ExternalProfile: {
         screen: ExternalProfile, 
