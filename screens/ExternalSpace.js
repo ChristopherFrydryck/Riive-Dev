@@ -122,6 +122,11 @@ class externalSpace extends React.Component {
         
         }
 
+    goToHostProfile = () => {
+        this.props.ComponentStore.selectedUser[0] = this.state.host ;
+        this.props.navigation.navigate("ExternalProfile")
+    }
+
 
 
     render(){
@@ -189,6 +194,7 @@ class externalSpace extends React.Component {
                     </View>
                   
                         <Text  style={{fontSize: 24, flexWrap: 'wrap'}}>{this.props.ComponentStore.selectedExternalSpot[0].spaceName}</Text>
+                        <Text style={{marginBottom: 8}}>No ratings yet</Text>
                         <View style={{flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8}}>
                             <Icon
                                 iconName="user"
@@ -197,8 +203,9 @@ class externalSpace extends React.Component {
                                 iconSize={16}
                                 style={{marginRight: 8, marginTop: 4}}
                             />
-                            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate("ExternalProfile")}><Text>Hosted by <Text style={{textDecorationLine: 'underline'}}>{this.state.host.firstname} {this.state.host.lastname.charAt(0).toUpperCase()}</Text>.</Text></TouchableWithoutFeedback>
+                            <TouchableWithoutFeedback onPress={() => this.goToHostProfile()}><Text>Hosted by <Text style={{textDecorationLine: 'underline'}}>{this.state.host.firstname} {this.state.host.lastname.charAt(0).toUpperCase()}</Text>.</Text></TouchableWithoutFeedback>
                         </View>
+                        
                         {this.props.ComponentStore.selectedExternalSpot[0].spaceBio.split("").length > 0 ? 
                         <View style={{flexDirection: 'row'}}>
                             <Icon
@@ -232,11 +239,22 @@ class externalSpace extends React.Component {
             return(
                 <SvgAnimatedLinearGradient width={Dimensions.get('window').width} height={height}>
                         <Rect x="0" width={width} height={width / 1.7777777} rx="0" ry="0" />
-                        <Rect x="16" y={width / 1.77777777 + 24} width="100" height="35" rx="20" ry="20" />
+                        <Rect x="16" y={width / 1.77777777 + 24} width="100" height="36" rx="20" ry="20" />
                         <Rect x="16" y={width / 1.77777777 + 67} width={width  * .75} height="36" />
-                        <Rect x="16" y={width / 1.77777777 + 112} width={width  * .45} height="24" />
-                        <Rect x="16" y={width / 1.77777777 + 144} width={width - 32} height="24" />
-                        <Rect x="16" y={width / 1.77777777 + 176} width={width  * .65} height="24" />
+                        <Rect x="16" y={width / 1.77777777 + 112} width={width  * .45} height="16" />
+                        <Rect x="16" y={width / 1.77777777 + 132} width={width  * .3} height="16" />
+                        <Rect x="16" y={width / 1.77777777 + 158} width={width - 32} height="24" />
+                        <Rect x="16" y={width / 1.77777777 + 188} width={width  * .65} height="24" />
+                        {/* Days of week */}
+                        <Rect x="16" y={width / 1.77777777 + 240} width={width / 7 - 12} height="24" rx="12" ry="12" />
+                        <Rect x={(((width - 32) / 7) * 1 + 12)} y={width / 1.77777777 + 240} width={(width - 32) / 7 - 8} height="24" rx="12" ry="12" />
+                        <Rect x={(((width - 32) / 7) * 2 + 8)} y={width / 1.77777777 + 240} width={(width - 32) / 7 - 8} height="24" rx="12" ry="12" />
+                        <Rect x={(((width - 32) / 7) * 3 + 8)} y={width / 1.77777777 + 240} width={(width - 32) / 7 - 8} height="24" rx="12" ry="12" />
+                        <Rect x={(((width - 32) / 7) * 4 + 8)} y={width / 1.77777777 + 240} width={(width - 32) / 7 - 8} height="24" rx="12" ry="12" />
+                        <Rect x={(((width - 32) / 7) * 5 + 8)} y={width / 1.77777777 + 240} width={(width - 32) / 7 - 8} height="24" rx="12" ry="12" />
+                        <Rect x={(((width - 32) / 7) * 6 + 8)} y={width / 1.77777777 + 240} width={(width - 32) / 7 - 8} height="24" rx="12" ry="12" />
+                        <Rect x="16" y={width / 1.77777777 + 280} width={width - 32} height="48" />
+                        <Rect x="16" y={width / 1.77777777 + 332} width={width - 32} height="48" />
                 </SvgAnimatedLinearGradient>
             )
         }

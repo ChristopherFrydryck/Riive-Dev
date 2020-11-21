@@ -499,6 +499,11 @@ export default class Home extends Component{
               actionSheetRef.current?.setModalVisible(false);
               this.props.navigation.navigate("ExternalProfile")
           }
+
+          goToSpaceProfile = () => {
+            actionSheetRef.current?.setModalVisible(false);
+            this.props.navigation.navigate("ExternalSpace")
+          }
       
 
         componentWillUnmount() {
@@ -721,7 +726,7 @@ export default class Home extends Component{
                     containerStyle={{paddingTop: 8}}
                     extraScroll={40}
                     delayActionSheetDrawTime={0}
-                    initialOffsetFromBottom = {this.state.selectedSpace && this.state.selectedSpace.spaceBio ? .70 : .775}
+                    initialOffsetFromBottom = {1}
                  
                    >
                         <View>
@@ -752,9 +757,9 @@ export default class Home extends Component{
                                     </View>
                                     <Text style={{fontSize: 16}}>{this.state.selectedSpace.spacePrice}/hr</Text>
                                     <Text style={{marginBottom: 16}}>No ratings yet</Text>
-                                    {this.state.selectedSpace.spaceBio ?
+                                    {/* {this.state.selectedSpace.spaceBio ?
                                         <Text style={{marginBottom: 16}}>{this.state.selectedSpace.spaceBio}</Text>
-                                    : null}
+                                    : null} */}
                                     {this.state.searchInputValue != '' && this.state.locationDifferenceWalking.duration != null ? 
                                         <View style={{flexDirection: 'row', alignItems: 'center', marginRight: 48}}>
                                              <Icon 
@@ -772,6 +777,7 @@ export default class Home extends Component{
                                             }
                                         </View>
                                     : null}
+                                    <Button style={{backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.tango900}} textStyle={{color: Colors.tango900}} onPress={() => this.goToSpaceProfile()}>More Details</Button>
                                     <Button style = {{backgroundColor: Colors.tango700, height: 48}} textStyle={{color: 'white'}}>Reserve Space</Button>
                                 </View>
                             </View>
