@@ -222,7 +222,7 @@ class ExternalSpacesList extends React.Component{
             return(
             <View style={[styles.container, {flexDirection: 'row', justifyContent: 'space-evenly', marginLeft: 16}]}>
                     <SvgAnimatedLinearGradient width={Dimensions.get('window').width} height="160">
-                        <Rect x="0" width={Dimensions.get('window').width * .75} height="140" rx="4" ry="4" />
+                        <Rect x="0" width={Dimensions.get('window').width * .75} height="160" rx="4" ry="4" />
                         <Rect x={Dimensions.get('window').width * .75 + 16} width={Dimensions.get('window').width * .75} height="160" rx="4" ry="4" />
                     </SvgAnimatedLinearGradient>
                 </View>

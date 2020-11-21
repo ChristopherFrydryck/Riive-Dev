@@ -6,7 +6,9 @@ import MapView, {Marker} from 'react-native-maps';
 import DayMap from '../constants/DayMap'
 import NightMap from '../constants/NightMap'
 
-
+//For Shimmer
+import SvgAnimatedLinearGradient from 'react-native-svg-animated-linear-gradient'
+import Svg, {Circle, Rect} from 'react-native-svg'
 
 
 import Icon from '../components/Icon'
@@ -50,6 +52,16 @@ class externalSpace extends React.Component {
 
     componentDidMount(){
        this.getHost();
+
+       this._navListener = this.props.navigation.addListener('didFocus', () => {
+        StatusBar.setBarStyle('dark-content', true);
+        Platform.OS === 'android' && StatusBar.setBackgroundColor('white');
+      });
+
+       let add = "Hello"
+       this.props.navigation.setParams({
+        title: add.length > 20 ? add.substring(0,20) + "..." : add,
+     });
     }
 
     getHost = () => {
@@ -98,7 +110,8 @@ class externalSpace extends React.Component {
 
     render(){
         const {width, height} = Dimensions.get("window")
-        if(this.state.host){
+        if(this.state.host && true){
+       
         return(
             <SafeAreaView>
             <View>
@@ -170,8 +183,8 @@ class externalSpace extends React.Component {
                             />
                             <Text>Hosted by {this.state.host.firstname} {this.state.host.lastname.charAt(0).toUpperCase()}.</Text>
                         </View>
-                        {this.props.ComponentStore.selectedExternalSpot[0].spaceBio ? 
-                        <View style={{flexDirection: 'row', flex: 1, alignItems: 'flex-start', flexShrink: 1}}>
+                        {this.props.ComponentStore.selectedExternalSpot[0].spaceBio.split("").length > 0 ? 
+                        <View style={{flexDirection: 'row'}}>
                             <Icon
                                 iconName="form"
                                 iconLib="AntDesign"
@@ -179,9 +192,11 @@ class externalSpace extends React.Component {
                                 iconSize={16}
                                 style={{marginRight: 8, marginTop: 4}}
                             />
-                            <Text style={{fontSize: 16, color: Colors.cosmos300, marginRight: 24}}>{this.props.ComponentStore.selectedExternalSpot[0].spaceBio}</Text> 
+                            <Text style={{flex: 1}}>{this.props.ComponentStore.selectedExternalSpot[0].spaceBio}</Text>
                         </View>
                         : null}
+                        
+                
                        
 
                       
@@ -200,7 +215,14 @@ class externalSpace extends React.Component {
         )
         }else{
             return(
-                <Text>Loading...</Text>
+                <SvgAnimatedLinearGradient width={Dimensions.get('window').width} height={height}>
+                        <Rect x="0" width={width} height={width / 1.7777777} rx="0" ry="0" />
+                        <Rect x="16" y={width / 1.77777777 + 24} width="100" height="35" rx="20" ry="20" />
+                        <Rect x="16" y={width / 1.77777777 + 67} width={width  * .75} height="36" />
+                        <Rect x="16" y={width / 1.77777777 + 112} width={width  * .45} height="24" />
+                        <Rect x="16" y={width / 1.77777777 + 144} width={width - 32} height="24" />
+                        <Rect x="16" y={width / 1.77777777 + 176} width={width  * .65} height="24" />
+                </SvgAnimatedLinearGradient>
             )
         }
     }

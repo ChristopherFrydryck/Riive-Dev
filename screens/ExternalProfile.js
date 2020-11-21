@@ -106,9 +106,9 @@ export default class ExternalProfile extends Component{
                                 // backupSource={require('../assets/img/Logo_001.png')}
                                 resizeMode={'cover'}
                             />
-                                <View style={{ marginLeft: 16, marginTop: -32, marginRight: 64}}>
+                                <View style={{flex: 1, marginLeft: 16, marginTop: -32,}}>
                                     <Text style = {{fontSize: 20, color: 'white'}} type="semiBold">{host.firstname} {host.lastname.charAt(0).toUpperCase()}.</Text>
-                                    <Text style={{fontSize: 14, marginTop: 8, marginRight: 16}} numberOfLines={2} elipsizeMode="tail" >Hosting {space.spaceName} {host.listings.length > 2 ?`and ${host.listings.length - 1} others.` : host.listings.length !== 0 ? `and ${host.listings.length - 1} other.`: "."}</Text>
+                                    <Text style={{fontSize: 14, marginTop: 8}} numberOfLines={2} elipsizeMode="tail" >Hosting {space.spaceName} {host.listings.length > 2 ?`and ${host.listings.length - 1} others.` : host.listings.length !== 0 ? `and ${host.listings.length - 1} other.`: "."}</Text>
                                 </View>
                             </View>
                             
