@@ -516,7 +516,6 @@ export default class Home extends Component{
         const {width, height} = Dimensions.get('window')
         const {firstname, email} = this.props.UserStore
 
-
         
         return(
                 <SafeAreaView style={{flex: 1, position: 'relative', backgroundColor: this.state.searchFilterOpen ? Colors.tango500 : 'white'}}>

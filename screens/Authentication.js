@@ -375,6 +375,8 @@ resetPassword = () =>{
                      vehicles: [],
                      payments: [],
                      photo: '',
+                     joined_date: firebase.auth().currentUser.metadata.creationTime,
+                     last_update: firebase.auth().currentUser.metadata.creationTime,
                   })
      
                   // alert('Welcome to Riive ' + this.props.UserStore.firstname + '!')

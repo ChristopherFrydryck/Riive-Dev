@@ -8,7 +8,7 @@ const ProfilePic = ({ alt, source, initals, fontSize, fontColor, imgWidth, imgHe
   const style = [styles.container,  props.style || {}]
   const allProps = Object.assign({}, props,{style:style})  
   
-  if (source){
+  if (source.uri.length > 0){
     return(
       <View style={{postion: 'absolute'}}>
       <View style={{position: 'relative', alignContent: 'center', zIndex:1,}}>
@@ -17,6 +17,7 @@ const ProfilePic = ({ alt, source, initals, fontSize, fontColor, imgWidth, imgHe
         {...allProps }
         underlayColor = '#ccc'
         onPress = {onPress}
+        disabled={onPress ? false : true}
       >
         {/* <Text style={{fontSize: fontSize, color: fontColor, fontWeight: '500'}}>FUK</Text> */}
         <Image style={{ width: imgWidth, 
@@ -44,8 +45,11 @@ const ProfilePic = ({ alt, source, initals, fontSize, fontColor, imgWidth, imgHe
         {...allProps }
         underlayColor = '#ccc'
         onPress = {onPress}
+        disabled={onPress ? false : true}
       >
-        <Text style={{fontSize: fontSize, color: fontColor, fontWeight: '700'}}> {initals} </Text>
+        <View style={{width: imgWidth, height: imgHeight, borderRadius:  (imgHeight) / 2, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{fontSize: fontSize, color: fontColor, fontWeight: '700'}}> {initals} </Text>
+        </View>
       </TouchableOpacity>
       
       </View>

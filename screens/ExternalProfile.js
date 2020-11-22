@@ -96,15 +96,15 @@ export default class ExternalProfile extends Component{
                         </LinearGradient>
                         <View style={{flex: 0, paddingHorizontal: 16}}>
                             <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start'}}>
-                            <Image 
-                                aspectRatio={1/1}
+                            <ProfilePic 
                                 source={{uri: host.photo}}
                                 style={{marginTop: -32}}
-                                width={80}
-                                height={80}
-                                borderRadius={Dimensions.get("window").width / 2}
-                                // backupSource={require('../assets/img/Logo_001.png')}
-                                resizeMode={'cover'}
+                                imgWidth={80}
+                                imgHeight={80}
+                                initals={host.firstname.charAt(0).toUpperCase() + "" + host.lastname.charAt(0).toUpperCase()}
+                                fontSize={24}
+                                fontColor="#1D2951"
+                                alt="Your profile picture"
                             />
                                 <View style={{flex: 1, marginLeft: 16, marginTop: -32,}}>
                                     <Text style = {{fontSize: 20, color: 'white'}} type="semiBold">{host.firstname} {host.lastname.charAt(0).toUpperCase()}.</Text>
