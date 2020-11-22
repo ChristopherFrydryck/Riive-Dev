@@ -8,7 +8,7 @@ const ProfilePic = ({ alt, source, initals, fontSize, fontColor, imgWidth, imgHe
   const style = [styles.container,  props.style || {}]
   const allProps = Object.assign({}, props,{style:style})  
   
-  if (source.uri.length > 0){
+  if (source && source.uri.length > 0){
     return(
       <View style={{postion: 'absolute'}}>
       <View style={{position: 'relative', alignContent: 'center', zIndex:1,}}>

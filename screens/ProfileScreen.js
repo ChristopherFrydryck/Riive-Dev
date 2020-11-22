@@ -720,10 +720,9 @@ class Profile extends Component{
                             initals={initals}
                             imgWidth = {80}
                             imgHeight = {80}
-                            style={{width: 80, height: 80, backgroundColor: "#ffffff", top: -45 , alignSelf: "center", position: "absolute"}}
+                            style={{backgroundColor: "#ffffff", top: -45 , alignSelf: "center", position: "absolute"}}
                             fontSize={24}
                             fontColor="#1D2951"
-                            onPress={() => alert("YYYAAAAYYY!")}
                             source={{ uri: this.props.UserStore.photo }}
 
                         />
@@ -736,10 +735,9 @@ class Profile extends Component{
                             initals={initals}
                             imgWidth = {80}
                             imgHeight = {80}
-                            style={{width: 80, height: 80, backgroundColor: "#ffffff", top: -45, alignSelf: "center", position: "absolute"}}
+                            style={{backgroundColor: "#ffffff", top: -45, alignSelf: "center", position: "absolute"}}
                             fontSize={24}
                             fontColor="#1D2951"
-                            onPress={() => alert("YYYAAAAYYY!")}
                             source={{ uri: firebase.auth().currentUser.photoURL }}
 
                         />
@@ -786,10 +784,11 @@ class Profile extends Component{
                         </View> 
                         <ProfilePic 
                             initals={initals}
-                            style={{width: 80, height: 80, backgroundColor: "#ffffff", top: -45, alignSelf: "center", position: "absolute"}}
+                            imgWidth={80}
+                            imgHeight={80}
+                            style={{backgroundColor: "#ffffff", top: -45, alignSelf: "center", position: "absolute"}}
                             fontSize={24}
                             fontColor={Colors.apollo900}
-                            onPress={() => alert("YYYAAAAYYY!")}
 
                         />
                         
