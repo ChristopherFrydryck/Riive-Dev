@@ -361,7 +361,7 @@ resetPassword = () =>{
 
                 doc.get().then((docData) => {
 
-                  db.collection("users").doc(this.props.UserStore.userID).set({
+                  return db.collection("users").doc(this.props.UserStore.userID).set({
                     id: firebase.auth().currentUser.uid,
                      fullname: this.props.UserStore.fullname,
                      firstname: this.props.UserStore.firstname,
@@ -377,6 +377,19 @@ resetPassword = () =>{
                      photo: '',
                      joined_date: firebase.auth().currentUser.metadata.creationTime,
                      last_update: firebase.auth().currentUser.metadata.creationTime,
+                  }).then((doc) => {
+                    // console.log(doc)
+                    // this.props.UserStore.fullname = doc.data().fullname;
+                    // this.props.UserStore.phone = doc.data().phone;
+                    // this.props.UserStore.userID = doc.data().id;
+                    // this.props.UserStore.stripeID = doc.data().stripeID;
+                    // this.props.UserStore.photo = doc.data().photo;
+                    // this.props.UserStore.joinedDate = firebase.auth().currentUser.metadata.creationTime;
+                    // this.props.UserStore.lastUpdate = doc.data().last_update;
+                    // this.props.UserStore.vehicles = doc.data().vehicles;
+                    // this.props.UserStore.listings = [];
+                    // this.props.UserStore.payments = doc.data().payments;
+                    // this.props.UserStore.searchHistory = doc.data().searchHistory;
                   })
      
                   // alert('Welcome to Riive ' + this.props.UserStore.firstname + '!')
@@ -473,7 +486,8 @@ resetPassword = () =>{
                   this.props.UserStore.userID = doc.data().id;
                   this.props.UserStore.stripeID = doc.data().stripeID;
                   this.props.UserStore.photo = doc.data().photo;
-                  this.props.UserStore.joinedDate = firebase.auth().currentUser.metadata.creationTime
+                  this.props.UserStore.joinedDate = firebase.auth().currentUser.metadata.creationTime;
+                  this.props.UserStore.lastUpdate = doc.data().last_update;
                   this.props.UserStore.vehicles = doc.data().vehicles;
                   this.props.UserStore.listings = [];
                   this.props.UserStore.payments = doc.data().payments;
@@ -486,7 +500,7 @@ resetPassword = () =>{
                   // in case a user reverts their email change via profile update
                   db.collection("users").doc(this.props.UserStore.userID).update({
                     email: this.props.UserStore.email,
-                })
+                  })
                   // Upon setting the MobX State Observer, navigate to home
                   this.props.navigation.navigate('Home')
               

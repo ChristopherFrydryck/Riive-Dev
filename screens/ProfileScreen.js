@@ -468,17 +468,7 @@ class Profile extends Component{
 
 
 
-    // carList () {
-    //     return this.props.UserStore.vehicles.map((car, index) => {
-    //         return (
-
-    //         <Text key={index}>Hello {car.Make}!</Text>
-                    
-     
-                
-    //         )
-    //     }) 
-    // }
+    
 
 
  

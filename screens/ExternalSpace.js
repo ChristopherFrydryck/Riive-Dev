@@ -131,7 +131,7 @@ class externalSpace extends React.Component {
 
     render(){
         const {width, height} = Dimensions.get("window")
-        if(this.state.host && true){
+        if(this.state.host){
        
         return(
             <ScrollView  style={{flex: 1}}>

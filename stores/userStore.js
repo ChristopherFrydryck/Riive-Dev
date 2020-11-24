@@ -11,6 +11,7 @@ class UserStore {
     @observable password = '';
     @observable photo = '';
     @observable joinedDate = null;
+    @observable lastUpdate = null;
     @observable listings = [];
     @observable vehicles = [];
     @observable payments = [];

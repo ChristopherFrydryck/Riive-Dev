@@ -179,25 +179,6 @@ export default class Home extends Component{
     
         }
 
-        componentDidUpdate(prevProps, prevState){
-             
-                   
-            // console.log(`
-            //              lat: ${this.state.region.current.latitude.toFixed(3)}
-            //              lng: ${this.state.region.current.longitude.toFixed(3)}
-            //              lat delt: ${this.state.region.current.latitudeDelta.toFixed(3)}
-            //              lng delt: ${this.state.region.current.longitudeDelta.toFixed(3)}
-            //              ----------------------------------------------------`)
-                    // if(prevLat !== this.state.region.current.latitude || prevLat !== this.state.region.current.longitude){
-                    //     console.log("ComponentDidUpdate")
-                       
-                    // }
-
-                    
-           
-            
-     
-        }
 
         mapLocationFunction = () => {
             this._interval = setInterval(() => {
