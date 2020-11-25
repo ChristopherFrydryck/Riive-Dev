@@ -181,6 +181,7 @@ addSource = async () => {
     return data;
   }catch(e){
     alert(e);
+
   }    
 }
 
@@ -195,21 +196,52 @@ submitPayment = async() => {
 
   try{
     
-    try{
-      this.verifyInput();
+ 
+      await this.verifyInput();
       await this.setCardParams();
-    }catch(e){
-      
-    }
+    
     
     
     if(this.state.allValid){
       const ref = db.collection("users").doc(); // creates unique ID
 
-        // add card to database
-      if(this.state.creditCardType !== ""){
-        db.collection("users").doc(this.props.UserStore.userID).update({
-            payments: firebase.firestore.FieldValue.arrayUnion({
+      try{
+      
+        await this.addSource();
+
+          // add card to database
+        if(this.state.creditCardType !== ""){
+          db.collection("users").doc(this.props.UserStore.userID).update({
+              payments: firebase.firestore.FieldValue.arrayUnion({
+                  PaymentID: ref.id,
+                  StripeID: this.state.StripecardId,
+                  Type: "Card",
+                  CardType: this.state.creditCardType,
+                  Name: this.state.name,
+                  Month: this.state.expMonth,
+                  Year: this.state.expYear,
+                  Number: this.state.creditCardNum.slice(-4),
+                  CCV: this.state.CCV,
+              })
+          })
+            }else{
+              db.collection("users").doc(this.props.UserStore.userID).update({
+                payments: firebase.firestore.FieldValue.arrayUnion({
+                    PaymentID: ref.id,
+                    StripeID: this.state.StripecardId,
+                    Type: "Card",
+                    CardType: "Credit",
+                    Name: this.state.name,
+                    Month: this.state.expMonth,
+                    Year: this.state.expYear,
+                    Number: this.state.creditCardNum.slice(-4),
+                    CCV: this.state.CCV,
+                })
+            })
+            }
+            // add card to mobx UserStore
+            if(this.state.creditCardType !== ""){
+            this.props.UserStore.payments.push({
                 PaymentID: ref.id,
                 StripeID: this.state.StripecardId,
                 Type: "Card",
@@ -220,10 +252,8 @@ submitPayment = async() => {
                 Number: this.state.creditCardNum.slice(-4),
                 CCV: this.state.CCV,
             })
-         })
-        }else{
-          db.collection("users").doc(this.props.UserStore.userID).update({
-            payments: firebase.firestore.FieldValue.arrayUnion({
+            }else{
+              this.props.UserStore.payments.push({
                 PaymentID: ref.id,
                 StripeID: this.state.StripecardId,
                 Type: "Card",
@@ -234,35 +264,17 @@ submitPayment = async() => {
                 Number: this.state.creditCardNum.slice(-4),
                 CCV: this.state.CCV,
             })
+          }
+        }catch(e){
+          db.collection("users").doc(this.props.UserStore.userID).update({
+            payments: firebase.firestore.FieldValue.arrayRemove({
+                PaymentID: ref.id,
+                StripeID: this.props.UserStore.stripeID,
+            })
          })
+         this.deleteSource();
+         alert(e)
         }
-         // add card to mobx UserStore
-         if(this.state.creditCardType !== ""){
-         this.props.UserStore.payments.push({
-            PaymentID: ref.id,
-            StripeID: this.state.StripecardId,
-            Type: "Card",
-            CardType: this.state.creditCardType,
-            Name: this.state.name,
-            Month: this.state.expMonth,
-            Year: this.state.expYear,
-            Number: this.state.creditCardNum.slice(-4),
-            CCV: this.state.CCV,
-         })
-        }else{
-          this.props.UserStore.payments.push({
-            PaymentID: ref.id,
-            StripeID: this.state.StripecardId,
-            Type: "Card",
-            CardType: "Credit",
-            Name: this.state.name,
-            Month: this.state.expMonth,
-            Year: this.state.expYear,
-            Number: this.state.creditCardNum.slice(-4),
-            CCV: this.state.CCV,
-         })
-        }
-        this.addSource();
 
         
       
@@ -282,6 +294,30 @@ submitPayment = async() => {
   
   
 }
+}
+
+deleteSource = async () => {
+
+  const settings = {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      FBID: firebase.auth().currentUser.uid,
+      stripeID: this.props.UserStore.stripeID,
+      cardSource: this.state.StripecardTok,
+    })
+  }
+  try{
+    
+    const fetchResponse = await fetch('https://us-central1-riive-parking.cloudfunctions.net/deleteSource', settings)
+    const data = await fetchResponse.json();
+    return data;
+  }catch(e){
+    alert(e);
+  }    
 }
 
 
