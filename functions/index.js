@@ -4,7 +4,8 @@ const stripe = require('stripe')('sk_test_rhRKZJYIAphopgJZcoKX32yD00ciJsrqFl');
 admin.initializeApp();
 const db = admin.firestore();
 
-const fs = require('fs')
+const fs = require('fs');
+const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
 
 
 
@@ -117,6 +118,116 @@ const fs = require('fs')
         }).then(() => {
             return null
         }).catch(e => {return e})
+
+    })
+
+    exports.deleteUser = functions.auth.user().onDelete((event) => {
+        const { uid } = event;
+        const bucket = admin.storage().bucket('gs://riive-parking.appspot.com');
+       
+        
+        db.collection('users').doc(uid).get().then((doc) => {
+            if(!doc.exists){
+                console.log("User doesn't exist")
+                throw new Error("User doesn't exist");
+            }else{
+                let userData = doc.data()
+                
+
+                return userData;
+
+
+
+
+                
+
+
+
+                // console.log(doc.data().listings)
+
+
+
+                // for(let i = 0 ; i < userData.listings.length; i++){
+                //     db.collection("listings").doc(userData.listings[i]).update({
+                //         hidden: true,
+                //         toBeDeleted: true
+                //     })
+                // }
+
+                // return null
+                // bucket.deleteFiles({
+                //     prefix: `users/${uid}`
+                // })
+            
+            }
+        }).then((userData) => {
+            let allListings = [];
+
+
+            if(userData.listings.length > 0 && userData.listings.length <= 10){
+                db.collection("listings").where(admin.firestore.FieldPath.documentId(), "in", userData.listings).get().then((qs) => {
+                    for(let i = 0; i < qs.docs.length; i++){
+                        allListings.push(qs.docs[i].data())
+                    }
+                    return allListings;
+                }).catch(e => {
+                    throw new Error("Failed to gather listing data")
+                })
+
+                return [userData, allListings]
+
+            }else if(userData.listings.length > 10){
+                let allArrs = [];
+                while(userData.listings.length > 0){
+                    allArrs.push(userData.listings.splice(0, 10))
+                }
+                for(let i = 0; i < allArrs.length; i++){
+                    db.collection('listings').where(admin.firestore.FieldPath.documentId(), "in", allArrs[i]).get().then((qs) => {
+                        for(let i = 0; i < qs.docs.length; i++){
+                            allListings.push(qs.docs[i].data())
+                        }
+                        return allListings;
+                    }).catch(e => {
+                        throw new Error("Failed to gather listing data")
+                    })
+                }
+
+                return [userData, allListings]
+
+            }else{
+                console.log("User had no listings")
+                return [userData, null]
+            }
+
+            
+
+        
+        }).then((data) => {
+            console.log(`
+                user data: ${JSON.stringify(data[0])}
+                listing data: ${JSON.stringify(data[1])}
+            `)
+            return null;
+        }).catch(e => {
+            return console.error(e)
+        })
+
+        return null;
+        // bucket.deleteFiles({
+        //     prefix: `users/${userID}`
+        // }).then(() => {
+        //     return console.log("Getting")
+        //     // return db.collection('users').doc({userID}).get()
+        // }).then((doc) => {
+        //     return console.log("Uhhh")
+        //     // if(!doc.exists){
+        //     //     return console.log("User doesn't exist")
+        //     // }else{
+        //     //     return console.log(doc.data())
+        //     // }
+        // }).then(() => {
+        //    return console.log("Completed Function")
+        // }).catch(e => {return e})
 
     })
     
