@@ -121,6 +121,8 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
 
     })
 
+    
+
     exports.deleteUser = functions.auth.user().onDelete((event) => {
         const { uid } = event;
         const bucket = admin.storage().bucket('gs://riive-parking.appspot.com');
@@ -242,6 +244,11 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
        var currentTime = admin.firestore.Timestamp.now();
 
         // When changelog updates, update the file located at https://firebasestorage.googleapis.com/v0/b/riive-parking.appspot.com/o/dev-team%2Fchangelog.json?alt=media&token=9210aa16-dd93-41df-8246-a17c58a4ee9e
+
+        console.log(`User ${beforeUser.id} disabled: ${beforeUser.disabled}.`)
+        // admin.auth().updateUser(uid, {
+        //     disabled: true
+        // });
        
         // 5 second latency before we will update the last_update field in someone's profile
        if(currentTime - beforeUser.last_update >=5 || !beforeUser.last_update){

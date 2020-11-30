@@ -17,6 +17,10 @@ class UserStore {
     @observable payments = [];
     @observable searchHistory = [];
 
+    @observable disabled = false;
+    @observable deleted = false;
+
+
     @observable signInProvider = "";
 
 

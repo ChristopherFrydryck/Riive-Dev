@@ -374,6 +374,11 @@ resetPassword = () =>{
                       photo: '',
                       joined_date: firebase.auth().currentUser.metadata.creationTime,
                       last_update: firebase.auth().currentUser.metadata.creationTime,
+                      disabled: {
+                        isDisabled: false,
+                        disabledEnds: null,
+                      },
+                      deleted: false,
                     })
                 return docData
               }).then((doc) => {
@@ -383,11 +388,13 @@ resetPassword = () =>{
                     this.props.UserStore.stripeID = "";
                     this.props.UserStore.photo = "";
                     this.props.UserStore.joinedDate = firebase.auth().currentUser.metadata.creationTime;
-                    this.props.UserStore.lastUpdate = firebase.auth().currentUser.metadata.creationTime;
+                    this.props.UserStore.last_update = firebase.auth().currentUser.metadata.creationTime;
                     this.props.UserStore.vehicles = [];
                     this.props.UserStore.listings = [];
                     this.props.UserStore.payments = [];
                     this.props.UserStore.searchHistory = [];
+                    this.props.UserStore.disabled = false;
+                    this.props.UserStore.deleted = false;
                   }).then(() => {
                     // alert('Welcome to Riive ' + this.props.UserStore.firstname + '!')
      
@@ -492,18 +499,23 @@ resetPassword = () =>{
                   this.props.UserStore.stripeID = doc.data().stripeID;
                   this.props.UserStore.photo = doc.data().photo;
                   this.props.UserStore.joinedDate = firebase.auth().currentUser.metadata.creationTime;
-                  this.props.UserStore.lastUpdate = doc.data().last_update;
+                  this.props.UserStore.last_update = doc.data().last_update;
                   this.props.UserStore.vehicles = doc.data().vehicles;
                   this.props.UserStore.listings = [];
                   this.props.UserStore.payments = doc.data().payments;
                   this.props.UserStore.searchHistory = doc.data().searchHistory;
+                  this.props.UserStore.disabled = doc.data().disabled.isDisabled;
+                  this.props.UserStore.deleted = doc.data().deleted
 
                   // ID if user signed in via email or google
                   this.props.UserStore.signInProvider = firebase.auth().currentUser.providerData[0].providerId;
                   
-              
+
+                  var currentTime = firebase.firestore.Timestamp.now();
+
                   // in case a user reverts their email change via profile update
                   db.collection("users").doc(this.props.UserStore.userID).update({
+                    last_update: currentTime,
                     email: this.props.UserStore.email,
                   })
                   // Upon setting the MobX State Observer, navigate to home
