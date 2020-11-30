@@ -376,7 +376,8 @@ resetPassword = () =>{
                       last_update: firebase.auth().currentUser.metadata.creationTime,
                       disabled: {
                         isDisabled: false,
-                        disabledEnds: null,
+                        disabledEnds: new Date().getTime() / 1000,
+                        numTimesDisabled: 0,
                       },
                       deleted: false,
                     })

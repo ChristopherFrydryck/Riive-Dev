@@ -242,24 +242,73 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
        var beforeUser = snap.before.data() 
        var afterUser = snap.after.data()
        var currentTime = admin.firestore.Timestamp.now();
+       var disabledUntilDate = new Date(afterUser.disabled.disabledEnds * 1000)
+       var date = new Date();
 
         // When changelog updates, update the file located at https://firebasestorage.googleapis.com/v0/b/riive-parking.appspot.com/o/dev-team%2Fchangelog.json?alt=media&token=9210aa16-dd93-41df-8246-a17c58a4ee9e
 
-        console.log(`User ${beforeUser.id} disabled: ${beforeUser.disabled}.`)
-        // admin.auth().updateUser(uid, {
-        //     disabled: true
-        // });
+        
+
+
+        
+        
+        
        
         // 5 second latency before we will update the last_update field in someone's profile
        if(currentTime - beforeUser.last_update >=5 || !beforeUser.last_update){
-         
-            db.collection('users').doc(context.params.user_id).update({
-                last_update: currentTime
-            })
 
-            admin.storage().bucket('gs://riive-parking.appspot.com').file('dev-team/changelog.json').download().then((res) => {
+        db.collection('users').doc(context.params.user_id).update({
+            last_update: currentTime
+        }).then(() => {
+            // Suspension check
+            if(afterUser.disabled.isDisabled && disabledUntilDate < date){
+                // First suspension
+                if(beforeUser.disabled.numTimesDisabled === 0){
+                    admin.auth().updateUser(context.params.user_id, {
+                        disabled: true,
+                    });
+                    db.collection('users').doc(context.params.user_id).update({
+                        disabled: {
+                            isDisabled: true,
+                            numTimesDisabled: 1,
+                            disabledEnds: Math.round((new Date()).getTime() / 1000),
+                        }
+                    })
+                // Second Suspension
+                }else if(beforeUser.disabled.numTimesDisabled === 1){
+                    admin.auth().updateUser(context.params.user_id, {
+                        disabled: true,
+                    });
+                    db.collection('users').doc(context.params.user_id).update({
+                        disabled: {
+                            isDisabled: true,
+                            numTimesDisabled: 2,
+                            disabledEnds: Math.round((new Date()).getTime() / 1000),
+                        }
+                    })
+                // Third Suspension
+                }else if (beforeUser.disabled.numTimesDisabled >= 2){
+                    admin.auth().updateUser(context.params.user_id, {
+                        disabled: true,
+                    });
+                    db.collection('users').doc(context.params.user_id).update({
+                        disabled: {
+                            isDisabled: true,
+                            numTimesDisabled: 3,
+                            disabledEnds: Math.round((new Date()).getTime() / 1000),
+                        }
+                    })
+                }
+            }
+
+            return null
+        }).then(() => {
+
+        
+            return admin.storage().bucket('gs://riive-parking.appspot.com').file('dev-team/changelog.json').download()
+        }).then((res) => {
             return JSON.parse(res)
-            }).then((changelog) => {
+        }).then((changelog) => {
 
             var versionsBehind;
 
@@ -268,8 +317,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
             }else{
                 versionsBehind = changelog.versions.filter(x => x.dateUnix > beforeUser.last_update.toMillis() && x.isReleased)
             }
-
-
+            
             // Checks if user is behind in changelog versions
             for(var i = 0; i < versionsBehind.length; i++){
                 switch(versionsBehind[i].major){
@@ -311,6 +359,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                 }
             }
             return null
+            
         }).catch((e) => {
             throw e
         })
