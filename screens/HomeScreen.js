@@ -254,19 +254,21 @@ export default class Home extends Component{
             }
         }
 
-        clickSpace = async (space) => {
+        clickSpace = async (data) => {
             await this.props.ComponentStore.selectedExternalSpot.clear()
-            await this.setState({selectedSpace: space})
-            await this.props.ComponentStore.selectedExternalSpot.push(space)
-            const db = firebase.firestore();
-            const hostData = db.collection('users').doc(space.hostID);
+            await this.setState({selectedSpace: data.space, selectedSpaceHost: data.host})
+            await this.props.ComponentStore.selectedExternalSpot.push(data.space)
+            // await this.props.ComponentStore.selectedSpaceHost.push(data.host)
+            // const db = firebase.firestore();
+            // const hostData = db.collection('users').doc(space.hostID);
         
             if(this.state.searchInputValue.split("").length > 0){
                 await this.getDistance(`${space.region.latitude}, ${space.region.longitude}`, `${this.state.region.searched.latitude}, ${this.state.region.searched.longitude}`, "walking")
             }
-            await hostData.get().then(doc => {
-                this.setState({selectedSpaceHost: doc.data()})
-            })
+            // await hostData.get().then(doc => {
+            //     this.setState({selectedSpaceHost: doc.data()})
+            // })
+            
         
             actionSheetRef.current?.setModalVisible()
 
@@ -279,6 +281,8 @@ export default class Home extends Component{
             
              // Create a Firestore reference
              const db = firebase.firestore();
+
+             
 
              // Create a GeoFirestore reference
              const GeoFirestore = geofirestore.initializeApp(db);
@@ -295,21 +299,36 @@ export default class Home extends Component{
 
                if(lat.toFixed(3) != prevLat.toFixed(3) || lng.toFixed(3) != prevLng.toFixed(3)){
  
-               await query.get().then((value) => {
+               await query.get().then( async(value) => {
                  // All GeoDocument returned by GeoQuery, like the GeoDocument added above
                 //  console.log(value.docs.data);
                 for (const doc of value.docs) {
+                    const hostRef = db.collection('users').doc(doc.data().hostID);
+
+                    await hostRef.get().then((hostDoc) => {
+                        return hostDoc.data();
+                    }).then((hostDoc) => {
+                        results.push({
+                            space: doc.data(),
+                            host: hostDoc,
+                        })
+                       
+                        // console.log(`space id: ${doc.data().hostID} and host: ${hostDoc.id}`)
+                    })
                     // console.log(doc.data())
-                    results.push(doc.data())
+                   
+                    
                   }
                });
-               let resultsFiltered = results.filter(x => !x.hidden && !x.toBeDeleted)
+               let resultsFiltered = results.filter(res => !res.space.hidden && !res.space.toBeDeleted && !res.host.toBeDeleted && !res.host.disabled.isDisabled)
                let resultsFilteredTimeAvail = new Array;
+
+               
                
 
             resultsFiltered.forEach((x, i) => {
                 // Gets current day data
-                let avail = resultsFiltered[i].availability[this.state.daySearched.dayValue].data
+                let avail = resultsFiltered[i].space.availability[this.state.daySearched.dayValue].data
                 // Creates new array to assume 
                 let worksArray = new Array;
                 for(let data of avail){
@@ -580,8 +599,8 @@ export default class Home extends Component{
                         : null }
                         {this.results.map(x => {
                            return( <ListingMarker 
-                                    key={x.listingID}
-                                    listing={x}
+                                    key={x.space.listingID}
+                                    listing={x.space}
                                     onPress={() => this.clickSpace(x)}
                                     />)
                         })}

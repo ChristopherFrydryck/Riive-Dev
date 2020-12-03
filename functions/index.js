@@ -303,8 +303,6 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
 
             return null
         }).then(() => {
-
-        
             return admin.storage().bucket('gs://riive-parking.appspot.com').file('dev-team/changelog.json').download()
         }).then((res) => {
             return JSON.parse(res)
