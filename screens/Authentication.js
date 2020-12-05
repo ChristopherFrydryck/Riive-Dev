@@ -379,7 +379,11 @@ resetPassword = () =>{
                         disabledEnds: new Date().getTime() / 1000,
                         numTimesDisabled: 0,
                       },
-                      deleted: false,
+                      deleted: {
+                        isDeleted: false,
+                        toBeDeleted: false,
+                        deletedStarts: new Date().getTime() / 1000,
+                      },
                     })
                 return docData
               }).then((doc) => {
@@ -506,7 +510,7 @@ resetPassword = () =>{
                   this.props.UserStore.payments = doc.data().payments;
                   this.props.UserStore.searchHistory = doc.data().searchHistory;
                   this.props.UserStore.disabled = doc.data().disabled.isDisabled;
-                  this.props.UserStore.deleted = doc.data().deleted
+                  this.props.UserStore.deleted = doc.data().deleted.toBeDeleted
 
                   // ID if user signed in via email or google
                   this.props.UserStore.signInProvider = firebase.auth().currentUser.providerData[0].providerId;

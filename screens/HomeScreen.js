@@ -282,8 +282,6 @@ export default class Home extends Component{
              // Create a Firestore reference
              const db = firebase.firestore();
 
-             
-
              // Create a GeoFirestore reference
              const GeoFirestore = geofirestore.initializeApp(db);
  
@@ -320,7 +318,7 @@ export default class Home extends Component{
                     
                   }
                });
-               let resultsFiltered = results.filter(res => !res.space.hidden && !res.space.toBeDeleted && !res.host.toBeDeleted && !res.host.disabled.isDisabled)
+               let resultsFiltered = results.filter(res => !res.space.hidden && !res.space.toBeDeleted && !res.host.deleted.toBeDeleted && !res.host.deleted.isDeleted && !res.host.disabled.isDisabled)
                let resultsFilteredTimeAvail = new Array;
 
                
