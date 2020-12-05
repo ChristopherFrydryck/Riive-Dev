@@ -121,6 +121,59 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
 
     })
 
+    exports.everySixHours = functions.pubsub.schedule('0 */6 * * *').timeZone('America/New_York').onRun(() => {
+
+        const query = db.collection("users")
+        .where("disabled.isDisabled", "==", true)
+
+        query.get().then(snapshot => {
+            if (snapshot.empty) {
+                throw new Error('no disabled users.')
+            }
+
+                let usersNeedingUpdated = [];
+                snapshot.forEach(doc => {
+                    // console.log(doc.id, '=>', doc.data());
+
+                    if(doc.data().disabled.disabledEnds < Math.round((new Date()).getTime() / 1000) && doc.data().disabled.numTimesDisabled < 3){
+                        usersNeedingUpdated.push(doc.data())
+                    }
+                });
+                return usersNeedingUpdated
+        }).then(users => {
+            users.forEach(async (x, i) => {
+                await db.collection("users").doc(x.id).update({
+                    "disabled.isDisabled": false
+                })
+                await admin.auth().updateUser(x.id, {
+                    disabled: false,
+                });
+                return null
+            })
+            
+            return null
+        }).catch(e => {
+            console.log(e)
+            return null
+        })
+
+        return null;
+
+        
+
+        
+            // .get().then( async(snapshot) => {
+            //     let needsUpdated = [];
+            //     await snapshot.docs.forEach((x, i) => {
+            //         needsUpdated.push(x)
+            //     })
+            //     return needsUpdated
+            // }).then((users) => {
+            //     console.log(users)
+            //     return null
+            // })
+    });
+
     
 
     exports.deleteUser = functions.auth.user().onDelete((event) => {
