@@ -107,7 +107,7 @@ class externalSpace extends React.Component {
     }
     
     
-    renderDotsView = (numItems, position) =>{
+    renderDotsView = (numItems, position) => {
         var arr = [];
         for(let i = 0; i <= numItems - 1; i++){
             arr.push(

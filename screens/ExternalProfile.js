@@ -154,7 +154,6 @@ export default class ExternalProfile extends Component{
                                         /> 
                                     }
                                 >
-                                    {/* <Menu.Item onPress={() => {this.onShare()}} title="Share Profile" /> */}
                                     <Menu.Item onPress={() => {}} title="Block User" />
                                     <Menu.Item onPress={() => {}} title="Report User" />
                                 </Menu>

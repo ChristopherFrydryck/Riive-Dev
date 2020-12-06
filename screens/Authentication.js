@@ -103,6 +103,7 @@ class Authentication extends Component {
 
   async componentDidMount() {
     // Remove after testing!!
+    this.setState({email: 'admin@riive.net', password: 'Fallon430'})
     this.props.UserStore.email = 'admin@riive.net'
     this.props.UserStore.password = "Fallon430"
 
@@ -160,6 +161,8 @@ createStripeCustomer = async () => {
     alert(e);
   }    
 }
+
+
 
 
 
@@ -575,7 +578,7 @@ resetPassword = () =>{
     })
 
 
-    }).catch((error) => {
+    }).catch( async (error) => {
       // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
@@ -595,7 +598,7 @@ resetPassword = () =>{
         })
       }else if(errorCode == 'auth/too-many-requests'){
         this.setState({
-          emailError: 'Too many recent requests. Try again soon.',
+          emailError: 'Too many recent requests. Try again soon',
           passwordError: '',
 
         })
@@ -604,12 +607,87 @@ resetPassword = () =>{
           passwordError: 'Password is incorrect or empty',
           emailError: '',
         })
+      }else if(errorCode == 'auth/user-disabled'){
+        const settings = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            "Access-Control-Request-Method": "POST"
+          },
+          body: JSON.stringify({
+            email: this.props.UserStore.email,
+          })
+        }
+    
+          
+          await fetch('https://us-central1-riive-parking.cloudfunctions.net/getUserDataFromEmail', settings).then((res) => {
+            return res.json()
+          }).then((body) => {
+            const db = firebase.firestore();
+            const doc = db.collection('users').doc(body.uid)
+            return doc.get()
+          }).then((user) => {
+            console.log(user.exists)
+            if(user.exists){
+              if(user.data().disabled.numTimesDisabled < 3){
+                var date = new Date(user.data().disabled.disabledEnds * 1000 + (24*60*60*1000));
+                var daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+                var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                this.setState({
+                  passwordError: '',
+                  emailError: `This account has been suspended until ${daysOfWeek[date.getDay()]} ${months[date.getMonth()]} ${date.getDate()}`,
+                })
+              }else{
+                this.setState({
+                  passwordError: 'Reach out to support@riive.net for assistance',
+                  emailError: `This account has been banned`,
+                })
+              }
+          }else{
+            this.setState({
+              passwordError: '',
+              emailError: `This account has been suspended`,
+            })
+          }
+          }).catch(e => {
+            alert(e)
+          })
+         
+        // console.log(this.props.UserStore.email)
+        // const db = firebase.firestore();
+        // const doc = db
+        // doc.get().then((doc) => {
+        //   console.log(doc)
+          // if(doc.exists){
+          //   if(doc.data().disabled.numTimesDisabled < 3){
+          //     var date = new Date(doc.data().disabled.disabledEnds * 1000);
+          //     var daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+          //     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+          //     this.setState({
+          //       passwordError: '',
+          //       emailError: `This account has been suspended until ${daysOfWeek[date.getDay()]} ${months[date.getMonth()]} ${date.getDate()}`,
+          //     })
+          //   }else{
+          //     this.setState({
+          //       passwordError: 'Reach out to support@riive.net for assistance',
+          //       emailError: `This account has been banned`,
+          //     })
+          //   }
+          // }else{
+          //   this.setState({
+          //     passwordError: '',
+          //     emailError: `This account has been suspended`,
+          //   })
+          // }
+        // })
       }else{
         alert(errorCode + ': ' + errorMessage);
       }
     });
 
   }
+
+
 
 
 

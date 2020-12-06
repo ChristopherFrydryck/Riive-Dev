@@ -318,7 +318,7 @@ export default class Home extends Component{
                     
                   }
                });
-               let resultsFiltered = results.filter(res => !res.space.hidden && !res.space.toBeDeleted && !res.host.deleted.toBeDeleted && !res.host.deleted.isDeleted && !res.host.disabled.isDisabled)
+               let resultsFiltered = results.filter(res => !res.space.hidden && !res.space.toBeDeleted && !res.host.deleted.toBeDeleted && !res.host.deleted.isDeleted && !this.props.UserStore.deleted && !res.host.disabled.isDisabled)
                let resultsFilteredTimeAvail = new Array;
 
                

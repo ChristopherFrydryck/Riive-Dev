@@ -15,6 +15,25 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
     // See your keys here: https://dashboard.stripe.com/account/apikeys
 
     // eslint-disable-next-line promise/catch-or-return
+
+    exports.getUserDataFromEmail = functions.https.onRequest((request, response) => {
+        if(request.method !== "POST"){
+            response.send(405, 'HTTP Method ' +request.method+' not allowed');
+        }else{
+            admin.auth().getUserByEmail(request.body.email).then((snap) => {
+                return snap
+            }).then((snap) => {
+                response.status(200).send(snap);
+                return snap
+            }).catch(e => {
+                console.log('Error fetching user data:', e)
+                response.status(500).send(e);
+            })
+        }
+       
+    })
+
+
     exports.addCustomer = functions.https.onRequest((request, response) => {
         stripe.customers.create(
             {
@@ -153,8 +172,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
             
             return null
         }).catch(e => {
-            console.log(e)
-            return null
+            return e
         })
 
         return null;
@@ -307,8 +325,8 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
         
         
        
-        // 5 second latency before we will update the last_update field in someone's profile
-       if(currentTime - beforeUser.last_update >=5 || !beforeUser.last_update){
+        // 10 second latency before we will update the last_update field in someone's profile
+       if(currentTime - beforeUser.last_update >= 10 || !beforeUser.last_update){
 
         db.collection('users').doc(context.params.user_id).update({
             last_update: currentTime
@@ -324,7 +342,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                         disabled: {
                             isDisabled: true,
                             numTimesDisabled: 1,
-                            disabledEnds: Math.round((new Date()).getTime() / 1000),
+                            disabledEnds: Math.round((new Date()).getTime() / 1000) + 24*3600,
                         }
                     })
                 // Second Suspension
@@ -336,7 +354,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                         disabled: {
                             isDisabled: true,
                             numTimesDisabled: 2,
-                            disabledEnds: Math.round((new Date()).getTime() / 1000),
+                            disabledEnds: Math.round((new Date()).getTime() / 1000) + 3*24*3600,
                         }
                     })
                 // Third Suspension
@@ -348,7 +366,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                         disabled: {
                             isDisabled: true,
                             numTimesDisabled: 3,
-                            disabledEnds: Math.round((new Date()).getTime() / 1000),
+                            disabledEnds: 9999999999,
                         }
                     })
                 }
