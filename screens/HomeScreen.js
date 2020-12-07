@@ -263,7 +263,7 @@ export default class Home extends Component{
             // const hostData = db.collection('users').doc(space.hostID);
         
             if(this.state.searchInputValue.split("").length > 0){
-                await this.getDistance(`${space.region.latitude}, ${space.region.longitude}`, `${this.state.region.searched.latitude}, ${this.state.region.searched.longitude}`, "walking")
+                await this.getDistance(`${data.space.region.latitude}, ${data.space.region.longitude}`, `${this.state.region.searched.latitude}, ${this.state.region.searched.longitude}`, "walking")
             }
             // await hostData.get().then(doc => {
             //     this.setState({selectedSpaceHost: doc.data()})
