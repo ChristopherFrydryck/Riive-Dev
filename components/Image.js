@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, Image, Dimensions, ImageBackground, TouchableOpacity } from 'react-native';
+import backupImage from '../assets/img/LoadingImage.jpg'
 
 // Props:
 // source
@@ -27,25 +28,30 @@ class Img extends React.Component{
 
         return(
             <TouchableOpacity
-           
+
                 onPress={this.props.onPress}
                 disabled={this.props.onPress ? false : true}
-
+                {...allProps}
             >
+                
                 <ImageBackground
-                    {...allProps}
-                    style={{aspectRatio: this.props.aspectRatio, resizeMode: this.props.resizeMode}}
-                    source={this.state.isReady ? null : this.props.backupSource}
+                    source={this.props.backupSource ? this.props.backupSource : backupImage}
+                    style={{width: this.props.width, height: this.props.height,}}
+                    imageStyle={{aspectRatio: this.props.aspectRatio, resizeMode: this.props.resizeMode,  borderRadius: this.props.borderRadius}}
+                    
+                    // {...allProps}
                 >
                     <Image 
+                        
                         underlayColor = {this.props.underlayColor}
-                        style={{aspectRatio: this.props.aspectRatio, resizeMode: this.props.resizeMode}}
+                        style={{aspectRatio: this.props.aspectRatio, resizeMode: this.props.resizeMode, width: this.props.width, height: this.props.height, borderRadius: this.props.borderRadius}}
                         source={this.props.source}
                         defaultSource = {this.props.backupSource}
                         onLoad = {() => this.setState({imgReady: true})}
-                        {...allProps}
+                        // {...allProps}
                     />
                 </ImageBackground>
+                
             </TouchableOpacity>
         )
     }    

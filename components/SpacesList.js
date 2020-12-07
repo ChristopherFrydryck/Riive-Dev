@@ -110,9 +110,9 @@ class SpacesList extends React.Component{
 
        let cardStyle
        if(orderedData.length > 1){
-            if(index == 0){
+            if(index === 0){
                 cardStyle = [styles.li, styles.li_first]
-            }if(index === orderedData.length - 1){
+            }else if(index === orderedData.length - 1){
                 cardStyle = [styles.li, styles.li_last]
             }else{
                 cardStyle = styles.li
@@ -132,7 +132,6 @@ class SpacesList extends React.Component{
             <Image 
                 aspectRatio={21/9}
                 source={{uri: spot.photo}}
-                backupSource={require('../assets/img/Logo_001.png')}
                 resizeMode={'cover'}
             /> 
             {currentActive[0].available ? 
@@ -175,7 +174,6 @@ class SpacesList extends React.Component{
 
     render(){
         let {spotsLoaded} =  this.props.ComponentStore;
-        let loaders = [];
         var dayToday = new Date().getDay()
         var hourToday = new Date().getHours()
         var orderedData = this.state.data.slice().sort((a, b) => b.created - a.created)
@@ -203,7 +201,6 @@ class SpacesList extends React.Component{
                     keyExtractor={item => item.listingID}
                     horizontal={true}
                     snapToAlignment={"center"}
-                    // snapToInterval={Dimensions.get("window").width * 0.75 + (16 * (orderedData.length - 2) + 48)/orderedData.length}
                     snapToOffsets={[...Array(orderedData.length)].map((x, i) => i * (width*.75) - 40 + 16*i)}
                     decelerationRate={"fast"}
                     bounces={true}
@@ -212,16 +209,18 @@ class SpacesList extends React.Component{
                 />
             </View>
             )
-        }else{
-            for(let i = 0; i < this.props.UserStore.listings.length; i++){
-                loaders.push(
-                    <SvgAnimatedLinearGradient key={i} width={Dimensions.get('window').width} height="50">
-                        <Rect width={Dimensions.get('window').width} height="40" rx="5" ry="5" />
-                    </SvgAnimatedLinearGradient>
-                )
-            }
+        }else if(!spotsLoaded && this.state.data.length > 1){
             return(
-                <View style={styles.container}>{loaders}</View>
+                <View style={[styles.container, {flexDirection: 'row', justifyContent: 'space-evenly', marginLeft: 16}]}>
+                    <SvgAnimatedLinearGradient width={Dimensions.get('window').width} height="160">
+                        <Rect x="0" width={Dimensions.get('window').width * .75} height="160" rx="4" ry="4" />
+                        <Rect x={Dimensions.get('window').width * .75 + 16} width={Dimensions.get('window').width * .75} height="160" rx="4" ry="4" />
+                    </SvgAnimatedLinearGradient>
+                </View>
+            )
+        }else{
+            return(
+              null
             )
         }
     
@@ -269,12 +268,10 @@ const styles = StyleSheet.create({
        
     },
     li_first: {
-        
         marginLeft: 16,
     },
     li_last: {
         marginRight: 16,
-
     }
 })
 

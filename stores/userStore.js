@@ -11,10 +11,15 @@ class UserStore {
     @observable password = '';
     @observable photo = '';
     @observable joinedDate = null;
+    @observable lastUpdate = null;
     @observable listings = [];
     @observable vehicles = [];
     @observable payments = [];
     @observable searchHistory = [];
+
+    @observable disabled = false;
+    @observable deleted = false;
+
 
     @observable signInProvider = "";
 
@@ -28,7 +33,7 @@ class UserStore {
     }
 
     @computed get monthJoined() {
-        return this.joinedDate.getMonth();
+        return this.joinedDate;
     }
 
 

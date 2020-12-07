@@ -103,6 +103,7 @@ class Authentication extends Component {
 
   async componentDidMount() {
     // Remove after testing!!
+    this.setState({email: 'admin@riive.net', password: 'Fallon430'})
     this.props.UserStore.email = 'admin@riive.net'
     this.props.UserStore.password = "Fallon430"
 
@@ -160,6 +161,8 @@ createStripeCustomer = async () => {
     alert(e);
   }    
 }
+
+
 
 
 
@@ -353,31 +356,55 @@ resetPassword = () =>{
                 // IMPORTANT!!! Defines user location in database
                 this.props.UserStore.userID = firebase.auth().currentUser.uid;
               }).then(() => {
-                // Sends email to valid user
-              firebase.auth().currentUser.sendEmailVerification()
                 //start firestore
                 const db = firebase.firestore();
                 const doc = db.collection('users').doc(this.props.UserStore.userID);
 
                 doc.get().then((docData) => {
-
-                  db.collection("users").doc(this.props.UserStore.userID).set({
-                    id: firebase.auth().currentUser.uid,
-                     fullname: this.props.UserStore.fullname,
-                     firstname: this.props.UserStore.firstname,
-                     lastname: this.props.UserStore.lastname,
-                     email: this.props.UserStore.email,
-                     phone: this.props.UserStore.phone,
-                     searchHistory: [],
-                     totalNumTimesParked: 0,
-                     numTimesOpenedApp: 1,
-                     listings: [],
-                     vehicles: [],
-                     payments: [],
-                     photo: '',
-                  })
-     
-                  // alert('Welcome to Riive ' + this.props.UserStore.firstname + '!')
+                    db.collection("users").doc(this.props.UserStore.userID).set({
+                      id: firebase.auth().currentUser.uid,
+                      fullname: this.props.UserStore.fullname,
+                      firstname: this.props.UserStore.firstname,
+                      lastname: this.props.UserStore.lastname,
+                      email: this.props.UserStore.email,
+                      phone: this.props.UserStore.phone,
+                      searchHistory: [],
+                      totalNumTimesParked: 0,
+                      numTimesOpenedApp: 1,
+                      listings: [],
+                      vehicles: [],
+                      payments: [],
+                      photo: '',
+                      joined_date: firebase.auth().currentUser.metadata.creationTime,
+                      last_update: firebase.auth().currentUser.metadata.creationTime,
+                      disabled: {
+                        isDisabled: false,
+                        disabledEnds: new Date().getTime() / 1000,
+                        numTimesDisabled: 0,
+                      },
+                      deleted: {
+                        isDeleted: false,
+                        toBeDeleted: false,
+                        deletedStarts: new Date().getTime() / 1000,
+                      },
+                    })
+                return docData
+              }).then((doc) => {
+                    // console.log(doc.data())
+                    this.props.UserStore.fullname = this.props.UserStore.fullname;
+                    this.props.UserStore.phone = this.props.UserStore.phone;
+                    this.props.UserStore.stripeID = "";
+                    this.props.UserStore.photo = "";
+                    this.props.UserStore.joinedDate = firebase.auth().currentUser.metadata.creationTime;
+                    this.props.UserStore.last_update = firebase.auth().currentUser.metadata.creationTime;
+                    this.props.UserStore.vehicles = [];
+                    this.props.UserStore.listings = [];
+                    this.props.UserStore.payments = [];
+                    this.props.UserStore.searchHistory = [];
+                    this.props.UserStore.disabled = false;
+                    this.props.UserStore.deleted = false;
+                  }).then(() => {
+                    // alert('Welcome to Riive ' + this.props.UserStore.firstname + '!')
      
                   this.setState({ authenticating: false});
                   this.props.navigation.navigate('Home')
@@ -385,48 +412,56 @@ resetPassword = () =>{
                   // ID if user signed in via email or google
                   this.props.UserStore.signInProvider = firebase.auth().currentUser.providerData[0].providerId;
      
+                
+     
+                  
                   
                
      
               }).then(() => this.createStripeCustomer())
-              .catch((e) => {
-               alert('Whoops! We accidently lost connection. Try signing up again.' + e)
-               firebase.auth().currentUser.delete();
+              .then(() =>  {
+                // Sends email to valid user
+                firebase.auth().currentUser.sendEmailVerification()
               })
-            })
+                .catch((e) => {
+                alert('Whoops! We accidently lost connection. Try signing up again.' + e)
+                firebase.auth().currentUser.delete();
+                })
+        
                   
           
-        }
-  }).catch(e => {
-    // Handle Errors here.
-    var errorCode = e.code;
-    var errorMessage = e.message;
-    this.setState ({ authenticating: false})
-    // alert(errorCode + ': ' + errorMessage)
-    if(errorCode == 'auth/invalid-email'){
-      this.setState({
-        emailError: 'Email format must be name@domain.com',
-        passwordError: '',
+        })
+      }
+    }).catch(e => {
+      // Handle Errors here.
+      var errorCode = e.code;
+      var errorMessage = e.message;
+      this.setState ({ authenticating: false})
+      // alert(errorCode + ': ' + errorMessage)
+      if(errorCode == 'auth/invalid-email'){
+        this.setState({
+          emailError: 'Email format must be name@domain.com',
+          passwordError: '',
 
-      })
-    }else if (errorCode == 'auth/email-already-in-use'){
-      this.setState({
-        emailError: 'Email is already in use with another account.',
-        passwordError: '',
+        })
+      }else if (errorCode == 'auth/email-already-in-use'){
+        this.setState({
+          emailError: 'Email is already in use with another account.',
+          passwordError: '',
 
-      })
-    }else if (errorCode == 'auth/weak-password'){
-      this.setState({
-        emailError: '',
-        passwordError: 'Password must be longer than 5 characters.',
+        })
+      }else if (errorCode == 'auth/weak-password'){
+        this.setState({
+          emailError: '',
+          passwordError: 'Password must be longer than 5 characters.',
 
-      })
-    }else{
-      alert(errorCode + ': ' + errorMessage);
-    }
- })
-}
+        })
+      }else{
+        alert(errorCode + ': ' + errorMessage);
+      }
+    })
   }
+}
 
 
   
@@ -471,20 +506,26 @@ resetPassword = () =>{
                   this.props.UserStore.userID = doc.data().id;
                   this.props.UserStore.stripeID = doc.data().stripeID;
                   this.props.UserStore.photo = doc.data().photo;
-                  this.props.UserStore.joinedDate = firebase.auth().currentUser.metadata.creationTime
+                  this.props.UserStore.joinedDate = firebase.auth().currentUser.metadata.creationTime;
+                  this.props.UserStore.last_update = doc.data().last_update;
                   this.props.UserStore.vehicles = doc.data().vehicles;
                   this.props.UserStore.listings = [];
                   this.props.UserStore.payments = doc.data().payments;
                   this.props.UserStore.searchHistory = doc.data().searchHistory;
+                  this.props.UserStore.disabled = doc.data().disabled.isDisabled;
+                  this.props.UserStore.deleted = doc.data().deleted.toBeDeleted
 
                   // ID if user signed in via email or google
                   this.props.UserStore.signInProvider = firebase.auth().currentUser.providerData[0].providerId;
                   
-              
+
+                  var currentTime = firebase.firestore.Timestamp.now();
+
                   // in case a user reverts their email change via profile update
                   db.collection("users").doc(this.props.UserStore.userID).update({
+                    last_update: currentTime,
                     email: this.props.UserStore.email,
-                })
+                  })
                   // Upon setting the MobX State Observer, navigate to home
                   this.props.navigation.navigate('Home')
               
@@ -537,7 +578,7 @@ resetPassword = () =>{
     })
 
 
-    }).catch((error) => {
+    }).catch( async (error) => {
       // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
@@ -557,7 +598,7 @@ resetPassword = () =>{
         })
       }else if(errorCode == 'auth/too-many-requests'){
         this.setState({
-          emailError: 'Too many recent requests. Try again soon.',
+          emailError: 'Too many recent requests. Try again soon',
           passwordError: '',
 
         })
@@ -566,12 +607,87 @@ resetPassword = () =>{
           passwordError: 'Password is incorrect or empty',
           emailError: '',
         })
+      }else if(errorCode == 'auth/user-disabled'){
+        const settings = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            "Access-Control-Request-Method": "POST"
+          },
+          body: JSON.stringify({
+            email: this.props.UserStore.email,
+          })
+        }
+    
+          
+          await fetch('https://us-central1-riive-parking.cloudfunctions.net/getUserDataFromEmail', settings).then((res) => {
+            return res.json()
+          }).then((body) => {
+            const db = firebase.firestore();
+            const doc = db.collection('users').doc(body.uid)
+            return doc.get()
+          }).then((user) => {
+            console.log(user.exists)
+            if(user.exists){
+              if(user.data().disabled.numTimesDisabled < 3){
+                var date = new Date(user.data().disabled.disabledEnds * 1000 + (24*60*60*1000));
+                var daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+                var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                this.setState({
+                  passwordError: '',
+                  emailError: `This account has been suspended until ${daysOfWeek[date.getDay()]} ${months[date.getMonth()]} ${date.getDate()}`,
+                })
+              }else{
+                this.setState({
+                  passwordError: 'Reach out to support@riive.net for assistance',
+                  emailError: `This account has been banned`,
+                })
+              }
+          }else{
+            this.setState({
+              passwordError: '',
+              emailError: `This account has been suspended`,
+            })
+          }
+          }).catch(e => {
+            alert(e)
+          })
+         
+        // console.log(this.props.UserStore.email)
+        // const db = firebase.firestore();
+        // const doc = db
+        // doc.get().then((doc) => {
+        //   console.log(doc)
+          // if(doc.exists){
+          //   if(doc.data().disabled.numTimesDisabled < 3){
+          //     var date = new Date(doc.data().disabled.disabledEnds * 1000);
+          //     var daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+          //     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+          //     this.setState({
+          //       passwordError: '',
+          //       emailError: `This account has been suspended until ${daysOfWeek[date.getDay()]} ${months[date.getMonth()]} ${date.getDate()}`,
+          //     })
+          //   }else{
+          //     this.setState({
+          //       passwordError: 'Reach out to support@riive.net for assistance',
+          //       emailError: `This account has been banned`,
+          //     })
+          //   }
+          // }else{
+          //   this.setState({
+          //     passwordError: '',
+          //     emailError: `This account has been suspended`,
+          //   })
+          // }
+        // })
       }else{
         alert(errorCode + ': ' + errorMessage);
       }
     });
 
   }
+
+
 
 
 

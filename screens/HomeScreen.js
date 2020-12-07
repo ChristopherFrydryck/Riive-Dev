@@ -1,7 +1,11 @@
-import React, {Component} from 'react'
+import React, {Component, createRef} from 'react'
 import {Fragment, View, ActivityIndicator, SafeAreaView, StatusBar, Platform, StyleSheet, Dimensions, Animated, TouchableOpacity} from 'react-native'
+import ActionSheet from "react-native-actions-sheet";
 import Button from '../components/Button'
 import Text from '../components/Txt'
+import ProfilePic from '../components/ProfilePic';
+import Image from '../components/Image'
+import ListingMarker from '../components/ListingMarker'
 import Icon from '../components/Icon'
 import FilterButton from '../components/FilterButton'
 import MapView, {Marker} from 'react-native-maps';
@@ -15,25 +19,56 @@ import Colors from '../constants/Colors'
 import SearchFilter from '../components/SearchFilter'
 import Times from '../constants/TimesAvailable'
 
+import axios from 'axios'
+
+//For Shimmer
+import SvgAnimatedLinearGradient from 'react-native-svg-animated-linear-gradient'
+import Svg, {Circle, Rect} from 'react-native-svg'
+
 import * as firebase from 'firebase'
+import firebaseConfig from '../firebaseConfig'
+import withFirebaseAuth from 'react-with-firebase-auth'
+import 'firebase/auth';
 import 'firebase/firestore';
+import * as geofirestore from 'geofirestore'
+
+
+
+
+
+
+  
 
 
 
 //MobX Imports
 import {inject, observer} from 'mobx-react/native'
-import UserStore from '../stores/userStore'
 
 
-@inject("UserStore")
+
+const actionSheetRef = createRef();
+const GOOGLE_API_KEY = "AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c";
+
+
+@inject("UserStore", "ComponentStore")
 @observer
 export default class Home extends Component{
     _interval = 0;
 
+    
+    static navigationOptions = {
+        header: null
+    }
+      
+
+
+
+
+
     constructor(props){
         super(props);
 
-        this.getCurrentLocation(true);
+       
 
 
         var date = new Date();
@@ -74,10 +109,10 @@ export default class Home extends Component{
                     longitudeDelta: null,
                 },
                 current: {
-                    latitude: null,
-                    longitude: null,
-                    latitudeDelta: null,
-                    longitudeDelta: null,
+                    latitude: 37.8020,
+                    longitude: -122.4486,
+                    latitudeDelta: 0.025,
+                    longitudeDelta: 0.025,
                 }
               },
               currentLocation: {
@@ -99,15 +134,31 @@ export default class Home extends Component{
                 dayValue: (date.getDay())%7,
                 isEnabled: true,
             },
-            timeSearched: [filteredStarts[0], filteredEnds[filteredEnds.length / 2]]
+            timeSearched: [filteredStarts[0], filteredEnds[filteredEnds.length / 2]],
+            selectedSpace: null,
+            selectedSpaceHost: null,
+
+            locationDifferenceWalking: {
+                distance: null,
+                duration: null,
+            },
+            locationDifferenceDriving: {
+                distance: null,
+                duration: null,
+            }
 
         }
 
         this.mapScrolling = false;
+        this.results = [];
+
+
+        
+      
 
     }
 
-   async componentDidMount(){
+   componentDidMount(){
          // Set Status Bar page info here!
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             if(this.state.searchFilterOpen){
@@ -121,9 +172,13 @@ export default class Home extends Component{
           });
 
           this.rippleAnimation();
+          this.getCurrentLocation(true);
+          this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.latitudeDelta * 69, 99999.9999, 99999.9999)
+          
           
     
         }
+
 
         mapLocationFunction = () => {
             this._interval = setInterval(() => {
@@ -137,10 +192,11 @@ export default class Home extends Component{
 
         searchFilterTimeCallback = (timeData) => {
             this.setState({timeSearched: timeData})
+
         }
 
         searchFilterDayCallback = (dayData) => {
-            this.setState({daySearched: dayData})
+           this.setState({daySearched: dayData})
         }
 
         rippleAnimation = () => {
@@ -161,6 +217,157 @@ export default class Home extends Component{
                     ]),
             ).start()
         }
+
+        filterResults = () => {
+
+            this.setState({searchFilterOpen: !this.state.searchFilterOpen})
+            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, 99999.9999, 99999.9999)
+
+             
+        }
+
+        getDistance = (start, end, type) => {
+            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+            let stringName = `locationDifference${type}`
+            let stateName = stringName.slice(0,18) + stringName.charAt(18).toUpperCase() + stringName.slice(19)
+
+            // Define arrival time by the state of the search start
+            let d = new Date();
+            d.setDate(this.state.daySearched.dateName)
+            d.setMonth(months.indexOf(this.state.daySearched.monthName))
+            d.setHours(parseInt(this.state.timeSearched[0].label.slice(0,2)))
+            d.setMinutes(parseInt(this.state.timeSearched[0].label.slice(2)))
+
+            let arrival = d.getTime();
+            
+            try{
+                axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${start}&destinations=${end}&departure_time=now&mode=${type}&arrival_time=${arrival}&traffic_model=optimistic&key=AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c`).then(x =>{
+                    this.setState({[stateName]: {
+                        distance: x.data.rows[0].elements[0].distance.text,
+                        duration: x.data.rows[0].elements[0].duration.text,
+                    }})
+                    return x
+                })
+            }catch(e){
+                console.log(e)
+            }
+        }
+
+        clickSpace = async (data) => {
+            await this.props.ComponentStore.selectedExternalSpot.clear()
+            await this.setState({selectedSpace: data.space, selectedSpaceHost: data.host})
+            await this.props.ComponentStore.selectedExternalSpot.push(data.space)
+            // await this.props.ComponentStore.selectedSpaceHost.push(data.host)
+            // const db = firebase.firestore();
+            // const hostData = db.collection('users').doc(space.hostID);
+        
+            if(this.state.searchInputValue.split("").length > 0){
+                await this.getDistance(`${data.space.region.latitude}, ${data.space.region.longitude}`, `${this.state.region.searched.latitude}, ${this.state.region.searched.longitude}`, "walking")
+            }
+            // await hostData.get().then(doc => {
+            //     this.setState({selectedSpaceHost: doc.data()})
+            // })
+            
+        
+            actionSheetRef.current?.setModalVisible()
+
+            // console.log(this.state.selectedSpace)
+        }
+
+        getResults = async (lat, lng, radius, prevLat, prevLng) => {
+
+            let results = [];
+            
+             // Create a Firestore reference
+             const db = firebase.firestore();
+
+             // Create a GeoFirestore reference
+             const GeoFirestore = geofirestore.initializeApp(db);
+ 
+             // Create a GeoCollection reference
+             const geocollection = GeoFirestore.collection('listings');
+ 
+               const query = geocollection.near({ 
+                   center: new firebase.firestore.GeoPoint(lat, lng), 
+                   radius: radius,
+                });
+
+                // console.log(`Lat is ${lat} and prev lat is ${prevLat}`)
+
+               if(lat.toFixed(3) != prevLat.toFixed(3) || lng.toFixed(3) != prevLng.toFixed(3)){
+ 
+               await query.get().then( async(value) => {
+                 // All GeoDocument returned by GeoQuery, like the GeoDocument added above
+                //  console.log(value.docs.data);
+                for (const doc of value.docs) {
+                    const hostRef = db.collection('users').doc(doc.data().hostID);
+
+                    await hostRef.get().then((hostDoc) => {
+                        return hostDoc.data();
+                    }).then((hostDoc) => {
+                        results.push({
+                            space: doc.data(),
+                            host: hostDoc,
+                        })
+                       
+                        // console.log(`space id: ${doc.data().hostID} and host: ${hostDoc.id}`)
+                    })
+                    // console.log(doc.data())
+                   
+                    
+                  }
+               });
+               let resultsFiltered = results.filter(res => !res.space.hidden && !res.space.toBeDeleted && !res.host.deleted.toBeDeleted && !res.host.deleted.isDeleted && !this.props.UserStore.deleted && !res.host.disabled.isDisabled)
+               let resultsFilteredTimeAvail = new Array;
+
+               
+               
+
+            resultsFiltered.forEach((x, i) => {
+                // Gets current day data
+                let avail = resultsFiltered[i].space.availability[this.state.daySearched.dayValue].data
+                // Creates new array to assume 
+                let worksArray = new Array;
+                for(let data of avail){
+                    // If specific time slot is marked unavailable, we will check it
+                    if(!data.available){
+                        // Check if start time is out of bounds
+                        if(parseInt(data.start) >= parseInt(this.state.timeSearched[0].label) && parseInt(data.start) <= parseInt(this.state.timeSearched[1].label)){
+                            // console.log(`Start value ${data.start} is invalid within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
+                            worksArray.push(false)
+                        }
+                        // Check if end time is out of bounds
+                        else if(parseInt(data.end) >= parseInt(this.state.timeSearched[0].label) && parseInt(data.start) <= parseInt(this.state.timeSearched[1].label)){
+                            worksArray.push(false)
+                            // console.log(`End value ${data.end} is invalid within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
+                        // If both start and end time don't interfere with filtered time slots
+                        }else{
+                            worksArray.push(true)
+                            // console.log(`Time slot ${data.id} is marked unavailable but works since ${data.start} and ${data.end} are not within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
+                        }
+                       
+                        // console.log("Time slot " + data.id + " does not work")
+                    }else{
+                        worksArray.push(true)
+                        // console.log("Time slot " + data.id + " is marked available")
+                    }
+                }
+
+                if(!worksArray.includes(false)){
+                    resultsFilteredTimeAvail.push(x)
+                }
+            })
+       
+            this.results = resultsFilteredTimeAvail;
+
+        }
+
+
+
+        }
+
+
 
         convertToCommonTime = (t) => {
             let hoursString = t.substring(0,2)
@@ -242,13 +449,16 @@ export default class Home extends Component{
                 searchInputValue: det.description == "Current Location" ? "Current Location" : det.name,
 
             }));
-         
 
+            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, 99999.9999, 99999.9999)
         }
 
-        onRegionChange = (region) => {
-            clearInterval(this._interval)
-            this.setState(prevState => ({
+        onRegionChange = async (region) => {
+            let prevLat = this.state.region.current.latitude;
+            let prevLng = this.state.region.current.longitude;
+
+            await clearInterval(this._interval)
+            await this.setState(prevState => ({
                 region: {
                     ...prevState.region,
                     current: {
@@ -263,6 +473,9 @@ export default class Home extends Component{
 
             this.mapScrolling = false;
             this.mapLocationFunction();
+            
+            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, prevLat, prevLng)
+            
         }
 
         clearAddress = () => {
@@ -278,6 +491,17 @@ export default class Home extends Component{
                 searchInputValue: '',
             }))
           }
+
+          goToHostProfile = () => {
+              this.props.ComponentStore.selectedUser.push(this.state.selectedSpaceHost);
+              actionSheetRef.current?.setModalVisible(false);
+              this.props.navigation.navigate("ExternalProfile")
+          }
+
+          goToSpaceProfile = () => {
+            actionSheetRef.current?.setModalVisible(false);
+            this.props.navigation.navigate("ExternalSpace")
+          }
       
 
         componentWillUnmount() {
@@ -290,7 +514,6 @@ export default class Home extends Component{
         const {width, height} = Dimensions.get('window')
         const {firstname, email} = this.props.UserStore
 
-     
         
         return(
                 <SafeAreaView style={{flex: 1, position: 'relative', backgroundColor: this.state.searchFilterOpen ? Colors.tango500 : 'white'}}>
@@ -301,7 +524,8 @@ export default class Home extends Component{
                     <View style={{paddingHorizontal: 16, paddingBottom: this.state.searchFilterOpen ? 0 : 36, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "space-between"}}>
                         <Text type="semiBold" numberOfLines={1} style={{flex: this.state.searchFilterOpen ? 0 : 4,fontSize: 24, paddingTop: 8}}>{this.state.searchFilterOpen ? "" : `Hello, ${firstname || 'traveler'}`}</Text>
                         <FilterButton 
-                            onPress={() => this.setState({searchFilterOpen: !this.state.searchFilterOpen})}
+                            onPress={() => this.filterResults()}
+                            disabled={this.state.timeSearched[0].key > this.state.timeSearched[1].key ? true : false}
                             searchFilterOpen={this.state.searchFilterOpen}
                             daySearched={this.state.daySearched}
                             timeSearched={this.state.timeSearched}
@@ -333,6 +557,9 @@ export default class Home extends Component{
                         rotateEnabled={false} 
                         zoomEnabled={true} 
                         scrollEnabled={true}
+                        minZoomLevel={6}
+                        toolbarEnabled={false}
+                        moveOnMarkerPress={false}
                         >
                         {this.state.currentLocation.geometry.location.lat && this.state.currentLocation.geometry.location.lng ? 
                        
@@ -368,6 +595,13 @@ export default class Home extends Component{
                             }}   
                         />
                         : null }
+                        {this.results.map(x => {
+                           return( <ListingMarker 
+                                    key={x.space.listingID}
+                                    listing={x.space}
+                                    onPress={() => this.clickSpace(x)}
+                                    />)
+                        })}
                         </MapView>
                         <View style={{zIndex: 9, position: 'absolute', top: -16}}>
                             <GooglePlacesAutocomplete
@@ -380,7 +614,7 @@ export default class Home extends Component{
                             minLength={2}
                             listViewDisplayed={false}
                             fetchDetails={true}
-                            onPress={(data, details = null) => {console.log(details); this.onSelectAddress(details)}}
+                            onPress={(data, details = null) => {this.onSelectAddress(details)}}
                             textInputProps={{
                                 onFocus: () => {
                                     this.setState({
@@ -481,6 +715,92 @@ export default class Home extends Component{
                   {/* <View style={{}}> */}
   
                    {/* </View> */}
+                   <ActionSheet 
+                    ref = {actionSheetRef}
+                    bounceOnOpen={true}
+                    bounciness={4}
+                    gestureEnabled={true}
+                    containerStyle={{paddingTop: 8}}
+                    extraScroll={40}
+                    delayActionSheetDrawTime={0}
+                    initialOffsetFromBottom = {1}
+                 
+                   >
+                        <View>
+                            {this.state.selectedSpace && this.state.selectedSpaceHost ?
+                            
+                            <View style={{paddingTop: 8}}>
+                                
+                                <Image 
+                                    aspectRatio={21/9}
+                                    source={{uri: this.state.selectedSpace.photo}}
+                                    // backupSource={require('../assets/img/Logo_001.png')}
+                                    resizeMode={'cover'}
+                                /> 
+                                <View style={styles.actionSheetContent}>
+                                    <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginTop: 8}}>
+                                        <Text style={{flex: 8, fontSize: 24, flexWrap: 'wrap', paddingRight: 16}} numberOfLines={2}>{this.state.selectedSpace.spaceName}</Text>
+                                        <ProfilePic 
+                                            source={{ uri: this.state.selectedSpaceHost.photo }}
+                                            imgWidth = {32}
+                                            imgHeight = {32}
+                                            initals={this.state.selectedSpaceHost.firstname.charAt(0).toUpperCase() + "" + this.state.selectedSpaceHost.lastname.charAt(0).toUpperCase()}
+                                            style={{backgroundColor:"#FFFFFF", flex: 1}}
+                                            fontSize={12}
+                                            fontColor="#1D2951"
+                                            onPress={() => this.goToHostProfile()}
+                                            alt="Your profile picture"
+                                        />
+                                    </View>
+                                    <Text style={{fontSize: 16}}>{this.state.selectedSpace.spacePrice}/hr</Text>
+                                    <Text style={{marginBottom: 16}}>No ratings yet</Text>
+                                    {/* {this.state.selectedSpace.spaceBio ?
+                                        <Text style={{marginBottom: 16}}>{this.state.selectedSpace.spaceBio}</Text>
+                                    : null} */}
+                                    {this.state.searchInputValue != '' && this.state.locationDifferenceWalking.duration != null ? 
+                                        <View style={{flexDirection: 'row', alignItems: 'center', marginRight: 48}}>
+                                             <Icon 
+                                                iconName="walk"
+                                                iconColor={Colors.cosmos500}
+                                                iconSize={24}
+                                                iconLib="MaterialCommunityIcons"
+                                                style={{paddingRight: 8}}
+                                            />
+                                            
+                                            { this.state.locationDifferenceWalking.duration.split(" ")[1] !== 'mins' ?
+                                                <Text numberOfLines={1}>Longer than 1 hour to {this.state.searchInputValue}</Text> 
+                                                :
+                                                <Text numberOfLines={1}>{this.state.locationDifferenceWalking.duration} to {this.state.searchInputValue}</Text> 
+                                            }
+                                        </View>
+                                    : null}
+                                    <Button style={{backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.tango900}} textStyle={{color: Colors.tango900}} onPress={() => this.goToSpaceProfile()}>More Details</Button>
+                                    <Button style = {{backgroundColor: Colors.tango700, height: 48}} textStyle={{color: 'white'}}>Reserve Space</Button>
+                                </View>
+                            </View>
+                            : 
+                            <View>
+                                <SvgAnimatedLinearGradient width={Dimensions.get('window').width} style={{marginTop: 8}}>
+                                    <Rect width={width} height={width * 2.3333} rx="0" ry="0" />
+                                </SvgAnimatedLinearGradient>
+                                <View style={styles.actionSheetContent}>
+                                    <SvgAnimatedLinearGradient  width={width - 32} height="225" style={{marginTop: 8}}>
+                                        {/* <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}> */}
+                                            <Rect x="0" y="0" width={width *.7} height={32} />
+                                            <Circle x={width - 64} y="0" cx="16" cy="16" r="16"/>
+                                            <Rect x="0" y="40" width="80" height="16" />
+                                            <Rect x="0" y="64" width="64" height="16" />
+                                            <Rect x="0" y="96" width={width} height="16" />
+                                            <Rect x="0" y="120" width={width} height="16" />
+                                            <Rect x="0" y="144" width={width * .4} height="16" />
+                                            <Rect x="0" y="176" width={width} height="40" />
+                                        {/* </View> */}
+                                    </SvgAnimatedLinearGradient>
+                                </View>
+                            </View>
+                            }
+                        </View>
+                    </ActionSheet>
                        
                 </SafeAreaView>
         )
@@ -502,5 +822,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.apollo300, 
         borderRadius: Dimensions.get('window').width/2, 
     },
-    
+    actionSheetContent:{
+        paddingHorizontal: 16, 
+    }
 })

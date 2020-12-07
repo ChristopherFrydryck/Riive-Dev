@@ -4,7 +4,8 @@ const stripe = require('stripe')('sk_test_rhRKZJYIAphopgJZcoKX32yD00ciJsrqFl');
 admin.initializeApp();
 const db = admin.firestore();
 
-const fs = require('fs')
+const fs = require('fs');
+const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
 
 
 
@@ -14,6 +15,25 @@ const fs = require('fs')
     // See your keys here: https://dashboard.stripe.com/account/apikeys
 
     // eslint-disable-next-line promise/catch-or-return
+
+    exports.getUserDataFromEmail = functions.https.onRequest((request, response) => {
+        if(request.method !== "POST"){
+            response.send(405, 'HTTP Method ' +request.method+' not allowed');
+        }else{
+            admin.auth().getUserByEmail(request.body.email).then((snap) => {
+                return snap
+            }).then((snap) => {
+                response.status(200).send(snap);
+                return snap
+            }).catch(e => {
+                console.log('Error fetching user data:', e)
+                response.status(500).send(e);
+            })
+        }
+       
+    })
+
+
     exports.addCustomer = functions.https.onRequest((request, response) => {
         stripe.customers.create(
             {
@@ -119,6 +139,170 @@ const fs = require('fs')
         }).catch(e => {return e})
 
     })
+
+    exports.everySixHours = functions.pubsub.schedule('0 */6 * * *').timeZone('America/New_York').onRun(() => {
+
+        const query = db.collection("users")
+        .where("disabled.isDisabled", "==", true)
+
+        query.get().then(snapshot => {
+            if (snapshot.empty) {
+                throw new Error('no disabled users.')
+            }
+
+                let usersNeedingUpdated = [];
+                snapshot.forEach(doc => {
+                    // console.log(doc.id, '=>', doc.data());
+
+                    if(doc.data().disabled.disabledEnds < Math.round((new Date()).getTime() / 1000) && doc.data().disabled.numTimesDisabled < 3){
+                        usersNeedingUpdated.push(doc.data())
+                    }
+                });
+                return usersNeedingUpdated
+        }).then(users => {
+            users.forEach(async (x, i) => {
+                await db.collection("users").doc(x.id).update({
+                    "disabled.isDisabled": false
+                })
+                await admin.auth().updateUser(x.id, {
+                    disabled: false,
+                });
+                return null
+            })
+            
+            return null
+        }).catch(e => {
+            return e
+        })
+
+        return null;
+
+        
+
+        
+            // .get().then( async(snapshot) => {
+            //     let needsUpdated = [];
+            //     await snapshot.docs.forEach((x, i) => {
+            //         needsUpdated.push(x)
+            //     })
+            //     return needsUpdated
+            // }).then((users) => {
+            //     console.log(users)
+            //     return null
+            // })
+    });
+
+    
+
+    exports.deleteUser = functions.auth.user().onDelete((event) => {
+        const { uid } = event;
+        const bucket = admin.storage().bucket('gs://riive-parking.appspot.com');
+       
+        
+        db.collection('users').doc(uid).get().then((doc) => {
+            if(!doc.exists){
+                console.log("User doesn't exist")
+                throw new Error("User doesn't exist");
+            }else{
+                let userData = doc.data()
+                
+
+                return userData;
+
+
+
+
+                
+
+
+
+                // console.log(doc.data().listings)
+
+
+
+                // for(let i = 0 ; i < userData.listings.length; i++){
+                //     db.collection("listings").doc(userData.listings[i]).update({
+                //         hidden: true,
+                //         toBeDeleted: true
+                //     })
+                // }
+
+                // return null
+                // bucket.deleteFiles({
+                //     prefix: `users/${uid}`
+                // })
+            
+            }
+        }).then((userData) => {
+            let allListings = [];
+
+
+            if(userData.listings.length > 0 && userData.listings.length <= 10){
+                db.collection("listings").where(admin.firestore.FieldPath.documentId(), "in", userData.listings).get().then((qs) => {
+                    for(let i = 0; i < qs.docs.length; i++){
+                        allListings.push(qs.docs[i].data())
+                    }
+                    return allListings;
+                }).catch(e => {
+                    throw new Error("Failed to gather listing data")
+                })
+
+                return [userData, allListings]
+
+            }else if(userData.listings.length > 10){
+                let allArrs = [];
+                while(userData.listings.length > 0){
+                    allArrs.push(userData.listings.splice(0, 10))
+                }
+                for(let i = 0; i < allArrs.length; i++){
+                    db.collection('listings').where(admin.firestore.FieldPath.documentId(), "in", allArrs[i]).get().then((qs) => {
+                        for(let i = 0; i < qs.docs.length; i++){
+                            allListings.push(qs.docs[i].data())
+                        }
+                        return allListings;
+                    }).catch(e => {
+                        throw new Error("Failed to gather listing data")
+                    })
+                }
+
+                return [userData, allListings]
+
+            }else{
+                console.log("User had no listings")
+                return [userData, null]
+            }
+
+            
+
+        
+        }).then((data) => {
+            console.log(`
+                user data: ${JSON.stringify(data[0])}
+                listing data: ${JSON.stringify(data[1])}
+            `)
+            return null;
+        }).catch(e => {
+            return console.error(e)
+        })
+
+        return null;
+        // bucket.deleteFiles({
+        //     prefix: `users/${userID}`
+        // }).then(() => {
+        //     return console.log("Getting")
+        //     // return db.collection('users').doc({userID}).get()
+        // }).then((doc) => {
+        //     return console.log("Uhhh")
+        //     // if(!doc.exists){
+        //     //     return console.log("User doesn't exist")
+        //     // }else{
+        //     //     return console.log(doc.data())
+        //     // }
+        // }).then(() => {
+        //    return console.log("Completed Function")
+        // }).catch(e => {return e})
+
+    })
     
 
   
@@ -129,19 +313,71 @@ const fs = require('fs')
        var beforeUser = snap.before.data() 
        var afterUser = snap.after.data()
        var currentTime = admin.firestore.Timestamp.now();
+       var disabledUntilDate = new Date(afterUser.disabled.disabledEnds * 1000)
+       var date = new Date();
 
         // When changelog updates, update the file located at https://firebasestorage.googleapis.com/v0/b/riive-parking.appspot.com/o/dev-team%2Fchangelog.json?alt=media&token=9210aa16-dd93-41df-8246-a17c58a4ee9e
-       
-        // 5 second latency before we will update the last_update field in someone's profile
-       if(currentTime - beforeUser.last_update >=5 || !beforeUser.last_update){
-         
-            db.collection('users').doc(context.params.user_id).update({
-                last_update: currentTime
-            })
 
-            admin.storage().bucket('gs://riive-parking.appspot.com').file('dev-team/changelog.json').download().then((res) => {
+        
+
+
+        
+        
+        
+       
+        // 10 second latency before we will update the last_update field in someone's profile
+       if(currentTime - beforeUser.last_update >= 10 || !beforeUser.last_update){
+
+        db.collection('users').doc(context.params.user_id).update({
+            last_update: currentTime
+        }).then(() => {
+            // Suspension check
+            if(afterUser.disabled.isDisabled && disabledUntilDate < date){
+                // First suspension
+                if(beforeUser.disabled.numTimesDisabled === 0){
+                    admin.auth().updateUser(context.params.user_id, {
+                        disabled: true,
+                    });
+                    db.collection('users').doc(context.params.user_id).update({
+                        disabled: {
+                            isDisabled: true,
+                            numTimesDisabled: 1,
+                            disabledEnds: Math.round((new Date()).getTime() / 1000) + 24*3600,
+                        }
+                    })
+                // Second Suspension
+                }else if(beforeUser.disabled.numTimesDisabled === 1){
+                    admin.auth().updateUser(context.params.user_id, {
+                        disabled: true,
+                    });
+                    db.collection('users').doc(context.params.user_id).update({
+                        disabled: {
+                            isDisabled: true,
+                            numTimesDisabled: 2,
+                            disabledEnds: Math.round((new Date()).getTime() / 1000) + 3*24*3600,
+                        }
+                    })
+                // Third Suspension
+                }else if (beforeUser.disabled.numTimesDisabled >= 2){
+                    admin.auth().updateUser(context.params.user_id, {
+                        disabled: true,
+                    });
+                    db.collection('users').doc(context.params.user_id).update({
+                        disabled: {
+                            isDisabled: true,
+                            numTimesDisabled: 3,
+                            disabledEnds: 9999999999,
+                        }
+                    })
+                }
+            }
+
+            return null
+        }).then(() => {
+            return admin.storage().bucket('gs://riive-parking.appspot.com').file('dev-team/changelog.json').download()
+        }).then((res) => {
             return JSON.parse(res)
-            }).then((changelog) => {
+        }).then((changelog) => {
 
             var versionsBehind;
 
@@ -150,8 +386,7 @@ const fs = require('fs')
             }else{
                 versionsBehind = changelog.versions.filter(x => x.dateUnix > beforeUser.last_update.toMillis() && x.isReleased)
             }
-
-
+            
             // Checks if user is behind in changelog versions
             for(var i = 0; i < versionsBehind.length; i++){
                 switch(versionsBehind[i].major){
@@ -193,6 +428,7 @@ const fs = require('fs')
                 }
             }
             return null
+            
         }).catch((e) => {
             throw e
         })

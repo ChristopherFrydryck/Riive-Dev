@@ -189,22 +189,21 @@ addSource = async () => {
 
 submitPayment = async() => {
   const db = firebase.firestore();
+  const ref = db.collection("users").doc(); // creates unique ID
 
   if(this._isMounted){
     
 
   try{
     
-    try{
-      this.verifyInput();
+    
+      await this.verifyInput();
       await this.setCardParams();
-    }catch(e){
-      
-    }
+    
     
     
     if(this.state.allValid){
-      const ref = db.collection("users").doc(); // creates unique ID
+      
 
         // add card to database
       if(this.state.creditCardType !== ""){
@@ -262,8 +261,8 @@ submitPayment = async() => {
             CCV: this.state.CCV,
          })
         }
-        this.addSource();
-
+        
+        await this.addSource();
         
       
          // navigate back to profile
@@ -277,11 +276,53 @@ submitPayment = async() => {
 
 
   }catch(e){
-    this.setState({creditCardNumError: e})
+    if(this.state.allValid){
+      this.props.UserStore.payments = this.props.UserStore.payments.filter(x => x.PaymentID !== ref.id)
+
+      await this.deleteSource()
+      await db.collection("users").doc(this.props.UserStore.userID).update({
+        payments: firebase.firestore.FieldValue.arrayRemove({
+            CardType: this.state.creditCardType == "" ? "Credit" : this.state.creditCardType,
+            Month: this.state.expMonth,
+            Name: this.state.name,
+            Number: this.state.creditCardNum.slice(-4),
+            PaymentID: ref.id,
+            StripeID: this.state.StripecardId,
+            Type: "Card",
+            Year: this.state.expYear,
+            CCV: this.state.CCV,
+        })
+     })
+    }
   }  
   
   
+  }
 }
+
+
+deleteSource = async () => {
+
+  const settings = {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      stripeID: this.props.UserStore.stripeID,
+      cardSource: this.state.StripecardId,
+      FBID: firebase.auth().currentUser.uid,
+    })
+  }
+  try{
+    
+    const fetchResponse = await fetch('https://us-central1-riive-parking.cloudfunctions.net/deleteSource', settings)
+    const data = await fetchResponse.json();
+    return data;
+  }catch(e){
+    alert(e);
+  }    
 }
 
 

@@ -480,6 +480,7 @@ export default class DayAvailabilityPicker extends React.Component{
         return(
             
             <Fragment>
+                {this.props.editable ?
                 <Modal
                     animationType="slide"
                     transparent={false}
@@ -621,6 +622,7 @@ export default class DayAvailabilityPicker extends React.Component{
 
                         
                     </Modal>
+                    : null}
                     <View style={styles.daysRow}>
                         {this.props.availability.map((x) => (
                             
@@ -628,7 +630,7 @@ export default class DayAvailabilityPicker extends React.Component{
                             bgColor={x.dayValue == this.state.activeDay ? Colors.apollo900 : "#FFFFFF"} 
                             textColor={x.dayValue == this.state.activeDay ? "#FFFFFF" : "#000000"}
                             onPress={() => this.changeDay(x.dayValue)} 
-                            style={{flex: 1}}>
+                            style={{flex: 0}}>
                                 {x.abbrName}
                             </ClickableChip>
                         ))}
