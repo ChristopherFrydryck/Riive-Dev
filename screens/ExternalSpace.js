@@ -134,106 +134,111 @@ class externalSpace extends React.Component {
         if(this.state.host){
        
         return(
-            <ScrollView  style={{flex: 1}}>
-            <View>
-                <ScrollView
-                        horizontal={true}
-                        pagingEnabled={true}
-                        scrollEnabled={true}
-                        decelerationRate={0}
-                        snapToAlignment="start"
-                        snapToInterval={width}
-                        onScroll={data =>  this.carouselUpdate(data.nativeEvent.contentOffset.x)}
-                        scrollEventThrottle={1}
-                        showsHorizontalScrollIndicator={false}
-                        // persistentScrollbar={true}
-                    >
-                    <View>
-                    <Image 
-                            style={{width: width}}
-                            aspectRatio={16/9}
-                            source={{uri: this.props.ComponentStore.selectedExternalSpot[0].photo}}
-                            resizeMode={'cover'}
-                        /> 
-                        </View>
+            <View style={{flex: 1}}>
+                <ScrollView >
+                <View>
+                    <ScrollView
+                            horizontal={true}
+                            pagingEnabled={true}
+                            scrollEnabled={true}
+                            decelerationRate={0}
+                            snapToAlignment="start"
+                            snapToInterval={width}
+                            onScroll={data =>  this.carouselUpdate(data.nativeEvent.contentOffset.x)}
+                            scrollEventThrottle={1}
+                            showsHorizontalScrollIndicator={false}
+                            // persistentScrollbar={true}
+                        >
                         <View>
-                        <View  style={{ position:'absolute', width: width, aspectRatio: 16/9, zIndex: 9}}/>
-                            <MapView
-                            provider={MapView.PROVIDER_GOOGLE}
-                            mapStyle={NightMap}
-                            style={{width: width, aspectRatio:16/9}}
-                            region={{
-                            latitude: this.props.ComponentStore.selectedExternalSpot[0].region.latitude,
-                            longitude: this.props.ComponentStore.selectedExternalSpot[0].region.longitude,
-                            latitudeDelta: this.props.ComponentStore.selectedExternalSpot[0].region.latitudeDelta,
-                            longitudeDelta: this.props.ComponentStore.selectedExternalSpot[0].region.longitudeDelta,
-                            }}
-                            pitchEnabled={false} 
-                            rotateEnabled={false} 
-                            zoomEnabled={false} 
-                            scrollEnabled={false}
-                            >
-                                <Marker 
-                                    coordinate={{
-                                    latitude: this.props.ComponentStore.selectedExternalSpot[0].region.latitude,
-                                    longitude: this.props.ComponentStore.selectedExternalSpot[0].region.longitude
-                                    }}   
+                        <Image 
+                                style={{width: width}}
+                                aspectRatio={16/9}
+                                source={{uri: this.props.ComponentStore.selectedExternalSpot[0].photo}}
+                                resizeMode={'cover'}
+                            /> 
+                            </View>
+                            <View>
+                            <View  style={{ position:'absolute', width: width, aspectRatio: 16/9, zIndex: 9}}/>
+                                <MapView
+                                provider={MapView.PROVIDER_GOOGLE}
+                                mapStyle={NightMap}
+                                style={{width: width, aspectRatio:16/9}}
+                                region={{
+                                latitude: this.props.ComponentStore.selectedExternalSpot[0].region.latitude,
+                                longitude: this.props.ComponentStore.selectedExternalSpot[0].region.longitude,
+                                latitudeDelta: this.props.ComponentStore.selectedExternalSpot[0].region.latitudeDelta,
+                                longitudeDelta: this.props.ComponentStore.selectedExternalSpot[0].region.longitudeDelta,
+                                }}
+                                pitchEnabled={false} 
+                                rotateEnabled={false} 
+                                zoomEnabled={false} 
+                                scrollEnabled={false}
+                                >
+                                    <Marker 
+                                        coordinate={{
+                                        latitude: this.props.ComponentStore.selectedExternalSpot[0].region.latitude,
+                                        longitude: this.props.ComponentStore.selectedExternalSpot[0].region.longitude
+                                        }}   
+                                    />
+                                </MapView>
+                            </View>
+                        </ScrollView>
+                        
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginVertical: 8}}>
+                            {this.renderDotsView(2, this.state.currentActivePhoto)}
+                        </View>
+                    </View>
+
+                    <View style={styles.contentBox}>
+                        <View style={{width: 100, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.fortune500, paddingVertical: 4, borderRadius: width, marginBottom: 8}}>
+                                    <Text style={{ fontSize: 16, color: Colors.mist300,}}>{this.props.ComponentStore.selectedExternalSpot[0].spacePrice}/hr</Text>
+                        </View>
+                    
+                            <Text  style={{fontSize: 24, flexWrap: 'wrap'}}>{this.props.ComponentStore.selectedExternalSpot[0].spaceName}</Text>
+                            <Text style={{marginBottom: 8}}>No ratings yet</Text>
+                            <View style={{flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8}}>
+                                <Icon
+                                    iconName="user"
+                                    
+                                    iconColor={Colors.cosmos300}
+                                    iconSize={16}
+                                    style={{marginRight: 8, marginTop: 4}}
                                 />
-                            </MapView>
+                                <TouchableWithoutFeedback onPress={() => this.goToHostProfile()}><Text>Hosted by <Text style={{textDecorationLine: 'underline'}}>{this.state.host.firstname} {this.state.host.lastname.charAt(0).toUpperCase()}</Text>.</Text></TouchableWithoutFeedback>
+                            </View>
+                            
+                            {this.props.ComponentStore.selectedExternalSpot[0].spaceBio.split("").length > 0 ? 
+                            <View style={{flexDirection: 'row'}}>
+                                <Icon
+                                    iconName="form"
+                                    iconLib="AntDesign"
+                                    iconColor={Colors.cosmos300}
+                                    iconSize={16}
+                                    style={{marginRight: 8, marginTop: 4}}
+                                />
+                                <Text style={{flex: 1}}>{this.props.ComponentStore.selectedExternalSpot[0].spaceBio}</Text>
+                            </View>
+                            : null}
+                            
+                    
+                        
+
+                        
+                            <View style={{marginTop: 32}}>
+                                <DayAvailabilityPicker 
+                                    availability={this.props.ComponentStore.selectedExternalSpot[0].availability}
+                                    availabilityCallback={() => {}}
+                                    editable={false}
+                                />
+                            </View>
+                            
+                        
                         </View>
                     </ScrollView>
-                    
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginVertical: 8}}>
-                        {this.renderDotsView(2, this.state.currentActivePhoto)}
+                    <View style={styles.contentBox}>
+                        <Button style = {{backgroundColor: Colors.tango700, height: 48}} textStyle={{color: 'white'}}>Reserve Space</Button>
                     </View>
                   </View>
-
-                  <View style={styles.contentBox}>
-                    <View style={{width: 100, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.fortune500, paddingVertical: 4, borderRadius: width, marginBottom: 8}}>
-                                <Text style={{ fontSize: 16, color: Colors.mist300,}}>{this.props.ComponentStore.selectedExternalSpot[0].spacePrice}/hr</Text>
-                    </View>
-                  
-                        <Text  style={{fontSize: 24, flexWrap: 'wrap'}}>{this.props.ComponentStore.selectedExternalSpot[0].spaceName}</Text>
-                        <Text style={{marginBottom: 8}}>No ratings yet</Text>
-                        <View style={{flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8}}>
-                            <Icon
-                                iconName="user"
-                                
-                                iconColor={Colors.cosmos300}
-                                iconSize={16}
-                                style={{marginRight: 8, marginTop: 4}}
-                            />
-                            <TouchableWithoutFeedback onPress={() => this.goToHostProfile()}><Text>Hosted by <Text style={{textDecorationLine: 'underline'}}>{this.state.host.firstname} {this.state.host.lastname.charAt(0).toUpperCase()}</Text>.</Text></TouchableWithoutFeedback>
-                        </View>
-                        
-                        {this.props.ComponentStore.selectedExternalSpot[0].spaceBio.split("").length > 0 ? 
-                        <View style={{flexDirection: 'row'}}>
-                            <Icon
-                                iconName="form"
-                                iconLib="AntDesign"
-                                iconColor={Colors.cosmos300}
-                                iconSize={16}
-                                style={{marginRight: 8, marginTop: 4}}
-                            />
-                            <Text style={{flex: 1}}>{this.props.ComponentStore.selectedExternalSpot[0].spaceBio}</Text>
-                        </View>
-                        : null}
-                        
-                
-                       
-
-                      
-                        <View style={{marginTop: 32}}>
-                            <DayAvailabilityPicker 
-                                availability={this.props.ComponentStore.selectedExternalSpot[0].availability}
-                                availabilityCallback={() => {}}
-                                editable={false}
-                            />
-                        </View>
-                        
-                    
-                    </View>
-                  </ScrollView>
         )
         }else{
             return(
