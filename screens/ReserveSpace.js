@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Animated, Dimensions, Text, StatusBar, ScrollView, View } from 'react-native';
+import { Animated, Dimensions, StatusBar, ScrollView, View, StyleSheet } from 'react-native';
 
+import Text from '../components/Txt'
 import Image from '../components/Image'
+import Icon from '../components/Icon'
 import Colors from '../constants/Colors'
 
 import MapView, {Marker} from 'react-native-maps';
@@ -77,9 +79,22 @@ class reserveSpace extends Component {
         
         }
 
+    
+        convertToCommonTime = (t) => {
+            let hoursString = t.substring(0,2)
+            let minutesString = t.substring(2)
+    
+    
+            
+            let hours = parseInt(hoursString) == 0 ? "12" : parseInt(hoursString) > 12 ? (parseInt(hoursString) - 12).toString() : parseInt(hoursString);
+            // let minutes = parseInt(minutesString)
+            return(`${hours}:${minutesString} ${parseInt(hoursString) >= 12 ? 'PM' : 'AM'}`)
+        }
+
       render(){
           const {width, height} = Dimensions.get("window");
-          const { daySearched } = this.props.navigation.state.params.homeState;
+          const { region, searchedAddress, searchInputValue, daySearched, timeSearched, locationDifferenceWalking } = this.props.navigation.state.params.homeState;
+
           return(
               <View>
                     <MapView
@@ -104,10 +119,47 @@ class reserveSpace extends Component {
                             }}   
                         />
                     </MapView>
-                    <Text>{daySearched.dayName}</Text>
+                    {searchedAddress ? 
+                    <View style={[styles.container, {paddingVertical: 8, display: 'flex', flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.apollo700}]}>
+                        <Icon 
+                            iconName="walk"
+                            iconColor={Colors.mist300}
+                            iconSize={20}
+                            iconLib="MaterialCommunityIcons"
+                        />
+                        <Text numberOfLines={1} style={{color: Colors.mist300, marginLeft: 8, flex: 1}}>{locationDifferenceWalking.duration} to {searchInputValue}</Text>
+                    </View>
+                    : null}
+                    <View style={styles.container}>
+                        <Text type="light" numberOfLines={1} style={{marginTop: 16, fontSize: 24}}>{new Date().getDay() === daySearched.dayValue ? "Today" : daySearched.dayName}, {daySearched.monthName} {daySearched.dateName}{daySearched.dateName.toString().split("")[daySearched.dateName.toString().split("").length - 1] == 1 && (daySearched.dateName > 20 || daySearched < 3)  ? "st" : daySearched.dateName == 2  && (daySearched.dateName > 20 || daySearched < 3) ? "nd" : "th"}</Text>
+
+                        <View style={{flexDirection: 'row', alignItems: "flex-end", justifyContent: 'space-between',  width: width * .8, marginTop: 8}}>
+                            <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
+                                <Text type="light" numberOfLines={1} style={{fontSize: 18}}>Arrival</Text>
+                                <Text numberOfLines={1} style={{fontSize: 20, color: Colors.tango700}}>{this.convertToCommonTime(timeSearched[0].label)}</Text>
+                            </View>
+                            <Icon 
+                                iconName="arrow-right"
+                                iconColor={Colors.tango700}
+                                iconSize={20}
+                                iconLib="MaterialCommunityIcons"
+                            />
+                            <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
+                                <Text type="light" numberOfLines={1} style={{fontSize: 18}}>Departure</Text>
+                                <Text numberOfLines={1} style={{fontSize: 20, color: Colors.tango700}}>{this.convertToCommonTime(timeSearched[1].label)}</Text>
+                            </View>
+                        </View>
+                    </View>
                 </View>
+                
           )
       }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        paddingHorizontal: 16,
+    }
+})
 
 export default reserveSpace
