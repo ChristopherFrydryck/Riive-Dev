@@ -42,8 +42,15 @@ class reserveSpace extends Component {
             currentActivePhoto: 0,
             hoursSpent: null,
             minutesSpent: null,
+            
+            serviceFeePercentage: .12, 
+
             price: null,
             priceCents: null,
+            serviceFee: null,
+            serviceFeeCents: null,
+            total: null,
+            totalCents: null,
         }
         
     }
@@ -124,7 +131,15 @@ class reserveSpace extends Component {
             var dollars = price / 100;
             dollars = dollars.toLocaleString("en-US", {style:"currency", currency:"USD"});
 
-            this.setState({price: dollars, priceCents: price})
+            var dollarsServiceFee = price * this.state.serviceFeePercentage / 100;
+            dollarsServiceFee = dollarsServiceFee.toLocaleString("en-US", {style:"currency", currency:"USD"});
+
+            this.setState({
+                price: dollars, 
+                priceCents: price,
+                serviceFee: dollarsServiceFee,
+                serviceFeeCents: price * this.state.serviceFeePercentage,
+            })
         }
 
       render(){
@@ -192,6 +207,10 @@ class reserveSpace extends Component {
                         <View style={{flexDirection: 'row'}}>
                             <Text>Parking Fare</Text>
                             <Text>{this.state.price}</Text>
+                        </View>
+                        <View style={{flexDirection: 'row'}}>
+                            <Text>Service Fee</Text>
+                            <Text>{this.state.serviceFee}</Text>
                         </View>
                     </View>
                 </View>
