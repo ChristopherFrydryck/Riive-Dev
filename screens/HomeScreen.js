@@ -502,6 +502,13 @@ export default class Home extends Component{
             actionSheetRef.current?.setModalVisible(false);
             this.props.navigation.navigate("ExternalSpace")
           }
+
+          goToReserveSpace = () => {
+            actionSheetRef.current?.setModalVisible(false);
+            this.props.navigation.navigate("ReserveSpace", {
+                homeState: {...this.state},
+            })
+          }
       
 
         componentWillUnmount() {
@@ -775,7 +782,7 @@ export default class Home extends Component{
                                         </View>
                                     : null}
                                     <Button style={{backgroundColor: "#FFFFFF", borderWidth: 2, borderColor: Colors.tango900}} textStyle={{color: Colors.tango900}} onPress={() => this.goToSpaceProfile()}>More Details</Button>
-                                    <Button style = {{backgroundColor: Colors.tango700, height: 48}} textStyle={{color: 'white'}}>Reserve Space</Button>
+                                    <Button onPress={() => this.goToReserveSpace()} style = {{backgroundColor: Colors.tango700, height: 48}} textStyle={{color: 'white'}}>Reserve Space</Button>
                                 </View>
                             </View>
                             : 
