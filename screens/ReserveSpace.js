@@ -124,7 +124,7 @@ class reserveSpace extends Component {
 
         }
 
-        getPrice = () => {
+        getPrice = async() => {
             let price = (this.state.hoursSpent * this.props.ComponentStore.selectedExternalSpot[0].spacePriceCents) + (this.state.minutesSpent === 0 ? 0 : Math.ceil(this.props.ComponentStore.selectedExternalSpot[0].spacePriceCents / 2));
 
             
@@ -134,11 +134,16 @@ class reserveSpace extends Component {
             var dollarsServiceFee = price * this.state.serviceFeePercentage / 100;
             dollarsServiceFee = dollarsServiceFee.toLocaleString("en-US", {style:"currency", currency:"USD"});
 
-            this.setState({
+            await this.setState({
                 price: dollars, 
-                priceCents: price,
+                priceCents: Math.ceil(price),
                 serviceFee: dollarsServiceFee,
-                serviceFeeCents: price * this.state.serviceFeePercentage,
+                serviceFeeCents: Math.ceil(price * this.state.serviceFeePercentage),
+            })
+
+            await this.setState({
+                total: ((this.state.priceCents + this.state.serviceFeeCents) / 100).toLocaleString("en-US", {style:"currency", currency:"USD"}),
+                totalCents: this.state.priceCents + this.state.serviceFeeCents
             })
         }
 
@@ -204,13 +209,24 @@ class reserveSpace extends Component {
                         </View>
                     </View>
                     <View style={styles.container}>
-                        <View style={{flexDirection: 'row'}}>
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
                             <Text>Parking Fare</Text>
                             <Text>{this.state.price}</Text>
                         </View>
-                        <View style={{flexDirection: 'row'}}>
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
                             <Text>Service Fee</Text>
                             <Text>{this.state.serviceFee}</Text>
+                        </View>
+                        <View
+                            style={{
+                                marginTop: 8,
+                                borderBottomColor: Colors.cosmos300,
+                                borderBottomWidth: 1,
+                            }}
+                        />
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
+                            <Text>Total</Text>
+                            <Text>{this.state.total}</Text>
                         </View>
                     </View>
                 </View>
