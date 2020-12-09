@@ -39,17 +39,29 @@ class reserveSpace extends Component {
     constructor(props){
         super(props)
         this.state = {
-            currentActivePhoto: 0
+            currentActivePhoto: 0,
+            hoursSpent: null,
+            minutesSpent: null,
+            price: null,
+            priceCents: null,
         }
+        
     }
 
-    componentDidMount(){
+    async componentDidMount(){
+        const { timeSearched } = this.props.navigation.state.params.homeState;
+
+        await this.getDiffHours(timeSearched[0].label, timeSearched[1].label)
+
+        await this.getPrice();
 
         this._isMounted = true;
         this._navListener = this.props.navigation.addListener('didFocus', () => {
            StatusBar.setBarStyle('dark-content', true);
            Platform.OS === 'android' && StatusBar.setBackgroundColor('white');
          });
+
+         
   
          
       }
@@ -91,9 +103,35 @@ class reserveSpace extends Component {
             return(`${hours}:${minutesString} ${parseInt(hoursString) >= 12 ? 'PM' : 'AM'}`)
         }
 
+        getDiffHours = (arrive, depart) => {
+            let arriveArray = arrive.split("").map(x => parseInt(x))
+            let departArray = depart.split("").map(x => parseInt(x))
+            let hoursArrive = parseInt(arriveArray[0] + "" + arriveArray[1]) 
+            let hoursDepart = parseInt(departArray[0] + "" + departArray[1]) 
+            let minutesArrive = parseInt(arriveArray[2] + "" + arriveArray[3]) 
+            let minutesDepart = parseInt(departArray[2] + "" + departArray[3]) 
+
+            
+
+            this.setState({ hoursSpent: minutesDepart + 1 - minutesArrive == 60 ? (hoursDepart - hoursArrive) + 1 : hoursDepart - hoursArrive, minutesSpent: minutesDepart + 1 - minutesArrive == 60 ? 0 : 30})
+
+        }
+
+        getPrice = () => {
+            let price = (this.state.hoursSpent * this.props.ComponentStore.selectedExternalSpot[0].spacePriceCents) + (this.state.minutesSpent === 0 ? 0 : Math.ceil(this.props.ComponentStore.selectedExternalSpot[0].spacePriceCents / 2));
+
+            
+            var dollars = price / 100;
+            dollars = dollars.toLocaleString("en-US", {style:"currency", currency:"USD"});
+
+            this.setState({price: dollars, priceCents: price})
+        }
+
       render(){
           const {width, height} = Dimensions.get("window");
           const { region, searchedAddress, searchInputValue, daySearched, timeSearched, locationDifferenceWalking } = this.props.navigation.state.params.homeState;
+
+          console.log(`hours spent: ${this.state.hoursSpent} and minutes spent: ${this.state.minutesSpent}`)
 
           return(
               <View>
@@ -131,10 +169,10 @@ class reserveSpace extends Component {
                     </View>
                     : null}
                     <View style={styles.container}>
-                        <Text type="light" numberOfLines={1} style={{marginTop: 16, fontSize: 24}}>{new Date().getDay() === daySearched.dayValue ? "Today" : daySearched.dayName}, {daySearched.monthName} {daySearched.dateName}{daySearched.dateName.toString().split("")[daySearched.dateName.toString().split("").length - 1] == 1 && (daySearched.dateName > 20 || daySearched < 3)  ? "st" : daySearched.dateName == 2  && (daySearched.dateName > 20 || daySearched < 3) ? "nd" : "th"}</Text>
+                        <Text type="light" numberOfLines={1} style={{marginTop: 16, fontSize: 24, textAlign: 'center'}}>{new Date().getDay() === daySearched.dayValue ? "Today" : daySearched.dayName}, {daySearched.monthName} {daySearched.dateName}{daySearched.dateName.toString().split("")[daySearched.dateName.toString().split("").length - 1] == 1 && (daySearched.dateName > 20 || daySearched < 3)  ? "st" : daySearched.dateName == 2  && (daySearched.dateName > 20 || daySearched < 3) ? "nd" : "th"}</Text>
 
-                        <View style={{flexDirection: 'row', alignItems: "flex-end", justifyContent: 'space-between',  width: width * .8, marginTop: 8}}>
-                            <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
+                        <View style={{flexDirection: 'row', alignItems: "flex-end", justifyContent: 'space-between', marginTop: 16}}>
+                            <View style={{flexDirection: 'column', alignItems: 'center', flex: 1}}>
                                 <Text type="light" numberOfLines={1} style={{fontSize: 18}}>Arrival</Text>
                                 <Text numberOfLines={1} style={{fontSize: 20, color: Colors.tango700}}>{this.convertToCommonTime(timeSearched[0].label)}</Text>
                             </View>
@@ -144,10 +182,16 @@ class reserveSpace extends Component {
                                 iconSize={20}
                                 iconLib="MaterialCommunityIcons"
                             />
-                            <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
+                            <View style={{flexDirection: 'column', alignItems: 'center', flex: 1}}>
                                 <Text type="light" numberOfLines={1} style={{fontSize: 18}}>Departure</Text>
                                 <Text numberOfLines={1} style={{fontSize: 20, color: Colors.tango700}}>{this.convertToCommonTime(timeSearched[1].label)}</Text>
                             </View>
+                        </View>
+                    </View>
+                    <View style={styles.container}>
+                        <View style={{flexDirection: 'row'}}>
+                            <Text>Parking Fare</Text>
+                            <Text>{this.state.price}</Text>
                         </View>
                     </View>
                 </View>
