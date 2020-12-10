@@ -221,14 +221,34 @@ class reserveSpace extends Component {
 
           let vehicleArray = this.props.UserStore.vehicles.map(vehicle => {
             return(
-                <RadioButton id={vehicle.VehicleID} title={`${vehicle.Year} ${vehicle.Make} ${vehicle.Model}`} subTitle={`${vehicle.LicensePlate}`} selectItem={() => this.setActiveVehicle(vehicle, false)} />
+                <RadioButton  style={{paddingVertical: 6}} id={vehicle.VehicleID} selectItem={() => this.setActiveVehicle(vehicle, false)}>
+                    <View style={{flex: 1}}>
+                        <Text style={{fontSize: 16}}>{`${vehicle.Year} ${vehicle.Make} ${vehicle.Model}`}</Text>
+                        <Text style={{fontSize: 12}} >{`${vehicle.LicensePlate}`}</Text>
+                    </View>
+                </RadioButton>
             )
           })
 
        
           let paymentsArray = this.props.UserStore.payments.map(payment => {
               return(
-                <RadioButton id={payment.PaymentID} title={`••••••••••••${payment.Number}`} subTitle={`${payment.CardType.charAt(0).toUpperCase() + payment.CardType.slice(1)}`} selectItem={() => this.setActivePayment(payment, false)} />
+                <RadioButton style={{paddingVertical: 6}} id={payment.PaymentID} selectItem={() => this.setActivePayment(payment, false)}>
+                    <View style={{flex: 1, alignItems: 'flex-start'}}>
+                        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+                            <Text style={{fontSize: 16, marginRight: 16}}>{`••••••••••••${payment.Number}`}</Text> 
+                            <Icon 
+                                iconName={payment.CardType ? 'cc-' + payment.CardType : 'credit-card'}
+                                iconLib="FontAwesome"
+                                iconColor={Colors.cosmos900}
+                                iconSize={20}
+                                style={{ marginLeft: "auto"}}
+                             />
+                        </View>
+                        
+                        {/* <Text style={{fontSize: 12}} >{`${payment.CardType.charAt(0).toUpperCase() + payment.CardType.slice(1)}`}</Text> */}
+                    </View>
+                </RadioButton>
               )
           })
 
