@@ -246,7 +246,7 @@ class reserveSpace extends Component {
                              />
                         </View>
                         
-                        {/* <Text style={{fontSize: 12}} >{`${payment.CardType.charAt(0).toUpperCase() + payment.CardType.slice(1)}`}</Text> */}
+                        <Text style={{fontSize: 12}} >{`${payment.Name}`}</Text>
                     </View>
                 </RadioButton>
               )
@@ -258,7 +258,9 @@ class reserveSpace extends Component {
         //   console.log(`hours spent: ${this.state.hoursSpent} and minutes spent: ${this.state.minutesSpent}`)
 
           return(
-              <View>
+              <ScrollView
+              stickyHeaderIndices={searchedAddress ? [2] : [1]}
+              >
                     <MapView
                         provider={MapView.PROVIDER_GOOGLE}
                         mapStyle={NightMap}
@@ -295,7 +297,7 @@ class reserveSpace extends Component {
 
 
                     {/* Date and Time */}
-                    <View style={styles.container}>
+                    <View style={[styles.container, {backgroundColor: 'white', paddingBottom: 8}]}>
                         <Text type="light" numberOfLines={1} style={{marginTop: 16, fontSize: 24, textAlign: 'center'}}>{new Date().getDay() === daySearched.dayValue ? "Today" : daySearched.dayName}, {daySearched.monthName} {daySearched.dateName}{daySearched.dateName.toString().split("")[daySearched.dateName.toString().split("").length - 1] == 1 && (daySearched.dateName > 20 || daySearched < 3)  ? "st" : daySearched.dateName == 2  && (daySearched.dateName > 20 || daySearched < 3) ? "nd" : "th"}</Text>
 
                         <View style={{flexDirection: 'row', alignItems: "flex-end", justifyContent: 'space-between', marginTop: 16}}>
@@ -358,7 +360,7 @@ class reserveSpace extends Component {
                             <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>{this.state.total}</Text>
                         </View>
                     </View>
-                </View>
+                </ScrollView>
                 
           )
       }
