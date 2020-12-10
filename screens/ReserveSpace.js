@@ -10,6 +10,10 @@ import MapView, {Marker} from 'react-native-maps';
 import DayMap from '../constants/DayMap'
 import NightMap from '../constants/NightMap'
 
+// import { RadioButton } from 'react-native-paper';
+import RadioList from '../components/RadioList'
+import RadioButton from '../components/RadioButton'
+
 
 import * as firebase from 'firebase'
 import 'firebase/firestore';
@@ -19,6 +23,7 @@ import firebaseConfig from '../firebaseConfig'
 //MobX Imports
 import {inject, observer} from 'mobx-react/native'
 import { roundToNearestPixel } from 'react-native/Libraries/Utilities/PixelRatio';
+import { TouchableWithoutFeedback } from 'react-native';
     
 
 
@@ -43,7 +48,7 @@ class reserveSpace extends Component {
             hoursSpent: null,
             minutesSpent: null,
             
-            serviceFeePercentage: .12, 
+            serviceFeePercentage: .15, 
 
             price: null,
             priceCents: null,
@@ -51,6 +56,8 @@ class reserveSpace extends Component {
             serviceFeeCents: null,
             total: null,
             totalCents: null,
+
+            selectedVehicle: null,
         }
         
     }
@@ -96,6 +103,10 @@ class reserveSpace extends Component {
     
         return(arr)
         
+        }
+
+        setActiveVehicle = (vehicle) => {
+            this.setState({selectedVehicle: vehicle})
         }
 
     
@@ -151,7 +162,9 @@ class reserveSpace extends Component {
           const {width, height} = Dimensions.get("window");
           const { region, searchedAddress, searchInputValue, daySearched, timeSearched, locationDifferenceWalking } = this.props.navigation.state.params.homeState;
 
-          console.log(`hours spent: ${this.state.hoursSpent} and minutes spent: ${this.state.minutesSpent}`)
+          console.log(this.state.selectedVehicle)
+
+        //   console.log(`hours spent: ${this.state.hoursSpent} and minutes spent: ${this.state.minutesSpent}`)
 
           return(
               <View>
@@ -188,6 +201,9 @@ class reserveSpace extends Component {
                         <Text numberOfLines={1} style={{color: Colors.mist300, marginLeft: 8, flex: 1}}>{locationDifferenceWalking.duration} to {searchInputValue}</Text>
                     </View>
                     : null}
+
+
+                    {/* Date and Time */}
                     <View style={styles.container}>
                         <Text type="light" numberOfLines={1} style={{marginTop: 16, fontSize: 24, textAlign: 'center'}}>{new Date().getDay() === daySearched.dayValue ? "Today" : daySearched.dayName}, {daySearched.monthName} {daySearched.dateName}{daySearched.dateName.toString().split("")[daySearched.dateName.toString().split("").length - 1] == 1 && (daySearched.dateName > 20 || daySearched < 3)  ? "st" : daySearched.dateName == 2  && (daySearched.dateName > 20 || daySearched < 3) ? "nd" : "th"}</Text>
 
@@ -208,6 +224,39 @@ class reserveSpace extends Component {
                             </View>
                         </View>
                     </View>
+
+                    {/* Vehicle */}
+                    <View style={styles.container}>
+                        <Text type="medium" numberOfLines={1} style={{fontSize: 16}}>Vehicle</Text>
+                        <RadioList activeItem={this.state.selectedVehicle} selectItem={(option) =>  this.setActiveVehicle(option)}>
+                            <RadioButton id={0} title="Hello" selectItem={() =>  this.setActiveVehicle("Hello")} />
+                            <RadioButton id={1} title="World" selectItem={() =>  this.setActiveVehicle("World")} />
+                        </RadioList>
+                        {/* <RadioButton.Group onValueChange={(vehicle) =>  this.setState({selectedVehicle: vehicle})} value={this.state.selectedVehicle}>
+                            <View style={{flexDirection: 'row', alignItems: 'center', paddingVertical: 4}}>
+                                <RadioButton.Android value="first"/>
+                                <TouchableWithoutFeedback onPress={() => this.setState({selectedVehicle: "first"})}>
+                                    <View style={{flex: 1}}>
+                                        <Text style={{fontSize: 16}}>2008 Honda Element EX</Text>
+                                        <Text style={{fontSize: 12}}>AHQ-063</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                                
+                            </View>
+                            <View style={{flexDirection: 'row', alignItems: 'center', paddingVertical: 4}}>
+                                <RadioButton.Android value="second"/>
+                                <TouchableWithoutFeedback onPress={() => this.setState({selectedVehicle: "second"})}>
+                                    <View style={{flex: 1}}>
+                                    <Text style={{fontSize: 16}}>Second</Text>
+                                        <Text style={{fontSize: 12}}>XXX-XXXX</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            </View>
+                        </RadioButton.Group> */}
+                    </View>
+
+
+                    {/* Price Breakdown */}
                     <View style={styles.container}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
                             <Text>Parking Fare</Text>
@@ -225,8 +274,8 @@ class reserveSpace extends Component {
                             }}
                         />
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
-                            <Text>Total</Text>
-                            <Text>{this.state.total}</Text>
+                            <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>Total (USD)</Text>
+                            <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>{this.state.total}</Text>
                         </View>
                     </View>
                 </View>
