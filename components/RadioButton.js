@@ -9,14 +9,14 @@ import { RadioButton } from 'react-native-paper';
 
 
 
-const radioButton = ({title, subTitle, selectItem, ...props}) => {
+const radioButton = ({id, title, subTitle, selectItem, ...props}) => {
     const style = [styles.main, props.style || {}]
     const allProps = Object.assign({}, props,{style:style})
     
 
     return(
-         <View {...allProps}>
-            <RadioButton.Android value={title}/>
+         <View {...allProps} key={id}>
+            <RadioButton.Android value={id}/>
             <TouchableWithoutFeedback onPress={selectItem}>
                 <View style={{flex: 1}}>
                     <Text style={{fontSize: 16}}>{title}</Text>

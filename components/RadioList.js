@@ -15,10 +15,9 @@ const radioList = ({activeItem, selectItem, ...props}) => {
     const allProps = Object.assign({}, props,{style:style})
     const childrenArray = React.Children.toArray(props.children)
 
-
     return(
         <View {...allProps}>
-            <RadioButton.Group onValueChange={(option) => selectItem(option)} value={activeItem ? activeItem : childrenArray[0].props.title}>
+            <RadioButton.Group onValueChange={(option) => selectItem(option)} value={activeItem ? activeItem : childrenArray[0].props.id}>
                 {props.children}      
             </RadioButton.Group>
         </View>

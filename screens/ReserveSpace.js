@@ -58,6 +58,7 @@ class reserveSpace extends Component {
             totalCents: null,
 
             selectedVehicle: null,
+            selectedPayment: null,
         }
         
     }
@@ -68,6 +69,7 @@ class reserveSpace extends Component {
         await this.getDiffHours(timeSearched[0].label, timeSearched[1].label)
 
         await this.getPrice();
+
 
         this._isMounted = true;
         this._navListener = this.props.navigation.addListener('didFocus', () => {
@@ -105,8 +107,63 @@ class reserveSpace extends Component {
         
         }
 
-        setActiveVehicle = (vehicle) => {
-            this.setState({selectedVehicle: vehicle})
+        setActivePayment = (payment, idOnly) => {
+            if(idOnly){
+                let activePayment = this.props.UserStore.payments.filter(x => x.PaymentID === payment)[0]
+
+                this.setState({selectedPayment: {
+                    CCV: activePayment.CCV,
+                    CardType: activePayment.CardType,
+                    Month: activePayment.Month,
+                    Name: activePayment.Name,
+                    PaymentID: activePayment.PaymentID,
+                    StripeID: activePayment.StripeID,
+                    Type: activePayment.Type,
+                    Year: activePayment.Year
+                }})
+            }else{
+                this.setState({selectedPayment: {
+                    CCV: payment.CCV,
+                    CardType: payment.CardType,
+                    Month: payment.Month,
+                    Name: payment.Name,
+                    PaymentID: payment.PaymentID,
+                    StripeID: payment.StripeID,
+                    Type: payment.Type,
+                    Year: payment.Year
+                }})
+            }
+        }
+
+        setActiveVehicle = (vehicle, idOnly) => {
+
+
+            if(idOnly){
+                let activeVehicle = this.props.UserStore.vehicles.filter(x => x.VehicleID === vehicle)[0]
+
+                this.setState({selectedVehicle: {
+                    Color: activeVehicle.Color,
+                    LicensePlate: activeVehicle.LicensePlate,
+                    Make: activeVehicle.Make,
+                    Model: activeVehicle.Model,
+                    VehicleID: activeVehicle.VehicleID,
+                    Year: activeVehicle.Year,
+                }})
+
+                // this.setState({selectedVehicle: activeVehicle.VehicleID})
+            }else{
+                this.setState({selectedVehicle: {
+                    Color: vehicle.Color,
+                    LicensePlate: vehicle.LicensePlate,
+                    Make: vehicle.Make,
+                    Model: vehicle.Model,
+                    VehicleID: vehicle.VehicleID,
+                    Year: vehicle.Year,
+                }})
+                // // console.log(vehicle.VehicleID)
+                // this.setState({selectedVehicle: vehicle.VehicleID})
+            }
+            
         }
 
     
@@ -162,8 +219,22 @@ class reserveSpace extends Component {
           const {width, height} = Dimensions.get("window");
           const { region, searchedAddress, searchInputValue, daySearched, timeSearched, locationDifferenceWalking } = this.props.navigation.state.params.homeState;
 
-          console.log(this.state.selectedVehicle)
+          let vehicleArray = this.props.UserStore.vehicles.map(vehicle => {
+            return(
+                <RadioButton id={vehicle.VehicleID} title={`${vehicle.Year} ${vehicle.Make} ${vehicle.Model}`} subTitle={`${vehicle.LicensePlate}`} selectItem={() => this.setActiveVehicle(vehicle, false)} />
+            )
+          })
 
+       
+          let paymentsArray = this.props.UserStore.payments.map(payment => {
+              return(
+                <RadioButton id={payment.PaymentID} title={`••••••••••••${payment.Number}`} subTitle={`${payment.CardType.charAt(0).toUpperCase() + payment.CardType.slice(1)}`} selectItem={() => this.setActivePayment(payment, false)} />
+              )
+          })
+
+            // console.log(this.state.selectedVehicle)
+
+        //   console.log(this.state.selectedVehicle ? this.state.selectedVehicle.VehicleID : null)
         //   console.log(`hours spent: ${this.state.hoursSpent} and minutes spent: ${this.state.minutesSpent}`)
 
           return(
@@ -225,36 +296,25 @@ class reserveSpace extends Component {
                         </View>
                     </View>
 
-                    {/* Vehicle */}
-                    <View style={styles.container}>
+                    {/* Vehicles */}
+                    {this.props.UserStore.vehicles.length > 0 ? 
+                    <View style={[styles.container, {marginTop: 16}]}>
                         <Text type="medium" numberOfLines={1} style={{fontSize: 16}}>Vehicle</Text>
-                        <RadioList activeItem={this.state.selectedVehicle} selectItem={(option) =>  this.setActiveVehicle(option)}>
-                            <RadioButton id={0} title="Hello" selectItem={() =>  this.setActiveVehicle("Hello")} />
-                            <RadioButton id={1} title="World" selectItem={() =>  this.setActiveVehicle("World")} />
+                        <RadioList activeItem={this.state.selectedVehicle ? this.state.selectedVehicle.VehicleID : null} selectItem={(option) => this.setActiveVehicle(option, true)}>
+                            {vehicleArray}
                         </RadioList>
-                        {/* <RadioButton.Group onValueChange={(vehicle) =>  this.setState({selectedVehicle: vehicle})} value={this.state.selectedVehicle}>
-                            <View style={{flexDirection: 'row', alignItems: 'center', paddingVertical: 4}}>
-                                <RadioButton.Android value="first"/>
-                                <TouchableWithoutFeedback onPress={() => this.setState({selectedVehicle: "first"})}>
-                                    <View style={{flex: 1}}>
-                                        <Text style={{fontSize: 16}}>2008 Honda Element EX</Text>
-                                        <Text style={{fontSize: 12}}>AHQ-063</Text>
-                                    </View>
-                                </TouchableWithoutFeedback>
-                                
-                            </View>
-                            <View style={{flexDirection: 'row', alignItems: 'center', paddingVertical: 4}}>
-                                <RadioButton.Android value="second"/>
-                                <TouchableWithoutFeedback onPress={() => this.setState({selectedVehicle: "second"})}>
-                                    <View style={{flex: 1}}>
-                                    <Text style={{fontSize: 16}}>Second</Text>
-                                        <Text style={{fontSize: 12}}>XXX-XXXX</Text>
-                                    </View>
-                                </TouchableWithoutFeedback>
-                            </View>
-                        </RadioButton.Group> */}
                     </View>
+                    : null}
 
+                    {/* Payments */}
+                    {this.props.UserStore.payments.length > 0 ? 
+                        <View style={[styles.container, {marginTop: 16}]}>
+                            <Text type="medium" numberOfLines={1} style={{fontSize: 16}}>Payments</Text>
+                            <RadioList activeItem={this.state.selectedPayment ? this.state.selectedPayment.PaymentID : null} selectItem={(option) => this.setActivePayment(option, true)}>
+                            {paymentsArray}
+                        </RadioList>
+                        </View>
+                    : null}
 
                     {/* Price Breakdown */}
                     <View style={styles.container}>
