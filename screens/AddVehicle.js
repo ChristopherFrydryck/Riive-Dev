@@ -103,7 +103,7 @@ class AddVehicle extends React.Component{
                  })
 
                  // navigate back to profile
-                this.props.navigation.navigate("Profile")
+                 this.props.navigation.goBack(null)
                  
         }else{
             

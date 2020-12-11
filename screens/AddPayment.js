@@ -265,8 +265,9 @@ submitPayment = async() => {
         await this.addSource();
         
       
-         // navigate back to profile
-         this.props.navigation.navigate("Profile")
+        
+          // navigate back to profile
+          this.props.navigation.goBack(null)
     
       }else{
         this.setState({creditCardNumError: 'Credit card type is not supported'})

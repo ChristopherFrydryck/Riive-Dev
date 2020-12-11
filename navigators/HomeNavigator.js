@@ -7,6 +7,9 @@ import ExternalProfile from '../screens/ExternalProfile'
 import ExternalSpace from '../screens/ExternalSpace'
 import ReserveSpace from '../screens/ReserveSpace'
 
+import AddVehicle from '../screens/AddVehicle'
+import AddPayment from '../screens/AddPayment'
+
 
 const HomeNavigator = createStackNavigator({
     Home: {
@@ -21,6 +24,12 @@ const HomeNavigator = createStackNavigator({
     },
     ReserveSpace: {
         screen: ReserveSpace, 
+    },
+    AddVehicle: {
+        screen: AddVehicle, 
+    },
+    AddPayment: {
+        screen: AddPayment, 
     },
 },
 {

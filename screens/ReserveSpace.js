@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Animated, Dimensions, StatusBar, ScrollView, View, StyleSheet } from 'react-native';
 
 import Text from '../components/Txt'
-import Image from '../components/Image'
+import Button from '../components/Button'
 import Icon from '../components/Icon'
 import Colors from '../constants/Colors'
 
@@ -54,6 +54,8 @@ class reserveSpace extends Component {
             priceCents: null,
             serviceFee: null,
             serviceFeeCents: null,
+            processingFee: null,
+            processingFeeCents: null,
             total: null,
             totalCents: null,
 
@@ -69,6 +71,32 @@ class reserveSpace extends Component {
         await this.getDiffHours(timeSearched[0].label, timeSearched[1].label)
 
         await this.getPrice();
+
+        if(this.props.UserStore.vehicles.length > 0){
+            let vehicle = this.props.UserStore.vehicles[0]
+            this.setState({selectedVehicle: {
+                Color: vehicle.Color,
+                LicensePlate: vehicle.LicensePlate,
+                Make: vehicle.Make,
+                Model: vehicle.Model,
+                VehicleID: vehicle.VehicleID,
+                Year: vehicle.Year,
+            }})
+        }
+
+        if(this.props.UserStore.payments.length > 0){
+            let payment = this.props.UserStore.payments[0]
+            this.setState({selectedPayment: {
+                CCV: payment.CCV,
+                CardType: payment.CardType,
+                Month: payment.Month,
+                Name: payment.Name,
+                PaymentID: payment.PaymentID,
+                StripeID: payment.StripeID,
+                Type: payment.Type,
+                Year: payment.Year
+            }})
+        }
 
 
         this._isMounted = true;
@@ -197,22 +225,46 @@ class reserveSpace extends Component {
 
             
             var dollars = price / 100;
+            var dollarsCents = Math.ceil(price);
             dollars = dollars.toLocaleString("en-US", {style:"currency", currency:"USD"});
 
-            var dollarsServiceFee = price * this.state.serviceFeePercentage / 100;
+
+            var dollarsServiceFee = price * this.state.serviceFeePercentage / 100 > 2 ? price * this.state.serviceFeePercentage / 100 : 2;
+            var dollarsServiceFeeCents = price * this.state.serviceFeePercentage > 200 ? Math.ceil(price * this.state.serviceFeePercentage) : 200;
             dollarsServiceFee = dollarsServiceFee.toLocaleString("en-US", {style:"currency", currency:"USD"});
+
+            var dollarsProcessingFee = (((price * this.state.serviceFeePercentage) * .029) + 30) / 100;
+            var dollarsProcessingFeeCents = Math.ceil(((price * this.state.serviceFeePercentage) * .029) + 30)
+            dollarsProcessingFee = dollarsProcessingFee.toLocaleString("en-US", {style:"currency", currency:"USD"});
+            console.log(dollarsProcessingFee)
+
 
             await this.setState({
                 price: dollars, 
-                priceCents: Math.ceil(price),
+                priceCents: dollarsCents,
                 serviceFee: dollarsServiceFee,
-                serviceFeeCents: Math.ceil(price * this.state.serviceFeePercentage),
+                serviceFeeCents: dollarsServiceFeeCents,
+                processingFee: dollarsProcessingFee,
+                processingFeeCents: dollarsProcessingFeeCents,
             })
 
             await this.setState({
-                total: ((this.state.priceCents + this.state.serviceFeeCents) / 100).toLocaleString("en-US", {style:"currency", currency:"USD"}),
-                totalCents: this.state.priceCents + this.state.serviceFeeCents
+                total: ((this.state.priceCents + this.state.serviceFeeCents + this.state.processingFeeCents) / 100).toLocaleString("en-US", {style:"currency", currency:"USD"}),
+                totalCents: this.state.priceCents + this.state.serviceFeeCents + this.state.processingFeeCents
             })
+
+    
+        }
+
+        checkout = () => {
+            console.log("Checking out")
+            const { region, searchedAddress, searchInputValue, daySearched, timeSearched, locationDifferenceWalking } = this.props.navigation.state.params.homeState;
+
+            if(this.state.selectedVehicle && this.state.selectedPayment){
+
+            }
+
+            console.log(this.state.selectedVehicle)
         }
 
       render(){
@@ -221,7 +273,7 @@ class reserveSpace extends Component {
 
           let vehicleArray = this.props.UserStore.vehicles.map(vehicle => {
             return(
-                <RadioButton  style={{paddingVertical: 6}} id={vehicle.VehicleID} selectItem={() => this.setActiveVehicle(vehicle, false)}>
+                <RadioButton  key ={vehicle.VehicleID} style={{paddingVertical: 6}} id={vehicle.VehicleID} selectItem={() => this.setActiveVehicle(vehicle, false)}>
                     <View style={{flex: 1}}>
                         <Text style={{fontSize: 16}}>{`${vehicle.Year} ${vehicle.Make} ${vehicle.Model}`}</Text>
                         <Text style={{fontSize: 12}} >{`${vehicle.LicensePlate}`}</Text>
@@ -233,7 +285,7 @@ class reserveSpace extends Component {
        
           let paymentsArray = this.props.UserStore.payments.map(payment => {
               return(
-                <RadioButton style={{paddingVertical: 6}} id={payment.PaymentID} selectItem={() => this.setActivePayment(payment, false)}>
+                <RadioButton key={payment.PaymentID} style={{paddingVertical: 6}} id={payment.PaymentID} selectItem={() => this.setActivePayment(payment, false)}>
                     <View style={{flex: 1, alignItems: 'flex-start'}}>
                         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
                             <Text style={{fontSize: 16, marginRight: 16}}>{`••••••••••••${payment.Number}`}</Text> 
@@ -259,7 +311,7 @@ class reserveSpace extends Component {
 
           return(
               <ScrollView
-              stickyHeaderIndices={searchedAddress ? [2] : [1]}
+                stickyHeaderIndices={searchedAddress ? [2] : [1]}
               >
                     <MapView
                         provider={MapView.PROVIDER_GOOGLE}
@@ -319,27 +371,33 @@ class reserveSpace extends Component {
                     </View>
 
                     {/* Vehicles */}
-                    {this.props.UserStore.vehicles.length > 0 ? 
+                    
                     <View style={[styles.container, {marginTop: 16}]}>
                         <Text type="medium" numberOfLines={1} style={{fontSize: 16}}>Vehicle</Text>
-                        <RadioList activeItem={this.state.selectedVehicle ? this.state.selectedVehicle.VehicleID : null} selectItem={(option) => this.setActiveVehicle(option, true)}>
-                            {vehicleArray}
-                        </RadioList>
+                        {this.props.UserStore.vehicles.length > 0 ? 
+                            <RadioList activeItem={this.state.selectedVehicle ? this.state.selectedVehicle.VehicleID : null} selectItem={(option) => this.setActiveVehicle(option, true)}>
+                                {vehicleArray}
+                            </RadioList>
+                        : null}
+                        <Button onPress={() => this.props.navigation.navigate("AddVehicle")} style = {{backgroundColor: "rgba(255, 193, 76, 0.3)", marginTop: 16, height: 40}} textStyle={{color: Colors.tango900, fontSize: 14}}>+ Add Vehicle</Button>
                     </View>
-                    : null}
+                    
 
                     {/* Payments */}
-                    {this.props.UserStore.payments.length > 0 ? 
+                    
                         <View style={[styles.container, {marginTop: 16}]}>
                             <Text type="medium" numberOfLines={1} style={{fontSize: 16}}>Payments</Text>
-                            <RadioList activeItem={this.state.selectedPayment ? this.state.selectedPayment.PaymentID : null} selectItem={(option) => this.setActivePayment(option, true)}>
-                            {paymentsArray}
-                        </RadioList>
+                            {this.props.UserStore.payments.length > 0 ? 
+                                <RadioList activeItem={this.state.selectedPayment ? this.state.selectedPayment.PaymentID : null} selectItem={(option) => this.setActivePayment(option, true)}>
+                                    {paymentsArray}
+                                </RadioList>
+                            : null}
+                        <Button onPress={() => this.props.navigation.navigate("AddPayment")} style = {{backgroundColor: "rgba(255, 193, 76, 0.3)", marginTop: 16, height: 40}} textStyle={{color: Colors.tango900, fontSize: 14}}>+ Add Payment</Button>
                         </View>
-                    : null}
+                    
 
                     {/* Price Breakdown */}
-                    <View style={styles.container}>
+                    <View style={[styles.container, {marginTop: 32}]}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
                             <Text>Parking Fare</Text>
                             <Text>{this.state.price}</Text>
@@ -347,6 +405,10 @@ class reserveSpace extends Component {
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
                             <Text>Service Fee</Text>
                             <Text>{this.state.serviceFee}</Text>
+                        </View>
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
+                            <Text>Processing Fee</Text>
+                            <Text>{this.state.processingFee}</Text>
                         </View>
                         <View
                             style={{
@@ -359,7 +421,9 @@ class reserveSpace extends Component {
                             <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>Total (USD)</Text>
                             <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>{this.state.total}</Text>
                         </View>
+                        <Button onPress={() => this.checkout()} style = {{backgroundColor: Colors.tango700, height: 48, marginTop: 36, marginBottom: 24}} textStyle={{color: 'white'}}>Reserve Space</Button>
                     </View>
+                    
                 </ScrollView>
                 
           )
