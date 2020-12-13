@@ -172,6 +172,11 @@ addSource = async () => {
       FBID: firebase.auth().currentUser.uid,
       stripeID: this.props.UserStore.stripeID,
       cardSource: this.state.StripecardTok,
+
+      number: this.state.creditCardNum,
+      expMonth: this.state.expMonth,
+      expYear: this.state.expYear,
+      cvc: this.state.CCV,
     })
   }
   try{

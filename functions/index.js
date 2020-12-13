@@ -50,16 +50,27 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                   return db.collection('users').doc(request.body.FBID).get()
                   .then(doc => {
                     if(!doc.exists){
-                        return console.log("User doesn't exist")
+                        throw new Error("User does not exist")
                     }else{
-                        // console.log(customer)
-                        // console.log(doc.data())
-                        return db.collection('users').doc(request.body.FBID).update({
-                            stripeID: customer.id,
+                        return stripe.accounts.create({
+                            type: 'express',
+                        }).then((account) => {
+                            db.collection('users').doc(request.body.FBID).update({
+                                stripeID: customer.id,
+                                stripeConnectID: account.id,
+                            })
+                            return [customer.id, account.id]
                         })
-                        .then(() => {
-                            response.send(customer)
+                        .then((stripeCustomerId) => {
+                            return stripe.setupIntents.create({
+                                customer:  stripeCustomerId[0]
+                            });
+                            
+                        }).then((setupIntent) => {
+                            console.log(setupIntent.client_secret)
                             return null
+                        }).catch(err => {
+                            console.log("ERROR! " + err)
                         })
                     }
                   }).catch(err => {
@@ -74,6 +85,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
     } )
 
     exports.addSource = functions.https.onRequest((request, response) => {
+        var cardItem = null;
         stripe.customers.createSource(request.body.stripeID, {
             source: request.body.cardSource,
           },
@@ -81,24 +93,26 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
             if (err){
                 response.send(err)
             }else{
-                return db.collection('users').doc(request.body.FBID).get().then(doc => {
-                  if(!doc.exists){
-                      return console.log("User doesn't exist")
-                  }else{
-                      // console.log(customer)
-                      // console.log(doc.data())
-                      return console.log("Success sending stuff")
-                      .then(() => response.send(card))
-                  }
-                }).catch(err => {
-                    console.log("ERROR! " + err)
-                    response.send(err)
-                })
-                
-                
+                cardItem = card
+            }  
+          
+            
+              
+        }).then(() => {
+            return db.collection('users').doc(request.body.FBID).get()
+        })
+        .then((doc) => {
+            if(!doc.exists){
+                return console.log("User doesn't exist")
+            }else{
+                return console.log("Success sending stuff")
             }
-          }   
-        )         
+        })
+        .then(() => response.send(cardItem))
+        .catch(err => {
+           console.log("ERROR! " + err)
+           response.send(err)
+        })
     })
 
     exports.deleteSource = functions.https.onRequest((request, response) => {
@@ -122,6 +136,33 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                 }
             }
           );
+    })
+
+    exports.payForSpace = functions.https.onRequest((request, response) => {
+        stripe.paymentIntents.create({
+            payment_method_types: ['card'],
+            amount: request.body.amount,
+            currency: 'usd',
+            customer: request.body.visitorID,
+            payment_method: request.body.cardID,
+            receipt_email: request.body.customerEmail,
+            application_fee_amount: request.body.transactionFee,
+            transfer_data: {
+              destination: request.body.hostID,
+            },
+          }).then(function(result) {
+            if (result.error) {
+              throw result.error
+            } else {
+                console.log("SUCCESS")
+                return null
+              // The payment has succeeded
+              // Display a success message
+            }
+        }).catch((e) => {
+            console.log("Failed process because of " + e)
+            return null;
+        });
     })
 
     exports.deleteSpace = functions.firestore.document('listings/{listingID}').onDelete((snap, context) => {

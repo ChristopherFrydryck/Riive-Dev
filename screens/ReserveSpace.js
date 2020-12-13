@@ -229,14 +229,13 @@ class reserveSpace extends Component {
             dollars = dollars.toLocaleString("en-US", {style:"currency", currency:"USD"});
 
 
-            var dollarsServiceFee = price * this.state.serviceFeePercentage / 100 > 2 ? price * this.state.serviceFeePercentage / 100 : 2;
-            var dollarsServiceFeeCents = price * this.state.serviceFeePercentage > 200 ? Math.ceil(price * this.state.serviceFeePercentage) : 200;
+            var dollarsServiceFee = price * this.state.serviceFeePercentage / 100 > 1.75 ? price * this.state.serviceFeePercentage / 100 : 1.75;
+            var dollarsServiceFeeCents = price * this.state.serviceFeePercentage > 175 ? Math.ceil(price * this.state.serviceFeePercentage) : 175;
             dollarsServiceFee = dollarsServiceFee.toLocaleString("en-US", {style:"currency", currency:"USD"});
 
             var dollarsProcessingFee = (((price * this.state.serviceFeePercentage) * .029) + 30) / 100;
             var dollarsProcessingFeeCents = Math.ceil(((price * this.state.serviceFeePercentage) * .029) + 30)
             dollarsProcessingFee = dollarsProcessingFee.toLocaleString("en-US", {style:"currency", currency:"USD"});
-            console.log(dollarsProcessingFee)
 
 
             await this.setState({
@@ -256,16 +255,80 @@ class reserveSpace extends Component {
     
         }
 
-        checkout = () => {
-            console.log("Checking out")
+
+        checkout = async() => {
             const { region, searchedAddress, searchInputValue, daySearched, timeSearched, locationDifferenceWalking } = this.props.navigation.state.params.homeState;
 
-            if(this.state.selectedVehicle && this.state.selectedPayment){
+            const db = firebase.firestore();
 
+            if(this.state.selectedVehicle && this.state.selectedPayment){
+                let card = this.state.selectedPayment;
+                let vehicle = this.state.selectedPayment;
+                // console.log(`${this.props.UserStore.userID} is paying for spot ${this.props.ComponentStore.selectedExternalSpot[0].listingID} with card ${this.state.selectedPayment.PaymentID} and driving a ${this.state.selectedVehicle.Year} ${this.state.selectedVehicle.Make} ${this.state.selectedVehicle.Model}`)
+                var d = new Date()
+
+                // Validate card is not expired
+                if(card.Year < parseInt(d.getFullYear().toString().slice(2))){
+                    console.log("Card expired prior year")
+                }else if(card.Year == parseInt(d.getFullYear().toString().slice(2)) && card.Month < d.getMonth() + 1){
+                    console.log("Card expired this year")
+                }else{
+                    // Card Valid
+
+                    
+                    
+                    const hostRef = db.collection('users').doc(this.props.ComponentStore.selectedExternalSpot[0].hostID);
+
+                    await hostRef.get().then((hostDoc) => {
+                        return hostDoc.data();
+                    }).then(async (hostDoc) => {
+                        try{
+                            console.log(`Host is: ${hostDoc.stripeID}`)
+                            console.log(`Visitor is: ${this.props.UserStore.stripeID}`)
+                            await this.payForSpace(hostDoc.stripeID)
+                        }catch{
+                            throw "Failed to process payment"
+                        }
+                    }).catch(e => {
+                        console.log(e)
+                    })
+
+
+
+
+                }
             }
 
-            console.log(this.state.selectedVehicle)
+            
         }
+
+        payForSpace = async (hostStripeID) => {
+            console.log(this.props.ComponentStore.selectedExternalSpot[0].hostID)
+
+            const settings = {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                amount: this.state.totalCents,
+                customer: this.props.UserStore.stripeID,
+                cardID: this.state.selectedPayment.StripeID,
+                customerEmail: this.props.UserStore.email,
+                transactionFee: this.state.serviceFeeCents + this.state.processingFeeCents,
+                hostID: hostStripeID
+              })
+            }
+            try{
+              
+              const fetchResponse = await fetch('https://us-central1-riive-parking.cloudfunctions.net/payForSpace', settings)
+              const data = await fetchResponse.json();
+              return data;
+            }catch(e){
+              alert(e);
+            }    
+          }
 
       render(){
           const {width, height} = Dimensions.get("window");
@@ -298,7 +361,7 @@ class reserveSpace extends Component {
                              />
                         </View>
                         
-                        <Text style={{fontSize: 12}} >{`${payment.Name}`}</Text>
+                        <Text style={{fontSize: 12}} >{`Expires ${payment.Month}/${payment.Year}`}</Text>
                     </View>
                 </RadioButton>
               )
