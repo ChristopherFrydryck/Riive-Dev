@@ -78,17 +78,8 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
 
     exports.addSource = functions.https.onRequest((request, response) => {
        
-        db.collection('users').doc(request.body.FBID).get()
-
-        .then((doc) => {
-            if(!doc.exists){
-                return console.log("User doesn't exist")
-            }else{
-                return console.log("Success sending stuff")
-            }
-        })
-        .then( async() => {
-            const card = await stripe.paymentMethods.create({
+        
+        return stripe.paymentMethods.create({
                 type: 'card',
                 card: {
                   number: request.body.number,
@@ -96,14 +87,12 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                   exp_year: request.body.expYear,
                   cvc: request.body.cvc,
                 },
-              });
-              await console.log(`created payment method with : ${card.id}`)
-              return card.id
-        })
-        .then( async(cardID) => {
+              })
+              
+        .then( async(card) => {
             const setupIntent = await stripe.setupIntents.create({
                 customer: request.body.stripeID,
-                payment_method: cardID,
+                payment_method: card.id,
                 payment_method_types: ["card"],
                 confirm: true,
             });
@@ -119,8 +108,15 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                 console.log("Successfully saved card!")
                 return null
             }
-        })
-        .catch(err => {
+        }).then(() => {
+            return db.collection('users').doc(request.body.FBID).get()        
+        }).then((doc) => {
+            if(!doc.exists){
+                return console.log("User doesn't exist")
+            }else{
+                return console.log("Success sending stuff")
+            }
+        }).catch(err => {
            console.log("ERROR! " + err)
            response.send(err)
         })
