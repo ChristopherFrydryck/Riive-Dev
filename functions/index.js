@@ -61,15 +61,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                             })
                             return [customer.id, account.id]
                         })
-                        .then((stripeCustomerId) => {
-                            return stripe.setupIntents.create({
-                                customer:  stripeCustomerId[0]
-                            });
-                            
-                        }).then((setupIntent) => {
-                            console.log(setupIntent.client_secret)
-                            return null
-                        }).catch(err => {
+                        .catch(err => {
                             console.log("ERROR! " + err)
                         })
                     }
@@ -85,22 +77,9 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
     } )
 
     exports.addSource = functions.https.onRequest((request, response) => {
-        var cardItem = null;
-        stripe.customers.createSource(request.body.stripeID, {
-            source: request.body.cardSource,
-          },
-          function(err, card) {
-            if (err){
-                response.send(err)
-            }else{
-                cardItem = card
-            }  
-          
-            
-              
-        }).then(() => {
-            return db.collection('users').doc(request.body.FBID).get()
-        })
+       
+        db.collection('users').doc(request.body.FBID).get()
+
         .then((doc) => {
             if(!doc.exists){
                 return console.log("User doesn't exist")
@@ -108,7 +87,39 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                 return console.log("Success sending stuff")
             }
         })
-        .then(() => response.send(cardItem))
+        .then( async() => {
+            const card = await stripe.paymentMethods.create({
+                type: 'card',
+                card: {
+                  number: request.body.number,
+                  exp_month: request.body.expMonth,
+                  exp_year: request.body.expYear,
+                  cvc: request.body.cvc,
+                },
+              });
+              await console.log(`created payment method with : ${card.id}`)
+              return card.id
+        })
+        .then( async(cardID) => {
+            const setupIntent = await stripe.setupIntents.create({
+                customer: request.body.stripeID,
+                payment_method: cardID,
+                payment_method_types: ["card"],
+                confirm: true,
+            });
+            await console.log(`created setup intent with : ${setupIntent.id}`)
+            return setupIntent
+            
+        })
+        .then((result) => {
+            if(result.error){
+                response.send(result.error)
+                throw new Error("Failed to confirm")
+            }else{
+                console.log("Successfully saved card!")
+                return null
+            }
+        })
         .catch(err => {
            console.log("ERROR! " + err)
            response.send(err)
