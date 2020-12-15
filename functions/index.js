@@ -77,7 +77,6 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
     } )
 
     exports.addSource = functions.https.onRequest((request, response) => {
-       
         
         return stripe.paymentMethods.create({
                 type: 'card',
@@ -87,6 +86,9 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                   exp_year: request.body.expYear,
                   cvc: request.body.cvc,
                 },
+                billing_details: {
+                    name: request.body.name
+                }
               })
               
         .then( async(card) => {
@@ -96,29 +98,64 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                 payment_method_types: ["card"],
                 confirm: true,
             });
-            await console.log(`created setup intent with : ${setupIntent.id}`)
+            // await console.log(`created setup intent with : ${setupIntent.id}`)
             return setupIntent
             
         })
         .then((result) => {
             if(result.error){
-                response.send(result.error)
+                response.status(500).send(err)
                 throw new Error("Failed to confirm")
             }else{
-                console.log("Successfully saved card!")
-                return null
+                return result
             }
-        }).then(() => {
-            return db.collection('users').doc(request.body.FBID).get()        
+        }).then( async(setupIntent) => {
+            const userData = await db.collection('users').doc(request.body.FBID).get();
+            return [userData, setupIntent]   
         }).then((doc) => {
-            if(!doc.exists){
-                return console.log("User doesn't exist")
+            if(!doc[0].exists){
+                response.status(500).send("User does not exist")
+                throw new Error("User does not exist")
             }else{
-                return console.log("Success sending stuff")
+                const ref = db.collection("users").doc();
+                  // add card to database
+                if(request.body.creditCardType !== ""){
+                    db.collection("users").doc(request.body.FBID).update({
+                        payments: admin.firestore.FieldValue.arrayUnion({
+                            PaymentID: ref.id,
+                            StripeID: doc[1].id,
+                            Type: "Card",
+                            CardType: request.body.creditCardType,
+                            Name: request.body.name,
+                            Month: request.body.expMonth,
+                            Year: request.body.expYear,
+                            Number: request.body.number.slice(-4),
+                            CCV: request.body.cvc,
+                        })
+                    })
+                }else{
+                    db.collection("users").doc(request.body.FBID).update({
+                        payments: admin.firestore.FieldValue.arrayUnion({
+                            PaymentID: ref.id,
+                            StripeID: doc[1].id,
+                            Type: "Card",
+                            CardType: "Credit",
+                            Name: request.body.name,
+                            Month: request.body.expMonth,
+                            Year: request.body.expYear,
+                            Number: request.body.number.slice(-4),
+                            CCV: request.body.cvc,
+                        })
+                    })
+                }
+
+                response.status(200).send(doc[1])
+                return doc[1];
             }
         }).catch(err => {
            console.log("ERROR! " + err)
-           response.send(err)
+           response.status(500).send(err)
+           return null
         })
     })
 

@@ -152,8 +152,8 @@ setCardParams = async() => {
   }
  
   
-  var token = await stripe.createTokenWithCard(params)
-  this.setState({StripecardId: token.card.cardId, StripecardTok: token.tokenId})
+  // var token = await stripe.createTokenWithCard(params)
+  // this.setState({StripecardId: token.card.cardId, StripecardTok: token.tokenId})
 
   
   
@@ -171,12 +171,14 @@ addSource = async () => {
     body: JSON.stringify({
       FBID: firebase.auth().currentUser.uid,
       stripeID: this.props.UserStore.stripeID,
-      cardSource: this.state.StripecardTok,
+
 
       number: this.state.creditCardNum,
       expMonth: this.state.expMonth,
       expYear: this.state.expYear,
       cvc: this.state.CCV,
+      name: this.state.name,
+      creditCardType: this.state.creditCardType
     })
   }
   try{
@@ -203,18 +205,19 @@ submitPayment = async() => {
     
     
       await this.verifyInput();
-      await this.setCardParams();
+      // await this.setCardParams();
     
     
     
     if(this.state.allValid){
       
 
-        // add card to database
-      if(this.state.creditCardType !== ""){
-        db.collection("users").doc(this.props.UserStore.userID).update({
-            payments: firebase.firestore.FieldValue.arrayUnion({
-                PaymentID: ref.id,
+        await this.addSource().then((card) => {
+          
+             // add card to mobx UserStore
+           if(this.state.creditCardType !== ""){
+            this.props.UserStore.payments.push({
+                PaymentID: card.id,
                 StripeID: this.state.StripecardId,
                 Type: "Card",
                 CardType: this.state.creditCardType,
@@ -224,55 +227,25 @@ submitPayment = async() => {
                 Number: this.state.creditCardNum.slice(-4),
                 CCV: this.state.CCV,
             })
-         })
-        }else{
-          db.collection("users").doc(this.props.UserStore.userID).update({
-            payments: firebase.firestore.FieldValue.arrayUnion({
-                PaymentID: ref.id,
-                StripeID: this.state.StripecardId,
-                Type: "Card",
-                CardType: "Credit",
-                Name: this.state.name,
-                Month: this.state.expMonth,
-                Year: this.state.expYear,
-                Number: this.state.creditCardNum.slice(-4),
-                CCV: this.state.CCV,
-            })
-         })
-        }
-         // add card to mobx UserStore
-         if(this.state.creditCardType !== ""){
-         this.props.UserStore.payments.push({
-            PaymentID: ref.id,
-            StripeID: this.state.StripecardId,
-            Type: "Card",
-            CardType: this.state.creditCardType,
-            Name: this.state.name,
-            Month: this.state.expMonth,
-            Year: this.state.expYear,
-            Number: this.state.creditCardNum.slice(-4),
-            CCV: this.state.CCV,
-         })
-        }else{
-          this.props.UserStore.payments.push({
-            PaymentID: ref.id,
-            StripeID: this.state.StripecardId,
-            Type: "Card",
-            CardType: "Credit",
-            Name: this.state.name,
-            Month: this.state.expMonth,
-            Year: this.state.expYear,
-            Number: this.state.creditCardNum.slice(-4),
-            CCV: this.state.CCV,
-         })
-        }
-        
-        await this.addSource();
-        
-      
-        
+          }else{
+            this.props.UserStore.payments.push({
+              PaymentID: card.id,
+              StripeID: this.state.StripecardId,
+              Type: "Card",
+              CardType: "Credit",
+              Name: this.state.name,
+              Month: this.state.expMonth,
+              Year: this.state.expYear,
+              Number: this.state.creditCardNum.slice(-4),
+              CCV: this.state.CCV,
+           })
+          }
+        }).then(() => {
           // navigate back to profile
           this.props.navigation.goBack(null)
+        }).catch(err => {
+          alert(err)
+        })
     
       }else{
         this.setState({creditCardNumError: 'Credit card type is not supported'})
