@@ -98,7 +98,14 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                     name: request.body.name
                 }
               })
-              
+        .then((result) => {
+            if(result.error){
+                response.status(500).send(err)
+                throw new Error("Failed to create payment method")
+            }else{
+                return result
+            }
+        })    
         .then( async(card) => {
             const setupIntent = await stripe.setupIntents.create({
                 customer: request.body.stripeID,
