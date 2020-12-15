@@ -213,36 +213,39 @@ submitPayment = async() => {
       
 
         await this.addSource().then((card) => {
-          
-             // add card to mobx UserStore
-           if(this.state.creditCardType !== ""){
-            this.props.UserStore.payments.push({
+
+          if(card.status == "succeeded"){
+            // add card to mobx UserStore
+            if(this.state.creditCardType !== ""){
+              this.props.UserStore.payments.push({
+                  PaymentID: card.id,
+                  StripeID: this.state.StripecardId,
+                  Type: "Card",
+                  CardType: this.state.creditCardType,
+                  Name: this.state.name,
+                  Month: this.state.expMonth,
+                  Year: this.state.expYear,
+                  Number: this.state.creditCardNum.slice(-4),
+                  CCV: this.state.CCV,
+              })
+            }else{
+              this.props.UserStore.payments.push({
                 PaymentID: card.id,
                 StripeID: this.state.StripecardId,
                 Type: "Card",
-                CardType: this.state.creditCardType,
+                CardType: "Credit",
                 Name: this.state.name,
                 Month: this.state.expMonth,
                 Year: this.state.expYear,
                 Number: this.state.creditCardNum.slice(-4),
                 CCV: this.state.CCV,
             })
-          }else{
-            this.props.UserStore.payments.push({
-              PaymentID: card.id,
-              StripeID: this.state.StripecardId,
-              Type: "Card",
-              CardType: "Credit",
-              Name: this.state.name,
-              Month: this.state.expMonth,
-              Year: this.state.expYear,
-              Number: this.state.creditCardNum.slice(-4),
-              CCV: this.state.CCV,
-           })
           }
-        }).then(() => {
           // navigate back to profile
           this.props.navigation.goBack(null)
+        }else{
+          throw new Error(`Failed to save card. ${card.raw.message} Error code ${card.statusCode}.`)
+        }
         }).catch(err => {
           alert(err)
         })

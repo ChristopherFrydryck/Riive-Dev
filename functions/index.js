@@ -54,6 +54,14 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                     }else{
                         return stripe.accounts.create({
                             type: 'express',
+                            email: request.body.email,
+                            business_type: "individual",
+                            individual: {
+                                email: request.body.email,
+                                phone: request.body.phone,
+                                first_name: request.body.name.split(' ', 1).toString(),
+                                last_name: request.body.name.split(' ').slice(-1).join(),
+                            }
                         }).then((account) => {
                             db.collection('users').doc(request.body.FBID).update({
                                 stripeID: customer.id,
@@ -149,14 +157,18 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                     })
                 }
 
-                response.status(200).send(doc[1])
-                return doc[1];
+                return response.status(200).send(doc[1])
+                // return doc[1];
             }
         }).catch(err => {
            console.log("ERROR! " + err)
            response.status(500).send(err)
            return null
         })
+    })
+
+    exports.enterApp = functions.https.onRequest((request, response) => {
+        
     })
 
     exports.deleteSource = functions.https.onRequest((request, response) => {
