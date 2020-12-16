@@ -85,7 +85,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
     } )
 
     exports.addSource = functions.https.onRequest((request, response) => {
-        
+        var pmID = null;
         return stripe.paymentMethods.create({
                 type: 'card',
                 card: {
@@ -114,6 +114,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                 confirm: true,
             });
             // await console.log(`created setup intent with : ${setupIntent.id}`)
+            pmID = card.id;
             return setupIntent
             
         })
@@ -124,7 +125,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
             }else{
                 return result
             }
-        }).then( async(setupIntent) => {
+        }).then(async(setupIntent) => {
             const userData = await db.collection('users').doc(request.body.FBID).get();
             return [userData, setupIntent]   
         }).then((doc) => {
@@ -134,13 +135,14 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
             }else{
                 const ref = db.collection("users").doc();
                   // add card to database
-                if(request.body.creditCardType !== ""){
+                
                     db.collection("users").doc(request.body.FBID).update({
                         payments: admin.firestore.FieldValue.arrayUnion({
                             PaymentID: ref.id,
                             StripeID: doc[1].id,
+                            StripePMID: pmID,
                             Type: "Card",
-                            CardType: request.body.creditCardType,
+                            CardType: request.body.creditCardType !== "" ? request.body.creditCardType : "Credit",
                             Name: request.body.name,
                             Month: request.body.expMonth,
                             Year: request.body.expYear,
@@ -148,26 +150,23 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                             CCV: request.body.cvc,
                         })
                     })
-                }else{
-                    db.collection("users").doc(request.body.FBID).update({
-                        payments: admin.firestore.FieldValue.arrayUnion({
-                            PaymentID: ref.id,
-                            StripeID: doc[1].id,
-                            Type: "Card",
-                            CardType: "Credit",
-                            Name: request.body.name,
-                            Month: request.body.expMonth,
-                            Year: request.body.expYear,
-                            Number: request.body.number.slice(-4),
-                            CCV: request.body.cvc,
-                        })
-                    })
-                }
+           
 
-                return response.status(200).send(doc[1])
-                // return doc[1];
+                response.status(200).send([doc[1], ref.id])
+                return doc[1];
             }
-        }).catch(err => {
+        }).catch(async(err) => {
+            // If created card, delete it.
+            let toBeDeleted = await stripe.paymentMethods.retrieve(
+                pmID
+            );
+
+            if(toBeDeleted){
+                await stripe.paymentMethods.detach(
+                    pmID
+                );
+            }
+
            console.log("ERROR! " + err)
            response.status(500).send(err)
            return null
@@ -179,7 +178,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
     })
 
     exports.deleteSource = functions.https.onRequest((request, response) => {
-        stripe.paymentMethods.detach(request.body.pmID).then((result) => {
+        stripe.paymentMethods.detach(request.body.StripePMID).then((result) => {
             if(result.error){
                 response.status(500).send("Failed to remove payment method from Stripe")
                 throw new Error ("Failed to remove payment method from Stripe")
@@ -187,31 +186,35 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                 return result
             }
         }).then((result) => {
-            return db.collection("users").doc(request.body.FBID).get()
+            return [db.collection("users").doc(request.body.FBID).get(), result]
         }).then((doc) => {
-            if(!doc.exists){
+            if(!doc[0].exists){
                 response.status(500).send("Failed to gather your data from our servers")
                 throw new Error ("Failed to gather your data from our servers")
             }else{
-                return db.collection("users").doc(request.body.FBID).update({
+                db.collection("users").doc(request.body.FBID).update({
                     payments: admin.firestore.FieldValue.arrayRemove({
                         CardType: request.body.CardType,
                         Month: request.body.Month,
                         Name: request.body.Name,
                         Number: request.body.Number,
                         PaymentID: request.body.PaymentID,
-                        StripeID: request.body.pmID,
+                        StripeID: request.body.StripeID,
+                        StripePMID: request.body.StripePMID,
                         Type: request.body.Type,
                         Year: request.body.Year,
                         CCV: request.body.CCV
                     })
                 })
+                response.status(200).send('success')
+                return doc[1]
             }
+            
           
-        }).then((card) => {
-            return response.status(200).send(card)
         }).catch((err) => {
-            return response.status(500).send(err)
+           console.log("ERROR! " + err)
+           response.status(500).send(err)
+           return null
         })
     })
 
