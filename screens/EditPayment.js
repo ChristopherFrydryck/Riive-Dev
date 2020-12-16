@@ -69,13 +69,28 @@ class EditPayment extends React.Component{
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            stripeID: this.props.UserStore.stripeID,
-            cardSource: this.props.ComponentStore.selectedPayment[0].StripeID,
-            FBID: firebase.auth().currentUser.uid,
+
+
+
+
+                CardType: this.props.ComponentStore.selectedPayment[0].CardType,
+                Month: this.props.ComponentStore.selectedPayment[0].Month,
+                Name: this.props.ComponentStore.selectedPayment[0].Name,
+                Number: this.props.ComponentStore.selectedPayment[0].Number,
+                PaymentID: this.props.ComponentStore.selectedPayment[0].PaymentID,
+                pmID: this.props.ComponentStore.selectedPayment[0].StripeID,
+                Type: "Card",
+                Year: this.props.ComponentStore.selectedPayment[0].Year,
+                CCV: this.props.ComponentStore.selectedPayment[0].CCV
           })
         }
-        try{
-          
+
+
+
+
+
+
+        try{ 
           const fetchResponse = await fetch('https://us-central1-riive-parking.cloudfunctions.net/deleteSource', settings)
           const data = await fetchResponse.json();
           return data;
@@ -90,35 +105,29 @@ class EditPayment extends React.Component{
         const db = firebase.firestore();
 
         // Remove the current vehicle
-       try {db.collection("users").doc(this.props.UserStore.userID).update({
-            payments: firebase.firestore.FieldValue.arrayRemove({
-                CardType: this.props.ComponentStore.selectedPayment[0].CardType,
-                Month: this.props.ComponentStore.selectedPayment[0].Month,
-                Name: this.props.ComponentStore.selectedPayment[0].Name,
-                Number: this.props.ComponentStore.selectedPayment[0].Number,
-                PaymentID: this.props.ComponentStore.selectedPayment[0].PaymentID,
-                StripeID: this.props.ComponentStore.selectedPayment[0].StripeID,
-                Type: this.props.ComponentStore.selectedPayment[0].Type,
-                Year: this.props.ComponentStore.selectedPayment[0].Year,
-                CCV: this.props.ComponentStore.selectedPayment[0].CCV,
-            })
-         })
-         this.deleteSource();
-        }catch(e){
-            alert(e)
-        }
+     
+        await this.deleteSource().then(result => {
+          console.log(result)
+          if(result.statusCode !== 200){
+            throw new Error(`Failed to delete card. ${result.raw.message} Error code ${result.statusCode}.`)
+          }
+          else{
+            this.props.navigation.navigate("Profile")
+          }
+        }).catch(err => {
+          alert(err)
+        })
+        
 
           // remove the old vehicle from the userstore mobx vehicles array
-        const updatedPaymentArray = this.props.UserStore.payments.filter(i => i.PaymentID !== this.props.ComponentStore.selectedPayment[0].PaymentID)
-        this.props.UserStore.payments = updatedPaymentArray
+        // const updatedPaymentArray = this.props.UserStore.payments.filter(i => i.PaymentID !== this.props.ComponentStore.selectedPayment[0].PaymentID)
+        // this.props.UserStore.payments = updatedPaymentArray
        
-        }else{
-            alert("Error deleting vehicle")
-        }
+        
 
         // navigate back to home.
-        this.props.navigation.navigate("Profile")
-
+        // this.props.navigation.navigate("Profile")
+      }
      
     }
 

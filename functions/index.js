@@ -179,26 +179,40 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
     })
 
     exports.deleteSource = functions.https.onRequest((request, response) => {
-        stripe.customers.deleteSource(
-            request.body.stripeID,
-            request.body.cardSource,
-            function(err, confirmation) {
-                if(err){
-                    response.send(err)
-                }else{
-                    return db.collection('users').doc(request.body.FBID).get().then(doc => {
-                    if(!doc.exists){
-                        return console.log("User doesn't exist")
-                    }else{
-                        return console.log("Success deleting card stuff")
-                        .then(() => response.send(confirmation))
-                    }
-                    }).catch(err => {
-                        console.log("ERROR! " + err)
-                    })
-                }
+        stripe.paymentMethods.detach(request.body.pmID).then((result) => {
+            if(result.error){
+                response.status(500).send("Failed to remove payment method from Stripe")
+                throw new Error ("Failed to remove payment method from Stripe")
+            }else{
+                return result
             }
-          );
+        }).then((result) => {
+            return db.collection("users").doc(request.body.FBID).get()
+        }).then((doc) => {
+            if(!doc.exists){
+                response.status(500).send("Failed to gather your data from our servers")
+                throw new Error ("Failed to gather your data from our servers")
+            }else{
+                return db.collection("users").doc(request.body.FBID).update({
+                    payments: admin.firestore.FieldValue.arrayRemove({
+                        CardType: request.body.CardType,
+                        Month: request.body.Month,
+                        Name: request.body.Name,
+                        Number: request.body.Number,
+                        PaymentID: request.body.PaymentID,
+                        StripeID: request.body.pmID,
+                        Type: request.body.Type,
+                        Year: request.body.Year,
+                        CCV: request.body.CCV
+                    })
+                })
+            }
+          
+        }).then((card) => {
+            return response.status(200).send(card)
+        }).catch((err) => {
+            return response.status(500).send(err)
+        })
     })
 
     exports.payForSpace = functions.https.onRequest((request, response) => {

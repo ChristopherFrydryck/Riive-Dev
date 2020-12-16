@@ -201,7 +201,7 @@ submitPayment = async() => {
   if(this._isMounted){
     
 
-  try{
+
     
     
       await this.verifyInput();
@@ -255,28 +255,7 @@ submitPayment = async() => {
       }
 
       
-
-
-  }catch(e){
-    if(this.state.allValid){
-      this.props.UserStore.payments = this.props.UserStore.payments.filter(x => x.PaymentID !== ref.id)
-
-      await this.deleteSource()
-      await db.collection("users").doc(this.props.UserStore.userID).update({
-        payments: firebase.firestore.FieldValue.arrayRemove({
-            CardType: this.state.creditCardType == "" ? "Credit" : this.state.creditCardType,
-            Month: this.state.expMonth,
-            Name: this.state.name,
-            Number: this.state.creditCardNum.slice(-4),
-            PaymentID: ref.id,
-            StripeID: this.state.StripecardId,
-            Type: "Card",
-            Year: this.state.expYear,
-            CCV: this.state.CCV,
-        })
-     })
-    }
-  }  
+  
   
   
   }
