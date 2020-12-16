@@ -213,38 +213,28 @@ submitPayment = async() => {
       
 
         await this.addSource().then((card) => {
-
-          if(card.status == "succeeded"){
+          
+          if(card[0].status == "succeeded"){
+            
             // add card to mobx UserStore
-            if(this.state.creditCardType !== ""){
+           
               this.props.UserStore.payments.push({
-                  PaymentID: card.id,
-                  StripeID: this.state.StripecardId,
+                  PaymentID: card[1],
+                  StripeID: card.id,
+                  StripePMID: card.payment_method,
                   Type: "Card",
-                  CardType: this.state.creditCardType,
+                  CardType: this.state.creditCardType !== "" ? this.state.creditCardType : "Credit",
                   Name: this.state.name,
                   Month: this.state.expMonth,
                   Year: this.state.expYear,
                   Number: this.state.creditCardNum.slice(-4),
                   CCV: this.state.CCV,
               })
-            }else{
-              this.props.UserStore.payments.push({
-                PaymentID: card.id,
-                StripeID: this.state.StripecardId,
-                Type: "Card",
-                CardType: "Credit",
-                Name: this.state.name,
-                Month: this.state.expMonth,
-                Year: this.state.expYear,
-                Number: this.state.creditCardNum.slice(-4),
-                CCV: this.state.CCV,
-            })
-          }
+            
           // navigate back to profile
           this.props.navigation.goBack(null)
         }else{
-          throw new Error(`Failed to save card. ${card.raw.message} Error code ${card.statusCode}.`)
+          throw new Error(`Failed to save card. ${card[0].raw.message} Error code ${card[0].statusCode}.`)
         }
         }).catch(err => {
           alert(err)

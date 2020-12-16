@@ -69,16 +69,14 @@ class EditPayment extends React.Component{
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-
-
-
-
+                // { CardType, Month, Name, Number, PaymentID, StripeID, StripePMID, Type, Year, CCV } = this.props.ComponentStore.selectedPayment[0]
                 CardType: this.props.ComponentStore.selectedPayment[0].CardType,
                 Month: this.props.ComponentStore.selectedPayment[0].Month,
                 Name: this.props.ComponentStore.selectedPayment[0].Name,
                 Number: this.props.ComponentStore.selectedPayment[0].Number,
                 PaymentID: this.props.ComponentStore.selectedPayment[0].PaymentID,
-                pmID: this.props.ComponentStore.selectedPayment[0].StripeID,
+                StripeID: this.props.ComponentStore.selectedPayment[0].StripeID,
+                StripePMID: this.props.ComponentStore.selectedPayment[0].StripePMID,
                 Type: "Card",
                 Year: this.props.ComponentStore.selectedPayment[0].Year,
                 CCV: this.props.ComponentStore.selectedPayment[0].CCV
@@ -104,19 +102,22 @@ class EditPayment extends React.Component{
         if(this._isMounted){
         const db = firebase.firestore();
 
+        console.log(this.props.ComponentStore.selectedPayment[0])
+        
         // Remove the current vehicle
      
-        await this.deleteSource().then(result => {
-          console.log(result)
-          if(result.statusCode !== 200){
-            throw new Error(`Failed to delete card. ${result.raw.message} Error code ${result.statusCode}.`)
-          }
-          else{
-            this.props.navigation.navigate("Profile")
-          }
-        }).catch(err => {
-          alert(err)
-        })
+        // await this.deleteSource().then(result => {
+          
+        //   console.log(result)
+        //   // if(result.statusCode !== 200){
+        //   //   throw new Error(`Failed to delete card. ${result.raw.message} Error code ${result.statusCode}.`)
+        //   // }
+        //   // else{
+        //   //   this.props.navigation.navigate("Profile")
+        //   // }
+        // }).catch(err => {
+        //   alert(err)
+        // })
         
 
           // remove the old vehicle from the userstore mobx vehicles array

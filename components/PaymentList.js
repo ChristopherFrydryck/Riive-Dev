@@ -56,6 +56,7 @@ class VehicleList extends React.Component{
             Number: payment.Number,
             PaymentID: payment.PaymentID,
             StripeID: payment.StripeID,
+            StripePMID: payment.StripePMID,
             Type: payment.Type,
             Year: payment.Year,
             CCV: payment.CCV,
