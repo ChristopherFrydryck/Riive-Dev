@@ -85,7 +85,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
     } )
 
     exports.addSource = functions.https.onRequest((request, response) => {
-        var pmID = null;
+       
         return stripe.paymentMethods.create({
                 type: 'card',
                 card: {
@@ -114,20 +114,20 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                 confirm: true,
             });
             // await console.log(`created setup intent with : ${setupIntent.id}`)
-            pmID = card.id;
-            return setupIntent
+           
+            return [setupIntent, card.id]
             
         })
         .then((result) => {
-            if(result.error){
+            if(result[0].error){
                 response.status(500).send(err)
                 throw new Error("Failed to confirm")
             }else{
                 return result
             }
-        }).then(async(setupIntent) => {
+        }).then(async(result) => {
             const userData = await db.collection('users').doc(request.body.FBID).get();
-            return [userData, setupIntent]   
+            return [userData, ...result]   
         }).then((doc) => {
             if(!doc[0].exists){
                 response.status(500).send("User does not exist")
@@ -140,7 +140,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                         payments: admin.firestore.FieldValue.arrayUnion({
                             PaymentID: ref.id,
                             StripeID: doc[1].id,
-                            StripePMID: pmID,
+                            StripePMID: doc[2],
                             Type: "Card",
                             CardType: request.body.creditCardType !== "" ? request.body.creditCardType : "Credit",
                             Name: request.body.name,
@@ -156,18 +156,19 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                 return doc[1];
             }
         }).catch(async(err) => {
+            console.log(err)
             // If created card, delete it.
-            let toBeDeleted = await stripe.paymentMethods.retrieve(
-                pmID
-            );
+            // let toBeDeleted = await stripe.paymentMethods.retrieve(
+            //     pmID
+            // );
 
-            if(toBeDeleted){
-                await stripe.paymentMethods.detach(
-                    pmID
-                );
-            }
+            // if(toBeDeleted){
+            //     await stripe.paymentMethods.detach(
+            //         pmID
+            //     );
+            // }
 
-           console.log("ERROR! " + err)
+        //    console.log("ERROR! " + err)
            response.status(500).send(err)
            return null
         })
@@ -235,7 +236,8 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
 
         bucket.deleteFiles({
             prefix: `listings/${listingID}`
-        }).then(() => {
+        }).then(async() => {
+            
             return db.collection("users").doc(snap.data().hostID).update({
                 listings: admin.firestore.FieldValue.arrayRemove(listingID)
             })

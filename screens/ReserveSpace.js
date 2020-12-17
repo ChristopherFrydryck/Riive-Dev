@@ -93,6 +93,7 @@ class reserveSpace extends Component {
                 Name: payment.Name,
                 PaymentID: payment.PaymentID,
                 StripeID: payment.StripeID,
+                StripePMID: payment.StripePMID,
                 Type: payment.Type,
                 Year: payment.Year
             }})
@@ -101,6 +102,7 @@ class reserveSpace extends Component {
 
         this._isMounted = true;
         this._navListener = this.props.navigation.addListener('didFocus', () => {
+            console.log(this.state.selectedPayment)
            StatusBar.setBarStyle('dark-content', true);
            Platform.OS === 'android' && StatusBar.setBackgroundColor('white');
          });
@@ -275,9 +277,11 @@ class reserveSpace extends Component {
                 }else{
                     // Card Valid
 
+       
+
                     
                     
-                    const hostRef = db.collection('users').doc(this.props.ComponentStore.selectedExternalSpot[0].hostID);
+                    const hostRef = await db.collection('users').doc(this.props.ComponentStore.selectedExternalSpot[0].hostID);
 
                     await hostRef.get().then((hostDoc) => {
                         return hostDoc.data();
@@ -285,7 +289,8 @@ class reserveSpace extends Component {
                         try{
                             console.log(`Host is: ${hostDoc.stripeID}`)
                             console.log(`Visitor is: ${this.props.UserStore.stripeID}`)
-                            await this.payForSpace(hostDoc.stripeID)
+                            console.log(`Payment SETI is ${JSON.stringify(this.state.selectedPayment)}`)
+                            // await this.payForSpace(hostDoc.stripeID)
                         }catch{
                             throw "Failed to process payment"
                         }

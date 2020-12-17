@@ -220,8 +220,8 @@ submitPayment = async() => {
            
               this.props.UserStore.payments.push({
                   PaymentID: card[1],
-                  StripeID: card.id,
-                  StripePMID: card.payment_method,
+                  StripeID: card[0].id,
+                  StripePMID: card[0].payment_method,
                   Type: "Card",
                   CardType: this.state.creditCardType !== "" ? this.state.creditCardType : "Credit",
                   Name: this.state.name,
