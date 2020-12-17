@@ -178,39 +178,23 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
     })
 
     exports.deleteSource = functions.https.onRequest((request, response) => {
-        stripe.paymentMethods.detach(request.body.StripePMID).then((result) => {
-            if(result.error){
-                response.status(500).send("Failed to remove payment method from Stripe")
-                throw new Error ("Failed to remove payment method from Stripe")
-            }else{
-                return result
-            }
-        }).then((result) => {
-            return [db.collection("users").doc(request.body.FBID).get(), result]
-        }).then((doc) => {
-            if(!doc[0].exists){
+        db.collection("users").doc(request.body.FBID).get().then(async(doc) => {
+            if(!doc.exists){
                 response.status(500).send("Failed to gather your data from our servers")
                 throw new Error ("Failed to gather your data from our servers")
             }else{
-                db.collection("users").doc(request.body.FBID).update({
-                    payments: admin.firestore.FieldValue.arrayRemove({
-                        CardType: request.body.CardType,
-                        Month: request.body.Month,
-                        Name: request.body.Name,
-                        Number: request.body.Number,
-                        PaymentID: request.body.PaymentID,
-                        StripeID: request.body.StripeID,
-                        StripePMID: request.body.StripePMID,
-                        Type: request.body.Type,
-                        Year: request.body.Year,
-                        CCV: request.body.CCV
-                    })
+                
+                let newPaymentsArray = await doc.data().payments.filter(x => x.PaymentID !== request.body.PaymentID)
+                await db.collection("users").doc(request.body.FBID).update({
+                    payments: newPaymentsArray
                 })
-                response.status(200).send('success')
-                return doc[1]
+                return doc
             }
-            
-          
+        }).then((doc) => {
+            return [stripe.paymentMethods.detach(request.body.StripePMID), doc]
+        }).then(data => {
+            response.status(200).send(data)
+            return data
         }).catch((err) => {
            console.log("ERROR! " + err)
            response.status(500).send(err)
