@@ -102,7 +102,6 @@ class reserveSpace extends Component {
 
         this._isMounted = true;
         this._navListener = this.props.navigation.addListener('didFocus', () => {
-            console.log(this.state.selectedPayment)
            StatusBar.setBarStyle('dark-content', true);
            Platform.OS === 'android' && StatusBar.setBackgroundColor('white');
          });
@@ -148,6 +147,7 @@ class reserveSpace extends Component {
                     Name: activePayment.Name,
                     PaymentID: activePayment.PaymentID,
                     StripeID: activePayment.StripeID,
+                    StripePMID: activePayment.StripePMID,
                     Type: activePayment.Type,
                     Year: activePayment.Year
                 }})
@@ -159,6 +159,7 @@ class reserveSpace extends Component {
                     Name: payment.Name,
                     PaymentID: payment.PaymentID,
                     StripeID: payment.StripeID,
+                    StripePMID: payment.StripePMID,
                     Type: payment.Type,
                     Year: payment.Year
                 }})
@@ -289,7 +290,8 @@ class reserveSpace extends Component {
                         try{
                             console.log(`Host is: ${hostDoc.stripeID}`)
                             console.log(`Visitor is: ${this.props.UserStore.stripeID}`)
-                            console.log(`Payment SETI is ${JSON.stringify(this.state.selectedPayment)}`)
+                            console.log(`Vehicle is ${this.state.selectedVehicle.Year} ${this.state.selectedVehicle.Make} ${this.state.selectedVehicle.Model}`)
+                            console.log(`Payment SETI is ${this.state.selectedPayment.StripeID}`)
                             // await this.payForSpace(hostDoc.stripeID)
                         }catch{
                             throw "Failed to process payment"
@@ -308,7 +310,7 @@ class reserveSpace extends Component {
         }
 
         payForSpace = async (hostStripeID) => {
-            console.log(this.props.ComponentStore.selectedExternalSpot[0].hostID)
+            // console.log(this.props.ComponentStore.selectedExternalSpot[0].hostID)
 
             const settings = {
               method: 'POST',

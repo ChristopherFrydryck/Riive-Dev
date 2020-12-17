@@ -102,47 +102,34 @@ class EditPayment extends React.Component{
     deletePayment = async () => {
 
         if(this._isMounted){
-        const db = firebase.firestore();
 
-
-   
      
-     
-        await this.deleteSource().then(result => {
-          console.log(result)
-          
-
-          
-          // if(result.statusCode){
-          //     if(result.statusCode == 400){
-          //       // Card in db but not in Stripe
-          //       throw new Error(`Failed to delete card. ${result.raw.message} Error code ${result.statusCode}.`)
-
-          //     }
-          // }else{
-          //   console.log("Success")
-          // }
-          // if(result.statusCode !== 200){
-          //   throw new Error(`Failed to delete card. ${result.raw.message} Error code ${result.statusCode}.`)
-          // }
-          // else{
-          //   this.props.navigation.navigate("Profile")
-          // }
+        await this.deleteSource().then(result => {  
+          console.log(result.removedCardID)
+            if(result.statusCode !== 200){
+                throw new Error(`Failed to delete card.`)
+            }else{
+              const updatedPaymentArray = this.props.UserStore.payments.filter(i => i.PaymentID !== result.removedCardID);
+              this.props.UserStore.payments = updatedPaymentArray;
+              this.props.navigation.navigate("Profile")
+            }
+        
         }).catch(err => {
           alert(err)
+          this.props.navigation.navigate("Profile")
         })
         
 
           // remove the old vehicle from the userstore mobx vehicles array
-        // const updatedPaymentArray = this.props.UserStore.payments.filter(i => i.PaymentID !== this.props.ComponentStore.selectedPayment[0].PaymentID)
-        // this.props.UserStore.payments = updatedPaymentArray
+       
        
         
 
         // navigate back to home.
         // this.props.navigation.navigate("Profile")
-      }
+ 
      
+        }
     }
 
     render(){

@@ -192,10 +192,15 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                 return doc
             }
         }).then((doc) => {
-            return [stripe.paymentMethods.detach(request.body.StripePMID), doc]
+            stripe.paymentMethods.detach(request.body.StripePMID)
+            return doc
         }).then(data => {
-            response.status(200).send(data)
-            return data
+            return response.send({
+                statusCode: 200,
+                res: "SUCCESS",
+                data: data,
+                removedCardID: request.body.PaymentID,
+            })
         }).catch((err) => {
            console.log("ERROR! " + err)
            response.status(500).send(err)
