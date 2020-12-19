@@ -86,6 +86,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
 
     exports.addSource = functions.https.onRequest((request, response) => {
       
+        // Payment method created. Still needs set up and confirmed
         return stripe.paymentMethods.create({
                 type: 'card',
                 card: {
@@ -101,16 +102,16 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
         .then((result) => {
             if(result.error){
            
-                throw new Error("Failed to create payment method")
-            }else{
-                const error = new Error("Testing error message")
+                const error = new Error("Failed to create payment method")
                 error.code = 401;
                 throw error;
-           
-                // return result
+                
+            }else{
+                return result
             }
         })    
         .then( async(card) => {
+            // Set up and send to Stripe customer
             const setupIntent = await stripe.setupIntents.create({
                 customer: request.body.stripeID,
                 payment_method: card.id,
@@ -124,16 +125,21 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
         })
         .then((result) => {
             if(result[0].error){
-                throw new Error("Failed to confirm")
+                const error = new Error("Failed to confirm")
+                error.code = 503;
+                throw error;
             }else{
                 return result
             }
         }).then(async(result) => {
+            // Get user info
             const userData = await db.collection('users').doc(request.body.FBID).get();
             return [userData, ...result]   
         }).then((doc) => {
             if(!doc[0].exists){
-                throw new Error("User does not exist")
+                const error = new Error("User does not exist")
+                error.code = 404;
+                throw error;
             }else{
                 const ref = db.collection("users").doc();
                   // add card to database
@@ -155,7 +161,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
            
 
     
-                response.send({
+                response.status(200).send({
                     statusCode: 200,
                     message: "Successfully saved card",
                     card: {
@@ -185,13 +191,13 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
             //     );
             // }
 
-            await console.log(err.message)
+            await console.error(`Your error is ${err.statusCode}: ${err.message} `)
             
-            response.send({
-                statusCode: err.code,
+            return response.status(err.statusCode || 500).send({
+                statusCode: err.statusCode,
                 message: err.message,
             })
-            return err
+            
             
         })
     })

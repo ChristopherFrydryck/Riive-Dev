@@ -239,7 +239,11 @@ submitPayment = async() => {
             this.props.navigation.goBack(null)
           }
         }).catch(err => {
-            alert(err.message)
+           
+              console.log(`Error: ${JSON.stringify(err)}`)
+              console.log(err)
+              alert(err.message)
+            
         })
  
     
