@@ -85,7 +85,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
     } )
 
     exports.addSource = functions.https.onRequest((request, response) => {
-       
+      
         return stripe.paymentMethods.create({
                 type: 'card',
                 card: {
@@ -100,10 +100,14 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
               })
         .then((result) => {
             if(result.error){
-                response.status(500).send(err)
+           
                 throw new Error("Failed to create payment method")
             }else{
-                return result
+                const error = new Error("Testing error message")
+                error.code = 401;
+                throw error;
+           
+                // return result
             }
         })    
         .then( async(card) => {
@@ -120,7 +124,6 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
         })
         .then((result) => {
             if(result[0].error){
-                response.status(500).send(err)
                 throw new Error("Failed to confirm")
             }else{
                 return result
@@ -130,7 +133,6 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
             return [userData, ...result]   
         }).then((doc) => {
             if(!doc[0].exists){
-                response.status(500).send("User does not exist")
                 throw new Error("User does not exist")
             }else{
                 const ref = db.collection("users").doc();
@@ -152,11 +154,26 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                     })
            
 
-                response.status(200).send([doc[1], ref.id])
+    
+                response.send({
+                    statusCode: 200,
+                    message: "Successfully saved card",
+                    card: {
+                        PaymentID: ref.id,
+                        StripeID: doc[1].id,
+                        StripePMID: doc[2],
+                        Type: "Card",
+                        CardType: request.body.creditCardType !== "" ? request.body.creditCardType : "Credit",
+                        Name: request.body.name,
+                        Month: request.body.expMonth,
+                        Year: request.body.expYear,
+                        Number: request.body.number.slice(-4),
+                        CCV: request.body.cvc,
+                    },
+                })
                 return doc[1];
             }
         }).catch(async(err) => {
-            console.log(err)
             // If created card, delete it.
             // let toBeDeleted = await stripe.paymentMethods.retrieve(
             //     pmID
@@ -168,9 +185,14 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
             //     );
             // }
 
-        //    console.log("ERROR! " + err)
-           response.status(500).send(err)
-           return null
+            await console.log(err.message)
+            
+            response.send({
+                statusCode: err.code,
+                message: err.message,
+            })
+            return err
+            
         })
     })
 

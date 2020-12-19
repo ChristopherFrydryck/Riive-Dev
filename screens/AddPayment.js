@@ -212,33 +212,36 @@ submitPayment = async() => {
     if(this.state.allValid){
       
 
-        await this.addSource().then((card) => {
+  
+        this.addSource().then((result) => {
+          console.log(`result is: ${JSON.stringify(result)}`)
+
           
-          if(card[0].status == "succeeded"){
-            
-            // add card to mobx UserStore
+          if(result.statusCode !== 200){
+            throw result
+          }else{
+               // add card to mobx UserStore
            
-              this.props.UserStore.payments.push({
-                  PaymentID: card[1],
-                  StripeID: card[0].id,
-                  StripePMID: card[0].payment_method,
-                  Type: "Card",
-                  CardType: this.state.creditCardType !== "" ? this.state.creditCardType : "Credit",
-                  Name: this.state.name,
-                  Month: this.state.expMonth,
-                  Year: this.state.expYear,
-                  Number: this.state.creditCardNum.slice(-4),
-                  CCV: this.state.CCV,
-              })
-            
-          // navigate back to profile
-          this.props.navigation.goBack(null)
-        }else{
-          throw new Error(`Failed to save card. ${card[0].raw.message} Error code ${card[0].statusCode}.`)
-        }
+               this.props.UserStore.payments.push({
+                PaymentID: result.card.PaymentID,
+                StripeID: result.card.StripeID,
+                StripePMID: result.card.PMID,
+                Type: "Card",
+                CardType: this.state.creditCardType !== "" ? this.state.creditCardType : "Credit",
+                Name: this.state.name,
+                Month: this.state.expMonth,
+                Year: this.state.expYear,
+                Number: this.state.creditCardNum.slice(-4),
+                CCV: this.state.CCV,
+            })
+          
+            // navigate back to profile
+            this.props.navigation.goBack(null)
+          }
         }).catch(err => {
-          alert(err)
+            alert(err.message)
         })
+ 
     
       }else{
         this.setState({creditCardNumError: 'Credit card type is not supported'})
