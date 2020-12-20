@@ -103,7 +103,8 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
             if(result.error){
            
                 const error = new Error("Failed to create payment method")
-                error.code = 401;
+                error.statusCode = 401;
+                error.name = 'Stripe/PaymentMethodFailure'
                 throw error;
                 
             }else{
@@ -126,7 +127,8 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
         .then((result) => {
             if(result[0].error){
                 const error = new Error("Failed to confirm")
-                error.code = 503;
+                error.statusCode = 503;
+                error.name = 'Stripe/SetupIntentFailure'
                 throw error;
             }else{
                 return result
@@ -137,10 +139,13 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
             return [userData, ...result]   
         }).then((doc) => {
             if(!doc[0].exists){
-                const error = new Error("User does not exist")
-                error.code = 404;
+                const error = new Error("Failed to get your information")
+                error.statusCode = 404;
+                error.name = 'Auth/UserDoesNotExist'
                 throw error;
             }else{
+
+                
                 const ref = db.collection("users").doc();
                   // add card to database
                 
@@ -180,22 +185,21 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
                 return doc[1];
             }
         }).catch(async(err) => {
-            // If created card, delete it.
-            // let toBeDeleted = await stripe.paymentMethods.retrieve(
-            //     pmID
-            // );
 
-            // if(toBeDeleted){
-            //     await stripe.paymentMethods.detach(
-            //         pmID
-            //     );
-            // }
+        
 
-            await console.error(`Your error is ${err.statusCode}: ${err.message} `)
+
+            // If error is after mounting payment to stripe, detatch it
+            if(err.statusCode === 404){
+                await stripe.paymentMethods.detach(
+                    pmID
+                );
+            }
             
             return response.status(err.statusCode || 500).send({
                 statusCode: err.statusCode,
                 message: err.message,
+                name: err.name
             })
             
             
