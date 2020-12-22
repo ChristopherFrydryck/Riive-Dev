@@ -66,6 +66,7 @@ class addPayment extends Component {
             nameError: "",
             expError: "",
             allValid: false,
+            authenticating: false,
         }
     }
 
@@ -211,10 +212,11 @@ submitPayment = async() => {
     
     if(this.state.allValid){
       
-
+        await this.setState({authenticating: true})
   
-        this.addSource().then((result) => {
-          console.log(`result is: ${JSON.stringify(result)}`)
+        this.addSource().then(async(result) => {
+          // console.log(`result is: ${JSON.stringify(result)}`)
+          
 
           
           if(result.statusCode !== 200){
@@ -238,10 +240,10 @@ submitPayment = async() => {
             // navigate back to profile
             this.props.navigation.goBack(null)
           }
-        }).catch(err => {
-           
-              console.log(`Error: ${JSON.stringify(err)}`)
-              console.log(err)
+        }).catch(async(err) => {
+              await this.setState({authenticating: false})
+              // console.log(`Error: ${JSON.stringify(err)}`)
+              // console.log(err)
               alert(err.message)
             
         })
@@ -259,29 +261,6 @@ submitPayment = async() => {
 }
 
 
-deleteSource = async () => {
-
-  const settings = {
-    method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      stripeID: this.props.UserStore.stripeID,
-      cardSource: this.state.StripecardId,
-      FBID: firebase.auth().currentUser.uid,
-    })
-  }
-  try{
-    
-    const fetchResponse = await fetch('https://us-central1-riive-parking.cloudfunctions.net/deleteSource', settings)
-    const data = await fetchResponse.json();
-    return data;
-  }catch(e){
-    alert(e);
-  }    
-}
 
 
 
@@ -475,7 +454,7 @@ verifyInput = () => {
               />
           </View>  
           </View>
-        <Button onPress={() => this.submitPayment()}>Test</Button>
+        <Button style={{backgroundColor: Colors.apollo700}} disabled={this.state.authenticating} textStyle={{color: 'white'}} onPress={() => this.submitPayment()}>{this.state.authenticating ? "Saving Card" : "Save Card"}</Button>
       </View>
       </ScrollView>
     );

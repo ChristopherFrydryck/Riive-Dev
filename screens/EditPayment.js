@@ -104,7 +104,7 @@ class EditPayment extends React.Component{
         if(this._isMounted){
 
      
-        await this.deleteSource().then(result => {  
+        this.deleteSource().then(result => {  
           console.log(result.removedCardID)
             if(result.statusCode !== 200){
                 throw new Error(`Failed to delete card.`)
