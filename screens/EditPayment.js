@@ -49,6 +49,8 @@ class EditPayment extends React.Component{
             nameError: "",
             expError: "",
             allValid: false,
+
+            authenticating: false,
         }
     }
 
@@ -102,10 +104,11 @@ class EditPayment extends React.Component{
     deletePayment = async () => {
 
         if(this._isMounted){
+          await this.setState({authenticating: true})
 
      
         this.deleteSource().then(result => {  
-          console.log(result.removedCardID)
+          // console.log(result.removedCardID)
             if(result.statusCode !== 200){
                 throw new Error(`Failed to delete card.`)
             }else{
@@ -114,9 +117,9 @@ class EditPayment extends React.Component{
               this.props.navigation.navigate("Profile")
             }
         
-        }).catch(err => {
+        }).catch(async(err) => {
+          await this.setState({authenticating: false})
           alert(err)
-          this.props.navigation.navigate("Profile")
         })
         
 
@@ -213,7 +216,7 @@ class EditPayment extends React.Component{
               />
           </View>  
           </View> */}
-        <Button style={{backgroundColor: 'white', borderColor: Colors.hal300, borderWidth: 2}} textStyle={{color: Colors.hal300}} onPress={() => this.deletePayment()}>Delete Card</Button>
+        <Button style={{backgroundColor: 'white', borderColor: Colors.hal300, borderWidth: 2}} textStyle={{color: Colors.hal300}} disabled={this.state.authenticating} onPress={() => this.deletePayment()}>Delete Card</Button>
       </View>
       </ScrollView>
     );
