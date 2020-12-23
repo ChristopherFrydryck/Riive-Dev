@@ -127,6 +127,12 @@ class externalSpace extends React.Component {
         this.props.navigation.navigate("ExternalProfile")
     }
 
+    goToReserveSpace = () => {
+        this.props.navigation.navigate("ReserveSpace", {
+            homeState: {...this.props.navigation.state.params.homeState},
+        })
+      }
+
 
 
     render(){
@@ -236,7 +242,7 @@ class externalSpace extends React.Component {
                         </View>
                     </ScrollView>
                     <View style={styles.contentBox}>
-                        <Button style = {{backgroundColor: Colors.tango700, height: 48}} textStyle={{color: 'white'}}>Reserve Space</Button>
+                        <Button onPress={() => this.goToReserveSpace()} style = {{backgroundColor: Colors.tango700, height: 48}} textStyle={{color: 'white'}}>Reserve Space</Button>
                     </View>
                   </View>
         )

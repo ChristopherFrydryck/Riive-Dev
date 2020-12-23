@@ -159,6 +159,8 @@ export default class Home extends Component{
     }
 
    componentDidMount(){
+        // let {searchParams} = this.props.ComponentStore;
+
          // Set Status Bar page info here!
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             if(this.state.searchFilterOpen){
@@ -170,6 +172,14 @@ export default class Home extends Component{
             }
            
           });
+
+        //   searchParams.region = {
+        //       latitude: this.state.region.current.latitude,
+        //       longitude: this.state.region.current.longitude,
+        //       latitudeDelta: this.state.region.current.latitudeDelta,
+        //       longitudeDelta: this.state.region.current.longitudeDelta
+        //   }
+          
 
           this.rippleAnimation();
           this.getCurrentLocation(true);
@@ -500,7 +510,10 @@ export default class Home extends Component{
 
           goToSpaceProfile = () => {
             actionSheetRef.current?.setModalVisible(false);
-            this.props.navigation.navigate("ExternalSpace")
+            this.props.navigation.navigate("ExternalSpace", {
+                homeState: {...this.state},
+            })
+            
           }
 
           goToReserveSpace = () => {
