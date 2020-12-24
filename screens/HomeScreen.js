@@ -282,7 +282,9 @@ export default class Home extends Component{
         
             actionSheetRef.current?.setModalVisible()
 
-            // console.log(this.state.selectedSpace)
+        
+
+            
         }
 
         getResults = async (lat, lng, radius, prevLat, prevLng) => {
@@ -505,7 +507,9 @@ export default class Home extends Component{
           goToHostProfile = () => {
               this.props.ComponentStore.selectedUser.push(this.state.selectedSpaceHost);
               actionSheetRef.current?.setModalVisible(false);
-              this.props.navigation.navigate("ExternalProfile")
+              this.props.navigation.navigate("ExternalProfile", {
+                homeState: {...this.state},
+            })
           }
 
           goToSpaceProfile = () => {

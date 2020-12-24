@@ -49,6 +49,8 @@ export default class ExternalProfile extends Component{
             StatusBar.setBarStyle('light-content', true);
             Platform.OS === 'android' && StatusBar.setBackgroundColor(Colors.tango900);
           });
+
+  
     }
     
     getListings = () => {
@@ -213,7 +215,7 @@ export default class ExternalProfile extends Component{
                             <View style={[styles.container, {marginTop: 8}]}>
                                 {host.listings.length == 0 || host.listings.length <= 1 ? <Text style={styles.categoryTitle}>Hosted Space</Text> : <Text style={{fontSize: 20, marginRight: 'auto'}}>Hosted Spaces</Text>}
                             </View>
-                            <ExternalSpacesList listings={host.listings}/>
+                            <ExternalSpacesList searchParams={this.props.navigation.state.params.homeState} listings={host.listings}/>
                         </ScrollView>
                     </View>
   

@@ -132,7 +132,9 @@ class ExternalSpacesList extends React.Component{
                 ...spot
             })
            
-            this.props.navigation.navigate("ExternalSpace")
+            this.props.navigation.navigate("ExternalSpace", {
+                homeState: this.props.searchParams,
+            })
 
 
     }

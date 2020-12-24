@@ -72,7 +72,9 @@ class externalSpace extends React.Component {
         Platform.OS === 'android' && StatusBar.setBackgroundColor('white');
       });
 
-      let {spaceName} = this.props.ComponentStore.selectedExternalSpot[0]
+      let {spaceName, listingID} = this.props.ComponentStore.selectedExternalSpot[0]
+
+      console.log(this.props.ComponentStore.selectedExternalSpot[0].availability[0])
 
       this.props.navigation.setParams({
         title: spaceName.length > 30 ? spaceName.substring(0,20) + "..." : spaceName,

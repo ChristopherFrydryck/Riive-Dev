@@ -61,14 +61,16 @@ class reserveSpace extends Component {
 
             selectedVehicle: null,
             selectedPayment: null,
+
+            spaceAvailabilityWorks: false,
         }
         
     }
 
     async componentDidMount(){
         const { timeSearched } = this.props.navigation.state.params.homeState;
-
         await this.getDiffHours(timeSearched[0].label, timeSearched[1].label)
+        await this.checkAvailability()
 
         await this.getPrice();
 
@@ -221,6 +223,49 @@ class reserveSpace extends Component {
 
             this.setState({ hoursSpent: minutesDepart + 1 - minutesArrive == 60 ? (hoursDepart - hoursArrive) + 1 : hoursDepart - hoursArrive, minutesSpent: minutesDepart + 1 - minutesArrive == 60 ? 0 : 30})
 
+        }
+
+        checkAvailability = () => {
+            let worksArray = new Array;
+            
+            let {timeSearched, daySearched} = this.props.navigation.state.params.homeState;
+
+            this.props.ComponentStore.selectedExternalSpot[0].availability[daySearched.dayValue].data.forEach((data, i) => {
+                 // If specific time slot is marked unavailable, we will check it
+                 if(!data.available){
+                    // Check if start time is out of bounds
+                    if(parseInt(data.start) >= parseInt(timeSearched[0].label) && parseInt(data.start) <= parseInt(timeSearched[1].label)){
+                        // console.log(`Start value ${data.start} is invalid within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
+                        worksArray.push(false)
+                        
+                    }
+                    // Check if end time is out of bounds
+                    else if(parseInt(data.end) >= parseInt(timeSearched[0].label) && parseInt(data.start) <= parseInt(timeSearched[1].label)){
+                        worksArray.push(false)
+                       
+                        // console.log(`End value ${data.end} is invalid within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
+                    // If both start and end time don't interfere with filtered time slots
+                    }else{
+                        worksArray.push(true)
+                        // console.log(`Time slot ${data.id} is marked unavailable but works since ${data.start} and ${data.end} are not within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
+                    }
+                   
+                    // console.log("Time slot " + data.id + " does not work")
+                }else{
+                    worksArray.push(true)
+                    // console.log("Time slot " + data.id + " is marked available")
+                }
+
+            })
+            
+            if(worksArray.includes(false)){
+                this.setState({spaceAvailabilityWorks: false})
+            }else{
+                this.setState({spaceAvailabilityWorks: true})
+            }
+           
+       
+               
         }
 
         getPrice = async() => {
@@ -491,7 +536,7 @@ class reserveSpace extends Component {
                             <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>Total (USD)</Text>
                             <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>{this.state.total}</Text>
                         </View>
-                        <Button onPress={() => this.checkout()} style = {{backgroundColor: Colors.tango700, height: 48, marginTop: 36, marginBottom: 24}} textStyle={{color: 'white'}}>Reserve Space</Button>
+                        <Button onPress={() => this.checkout()} style = {this.state.spaceAvailabilityWorks ? styles.activeButton : styles.disabledButton} disabled={!this.state.spaceAvailabilityWorks} textStyle={this.state.spaceAvailabilityWorks ? {color: 'white'} : {color: Colors.cosmos300}}>{this.state.spaceAvailabilityWorks? "Reserve Space" : `Unavailable at ${timeSearched[0].labelFormatted}`}</Button>
                     </View>
                     
                 </ScrollView>
@@ -503,6 +548,18 @@ class reserveSpace extends Component {
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 16,
+    },
+    activeButton: {
+        backgroundColor: Colors.tango700, 
+        height: 48, 
+        marginTop: 36, 
+        marginBottom: 24
+    },
+    disabledButton:{
+        backgroundColor: Colors.mist900, 
+        height: 48, 
+        marginTop: 36, 
+        marginBottom: 24
     }
 })
 
