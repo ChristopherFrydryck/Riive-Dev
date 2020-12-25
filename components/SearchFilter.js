@@ -79,6 +79,7 @@ export default class SearchFilter extends React.PureComponent{
     componentDidUpdate(prevProps, prevState) {
         if(!prevProps.visible && this.props.visible){
             this.slideAnimate(true)
+            this._updateIndexTimes();
             this.forceUpdate();
         }
     }
@@ -479,6 +480,8 @@ export default class SearchFilter extends React.PureComponent{
         let hour = date.getHours()
         let minute = date.getMinutes();
         let minutes = minute >= 10 ? minute.toString() : "0" + minute;
+
+        // console.log(`arriveValue: ${JSON.stringify(this.state.arriveValue)}, departValue: ${this.state.departValue}`)
        
         
 
@@ -505,7 +508,7 @@ export default class SearchFilter extends React.PureComponent{
                     }
                 }
                 // Collision handling for arrive/depart times for not current day
-                if(this.state.arriveValue.key > this.state.departValue.key && this.state.scrollingTimes){
+                if(parseInt(this.state.arriveValue.label) >= parseInt(this.state.departValue.label) && this.state.scrollingTimes){
                     this.setState({departValue: this.state.endTimes[this.state.arriveValue.key], departIndex: this.state.arriveValue.key})
                 }
             // Current day
@@ -525,7 +528,7 @@ export default class SearchFilter extends React.PureComponent{
                     }
                 }
                 // Collision handling for arrive/depart times for current day
-                if(this.state.arriveValue.key > this.state.departValue.key && this.state.scrollingTimes){
+                if(parseInt(this.state.arriveValue.label) >= parseInt(this.state.departValue.label) && this.state.scrollingTimes){
                     let index = firstItemCurrentDay.indexOf(this.state.arriveValue)
                     this.setState({departValue: firstItemCurrentDayEnd[index], departIndex: index})
                 }
@@ -550,7 +553,7 @@ export default class SearchFilter extends React.PureComponent{
                 }
 
                 // Collision handling for arrive/depart times for not current day
-                if(this.state.departValue.key <= this.state.arriveValue.key && this.state.scrollingTimes){
+                if(parseInt(this.state.departValue.label) <= parseInt(this.state.arriveValue.label) && this.state.scrollingTimes){
                     this.setState({arriveValue: this.state.startTimes[this.state.departValue.key], arriveIndex: this.state.departValue.key})
                 }
             // Current day
@@ -570,7 +573,7 @@ export default class SearchFilter extends React.PureComponent{
                     }
                 }
                 // Collision handling for arrive/depart times for current day
-                if(this.state.arriveValue.key > this.state.departValue.key && this.state.scrollingTimes){
+                if(parseInt(this.state.departValue.label) <= parseInt(this.state.arriveValue.label) && this.state.scrollingTimes){
                     let index = firstItemCurrentDayEnd.indexOf(this.state.departValue)
                     this.setState({arriveValue: firstItemCurrentDay[index], arriveIndex: index})
                 }
