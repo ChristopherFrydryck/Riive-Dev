@@ -79,6 +79,7 @@ export default class SearchFilter extends React.PureComponent{
     componentDidUpdate(prevProps, prevState) {
         if(!prevProps.visible && this.props.visible){
             this.slideAnimate(true)
+            this.forceUpdate();
         }
     }
 

@@ -72,9 +72,9 @@ class externalSpace extends React.Component {
         Platform.OS === 'android' && StatusBar.setBackgroundColor('white');
       });
 
-      let {spaceName, listingID} = this.props.ComponentStore.selectedExternalSpot[0]
+      let {spaceName} = this.props.ComponentStore.selectedExternalSpot[0]
 
-      console.log(this.props.ComponentStore.selectedExternalSpot[0].availability[0])
+    
 
       this.props.navigation.setParams({
         title: spaceName.length > 30 ? spaceName.substring(0,20) + "..." : spaceName,
@@ -126,7 +126,9 @@ class externalSpace extends React.Component {
 
     goToHostProfile = () => {
         this.props.ComponentStore.selectedUser[0] = this.state.host ;
-        this.props.navigation.navigate("ExternalProfile")
+        this.props.navigation.navigate("ExternalProfile", {
+            homeState: {...this.props.navigation.state.params.homeState},
+        })
     }
 
     goToReserveSpace = () => {
