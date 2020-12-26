@@ -12,8 +12,11 @@ import Times from '../constants/TimesAvailable'
 
 
 export default class SearchFilter extends React.PureComponent{
+    _interval = 0;
+
     constructor(props){
         super(props);
+
 
         var startTimes = [];
         for (var i = 0 ; i < Times[0].start.length; i++){
@@ -44,6 +47,7 @@ export default class SearchFilter extends React.PureComponent{
 
             // Used to know if user is changing date or time
             scrollingTimes: false,
+            scrollingDates: false,
 
             dayValue: 0,
             arriveValue: filteredStarts[0],
@@ -74,15 +78,33 @@ export default class SearchFilter extends React.PureComponent{
     componentDidMount(){
         this.props.dayCallback(this.state.dayData[this.state.dayValue + 3]);
         this.props.timeCallback([this.state.arriveValue, this.state.departValue]);
+        this._interval = setInterval(() => {
+            this.setState({dayData: this.getDays()})
+            // console.log("Updating...")
+        }, 1000)
+    }
+
+    componentWillUnmount(){
+        clearInterval(this._interval)
     }
 
     componentDidUpdate(prevProps, prevState) {
+        // On opening of component
         if(!prevProps.visible && this.props.visible){
             this.slideAnimate(true)
-            this._updateIndexTimes();
-            this.forceUpdate();
+            this.setState({dayData: this.getDays()})
+            this.forceUpdate(); 
         }
+        // Scrolling dates check current date
+        if(!prevState.scrollingDates && this.state.scrollingDates){
+            this.setState({dayData: this.getDays()})
+        }
+        
+       
     }
+
+
+    
 
     
 
@@ -627,6 +649,8 @@ export default class SearchFilter extends React.PureComponent{
                             keyExtractor={item => item.index.toString()}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
+                            onMomentumScrollBegin={() => this.setState({scrollingDates: true})}
+                            onMomentumScrollEnd={() => this.setState({scrollingDates: false})}
 
                             contentContainerStyle={{marginLeft: -20}}
 
