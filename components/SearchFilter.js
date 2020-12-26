@@ -12,7 +12,7 @@ import Times from '../constants/TimesAvailable'
 
 
 export default class SearchFilter extends React.PureComponent{
-    _interval = 0;
+
 
     constructor(props){
         super(props);
@@ -78,14 +78,11 @@ export default class SearchFilter extends React.PureComponent{
     componentDidMount(){
         this.props.dayCallback(this.state.dayData[this.state.dayValue + 3]);
         this.props.timeCallback([this.state.arriveValue, this.state.departValue]);
-        this._interval = setInterval(() => {
-            this.setState({dayData: this.getDays()})
-            // console.log("Updating...")
-        }, 1000)
+
     }
 
     componentWillUnmount(){
-        clearInterval(this._interval)
+   
     }
 
     componentDidUpdate(prevProps, prevState) {
