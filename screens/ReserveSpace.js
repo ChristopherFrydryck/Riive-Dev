@@ -219,9 +219,9 @@ class reserveSpace extends Component {
             let minutesArrive = parseInt(arriveArray[2] + "" + arriveArray[3]) 
             let minutesDepart = parseInt(departArray[2] + "" + departArray[3]) 
 
-            
+            console.log(`${minutesArrive} and ${minutesDepart}`)
 
-            this.setState({ hoursSpent: minutesDepart + 1 - minutesArrive == 60 ? (hoursDepart - hoursArrive) + 1 : hoursDepart - hoursArrive, minutesSpent: minutesDepart + 1 - minutesArrive == 60 ? 0 : 30})
+            this.setState({ hoursSpent: minutesDepart + 1 + minutesArrive == 60 ? (hoursDepart - hoursArrive) + 1 : hoursDepart - hoursArrive, minutesSpent: minutesDepart + 1 + minutesArrive == 60 ? 0 : 30})
 
         }
 
@@ -269,6 +269,7 @@ class reserveSpace extends Component {
         }
 
         getPrice = async() => {
+            console.log(`${this.state.hoursSpent} hours and ${this.state.minutesSpent} minutes`)
             let price = (this.state.hoursSpent * this.props.ComponentStore.selectedExternalSpot[0].spacePriceCents) + (this.state.minutesSpent === 0 ? 0 : Math.ceil(this.props.ComponentStore.selectedExternalSpot[0].spacePriceCents / 2));
 
             
