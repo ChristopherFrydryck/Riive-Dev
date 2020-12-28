@@ -485,6 +485,8 @@ export default class SearchFilter extends React.PureComponent{
             this.setState({departValue: firstItemCurrentDayEnd[this.state.departIndex]})
         }
         await this.slideAnimate(true)
+
+        
         this.goToIndexArrivals(this.state.arriveIndex, false)
        
         await this.props.dayCallback(this.state.dayData[this.state.dayValue + 3]);

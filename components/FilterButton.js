@@ -9,15 +9,15 @@ export default class FilterButton extends Component{
     render(){
         return(
             <TouchableOpacity onPress={() => this.setState(this.props.onPress)} disabled={this.props.disabled ? true : false} style={this.props.searchFilterOpen ? styles.filterButtonOpen : styles.filterButtonClosed}>
-                {this.props.searchFilterOpen ?
+                {/* {this.props.searchFilterOpen ?
                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}}>
                     <Text style={{paddingRight: 8}}>Close Filters</Text>
                     <Icon iconSize={24} iconName="arrow-up"/>                
                 </View>
                 
-                :
+                : */}
                 <Text numberOfLines={2} style={{fontSize: 13, lineHeight: 16}}>{`${this.props.daySearched.dayName}  \n${this.props.timeSearched[0].labelFormatted} to ${this.props.timeSearched[1].labelFormatted}`}</Text>
-                }
+                {/* } */}
                 
             </TouchableOpacity>
         )

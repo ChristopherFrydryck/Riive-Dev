@@ -19,6 +19,7 @@ import Colors from '../constants/Colors'
 import SearchFilter from '../components/SearchFilter'
 import Times from '../constants/TimesAvailable'
 
+
 import axios from 'axios'
 
 //For Shimmer
@@ -43,6 +44,8 @@ import * as geofirestore from 'geofirestore'
 
 //MobX Imports
 import {inject, observer} from 'mobx-react/native'
+import { Constants } from 'expo-constants';
+import { TouchableWithoutFeedback } from 'react-native';
 
 
 
@@ -99,7 +102,7 @@ export default class Home extends Component{
             inputFocus: false,
             searchedAddress: false,
             mapScrolled: false,
-            searchFilterOpen: true,
+            searchFilterOpen: false,
             searchInputValue: '',
             region: {
                 searched: {
@@ -541,9 +544,15 @@ export default class Home extends Component{
         
         return(
                 <SafeAreaView style={{flex: 1, position: 'relative', backgroundColor: this.state.searchFilterOpen ? Colors.tango500 : 'white'}}>
-                    
+              
+                    {/* Search Filter component */}
+                    <View style={{opacity: this.state.searchFilterOpen ? 1 : 0,  marginTop: Platform.OS === 'ios' ? 40 : StatusBar.currentHeight, zIndex: 999, position: 'absolute'}}>
                         <SearchFilter visible={this.state.searchFilterOpen} currentSearch={this.state.searchInputValue} timeCallback={(data) => this.searchFilterTimeCallback(data)} dayCallback={(data) => this.searchFilterDayCallback(data)}/>
-
+                        {this.state.searchFilterOpen ? 
+                        <TouchableOpacity onPress={() => this.filterResults()} style={{width: width, height: height, backgroundColor: 'black', opacity: 0.3}} disabled={this.state.timeSearched[0].key > this.state.timeSearched[1].key ? true : false}/>
+                        : null}
+                    </View>
+                    
 
                     <View style={{paddingHorizontal: 16, paddingBottom: this.state.searchFilterOpen ? 0 : 36, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "space-between"}}>
                         <Text type="semiBold" numberOfLines={1} style={{flex: this.state.searchFilterOpen ? 0 : 4,fontSize: 24, paddingTop: 8}}>{this.state.searchFilterOpen ? "" : `Hello, ${firstname || 'traveler'}`}</Text>
