@@ -81,6 +81,7 @@ class addSpace extends Component {
               zip: null,
               spaceNumber: null,
             },
+            utcOffset: null,
             
             searchedAddress: false,
             addressValid: false,
@@ -363,6 +364,7 @@ class addSpace extends Component {
  
 
 
+
       if(this.state.searchedAddress && this.state.spacePrice && this.state.nameValid && this.state.bioValid && this.state.photo){
 
        
@@ -392,6 +394,7 @@ class addSpace extends Component {
                       listingID: this.state.postID,
                       hostID: this.props.UserStore.userID,
                       address: this.state.address,
+                      utcOffset: this.state.utcOffset,
                       region: this.state.region,
                       photo: this.state.photo,
                       spaceName: this.state.spaceName,
@@ -411,6 +414,7 @@ class addSpace extends Component {
                   listingID: this.state.postID,
                   hostID: this.props.UserStore.userID,
                   address: this.state.address,
+                  utcOffset: this.state.utcOffset,
                   region: this.state.region,
                   photo: this.state.photo,
                   spaceName: this.state.spaceName,
@@ -486,7 +490,69 @@ class addSpace extends Component {
 onSelectAddress = (det) => {
   // console.log(det.formatted_address)
   // console.log(det.geometry.location.lat);
-  // console.log(det.address_components)
+  // console.log(det.address_c omponents)
+
+  
+  let gmtValue = null;
+  
+  // If it is not UTC 0
+  if(det.utc_offset !== 0){
+    let gmtOffset = det.utc_offset/60;
+    let gmtAbs = Math.abs(gmtOffset)
+    console.log(gmtAbs)
+    // If the GMT offset is one whole number
+    if(gmtAbs.toString().length == 1){
+      // If ahead of GMT
+      if(gmtOffset > 0){
+        gmtValue = `GMT+0${gmtAbs}:00`
+        // If behind GMT
+      }else{
+        gmtValue = `GMT-0${gmtAbs}:00`
+      }
+    // If GMT offset is longer than one whole number
+    }else{
+      // Check if whole number
+      if(gmtOffset % 1 == 0){
+        // If ahead of GMT
+        if(gmtOffset > 0){
+          gmtValue = `GMT+${gmtAbs}:00`
+          // If behind GMT
+        }else{
+          gmtValue = `GMT-${gmtAbs}:00`
+        }
+      // Offset it not a whole number
+      }else{
+          let gmtSplit = gmtOffset.toString().split(".")
+          let hours = parseInt(gmtSplit[0])
+          let minutes = parseFloat(gmtOffset - hours) * 60
+          
+          if(hours.toString().length == 1){
+            // If ahead of GMT
+            if(gmtOffset > 0){
+              gmtValue = `GMT+0${hours}:${minutes}`
+              // If behind GMT
+            }else{
+              gmtValue = `GMT-0${hours}:${minutes}`
+            }
+          }else{
+             // If ahead of GMT
+             if(gmtOffset > 0){
+              gmtValue = `GMT+${hours}:${minutes}`
+              // If behind GMT
+            }else{
+              gmtValue = `GMT-${hours}:${minutes}`
+            }
+          }
+          
+
+       }   
+      }
+  }else{
+    gmtValue = `GMT`
+  }
+
+  console.log(gmtValue)
+ 
   
   var number = det.address_components.filter(x => x.types.includes('street_number'))[0]
   var street = det.address_components.filter(x => x.types.includes('route'))[0]
@@ -499,6 +565,7 @@ onSelectAddress = (det) => {
   if(number && street && city && county && state){
     this.setState(prevState => ({
       searchedAddress: true,
+      utcOffset: det.utc_offset,
       region:{
         latitude: det.geometry.location.lat,
         longitude: det.geometry.location.lng,
@@ -533,6 +600,7 @@ clearAddress = () => {
   this.GooglePlacesRef.setAddressText("")
   this.setState(prevState => ({
     searchedAddress: false,
+    utcOffset: null,
     address:{
       ...prevState.address,
       full: null,
