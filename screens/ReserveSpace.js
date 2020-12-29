@@ -345,38 +345,64 @@ class reserveSpace extends Component {
 
                             let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
                             let timeZoneAbbr = new Date().toLocaleTimeString('en-us',{timeZoneName:'short'}).split(' ')[2]
-                            let startDate = new Date(currentYear, monthNames.indexOf(daySearched.monthName), daySearched.dateName, timeSearched[0].label.slice(0,2), timeSearched[0].label.slice(2,4)).toLocaleString('en-US', {timezone: timeZone})
-                            let endDate = new Date(currentYear, monthNames.indexOf(daySearched.monthName), daySearched.dateName, timeSearched[1].label.slice(0,2), timeSearched[1].label.slice(2,4), 59).toLocaleString('en-US', {timezone: timeZone})
-                            // const ref = db.collection("trips").doc();
-                            // var currentTime = firebase.firestore.Timestamp.now();
 
-                            // var obj = {
-                            //     hostID: hostDoc.id,
-                            //     hostStripeID: stripeID,
-                            //     isCancelled: false,
-                            //     listingID: this.props.ComponentStore.selectedExternalSpot[0].listingID,
-                            //     listingSubSpaceID: null,
-                            //     payment: this.state.selectedPayment,
-                            //     price: this.state.total,
-                            //     priceCents: this.state.totalCents,
-                            //     tripID: ref.id,
-                            //     updated: currentTime,
-                            //     vehicle: this.state.selectedVehicle,
-                            //     visit: {
-                            //         day: daySearched,
-                            //         time: {
-                            //             start: {
-                            //                 label: timeSearched[0].label,
-                            //                 labelFormatted: timeSearched[0].labelFormatted,
-                            //                 unix: 0,
-                            //             }
-                            //         }
+                            
+                            
+                            let startDate = new Date(currentYear, monthNames.indexOf(daySearched.monthName), daySearched.dateName, timeSearched[0].label.slice(0,2), timeSearched[0].label.slice(2,4));
+                            let startDateString = startDate.toLocaleString('en-US', {timezone: timeZone});
 
-                            //     }
+                            let endDate = new Date(currentYear, monthNames.indexOf(daySearched.monthName), daySearched.dateName, timeSearched[1].label.slice(0,2), timeSearched[1].label.slice(2,4), 59);
+                            let endDateString = new Date(currentYear, monthNames.indexOf(daySearched.monthName), daySearched.dateName, timeSearched[1].label.slice(0,2), timeSearched[1].label.slice(2,4), 59).toLocaleString('en-US', {timezone: timeZone});
 
-                            // }
-                            console.log(startDate)
-                            console.log(timeZoneAbbr)
+
+                            const ref = db.collection("trips").doc();
+                            var currentTime = firebase.firestore.Timestamp.now();
+
+                            
+
+                            var obj = {
+                                hostID: hostDoc.id,
+                                hostStripeID: hostDoc.stripeID,
+                                isCancelled: false,
+                                listingID: this.props.ComponentStore.selectedExternalSpot[0].listingID,
+                                listingSubSpaceID: null,
+                                payment: this.state.selectedPayment,
+                                price: this.state.total,
+                                priceCents: this.state.totalCents,
+                                tripID: ref.id,
+                                updated: currentTime,
+                                vehicle: this.state.selectedVehicle,
+                                visitorID: this.props.UserStore.userID,
+                                searchedAddress: searchedAddress,
+                                searchInputValue: searchInputValue,
+                                distanceWalking: locationDifferenceWalking,
+                                visit: {
+                                    day: daySearched,
+                                    time: {
+                                        timeZone: timeZone,
+                                        timeZoneAbbr: timeZoneAbbr,
+                                        start: {
+                                            label: timeSearched[0].label,
+                                            labelFormatted: timeSearched[0].labelFormatted,
+                                            unix: startDate.getTime(),
+                                            dateString: startDateString,
+                                            dateUTC: startDate,
+                                        },
+                                        end: {
+                                            label: timeSearched[1].label,
+                                            labelFormatted: timeSearched[1].labelFormatted,
+                                            unix: startDate.getTime(),
+                                            dateString: endDateString,
+                                            dateUTC: endDate,
+                                        },
+                                    },
+
+                                },
+                            }
+
+                            console.log(obj)
+                            
+                            // console.log(startDateString)
                             // console.log(obj)
                             // console.log(hostDoc)
                             // console.log(`Host is: ${hostDoc.stripeID}`)
@@ -384,8 +410,8 @@ class reserveSpace extends Component {
                             // console.log(`Vehicle is ${this.state.selectedVehicle.Year} ${this.state.selectedVehicle.Make} ${this.state.selectedVehicle.Model}`)
                             // console.log(`Payment SETI is ${this.state.selectedPayment.StripeID}`)
                             // await this.payForSpace(hostDoc.stripeID)
-                        }catch{
-                            throw "Failed to process payment"
+                        }catch(e){
+                            throw e
                         }
                     }).catch(e => {
                         console.log(e)
