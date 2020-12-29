@@ -333,12 +333,54 @@ class reserveSpace extends Component {
                     await hostRef.get().then((hostDoc) => {
                         return hostDoc.data();
                     }).then(async (hostDoc) => {
+                        
                         try{
+                            const { region, searchedAddress, searchInputValue, daySearched, timeSearched, locationDifferenceWalking } = this.props.navigation.state.params.homeState;
+                            var today = new Date()
+                            let currentYear = today.getMonth() === 11 && daySearched.monthName === "January" ? today.getFullYear() + 1 : today.getFullYear();
+
+                            const monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"
+                            ];
+
+
+
+
+                            let startDate = new Date(currentYear, monthNames.indexOf(daySearched.monthName), daySearched.dateName, parseInt(timeSearched[0].label.slice(0,2)), parseInt(timeSearched[0].label.slice(2,4)))
+                            // const ref = db.collection("trips").doc();
+                            // var currentTime = firebase.firestore.Timestamp.now();
+
+                            // var obj = {
+                            //     hostID: hostDoc.id,
+                            //     hostStripeID: stripeID,
+                            //     isCancelled: false,
+                            //     listingID: this.props.ComponentStore.selectedExternalSpot[0].listingID,
+                            //     listingSubSpaceID: null,
+                            //     payment: this.state.selectedPayment,
+                            //     price: this.state.total,
+                            //     priceCents: this.state.totalCents,
+                            //     tripID: ref.id,
+                            //     updated: currentTime,
+                            //     vehicle: this.state.selectedVehicle,
+                            //     visit: {
+                            //         day: daySearched,
+                            //         time: {
+                            //             start: {
+                            //                 label: timeSearched[0].label,
+                            //                 labelFormatted: timeSearched[0].labelFormatted,
+                            //                 unix: 0,
+                            //             }
+                            //         }
+
+                            //     }
+
+                            // }
+                            console.log(startDate)
+                            // console.log(obj)
                             // console.log(hostDoc)
-                            console.log(`Host is: ${hostDoc.stripeID}`)
-                            console.log(`Visitor is: ${this.props.UserStore.stripeID}`)
-                            console.log(`Vehicle is ${this.state.selectedVehicle.Year} ${this.state.selectedVehicle.Make} ${this.state.selectedVehicle.Model}`)
-                            console.log(`Payment SETI is ${this.state.selectedPayment.StripeID}`)
+                            // console.log(`Host is: ${hostDoc.stripeID}`)
+                            // console.log(`Visitor is: ${this.props.UserStore.stripeID}`)
+                            // console.log(`Vehicle is ${this.state.selectedVehicle.Year} ${this.state.selectedVehicle.Make} ${this.state.selectedVehicle.Model}`)
+                            // console.log(`Payment SETI is ${this.state.selectedPayment.StripeID}`)
                             // await this.payForSpace(hostDoc.stripeID)
                         }catch{
                             throw "Failed to process payment"

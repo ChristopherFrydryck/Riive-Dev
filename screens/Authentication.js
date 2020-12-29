@@ -374,6 +374,7 @@ resetPassword = () =>{
                       listings: [],
                       vehicles: [],
                       payments: [],
+                      trips: [],
                       photo: '',
                       joined_date: firebase.auth().currentUser.metadata.creationTime,
                       last_update: firebase.auth().currentUser.metadata.creationTime,
@@ -400,6 +401,7 @@ resetPassword = () =>{
                     this.props.UserStore.vehicles = [];
                     this.props.UserStore.listings = [];
                     this.props.UserStore.payments = [];
+                    this.props.UserStore.trips = [];
                     this.props.UserStore.searchHistory = [];
                     this.props.UserStore.disabled = false;
                     this.props.UserStore.deleted = false;
@@ -510,6 +512,7 @@ resetPassword = () =>{
                   this.props.UserStore.last_update = doc.data().last_update;
                   this.props.UserStore.vehicles = doc.data().vehicles;
                   this.props.UserStore.listings = [];
+                  this.props.UserStore.trips = doc.data().trips;
                   this.props.UserStore.payments = doc.data().payments;
                   this.props.UserStore.searchHistory = doc.data().searchHistory;
                   this.props.UserStore.disabled = doc.data().disabled.isDisabled;

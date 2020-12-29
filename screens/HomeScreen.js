@@ -182,7 +182,6 @@ export default class Home extends Component{
         //       latitudeDelta: this.state.region.current.latitudeDelta,
         //       longitudeDelta: this.state.region.current.longitudeDelta
         //   }
-          
           await this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.latitudeDelta * 69, 99999.9999, 99999.9999)
           this.rippleAnimation();
           this.getCurrentLocation(true);
@@ -232,7 +231,10 @@ export default class Home extends Component{
         }
 
         filterResults = async() => {
-            await this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, 99999.9999, 99999.9999)
+            if(this.state.searchFilterOpen){
+                await this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, 99999.9999, 99999.9999)
+            }
+            
             await this.setState({searchFilterOpen: !this.state.searchFilterOpen})
             
 
@@ -291,7 +293,6 @@ export default class Home extends Component{
         }
 
         getResults = async (lat, lng, radius, prevLat, prevLng) => {
-
             let results = [];
             
              // Create a Firestore reference
@@ -474,6 +475,7 @@ export default class Home extends Component{
             let prevLng = this.state.region.current.longitude;
 
             await clearInterval(this._interval)
+            await this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, prevLat, prevLng)
             await this.setState(prevState => ({
                 region: {
                     ...prevState.region,
@@ -490,7 +492,7 @@ export default class Home extends Component{
             this.mapScrolling = false;
             this.mapLocationFunction();
             
-            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, prevLat, prevLng)
+            
             
         }
 
