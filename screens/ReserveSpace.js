@@ -339,13 +339,14 @@ class reserveSpace extends Component {
                             var today = new Date()
                             let currentYear = today.getMonth() === 11 && daySearched.monthName === "January" ? today.getFullYear() + 1 : today.getFullYear();
 
-                            const monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"
-                            ];
+                            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
+                            // timeSearched[0].label.slice(0,2), timeSearched[0].label.slice(2,4)
 
-
-
-                            let startDate = new Date(currentYear, monthNames.indexOf(daySearched.monthName), daySearched.dateName, parseInt(timeSearched[0].label.slice(0,2)), parseInt(timeSearched[0].label.slice(2,4)))
+                            let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+                            let timeZoneAbbr = new Date().toLocaleTimeString('en-us',{timeZoneName:'short'}).split(' ')[2]
+                            let startDate = new Date(currentYear, monthNames.indexOf(daySearched.monthName), daySearched.dateName, timeSearched[0].label.slice(0,2), timeSearched[0].label.slice(2,4)).toLocaleString('en-US', {timezone: timeZone})
+                            let endDate = new Date(currentYear, monthNames.indexOf(daySearched.monthName), daySearched.dateName, timeSearched[1].label.slice(0,2), timeSearched[1].label.slice(2,4), 59).toLocaleString('en-US', {timezone: timeZone})
                             // const ref = db.collection("trips").doc();
                             // var currentTime = firebase.firestore.Timestamp.now();
 
@@ -375,6 +376,7 @@ class reserveSpace extends Component {
 
                             // }
                             console.log(startDate)
+                            console.log(timeZoneAbbr)
                             // console.log(obj)
                             // console.log(hostDoc)
                             // console.log(`Host is: ${hostDoc.stripeID}`)
