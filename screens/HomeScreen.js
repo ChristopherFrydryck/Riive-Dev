@@ -161,7 +161,7 @@ export default class Home extends Component{
 
     }
 
-   componentDidMount(){
+   componentDidMount = async() => {
         // let {searchParams} = this.props.ComponentStore;
 
          // Set Status Bar page info here!
@@ -183,10 +183,10 @@ export default class Home extends Component{
         //       longitudeDelta: this.state.region.current.longitudeDelta
         //   }
           
-
+          await this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.latitudeDelta * 69, 99999.9999, 99999.9999)
           this.rippleAnimation();
           this.getCurrentLocation(true);
-          this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.latitudeDelta * 69, 99999.9999, 99999.9999)
+          
           
           
     
@@ -231,10 +231,10 @@ export default class Home extends Component{
             ).start()
         }
 
-        filterResults = () => {
-
-            this.setState({searchFilterOpen: !this.state.searchFilterOpen})
-            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, 99999.9999, 99999.9999)
+        filterResults = async() => {
+            await this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, 99999.9999, 99999.9999)
+            await this.setState({searchFilterOpen: !this.state.searchFilterOpen})
+            
 
              
         }
@@ -336,6 +336,7 @@ export default class Home extends Component{
                let resultsFiltered = results.filter(res => !res.space.hidden && !res.space.toBeDeleted && !res.host.deleted.toBeDeleted && !res.host.deleted.isDeleted && !this.props.UserStore.deleted && !res.host.disabled.isDisabled)
                let resultsFilteredTimeAvail = new Array;
 
+            
                
                
 

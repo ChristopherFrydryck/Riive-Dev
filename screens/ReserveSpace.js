@@ -219,7 +219,7 @@ class reserveSpace extends Component {
             let minutesArrive = parseInt(arriveArray[2] + "" + arriveArray[3]) 
             let minutesDepart = parseInt(departArray[2] + "" + departArray[3]) 
 
-            console.log(`${minutesArrive} and ${minutesDepart}`)
+            
 
             this.setState({ hoursSpent: minutesDepart + 1 + minutesArrive == 60 ? (hoursDepart - hoursArrive) + 1 : hoursDepart - hoursArrive, minutesSpent: minutesDepart + 1 + minutesArrive == 60 ? 0 : 30})
 
@@ -269,7 +269,7 @@ class reserveSpace extends Component {
         }
 
         getPrice = async() => {
-            console.log(`${this.state.hoursSpent} hours and ${this.state.minutesSpent} minutes`)
+            // console.log(`${this.state.hoursSpent} hours and ${this.state.minutesSpent} minutes`)
             let price = (this.state.hoursSpent * this.props.ComponentStore.selectedExternalSpot[0].spacePriceCents) + (this.state.minutesSpent === 0 ? 0 : Math.ceil(this.props.ComponentStore.selectedExternalSpot[0].spacePriceCents / 2));
 
             
@@ -334,6 +334,7 @@ class reserveSpace extends Component {
                         return hostDoc.data();
                     }).then(async (hostDoc) => {
                         try{
+                            // console.log(hostDoc)
                             console.log(`Host is: ${hostDoc.stripeID}`)
                             console.log(`Visitor is: ${this.props.UserStore.stripeID}`)
                             console.log(`Vehicle is ${this.state.selectedVehicle.Year} ${this.state.selectedVehicle.Make} ${this.state.selectedVehicle.Model}`)

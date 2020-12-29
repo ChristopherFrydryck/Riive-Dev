@@ -445,7 +445,7 @@ class editSpace extends Component {
                 updated: createdTime,
                 hidden: this.state.hidden,
                 toBeDeleted: this.state.toBeDeleted,
-                visits: this.state.visits,
+
                })
 
                

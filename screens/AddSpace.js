@@ -404,7 +404,6 @@ class addSpace extends Component {
                       hidden: false,
                       toBeDeleted: false,
                       visits: []
-                 
                })
 
                // add space to mobx UserStore
@@ -423,7 +422,7 @@ class addSpace extends Component {
                   created: createdTime,
                   hidden: false,
                   toBeDeleted: false,
-                  visits: []
+                  visits: [],
                })
 
                   // navigate back to profile
