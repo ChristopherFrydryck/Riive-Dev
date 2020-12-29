@@ -24,6 +24,8 @@ import Image from '../components/Image'
 import DayAvailabilityPicker from '../components/DayAvailabilityPicker'
 import { LinearGradient } from 'expo-linear-gradient'
 
+import Timezones from '../constants/Timezones'
+
 import * as firebase from 'firebase'
 import 'firebase/firestore';
 import firebaseConfig from '../firebaseConfig'
@@ -81,7 +83,7 @@ class addSpace extends Component {
               zip: null,
               spaceNumber: null,
             },
-            utcOffset: null,
+            timezone: null,
             
             searchedAddress: false,
             addressValid: false,
@@ -394,7 +396,7 @@ class addSpace extends Component {
                       listingID: this.state.postID,
                       hostID: this.props.UserStore.userID,
                       address: this.state.address,
-                      utcOffset: this.state.utcOffset,
+                      timezone: this.state.timezone,
                       region: this.state.region,
                       photo: this.state.photo,
                       spaceName: this.state.spaceName,
@@ -414,7 +416,7 @@ class addSpace extends Component {
                   listingID: this.state.postID,
                   hostID: this.props.UserStore.userID,
                   address: this.state.address,
-                  utcOffset: this.state.utcOffset,
+                  timezone: this.state.timezone,
                   region: this.state.region,
                   photo: this.state.photo,
                   spaceName: this.state.spaceName,
@@ -499,7 +501,6 @@ onSelectAddress = (det) => {
   if(det.utc_offset !== 0){
     let gmtOffset = det.utc_offset/60;
     let gmtAbs = Math.abs(gmtOffset)
-    console.log(gmtAbs)
     // If the GMT offset is one whole number
     if(gmtAbs.toString().length == 1){
       // If ahead of GMT
@@ -551,7 +552,19 @@ onSelectAddress = (det) => {
     gmtValue = `GMT`
   }
 
-  console.log(gmtValue)
+  let deviceTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+  let tzdbArray = Timezones.filter(x => x.offset === gmtValue)
+  let tzDB = tzdbArray.filter(x => x.name === deviceTimeZone)
+  let timeZoneDB;
+  
+  if(tzDB.length > 0){
+    timeZoneDB = tzDB[0]
+  }else{
+    timeZoneDB = tzdbArray[0]
+  }
+
+  console.log(timeZoneDB)
+
  
   
   var number = det.address_components.filter(x => x.types.includes('street_number'))[0]
@@ -565,7 +578,7 @@ onSelectAddress = (det) => {
   if(number && street && city && county && state){
     this.setState(prevState => ({
       searchedAddress: true,
-      utcOffset: det.utc_offset,
+      timezone: timeZoneDB,
       region:{
         latitude: det.geometry.location.lat,
         longitude: det.geometry.location.lng,
@@ -600,7 +613,7 @@ clearAddress = () => {
   this.GooglePlacesRef.setAddressText("")
   this.setState(prevState => ({
     searchedAddress: false,
-    utcOffset: null,
+    timezone: timeZoneDB,
     address:{
       ...prevState.address,
       full: null,
