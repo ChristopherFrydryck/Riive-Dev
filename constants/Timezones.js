@@ -1,375 +1,468 @@
 const timezones = [
     {
       "offset": "GMT-12:00",
-      "name": "Etc/GMT-12"
+      "name": "Etc/GMT-12",
+      "offsetValue": -12,
     },
     {
       "offset": "GMT-11:00",
-      "name": "Etc/GMT-11"
+      "name": "Pacific/Midway",
+      "offsetValue": -11,
     },
     {
       "offset": "GMT-11:00",
-      "name": "Pacific/Midway"
-    },
+      "name": "Etc/GMT-11",
+      "offsetValue": -11,
+    },  
     {
       "offset": "GMT-10:00",
-      "name": "America/Adak"
+      "name": "America/Adak",
+      "offsetValue": -10,
     },
     {
       "offset": "GMT-09:00",
-      "name": "America/Anchorage"
+      "name": "America/Anchorage",
+      "offsetValue": -9,
     },
     {
       "offset": "GMT-09:00",
-      "name": "Pacific/Gambier"
+      "name": "Pacific/Gambier",
+      "offsetValue": -9,
     },
     {
       "offset": "GMT-08:00",
-      "name": "America/Los_Angeles"
+      "name": "America/Los_Angeles",
+      "offsetValue": -8,
     },
     {
       "offset": "GMT-08:00",
-      "name": "America/Dawson_Creek"
+      "name": "America/Dawson_Creek",
+      "offsetValue": -8,
     },
     {
       "offset": "GMT-08:00",
-      "name": "America/Ensenada"
+      "name": "America/Ensenada",
+      "offsetValue": -8,
     },
     {
       "offset": "GMT-07:00",
-      "name": "America/Denver"
+      "name": "America/Denver",
+      "offsetValue": -7,
     },
     {
       "offset": "GMT-07:00",
-      "name": "America/Chihuahua"
+      "name": "America/Chihuahua",
+      "offsetValue": -7,
     },
     {
       "offset": "GMT-06:00",
-      "name": "America/Chicago"
+      "name": "America/Chicago",
+      "offsetValue": -6,
     },
     {
       "offset": "GMT-06:00",
-      "name": "America/Belize"
+      "name": "America/Belize",
+      "offsetValue": -6,
     },
     {
       "offset": "GMT-06:00",
-      "name": "America/Cancun"
+      "name": "America/Cancun",
+      "offsetValue": -6,
     },
     {
       "offset": "GMT-06:00",
-      "name": "Chile/EasterIsland"
+      "name": "Chile/EasterIsland",
+      "offsetValue": -6,
     },
     {
       "offset": "GMT-05:00",
-      "name": "America/New_York"
+      "name": "America/New_York",
+      "offsetValue": -5,
     },
     {
       "offset": "GMT-05:00",
-      "name": "America/Bogota"
+      "name": "America/Bogota",
+      "offsetValue": -5,
     },
     {
       "offset": "GMT-05:00",
-      "name": "America/Havana"
+      "name": "America/Havana",
+      "offsetValue": -5,
     },
     {
       "offset": "GMT-04:30",
-      "name": "America/Caracas"
+      "name": "America/Caracas",
+      "offsetValue": -4.5,
     },
     {
       "offset": "GMT-04:00",
-      "name": "America/Santiago"
+      "name": "America/Santiago",
+      "offsetValue": -4,
     },
     {
       "offset": "GMT-04:00",
-      "name": "America/Campo_Grande"
+      "name": "America/Campo_Grande",
+      "offsetValue": -4,
     },
     {
       "offset": "GMT-04:00",
-      "name": "America/Glace_Bay"
+      "name": "America/Glace_Bay",
+      "offsetValue": -4,
     },
     {
       "offset": "GMT-04:00",
-      "name": "America/Goose_Bay"
+      "name": "America/Goose_Bay",
+      "offsetValue": -4,
     },
     {
       "offset": "GMT-04:00",
-      "name": "America/La_Paz"
+      "name": "America/La_Paz",
+      "offsetValue": -4,
     },
     {
       "offset": "GMT-03:00",
-      "name": "America/Sao_Paulo"
+      "name": "America/Sao_Paulo",
+      "offsetValue": -3,
     },
     {
       "offset": "GMT-03:00",
-      "name": "America/Argentina/Buenos_Aires"
+      "name": "America/Argentina/Buenos_Aires",
+      "offsetValue": -3,
     },
     {
       "offset": "GMT-03:00",
-      "name": "America/Montevideo"
+      "name": "America/Montevideo",
+      "offsetValue": -3,
     },
     {
       "offset": "GMT-03:00",
-      "name": "America/Araguaina"
+      "name": "America/Araguaina",
+      "offsetValue": -3,
     },
     {
       "offset": "GMT-03:00",
-      "name": "America/Godthab"
+      "name": "America/Godthab",
+      "offsetValue": -3,
     },
     {
       "offset": "GMT-03:00",
-      "name": "America/Miquelon"
+      "name": "America/Miquelon",
+      "offsetValue": -3,
     }, 
     {
       "offset": "GMT-03:30",
-      "name": "America/St_Johns"
+      "name": "America/St_Johns",
+      "offsetValue": -3.5,
     },
     {
       "offset": "GMT-02:00",
-      "name": "America/Noronha"
+      "name": "America/Noronha",
+      "offsetValue": -2,
     },
     {
       "offset": "GMT-01:00",
-      "name": "Atlantic/Cape_Verde"
+      "name": "Atlantic/Cape_Verde",
+      "offsetValue": -1,
     },
     {
       "offset": "GMT",
-      "name": "Europe/London"
+      "name": "Europe/London",
+      "offsetValue": 0,
     },
     {
       "offset": "GMT",
-      "name": "Europe/Belfast"
+      "name": "Europe/Belfast",
+      "offsetValue": 0,
     },
     {
       "offset": "GMT",
-      "name": "Africa/Abidjan"
+      "name": "Africa/Abidjan",
+      "offsetValue": 0,
     },
     {
       "offset": "GMT",
-      "name": "Europe/Dublin"
+      "name": "Europe/Dublin",
+      "offsetValue": 0,
     },
     {
       "offset": "GMT",
-      "name": "Europe/Lisbon"
+      "name": "Europe/Lisbon",
+      "offsetValue": 0,
     },
     {
       "offset": "UTC",
-      "name": "UTC"
+      "name": "UTC",
+      "offsetValue": 0,
     },
     {
       "offset": "GMT+01:00",
-      "name": "Europe/Amsterdam"
+      "name": "Europe/Amsterdam",
+      "offsetValue": 1,
     },
     {
       "offset": "GMT+01:00",
-      "name": "Africa/Algiers"
+      "name": "Africa/Algiers",
+      "offsetValue": 1,
     },
     {
       "offset": "GMT+01:00",
-      "name": "Africa/Windhoek"
+      "name": "Africa/Windhoek",
+      "offsetValue": 1,
     },
     {
       "offset": "GMT+01:00",
-      "name": "Atlantic/Azores"
+      "name": "Atlantic/Azores",
+      "offsetValue": 1,
     },
     {
       "offset": "GMT+01:00",
-      "name": "Atlantic/Stanley"
+      "name": "Atlantic/Stanley",
+      "offsetValue": 1,
     },
     {
       "offset": "GMT+01:00",
-      "name": "Europe/Belgrade"
+      "name": "Europe/Belgrade",
+      "offsetValue": 1,
     },
     {
       "offset": "GMT+01:00",
-      "name": "Europe/Brussels"
+      "name": "Europe/Brussels",
+      "offsetValue": 1,
     },
     {
       "offset": "GMT+02:00",
-      "name": "Asia/Jerusalem"
+      "name": "Asia/Jerusalem",
+      "offsetValue": 2,
     },
     {
       "offset": "GMT+02:00",
-      "name": "Africa/Cairo"
+      "name": "Africa/Cairo",
+      "offsetValue": 2,
     },
     {
       "offset": "GMT+02:00",
-      "name": "Africa/Blantyre"
+      "name": "Africa/Blantyre",
+      "offsetValue": 2,
     },
     {
       "offset": "GMT+02:00",
-      "name": "Asia/Beirut"
+      "name": "Asia/Beirut",
+      "offsetValue": 2,
     },
     {
       "offset": "GMT+02:00",
-      "name": "Asia/Damascus"
+      "name": "Asia/Damascus",
+      "offsetValue": 2,
     },
     {
       "offset": "GMT+02:00",
-      "name": "Asia/Gaza"
+      "name": "Asia/Gaza",
+      "offsetValue": 2,
     },
     {
       "offset": "GMT+03:00",
-      "name": "Africa/Addis_Ababa"
+      "name": "Africa/Addis_Ababa",
+      "offsetValue": 3,
     },
     {
       "offset": "GMT+03:00",
-      "name": "Asia/Riyadh89"
+      "name": "Asia/Riyadh89",
+      "offsetValue": 3,
     },
     {
       "offset": "GMT+03:00",
-      "name": "Europe/Minsk"
+      "name": "Europe/Minsk",
+      "offsetValue": 3,
     },
     {
       "offset": "GMT+03:30",
-      "name": "Asia/Tehran"
+      "name": "Asia/Tehran",
+      "offsetValue": 3.5,
     },
     {
       "offset": "GMT+04:00",
-      "name": "Europe/Moscow"
+      "name": "Europe/Moscow",
+      "offsetValue": 4,
     },
     {
       "offset": "GMT+04:00",
-      "name": "Asia/Dubai"
+      "name": "Asia/Dubai",
+      "offsetValue": 4,
     },
     {
       "offset": "GMT+04:00",
-      "name": "Asia/Yerevan"
+      "name": "Asia/Yerevan",
+      "offsetValue": 4,
     },
     {
       "offset": "GMT+04:30",
-      "name": "Asia/Kabul"
+      "name": "Asia/Kabul",
+      "offsetValue": 4.5,
     },
     {
       "offset": "GMT+05:00",
-      "name": "Asia/Tashkent"
+      "name": "Asia/Tashkent",
+      "offsetValue": 5,
     },
     {
       "offset": "GMT+05:30",
-      "name": "Asia/Kolkata"
+      "name": "Asia/Kolkata",
+      "offsetValue": 5.5,
     },
     {
       "offset": "GMT+05:45",
-      "name": "Asia/Katmandu"
+      "name": "Asia/Katmandu",
+      "offsetValue": 5.75,
     },
     {
       "offset": "GMT+06:00",
-      "name": "Asia/Dhaka"
+      "name": "Asia/Dhaka",
+      "offsetValue": 6,
     },
     {
       "offset": "GMT+06:00",
-      "name": "Asia/Yekaterinburg"
+      "name": "Asia/Yekaterinburg",
+      "offsetValue": 6,
     },
     {
       "offset": "GMT+06:30",
-      "name": "Asia/Rangoon"
+      "name": "Asia/Rangoon",
+      "offsetValue": 6.5,
     },
     {
       "offset": "GMT+07:00",
-      "name": "Asia/Bangkok"
+      "name": "Asia/Bangkok",
+      "offsetValue": 7,
     },
     {
       "offset": "GMT+07:00",
-      "name": "Asia/Novosibirsk"
+      "name": "Asia/Novosibirsk",
+      "offsetValue": 7,
     },
     {
       "offset": "GMT+08:00",
-      "name": "Asia/Hong_Kong"
+      "name": "Asia/Hong_Kong",
+      "offsetValue": 8,
     },
     {
       "offset": "GMT+08:00",
-      "name": "Etc/GMT+8"
+      "name": "Etc/GMT+8",
+      "offsetValue": 8,
     },
     {
       "offset": "GMT+08:00",
-      "name": "Asia/Krasnoyarsk"
+      "name": "Asia/Krasnoyarsk",
+      "offsetValue": 8,
     },
     {
       "offset": "GMT+08:00",
-      "name": "Australia/Perth"
+      "name": "Australia/Perth",
+      "offsetValue": 8,
     },
     {
       "offset": "GMT+08:45",
-      "name": "Australia/Eucla"
+      "name": "Australia/Eucla",
+      "offsetValue": 8.75,
     },
     {
       "offset": "GMT+09:00",
-      "name": "Asia/Tokyo"
+      "name": "Asia/Tokyo",
+      "offsetValue": 9,
     },
     {
       "offset": "GMT+09:00",
-      "name": "Asia/Irkutsk"
+      "name": "Asia/Irkutsk",
+      "offsetValue": 9,
     },
     {
       "offset": "GMT+09:00",
-      "name": "Asia/Seoul"
+      "name": "Asia/Seoul",
+      "offsetValue": 9,
     },
     {
       "offset": "GMT+09:30",
-      "name": "Australia/Adelaide"
+      "name": "Australia/Adelaide",
+      "offsetValue": 9.5,
     },
     {
       "offset": "GMT+09:30",
-      "name": "Australia/Darwin"
+      "name": "Australia/Darwin",
+      "offsetValue": 9.5,
     },
     {
       "offset": "GMT+09:30",
-      "name": "Pacific/Marquesas"
+      "name": "Pacific/Marquesas",
+      "offsetValue": 9.5,
     },
     {
       "offset": "GMT+10:00",
-      "name": "Australia/Brisbane"
+      "name": "Australia/Brisbane",
+      "offsetValue": 10,
     },
     {
       "offset": "GMT+10:00",
-      "name": "Etc/GMT+10"
+      "name": "Etc/GMT+10",
+      "offsetValue": 10,
     },
     {
       "offset": "GMT+10:00",
-      "name": "Australia/Hobart"
+      "name": "Australia/Hobart",
+      "offsetValue": 10,
     },
     {
       "offset": "GMT+10:00",
-      "name": "Asia/Yakutsk"
+      "name": "Asia/Yakutsk",
+      "offsetValue": 10,
     },
     {
       "offset": "GMT+10:30",
-      "name": "Australia/Lord_Howe"
+      "name": "Australia/Lord_Howe",
+      "offsetValue": 10.5,
     },
     {
       "offset": "GMT+11:00",
-      "name": "Asia/Vladivostok"
+      "name": "Asia/Vladivostok",
+      "offsetValue": 11,
     },
     {
       "offset": "GMT+11:30",
-      "name": "Pacific/Norfolk"
+      "name": "Pacific/Norfolk",
+      "offsetValue": 11.5,
     },
     {
       "offset": "GMT+12:00",
-      "name": "Pacific/Auckland"
+      "name": "Pacific/Auckland",
+      "offsetValue": 12,
     },
     {
       "offset": "GMT+12:00",
-      "name": "Etc/GMT+12"
+      "name": "Etc/GMT+12",
+      "offsetValue": 12,
     },
     {
       "offset": "GMT+12:00",
-      "name": "Asia/Anadyr"
+      "name": "Asia/Anadyr",
+      "offsetValue": 12,
     },
     {
       "offset": "GMT+12:00",
-      "name": "Asia/Magadan"
+      "name": "Asia/Magadan",
+      "offsetValue": 12,
     },
     {
       "offset": "GMT+12:45",
-      "name": "Pacific/Chatham"
+      "name": "Pacific/Chatham",
+      "offsetValue": 12.75,
     },
     {
       "offset": "GMT+13:00",
-      "name": "Pacific/Tongatapu"
+      "name": "Pacific/Tongatapu",
+      "offsetValue": 13,
     },
     {
       "offset": "GMT+14:00",
-      "name": "Pacific/Kiritimati"
+      "name": "Pacific/Kiritimati",
+      "offsetValue": 14,
     }
   ]
 
