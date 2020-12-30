@@ -25,6 +25,10 @@ const timezones = [
     },
     {
       "offset": "GMT-08:00",
+      "name": "America/Los_Angeles"
+    },
+    {
+      "offset": "GMT-08:00",
       "name": "America/Dawson_Creek"
     },
     {
@@ -32,16 +36,16 @@ const timezones = [
       "name": "America/Ensenada"
     },
     {
-      "offset": "GMT-08:00",
-      "name": "America/Los_Angeles"
+      "offset": "GMT-07:00",
+      "name": "America/Denver"
     },
     {
       "offset": "GMT-07:00",
       "name": "America/Chihuahua"
     },
     {
-      "offset": "GMT-07:00",
-      "name": "America/Denver"
+      "offset": "GMT-06:00",
+      "name": "America/Chicago"
     },
     {
       "offset": "GMT-06:00",
@@ -53,11 +57,11 @@ const timezones = [
     },
     {
       "offset": "GMT-06:00",
-      "name": "America/Chicago"
+      "name": "Chile/EasterIsland"
     },
     {
-      "offset": "GMT-06:00",
-      "name": "Chile/EasterIsland"
+      "offset": "GMT-05:00",
+      "name": "America/New_York"
     },
     {
       "offset": "GMT-05:00",
@@ -68,12 +72,12 @@ const timezones = [
       "name": "America/Havana"
     },
     {
-      "offset": "GMT-05:00",
-      "name": "America/New_York"
-    },
-    {
       "offset": "GMT-04:30",
       "name": "America/Caracas"
+    },
+    {
+      "offset": "GMT-04:00",
+      "name": "America/Santiago"
     },
     {
       "offset": "GMT-04:00",
@@ -89,11 +93,11 @@ const timezones = [
     },
     {
       "offset": "GMT-04:00",
-      "name": "America/Santiago"
+      "name": "America/La_Paz"
     },
     {
-      "offset": "GMT-04:00",
-      "name": "America/La_Paz"
+      "offset": "GMT-03:00",
+      "name": "America/Sao_Paulo"
     },
     {
       "offset": "GMT-03:00",
@@ -114,11 +118,7 @@ const timezones = [
     {
       "offset": "GMT-03:00",
       "name": "America/Miquelon"
-    },
-    {
-      "offset": "GMT-03:00",
-      "name": "America/Sao_Paulo"
-    },
+    }, 
     {
       "offset": "GMT-03:30",
       "name": "America/St_Johns"
@@ -130,6 +130,10 @@ const timezones = [
     {
       "offset": "GMT-01:00",
       "name": "Atlantic/Cape_Verde"
+    },
+    {
+      "offset": "GMT",
+      "name": "Europe/London"
     },
     {
       "offset": "GMT",
@@ -148,12 +152,12 @@ const timezones = [
       "name": "Europe/Lisbon"
     },
     {
-      "offset": "GMT",
-      "name": "Europe/London"
-    },
-    {
       "offset": "UTC",
       "name": "UTC"
+    },
+    {
+      "offset": "GMT+01:00",
+      "name": "Europe/Amsterdam"
     },
     {
       "offset": "GMT+01:00",
@@ -173,15 +177,15 @@ const timezones = [
     },
     {
       "offset": "GMT+01:00",
-      "name": "Europe/Amsterdam"
-    },
-    {
-      "offset": "GMT+01:00",
       "name": "Europe/Belgrade"
     },
     {
       "offset": "GMT+01:00",
       "name": "Europe/Brussels"
+    },
+    {
+      "offset": "GMT+02:00",
+      "name": "Asia/Jerusalem"
     },
     {
       "offset": "GMT+02:00",
@@ -204,10 +208,6 @@ const timezones = [
       "name": "Asia/Gaza"
     },
     {
-      "offset": "GMT+02:00",
-      "name": "Asia/Jerusalem"
-    },
-    {
       "offset": "GMT+03:00",
       "name": "Africa/Addis_Ababa"
     },
@@ -225,15 +225,15 @@ const timezones = [
     },
     {
       "offset": "GMT+04:00",
+      "name": "Europe/Moscow"
+    },
+    {
+      "offset": "GMT+04:00",
       "name": "Asia/Dubai"
     },
     {
       "offset": "GMT+04:00",
       "name": "Asia/Yerevan"
-    },
-    {
-      "offset": "GMT+04:00",
-      "name": "Europe/Moscow"
     },
     {
       "offset": "GMT+04:30",
@@ -273,11 +273,11 @@ const timezones = [
     },
     {
       "offset": "GMT+08:00",
-      "name": "Etc/GMT+8"
+      "name": "Asia/Hong_Kong"
     },
     {
       "offset": "GMT+08:00",
-      "name": "Asia/Hong_Kong"
+      "name": "Etc/GMT+8"
     },
     {
       "offset": "GMT+08:00",
@@ -293,15 +293,15 @@ const timezones = [
     },
     {
       "offset": "GMT+09:00",
+      "name": "Asia/Tokyo"
+    },
+    {
+      "offset": "GMT+09:00",
       "name": "Asia/Irkutsk"
     },
     {
       "offset": "GMT+09:00",
       "name": "Asia/Seoul"
-    },
-    {
-      "offset": "GMT+09:00",
-      "name": "Asia/Tokyo"
     },
     {
       "offset": "GMT+09:30",
@@ -317,11 +317,11 @@ const timezones = [
     },
     {
       "offset": "GMT+10:00",
-      "name": "Etc/GMT+10"
+      "name": "Australia/Brisbane"
     },
     {
       "offset": "GMT+10:00",
-      "name": "Australia/Brisbane"
+      "name": "Etc/GMT+10"
     },
     {
       "offset": "GMT+10:00",
@@ -345,6 +345,10 @@ const timezones = [
     },
     {
       "offset": "GMT+12:00",
+      "name": "Pacific/Auckland"
+    },
+    {
+      "offset": "GMT+12:00",
       "name": "Etc/GMT+12"
     },
     {
@@ -354,10 +358,6 @@ const timezones = [
     {
       "offset": "GMT+12:00",
       "name": "Asia/Magadan"
-    },
-    {
-      "offset": "GMT+12:00",
-      "name": "Pacific/Auckland"
     },
     {
       "offset": "GMT+12:45",
