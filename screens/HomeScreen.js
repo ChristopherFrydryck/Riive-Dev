@@ -475,7 +475,7 @@ export default class Home extends Component{
             let prevLng = this.state.region.current.longitude;
 
             await clearInterval(this._interval)
-            await this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, prevLat, prevLng)
+            
             await this.setState(prevState => ({
                 region: {
                     ...prevState.region,
@@ -488,6 +488,7 @@ export default class Home extends Component{
                 },
                 mapScrolled: true,
             }))
+            await this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, prevLat, prevLng)
 
             this.mapScrolling = false;
             this.mapLocationFunction();

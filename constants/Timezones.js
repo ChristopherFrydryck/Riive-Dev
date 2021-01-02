@@ -1,7 +1,7 @@
 const timezones = [
     {
       "offset": "GMT-12:00",
-      "name": "Etc/GMT-12",
+      "name": "Etc/GMT+12",
       "offsetValue": -12,
       "timeZoneName": "International Date Line West",
       "timeZoneAbbr": "IDLW",
@@ -213,8 +213,8 @@ const timezones = [
       "offset": "GMT-03:30",
       "name": "America/St_Johns",
       "offsetValue": -3.5,
-
-
+      "timeZoneName": "Newfounland Standard Time",
+      "timeZoneAbbr": "NST",
     },
     {
       "offset": "GMT-02:00",

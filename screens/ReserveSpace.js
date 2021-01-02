@@ -63,6 +63,7 @@ class reserveSpace extends Component {
             selectedPayment: null,
 
             spaceAvailabilityWorks: false,
+            inSameTimezone: false,
         }
         
     }
@@ -73,6 +74,12 @@ class reserveSpace extends Component {
         await this.checkAvailability()
 
         await this.getPrice();
+
+       
+        // Check if space is in same timezone as current device
+        if(this.props.ComponentStore.selectedExternalSpot[0].timezone.offsetValue + new Date().getTimezoneOffset()/60 === 0){
+            this.setState({inSameTimezone: true})
+        }
 
         if(this.props.UserStore.vehicles.length > 0){
             let vehicle = this.props.UserStore.vehicles[0]
@@ -400,7 +407,9 @@ class reserveSpace extends Component {
                                 },
                             }
 
-                            console.log(obj)
+                            
+                            console.log(this.state.inSameTimezone)
+                         
                             
                             // console.log(startDateString)
                             // console.log(obj)
@@ -541,8 +550,9 @@ class reserveSpace extends Component {
 
                         <View style={{flexDirection: 'row', alignItems: "flex-end", justifyContent: 'space-between', marginTop: 16}}>
                             <View style={{flexDirection: 'column', alignItems: 'center', flex: 1}}>
+                                
                                 <Text type="light" numberOfLines={1} style={{fontSize: 18}}>Arrival</Text>
-                                <Text numberOfLines={1} style={{fontSize: 20, color: Colors.tango700}}>{this.convertToCommonTime(timeSearched[0].label)}</Text>
+                                <Text numberOfLines={1} style={{fontSize: 20, color: Colors.tango700}}>{this.convertToCommonTime(timeSearched[0].label)} {this.state.inSameTimezone ? null : this.props.ComponentStore.selectedExternalSpot[0].timezone.timeZoneAbbr}</Text>
                             </View>
                             <Icon 
                                 iconName="arrow-right"
@@ -552,7 +562,7 @@ class reserveSpace extends Component {
                             />
                             <View style={{flexDirection: 'column', alignItems: 'center', flex: 1}}>
                                 <Text type="light" numberOfLines={1} style={{fontSize: 18}}>Departure</Text>
-                                <Text numberOfLines={1} style={{fontSize: 20, color: Colors.tango700}}>{this.convertToCommonTime(timeSearched[1].label)}</Text>
+                                <Text numberOfLines={1} style={{fontSize: 20, color: Colors.tango700}}>{this.convertToCommonTime(timeSearched[1].label)} {this.state.inSameTimezone ? null : this.props.ComponentStore.selectedExternalSpot[0].timezone.timeZoneAbbr}</Text>
                             </View>
                         </View>
                     </View>
