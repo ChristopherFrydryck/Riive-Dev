@@ -699,7 +699,7 @@ renderDotsView = (numItems, position) =>{
                    
                   </Modal>
 
-
+                  <SafeAreaView>
                   <View>
                     <ScrollView
                         horizontal={true}
@@ -795,6 +795,8 @@ renderDotsView = (numItems, position) =>{
                     
                   
                   </View>
+              
+                  </SafeAreaView>
                   
                 </KeyboardAwareScrollView>
       )

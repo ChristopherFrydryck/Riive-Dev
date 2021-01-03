@@ -26,6 +26,7 @@ const ProfileNavigator = createStackNavigator({
     
     initialRouteName: "Profile",
     
+    
     // headerMode: "none", 
 });
 

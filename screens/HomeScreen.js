@@ -198,7 +198,7 @@ export default class Home extends Component{
                   this.getCurrentLocation(false)
                 //   console.log("Got new location")
                 }
-              }, 5000)
+              }, 60000)
               
         }
 

@@ -1,10 +1,9 @@
 import React from 'react'
-import {View, Picker, StyleSheet, Platform, Dimensions} from 'react-native'
+import {View, Picker, StyleSheet, Platform, Dimensions, SafeAreaView} from 'react-native'
 import Text from './Txt'
 import ModalSelector from 'react-native-modal-selector'
 import Icon from './Icon'
 import Color from '../constants/Colors'
-import SafeAreaView from 'react-native-safe-area-view'
 import Colors from '../constants/Colors'
 
 

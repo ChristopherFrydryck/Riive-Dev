@@ -91,6 +91,7 @@ export default class App extends React.Component {
   render() {
     if (this.state.fontLoaded){
       return (
+        
         <Provider {...stores}>
           <AuthNavigator initRoute="Home"/>
         </Provider>
