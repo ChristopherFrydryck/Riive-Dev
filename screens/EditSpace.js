@@ -57,7 +57,7 @@ class editSpace extends Component {
           fontWeight: "300",
           fontSize: 18,
       },
-      headerRight:(
+      headerRight: () => (
         <TouchableOpacity
           onPress={() => params.openEditModal()}
           style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16}}
@@ -72,6 +72,7 @@ class editSpace extends Component {
         </TouchableOpacity>
       )
     }
+    
 };
 
 

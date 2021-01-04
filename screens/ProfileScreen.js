@@ -59,7 +59,7 @@ let phoneValid = true;
 class Profile extends Component{
 
     static navigationOptions = {
-        header: null
+        headerShown: false
     };
     
     constructor(props){
