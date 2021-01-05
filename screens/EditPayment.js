@@ -140,8 +140,8 @@ class EditPayment extends React.Component{
             // <View>
             //     <Text>{this.props.ComponentStore.selectedPayment[0].PaymentID}</Text>
             // </View>
-            <ScrollView>
-      <SafeAreaView style={{flex: 0, backgroundColor: "white", }} />
+      <ScrollView style={{flex: 1, backgroundColor: "white", }}>
+      <SafeAreaView style={{flex: 0}} />
       <View style={styles.container}>
         <LinearGradient colors={[Colors.apollo500, Colors.apollo700]} style={styles.creditCard}>
             <Icon 

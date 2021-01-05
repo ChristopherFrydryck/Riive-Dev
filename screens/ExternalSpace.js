@@ -144,7 +144,7 @@ class externalSpace extends React.Component {
         if(this.state.host){
        
         return(
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, backgroundColor: 'white'}}>
                 <ScrollView >
                 <View>
                     <ScrollView

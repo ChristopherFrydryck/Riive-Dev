@@ -378,7 +378,7 @@ verifyInput = () => {
   render() {
     return (
       
-      <ScrollView>
+      <ScrollView style={{backgroundColor: 'white'}}>
       <SafeAreaView style={{flex: 0, backgroundColor: "white", }} />
       <View style={styles.container}>
         <LinearGradient colors={[Colors.apollo500, Colors.apollo700]} style={styles.creditCard}>

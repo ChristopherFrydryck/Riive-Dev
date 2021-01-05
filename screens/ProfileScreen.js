@@ -495,7 +495,7 @@ class Profile extends Component{
 
         return(
             <Provider>
-                <View style={{flex: 1}}>
+                <View style={{flex: 1, backgroundColor: 'white'}}>
 
                 {/* Edit Account Modal!!! */}
                 <Modal

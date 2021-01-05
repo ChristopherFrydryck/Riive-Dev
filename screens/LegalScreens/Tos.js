@@ -13,7 +13,7 @@ class TOS extends React.Component{
 
     render(){
         return(
-            <ScrollView>
+            <ScrollView style={{backgroundColor: 'white'}}>
                 <View style={styles.container}>
                 <Text style={styles.para}>Riive provides on an online platform which has the sole purpose of enabling 
                     vehicle owners (“Guests”) and parking space holders (“Hosts”) to connect, 

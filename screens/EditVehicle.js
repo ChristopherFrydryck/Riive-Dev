@@ -1,5 +1,5 @@
 import React from "react"
-import { View, Platform, Picker, StatusBar, StyleSheet, ActivityIndicator} from 'react-native'
+import { View, ScrollView, Platform, Picker, StatusBar, StyleSheet, ActivityIndicator} from 'react-native'
 import Input from '../components/Input'
 import Dropdown from '../components/Dropdown'
 import Button from '../components/Button'
@@ -349,7 +349,7 @@ class AddVehicle extends React.Component{
                       "White"]
 
         return(
-            <View style={styles.container}>
+            <ScrollView style={[styles.container, {backgroundColor: 'white'}]}>
                 <View style={{flexDirection: "row" }}>
                     <Input 
                         flex= {1}
@@ -452,18 +452,18 @@ class AddVehicle extends React.Component{
                 </View> 
                 <Button style={{backgroundColor: Colors.tango900}} textStyle={{color: 'white'}} onPress={() => this.submitVehicle()}>Save Vehicle</Button>
                 <Button style={{backgroundColor: 'white', borderColor: Colors.hal300, borderWidth: 2}} textStyle={{color: Colors.hal300}} onPress={() => this.deleteVehicle()}>Delete Vehicle</Button>
-            </View>
+            </ScrollView>
         )
     }
 }
 
 const styles = StyleSheet.create({
     container:{
-        // flex: 1,
+        flex: 1,
         // only use for emulator
         // marginTop: getStatusBarHeight(),
         padding: 20,
-        justifyContent: 'center',
+      
         // flexDirection: 'row'
     }
 })

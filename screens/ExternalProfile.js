@@ -127,6 +127,7 @@ export default class ExternalProfile extends Component{
         
         if(host && allListings){
             return(
+            <View style={{flex: 1, backgroundColor: 'white'}}>
                 <Provider>
                 <SafeAreaView style={{ flexDirection: "column", backgroundColor: Colors.tango900}} />
                     <View style={{flex: 1}}>
@@ -170,7 +171,7 @@ export default class ExternalProfile extends Component{
                             /> */}
                         </TopBar>
                         </LinearGradient>
-                        <View style={{flex: 0, paddingHorizontal: 16}}>
+                        <View style={{ flex: 0, paddingHorizontal: 16}}>
                             <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-start'}}>
                             <ProfilePic 
                                 source={{uri: host.photo}}
@@ -220,6 +221,7 @@ export default class ExternalProfile extends Component{
                     </View>
   
                 </Provider>
+                </View>
             )
         }else{
             return(

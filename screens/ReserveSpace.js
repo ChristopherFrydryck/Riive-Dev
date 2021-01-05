@@ -551,6 +551,7 @@ class reserveSpace extends Component {
           return(
               <ScrollView
                 stickyHeaderIndices={searchedAddress ? [2] : [1]}
+                style={{backgroundColor: 'white'}}
               >
                     <MapView
                         provider={MapView.PROVIDER_GOOGLE}

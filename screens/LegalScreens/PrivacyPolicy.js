@@ -13,7 +13,7 @@ class PrivacyPolicy extends React.Component{
 
     render(){
         return(
-            <ScrollView>
+            <ScrollView style={{backgroundColor: 'white'}}>
                 <View style={styles.container}>
                     <Text style={styles.para}>
                     Riive, Inc. (“Riive,” “we,” “us”) takes your privacy very seriously. We provide this Privacy Policy to inform you of our policies and procedures regarding the collection, use and disclosure of personal information we receive from Users of our website at Riive.com (the “Site”) and the Riive iOS mobile device application (the “App”) or any other products provided by Riive, Inc. The Site, App, and all other Riive services are collectively referred to as the “Services.” This Privacy Policy applies only to information that you provide to us through use of the Services or by direct contact with a representative of Riive. By using the Services, you are agreeing to be bound by these policies. Our privacy policy will be updated as necessary. We will notify you of any material changes and all updates to the privacy policy will be posted on the Site and within the Mobile App.</Text>

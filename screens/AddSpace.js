@@ -646,7 +646,7 @@ clearAddress = () => {
       <KeyboardAwareScrollView
       keyboardShouldPersistTaps="handled"
       automaticallyAdjustContentInsets={false}
-      contentContainerStyle={{ flexGrow: 1 }} scrollEnabled
+      contentContainerStyle={{ flexGrow: 1, backgroundColor: 'white' }} scrollEnabled
       enableOnAndroid={true}
       extraScrollHeight={150} //iOS
       extraHeight={135} //Android
