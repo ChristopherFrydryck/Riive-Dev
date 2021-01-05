@@ -104,29 +104,7 @@ export default class Home extends Component{
             mapScrolled: false,
             searchFilterOpen: false,
             searchInputValue: '',
-            region: {
-                searched: {
-                    latitude: null,
-                    longitude: null,
-                    latitudeDelta: null,
-                    longitudeDelta: null,
-                },
-                current: {
-                    latitude: 37.8020,
-                    longitude: -122.4486,
-                    latitudeDelta: 0.025,
-                    longitudeDelta: 0.025,
-                }
-              },
-              currentLocation: {
-                  description: "Current Location",
-                  geometry: {
-                      location: {
-                          lat: null,
-                          lng: null,
-                      }
-                  }
-              },
+            
               daySearched: {
                 index: 0,
                 dayName: days[(date.getDay())%7],
@@ -154,7 +132,30 @@ export default class Home extends Component{
 
         this.mapScrolling = false;
         this.results = [];
-
+        
+        this.region = {
+            searched: {
+                latitude: null,
+                longitude: null,
+                latitudeDelta: null,
+                longitudeDelta: null,
+            },
+            current: {
+                latitude: 37.8020,
+                longitude: -122.4486,
+                latitudeDelta: 0.025,
+                longitudeDelta: 0.025,
+            }
+          }
+          this.currentLocation = {
+              description: "Current Location",
+              geometry: {
+                  location: {
+                      lat: null,
+                      lng: null,
+                  }
+              }
+          }
 
         
       
@@ -177,14 +178,16 @@ export default class Home extends Component{
           });
 
         //   searchParams.region = {
-        //       latitude: this.state.region.current.latitude,
-        //       longitude: this.state.region.current.longitude,
-        //       latitudeDelta: this.state.region.current.latitudeDelta,
-        //       longitudeDelta: this.state.region.current.longitudeDelta
+        //       latitude: this.region.current.latitude,
+        //       longitude: this.region.current.longitude,
+        //       latitudeDelta: this.region.current.latitudeDelta,
+        //       longitudeDelta: this.region.current.longitudeDelta
         //   }
-          await this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.latitudeDelta * 69, 99999.9999, 99999.9999)
+          await this.getCurrentLocation(true);
+          await this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.latitudeDelta * 69, 99999.9999, 99999.9999)
+          
           this.rippleAnimation();
-          this.getCurrentLocation(true);
+          
           
           
           
@@ -232,7 +235,7 @@ export default class Home extends Component{
 
         filterResults = async() => {
             if(this.state.searchFilterOpen){
-                await this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, 99999.9999, 99999.9999)
+                await this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.longitudeDelta * 69, 99999.9999, 99999.9999)
             }
             
             await this.setState({searchFilterOpen: !this.state.searchFilterOpen})
@@ -278,7 +281,7 @@ export default class Home extends Component{
             // const hostData = db.collection('users').doc(space.hostID);
         
             if(this.state.searchInputValue.split("").length > 0){
-                await this.getDistance(`${data.space.region.latitude}, ${data.space.region.longitude}`, `${this.state.region.searched.latitude}, ${this.state.region.searched.longitude}`, "walking")
+                await this.getDistance(`${data.space.region.latitude}, ${data.space.region.longitude}`, `${this.region.searched.latitude}, ${this.region.searched.longitude}`, "walking")
             }
             // await hostData.get().then(doc => {
             //     this.setState({selectedSpaceHost: doc.data()})
@@ -405,38 +408,36 @@ export default class Home extends Component{
                 }
                 let location = await Location.getCurrentPositionAsync({});
                 if(isFirstTime){
-                    this.setState(prevState => ({
-                        region: {
-                            ...prevState.region,
-                            current: {
-                                ...prevState.region.current,
-                                latitude: location.coords.latitude,
-                                longitude: location.coords.longitude
-                            }
-                        },
-                        currentLocation:{
-                            ...prevState.currentLocation,
-                            geometry: {
-                                location: {
-                                    lat: location.coords.latitude,
-                                    lng: location.coords.longitude,
-                                }
+                    this.region = {
+                        ...this.region,
+                        current: {
+                            ...this.region.current,
+                            latitude: location.coords.latitude,
+                            longitude: location.coords.longitude
+                        }
+                    }
+
+                    this.currentLocation = {
+                        ...this.currentLocation,
+                        geometry: {
+                            location: {
+                                lat: location.coords.latitude,
+                                lng: location.coords.longitude,
                             }
                         }
-                        
-                    }))
+                    }
+                 
                 }else{
-                    this.setState(prevState => ({
-                        currentLocation:{
-                            ...prevState.currentLocation,
+                    this.currentLocation = {
+                        ...this.currentLocation,
                             geometry: {
                                 location: {
                                     lat: location.coords.latitude,
                                     lng: location.coords.longitude,
                                 }
                             }
-                        }
-                    }))
+                    }
+
                 }
                
                 
@@ -447,48 +448,62 @@ export default class Home extends Component{
         }
 
         onSelectAddress = (det) => {
-            this.setState(prevState => ({
-                region: {
-                    current: {
-                        ...prevState.region.current,
-                        latitude: det.geometry.location.lat,
-                        longitude: det.geometry.location.lng
-                    },
-                    searched:{
-                        ...prevState.region.current,
-                        latitude: det.geometry.location.lat,
-                        longitude: det.geometry.location.lng
-                    }
-                    
+            this.region = {
+                current: {
+                    ...this.region.current,
+                    latitude: det.geometry.location.lat,
+                    longitude: det.geometry.location.lng
                 },
+                searched: {
+                    ...this.region.current,
+                    latitude: det.geometry.location.lat,
+                    longitude: det.geometry.location.lng
+                }
+            }
+            this.setState(prevState => ({
+                // region: {
+                //     current: {
+                //         ...prevState.region.current,
+                //         latitude: det.geometry.location.lat,
+                //         longitude: det.geometry.location.lng
+                //     },
+                //     searched:{
+                //         ...prevState.region.current,
+                //         latitude: det.geometry.location.lat,
+                //         longitude: det.geometry.location.lng
+                //     }
+                    
+                // },
                 mapScrolled: false,
                 searchedAddress: true,
                 searchInputValue: det.description == "Current Location" ? "Current Location" : det.name,
 
             }));
 
-            this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, 99999.9999, 99999.9999)
+            this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.longitudeDelta * 69, 99999.9999, 99999.9999)
         }
 
         onRegionChange = async (region) => {
-            let prevLat = this.state.region.current.latitude;
-            let prevLng = this.state.region.current.longitude;
+            let prevLat = this.region.current.latitude;
+            let prevLng = this.region.current.longitude;
 
             await clearInterval(this._interval)
+
+            this.region = await {
+                ...this.region,
+                current: {
+                    latitudeDelta: region.latitudeDelta,
+                    longitudeDelta: region.longitudeDelta,
+                    latitude: region.latitude,
+                    longitude: region.longitude
+                }
+            }
             
             await this.setState(prevState => ({
-                region: {
-                    ...prevState.region,
-                    current: {
-                        latitudeDelta: region.latitudeDelta,
-                        longitudeDelta: region.longitudeDelta,
-                        latitude: region.latitude,
-                        longitude: region.longitude
-                    }
-                },
                 mapScrolled: true,
             }))
-            await this.getResults(this.state.region.current.latitude, this.state.region.current.longitude, this.state.region.current.longitudeDelta * 69, prevLat, prevLng)
+
+            await this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.longitudeDelta * 69, prevLat, prevLng)
 
             this.mapScrolling = false;
             this.mapLocationFunction();
@@ -499,14 +514,16 @@ export default class Home extends Component{
 
         clearAddress = () => {
             this.GooglePlacesRef.setAddressText("")
+             
+
             this.setState(prevState => ({
                 searchedAddress: false,
-                region: {
-                    ...prevState.region,
-                    searched: {
-                        ...prevState.region.current
-                    },
-                },
+                // region: {
+                //     ...prevState.region,
+                //     searched: {
+                //         ...prevState.region.current
+                //     },
+                // },
                 searchInputValue: '',
             }))
           }
@@ -576,19 +593,19 @@ export default class Home extends Component{
                         onRegionChangeComplete={region =>  this.onRegionChange(region)}
                         onRegionChange={() => this.mapScrolling = true}
                         initialRegion={{
-                            latitude: this.state.region.current.latitude || 37.8020,
-                            longitude: this.state.region.current.longitude || -122.4486,
-                            latitudeDelta:this.state.region.current.latitudeDelta || 0.025,
-                            longitudeDelta: this.state.region.current.longitudeDelta || 0.025
+                            latitude: this.region.current.latitude || 37.8020,
+                            longitude: this.region.current.longitude || -122.4486,
+                            latitudeDelta:this.region.current.latitudeDelta || 0.025,
+                            longitudeDelta: this.region.current.longitudeDelta || 0.025
                         }}
                         region={{
-                            latitude: this.state.region.searched.latitude && !this.state.mapScrolled ? this.state.region.searched.latitude : this.state.region.current.latitude ? this.state.region.current.latitude : 37.8020,
+                            latitude: this.region.searched.latitude && !this.state.mapScrolled ? this.region.searched.latitude : this.region.current.latitude,
 
-                            longitude: this.state.region.searched.longitude  && !this.state.mapScrolled ? this.state.region.searched.longitude : this.state.region.current.longitude ? this.state.region.current.longitude : -122.4486,
+                            longitude: this.region.searched.longitude  && !this.state.mapScrolled ? this.region.searched.longitude : this.region.current.longitude,
 
-                            latitudeDelta: this.state.region.searched.latitudeDelta  && !this.state.mapScrolled ? this.state.region.searched.latitudeDelta : this.state.region.current.latitudeDelta ? this.state.region.current.latitudeDelta : 0.025,
+                            latitudeDelta: this.region.searched.latitudeDelta  && !this.state.mapScrolled ? this.region.searched.latitudeDelta : this.region.current.latitudeDelta,
 
-                            longitudeDelta: this.state.region.searched.longitudeDelta  && !this.state.mapScrolled ? this.state.region.searched.longitudeDelta : this.state.region.current.longitudeDelta ? this.state.region.current.longitudeDelta : 0.025,
+                            longitudeDelta: this.region.searched.longitudeDelta  && !this.state.mapScrolled ? this.region.searched.longitudeDelta : this.region.current.longitudeDelta,
                         }}
                         pitchEnabled={false} 
                         rotateEnabled={false} 
@@ -598,13 +615,13 @@ export default class Home extends Component{
                         toolbarEnabled={false}
                         moveOnMarkerPress={false}
                         >
-                        {this.state.currentLocation.geometry.location.lat && this.state.currentLocation.geometry.location.lng ? 
+                        {this.currentLocation.geometry.location.lat && this.currentLocation.geometry.location.lng ? 
                        
                         <Marker 
                             anchor={{x: 0.5, y: 0.5}} // For Android          
                             coordinate={{
-                                latitude: this.state.currentLocation.geometry.location.lat,
-                                longitude: this.state.currentLocation.geometry.location.lng
+                                latitude: this.currentLocation.geometry.location.lat,
+                                longitude: this.currentLocation.geometry.location.lng
                             }} 
                             style={{position: 'relative', width: 150, height: 150, alignItems: 'center', justifyContent: 'center'}}
                         >
@@ -627,8 +644,8 @@ export default class Home extends Component{
                         {this.state.searchedAddress ?
                         <Marker 
                             coordinate={{
-                            latitude: this.state.region.searched.latitude,
-                            longitude: this.state.region.searched.longitude
+                            latitude: this.region.searched.latitude,
+                            longitude: this.region.searched.longitude
                             }}   
                         />
                         : null }
@@ -691,7 +708,7 @@ export default class Home extends Component{
                             debounce={200}
                             predefinedPlacesAlwaysVisible={true}
                             enablePoweredByContainer={false}
-                            predefinedPlaces={[this.state.currentLocation]}
+                            predefinedPlaces={[this.currentLocation]}
 
                             styles={{
                                 container:{
