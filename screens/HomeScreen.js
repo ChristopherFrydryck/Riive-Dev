@@ -177,6 +177,7 @@ export default class Home extends Component{
        
          // Set Status Bar page info here!
         this._navListener = this.props.navigation.addListener('didFocus', () => {
+            this.mapLocationFunction();
             if(this.state.searchFilterOpen){
                 StatusBar.setBarStyle('light-content', true);
                 Platform.OS === 'android' && StatusBar.setBackgroundColor(Colors.tango900);
@@ -186,6 +187,10 @@ export default class Home extends Component{
             }
            
           });
+
+          this._navListener = this.props.navigation.addListener('didBlur', () => {
+            clearInterval(this._interval)
+          })
 
         //   searchParams.region = {
         //       latitude: this.region.current.latitude,
@@ -197,7 +202,7 @@ export default class Home extends Component{
 
           await this.getCurrentLocation(true);
           await this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.latitudeDelta * 69, 99999.9999, 99999.9999)
-          this.mapLocationFunction();
+          
           
           this.rippleAnimation();
           
@@ -514,9 +519,7 @@ export default class Home extends Component{
             // console.log(`prevLng: ${prevLng.toFixed(2)}. CurrentLng: ${region.longitude.toFixed(2)}`)
            
 
-            if(this.mapScrolling){
-                console.log("region change")
-                
+            if(this.mapScrolling){                
 
                 this.region = await{
                     ...this.region,
