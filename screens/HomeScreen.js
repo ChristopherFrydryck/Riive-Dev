@@ -398,7 +398,7 @@ export default class Home extends Component{
         // }
 
 
-
+        this.forceUpdate();
         }
 
 
@@ -445,7 +445,7 @@ export default class Home extends Component{
                     }
 
                    
-                    this.forceUpdate();
+                    
                 }else{
                     this.currentLocation = {
                         ...this.currentLocation,
@@ -509,8 +509,8 @@ export default class Home extends Component{
             let prevLatD = this.region.current.latitudeDelta;
             let prevLngD = this.region.current.longitudeDelta;
 
-            console.log(`prevLat: ${prevLat.toFixed(2)}. CurrentLat: ${region.latitude.toFixed(2)}`)
-            console.log(`prevLng: ${prevLng.toFixed(2)}. CurrentLng: ${region.longitude.toFixed(2)}`)
+            // console.log(`prevLat: ${prevLat.toFixed(2)}. CurrentLat: ${region.latitude.toFixed(2)}`)
+            // console.log(`prevLng: ${prevLng.toFixed(2)}. CurrentLng: ${region.longitude.toFixed(2)}`)
 
             if(this.mapScrolling){
                 console.log("region change")
