@@ -197,6 +197,7 @@ export default class Home extends Component{
 
           await this.getCurrentLocation(true);
           await this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.latitudeDelta * 69, 99999.9999, 99999.9999)
+          this.mapLocationFunction();
           
           this.rippleAnimation();
           
@@ -213,7 +214,7 @@ export default class Home extends Component{
                   this.getCurrentLocation(false)
                 //   console.log("Got new location")
                 }
-              }, 60000)
+              }, 5000)
               
         }
 
@@ -511,10 +512,11 @@ export default class Home extends Component{
 
             // console.log(`prevLat: ${prevLat.toFixed(2)}. CurrentLat: ${region.latitude.toFixed(2)}`)
             // console.log(`prevLng: ${prevLng.toFixed(2)}. CurrentLng: ${region.longitude.toFixed(2)}`)
+           
 
             if(this.mapScrolling){
                 console.log("region change")
-                await clearInterval(this._interval)
+                
 
                 this.region = await{
                     ...this.region,
@@ -531,12 +533,10 @@ export default class Home extends Component{
                 }))
 
                 
-
-                
-                this.mapLocationFunction();
             }
             await this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.longitudeDelta * 69, prevLat, prevLng)
             this.mapScrolling = false;
+            
             
             
             
