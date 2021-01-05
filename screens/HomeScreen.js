@@ -94,6 +94,7 @@ export default class Home extends Component{
 
         let filteredStarts = startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
         let filteredEnds = endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
+        
 
         this.state = {
             rippleFadeAnimation: new Animated.Value(1),
@@ -141,12 +142,15 @@ export default class Home extends Component{
                 longitudeDelta: null,
             },
             current: {
-                latitude: 37.8020,
-                longitude: -122.4486,
+                latitude: null,
+                longitude: null,
                 latitudeDelta: 0.025,
                 longitudeDelta: 0.025,
             }
           }
+
+ 
+    
           this.currentLocation = {
               description: "Current Location",
               geometry: {
@@ -158,13 +162,19 @@ export default class Home extends Component{
           }
 
         
+
+          
+
+        
       
 
     }
 
+   
+
    componentDidMount = async() => {
         // let {searchParams} = this.props.ComponentStore;
-
+       
          // Set Status Bar page info here!
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             if(this.state.searchFilterOpen){
@@ -183,6 +193,8 @@ export default class Home extends Component{
         //       latitudeDelta: this.region.current.latitudeDelta,
         //       longitudeDelta: this.region.current.longitudeDelta
         //   }
+
+
           await this.getCurrentLocation(true);
           await this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.latitudeDelta * 69, 99999.9999, 99999.9999)
           
@@ -279,6 +291,8 @@ export default class Home extends Component{
             // await this.props.ComponentStore.selectedSpaceHost.push(data.host)
             // const db = firebase.firestore();
             // const hostData = db.collection('users').doc(space.hostID);
+
+            console.log(this.region.searched.latitude)
         
             if(this.state.searchInputValue.split("").length > 0){
                 await this.getDistance(`${data.space.region.latitude}, ${data.space.region.longitude}`, `${this.region.searched.latitude}, ${this.region.searched.longitude}`, "walking")
@@ -401,13 +415,16 @@ export default class Home extends Component{
         }
 
         getCurrentLocation = async(isFirstTime) => {
+            
             try {
                 let { status } = await Location.requestPermissionsAsync();
                 if (status !== 'granted') {
-                  return;
+                  throw "Failure to get location"
                 }
                 let location = await Location.getCurrentPositionAsync({});
+                
                 if(isFirstTime){
+                    
                     this.region = {
                         ...this.region,
                         current: {
@@ -426,7 +443,9 @@ export default class Home extends Component{
                             }
                         }
                     }
-                 
+
+                   
+                    this.forceUpdate();
                 }else{
                     this.currentLocation = {
                         ...this.currentLocation,
@@ -441,7 +460,7 @@ export default class Home extends Component{
                 }
                
                 
-    
+                
               } catch (error) {
                 console.log(error);
               }
@@ -484,29 +503,37 @@ export default class Home extends Component{
         }
 
         onRegionChange = async (region) => {
+           
             let prevLat = this.region.current.latitude;
             let prevLng = this.region.current.longitude;
+            let prevLatD = this.region.current.latitudeDelta;
+            let prevLngD = this.region.current.longitudeDelta;
 
-            await clearInterval(this._interval)
+            // console.log(`prevLat: ${prevLat.toFixed(2)}. CurrentLat: ${region.latitude.toFixed(2)}`)
 
-            this.region = await {
-                ...this.region,
-                current: {
-                    latitudeDelta: region.latitudeDelta,
-                    longitudeDelta: region.longitudeDelta,
-                    latitude: region.latitude,
-                    longitude: region.longitude
+            if(prevLat.toFixed(2) !== region.latitude.toFixed(2) || prevLng.toFixed(2) !== region.longitude.toFixed(2)){
+                console.log("region change")
+                await clearInterval(this._interval)
+
+                this.region = await{
+                    ...this.region,
+                    current: {
+                        latitudeDelta: region.latitudeDelta,
+                        longitudeDelta: region.longitudeDelta,
+                        latitude: region.latitude,
+                        longitude: region.longitude
+                    }
                 }
+                
+                await this.setState(prevState => ({
+                    mapScrolled: true,
+                }))
+
+                await this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.longitudeDelta * 69, prevLat, prevLng)
+
+                this.mapScrolling = false;
+                this.mapLocationFunction();
             }
-            
-            await this.setState(prevState => ({
-                mapScrolled: true,
-            }))
-
-            await this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.longitudeDelta * 69, prevLat, prevLng)
-
-            this.mapScrolling = false;
-            this.mapLocationFunction();
             
             
             
@@ -562,6 +589,9 @@ export default class Home extends Component{
         const {width, height} = Dimensions.get('window')
         const {firstname, email} = this.props.UserStore
 
+
+
+        if(this.currentLocation.geometry.location.lat && this.currentLocation.geometry.location.lng){
         
         return(
                 <SafeAreaView style={{flex: 1, position: 'relative', backgroundColor: this.state.searchFilterOpen ? Colors.tango500 : 'white'}}>
@@ -590,22 +620,25 @@ export default class Home extends Component{
                         provider={MapView.PROVIDER_GOOGLE}
                         mapStyle={DayMap}
                         style={styles.mapStyle}
-                        onRegionChangeComplete={region =>  this.onRegionChange(region)}
+                        // onRegionChangeComplete={region =>  this.onRegionChange(region)}
                         onRegionChange={() => this.mapScrolling = true}
                         initialRegion={{
-                            latitude: this.region.current.latitude || 37.8020,
-                            longitude: this.region.current.longitude || -122.4486,
-                            latitudeDelta:this.region.current.latitudeDelta || 0.025,
-                            longitudeDelta: this.region.current.longitudeDelta || 0.025
+                            latitude: this.region.searched.latitude ? this.region.searched.latitude : this.region.current.latitude ? this.region.current.latitude : 37.8020,
+
+                            longitude: this.region.searched.longitude ? this.region.searched.longitude : this.region.current.longitude ? this.region.current.longitude : -122.4486,
+
+                            latitudeDelta: this.region.searched.latitudeDelta  && !this.state.mapScrolled ? this.region.searched.latitudeDelta : this.region.current.latitudeDelta ? this.region.current.latitudeDelta : 0.025,
+
+                            longitudeDelta: this.region.searched.longitudeDelta  && !this.state.mapScrolled ? this.region.searched.longitudeDelta : this.region.current.longitudeDelta ? this.region.current.longitudeDelta : 0.025,
                         }}
                         region={{
-                            latitude: this.region.searched.latitude && !this.state.mapScrolled ? this.region.searched.latitude : this.region.current.latitude,
+                            latitude: this.region.current.latitude,
 
-                            longitude: this.region.searched.longitude  && !this.state.mapScrolled ? this.region.searched.longitude : this.region.current.longitude,
+                            longitude: this.region.current.longitude,
 
-                            latitudeDelta: this.region.searched.latitudeDelta  && !this.state.mapScrolled ? this.region.searched.latitudeDelta : this.region.current.latitudeDelta,
+                            latitudeDelta: this.region.current.latitudeDelta,
 
-                            longitudeDelta: this.region.searched.longitudeDelta  && !this.state.mapScrolled ? this.region.searched.longitudeDelta : this.region.current.longitudeDelta,
+                            longitudeDelta: this.region.current.longitudeDelta,
                         }}
                         pitchEnabled={false} 
                         rotateEnabled={false} 
@@ -858,6 +891,13 @@ export default class Home extends Component{
                        
                 </SafeAreaView>
         )
+    }else{
+        return(
+            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                <ActivityIndicator size="large" />
+             </View>
+        )
+        }
     }
 }
 const styles = StyleSheet.create({
