@@ -328,7 +328,7 @@ export default class Home extends Component{
 
                 // console.log(`Lat is ${lat} and prev lat is ${prevLat}`)
 
-               if(lat.toFixed(3) != prevLat.toFixed(3) || lng.toFixed(3) != prevLng.toFixed(3)){
+            //    if(lat.toFixed(3) != prevLat.toFixed(3) || lng.toFixed(3) != prevLng.toFixed(3)){
  
                await query.get().then( async(value) => {
                  // All GeoDocument returned by GeoQuery, like the GeoDocument added above
@@ -395,7 +395,7 @@ export default class Home extends Component{
        
             this.results = resultsFilteredTimeAvail;
 
-        }
+        // }
 
 
 
@@ -509,9 +509,10 @@ export default class Home extends Component{
             let prevLatD = this.region.current.latitudeDelta;
             let prevLngD = this.region.current.longitudeDelta;
 
-            // console.log(`prevLat: ${prevLat.toFixed(2)}. CurrentLat: ${region.latitude.toFixed(2)}`)
+            console.log(`prevLat: ${prevLat.toFixed(2)}. CurrentLat: ${region.latitude.toFixed(2)}`)
+            console.log(`prevLng: ${prevLng.toFixed(2)}. CurrentLng: ${region.longitude.toFixed(2)}`)
 
-            if(prevLat.toFixed(2) !== region.latitude.toFixed(2) || prevLng.toFixed(2) !== region.longitude.toFixed(2)){
+            if(this.mapScrolling){
                 console.log("region change")
                 await clearInterval(this._interval)
 
@@ -529,11 +530,13 @@ export default class Home extends Component{
                     mapScrolled: true,
                 }))
 
-                await this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.longitudeDelta * 69, prevLat, prevLng)
+                
 
-                this.mapScrolling = false;
+                
                 this.mapLocationFunction();
             }
+            await this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.longitudeDelta * 69, prevLat, prevLng)
+            this.mapScrolling = false;
             
             
             
@@ -620,7 +623,7 @@ export default class Home extends Component{
                         provider={MapView.PROVIDER_GOOGLE}
                         mapStyle={DayMap}
                         style={styles.mapStyle}
-                        // onRegionChangeComplete={region =>  this.onRegionChange(region)}
+                        onRegionChangeComplete={region =>  this.onRegionChange(region)}
                         onRegionChange={() => this.mapScrolling = true}
                         initialRegion={{
                             latitude: this.region.searched.latitude ? this.region.searched.latitude : this.region.current.latitude ? this.region.current.latitude : 37.8020,
