@@ -633,16 +633,29 @@ export default class Home extends Component{
                             longitude: this.currentLocation.geometry.location.lng,
                             latitudeDelta: this.region.current.latitudeDelta || 0.025,
                             longitudeDelta: this.region.current.longitudeDelta || 0.025
+                            
                         }}
-                        region={{
-                            latitude: this.region.searched.latitude && !this.state.mapScrolled ? this.region.searched.latitude : this.region.current.latitude ? this.region.current.latitude : 37.8020,
+                        region={Platform.OS == 'ios' ? {
+                            latitude: this.region.searched.latitude && !this.state.mapScrolled ? this.region.searched.latitude : this.region.current.latitude,
 
-                            longitude: this.region.searched.longitude && !this.state.mapScrolled ? this.region.searched.longitude : this.region.current.longitude ? this.region.current.longitude : -122.4486,
+                            longitude: this.region.searched.longitude && !this.state.mapScrolled ? this.region.searched.longitude : this.region.current.longitude,
  
-                            latitudeDelta: this.region.searched.latitudeDelta  && !this.state.mapScrolled ? this.region.searched.latitudeDelta : this.region.current.latitudeDelta ? this.region.current.latitudeDelta : 0.025,
+                            latitudeDelta: this.region.searched.latitudeDelta  && !this.state.mapScrolled ? this.region.searched.latitudeDelta : this.region.current.latitudeDelta ,
 
-                            longitudeDelta: this.region.searched.longitudeDelta  && !this.state.mapScrolled ? this.region.searched.longitudeDelta : this.region.current.longitudeDelta ? this.region.current.longitudeDelta : 0.025,
-                        }}
+                            longitudeDelta: this.region.searched.longitudeDelta  && !this.state.mapScrolled ? this.region.searched.longitudeDelta : this.region.current.longitudeDelta
+                        } : 
+                            this.region.searched.latitude && !this.state.mapScrolled ? 
+                            {
+                                latitude: this.region.searched.latitude || this.region.current.latitude,
+
+                                longitude: this.region.searched.longitude || this.region.current.longitude,
+    
+                                latitudeDelta: this.region.searched.latitudeDelta || this.region.current.latitudeDelta ,
+
+                                longitudeDelta: this.region.searched.longitudeDelta || this.region.current.longitudeDelta
+                            }
+                            :
+                            null}
                         pitchEnabled={false} 
                         rotateEnabled={false} 
                         zoomEnabled={true} 
