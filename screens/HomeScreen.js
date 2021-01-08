@@ -635,8 +635,15 @@ export default class Home extends Component{
                             longitudeDelta: this.region.current.longitudeDelta || 0.025
                             
                         }}
-                        region={
+                        region={Platform.OS == 'ios' ? {
+                            latitude: this.region.searched.latitude && !this.state.mapScrolled ? this.region.searched.latitude : this.region.current.latitude,
 
+                            longitude: this.region.searched.longitude && !this.state.mapScrolled ? this.region.searched.longitude : this.region.current.longitude,
+ 
+                            latitudeDelta: this.region.searched.latitudeDelta  && !this.state.mapScrolled ? this.region.searched.latitudeDelta : this.region.current.latitudeDelta ,
+
+                            longitudeDelta: this.region.searched.longitudeDelta  && !this.state.mapScrolled ? this.region.searched.longitudeDelta : this.region.current.longitudeDelta
+                        } : 
                             this.region.searched.latitude && this.region.searched.longitude && !this.state.mapScrolled ? 
                             {
                                 latitude: this.region.searched.latitude || this.region.current.latitude,
@@ -648,8 +655,7 @@ export default class Home extends Component{
                                 longitudeDelta: this.region.searched.longitudeDelta || this.region.current.longitudeDelta
                             }
                             :
-                            null
-                        }
+                            null}
                         pitchEnabled={false} 
                         rotateEnabled={false} 
                         zoomEnabled={true} 

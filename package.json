@@ -98,5 +98,19 @@
     "react-native-svg": "9.9.5",
     "react-native-safe-area-view": "^2.0.0"
   },
-  "private": true
+  "private": true,
+  "name": "riive",
+  "description": "This is a backup of Riive, a shareparking app currently in development. You can view my portfolio writeup about it here: https://www.christopherfrydryck.cf/Riive.html",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChristopherFrydryck/Riive-Dev.git"
+  },
+  "author": "Christopher Frydryck",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ChristopherFrydryck/Riive-Dev/issues"
+  },
+  "homepage": "https://github.com/ChristopherFrydryck/Riive-Dev#readme"
 }

@@ -137,17 +137,12 @@
 			<key>orderHint</key>
 			<integer>21</integer>
 		</dict>
-		<key>EXSplashScreen.xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>22</integer>
-		</dict>
 		<key>EXWebBrowser.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>23</integer>
+			<integer>22</integer>
 		</dict>
 		<key>ExpoKit.xcscheme</key>
 		<dict>
@@ -161,392 +156,392 @@
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>25</integer>
+			<integer>24</integer>
 		</dict>
 		<key>FBReactNativeSpec.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>26</integer>
+			<integer>25</integer>
 		</dict>
 		<key>Fabric.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>24</integer>
+			<integer>23</integer>
 		</dict>
 		<key>Firebase.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>27</integer>
+			<integer>26</integer>
 		</dict>
 		<key>FirebaseAnalytics.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>28</integer>
+			<integer>27</integer>
 		</dict>
 		<key>FirebaseCore.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>29</integer>
+			<integer>28</integer>
 		</dict>
 		<key>FirebaseCoreDiagnostics.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>30</integer>
+			<integer>29</integer>
 		</dict>
 		<key>FirebaseCoreDiagnosticsInterop.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>31</integer>
+			<integer>30</integer>
 		</dict>
 		<key>FirebaseInstanceID.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>32</integer>
+			<integer>31</integer>
 		</dict>
 		<key>Folly.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>33</integer>
+			<integer>32</integer>
 		</dict>
 		<key>GTMAppAuth.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>42</integer>
+			<integer>41</integer>
 		</dict>
 		<key>GTMSessionFetcher.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>43</integer>
+			<integer>42</integer>
 		</dict>
 		<key>Google-Maps-iOS-Utils.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>35</integer>
+			<integer>34</integer>
 		</dict>
 		<key>GoogleAppMeasurement.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>36</integer>
+			<integer>35</integer>
 		</dict>
 		<key>GoogleDataTransport.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>37</integer>
+			<integer>36</integer>
 		</dict>
 		<key>GoogleDataTransportCCTSupport.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>38</integer>
+			<integer>37</integer>
 		</dict>
 		<key>GoogleMaps.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>39</integer>
+			<integer>38</integer>
 		</dict>
 		<key>GoogleSignIn.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>40</integer>
+			<integer>39</integer>
 		</dict>
 		<key>GoogleUtilities.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>41</integer>
+			<integer>40</integer>
 		</dict>
 		<key>JKBigInteger2.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>44</integer>
+			<integer>43</integer>
 		</dict>
 		<key>Pods-riive.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>47</integer>
+			<integer>46</integer>
 		</dict>
 		<key>RCTRequired.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>48</integer>
+			<integer>47</integer>
 		</dict>
 		<key>RCTTypeSafety.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>49</integer>
+			<integer>48</integer>
 		</dict>
 		<key>React-Core.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>51</integer>
+			<integer>50</integer>
 		</dict>
 		<key>React-CoreModules.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>52</integer>
+			<integer>51</integer>
 		</dict>
 		<key>React-RCTActionSheet.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>57</integer>
+			<integer>56</integer>
 		</dict>
 		<key>React-RCTAnimation.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>58</integer>
+			<integer>57</integer>
 		</dict>
 		<key>React-RCTBlob.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>59</integer>
+			<integer>58</integer>
 		</dict>
 		<key>React-RCTImage.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>60</integer>
+			<integer>59</integer>
 		</dict>
 		<key>React-RCTLinking.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>61</integer>
+			<integer>60</integer>
 		</dict>
 		<key>React-RCTNetwork.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>62</integer>
+			<integer>61</integer>
 		</dict>
 		<key>React-RCTSettings.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>63</integer>
+			<integer>62</integer>
 		</dict>
 		<key>React-RCTText.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>64</integer>
+			<integer>63</integer>
 		</dict>
 		<key>React-RCTVibration.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>65</integer>
+			<integer>64</integer>
 		</dict>
 		<key>React-cxxreact.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>53</integer>
+			<integer>52</integer>
 		</dict>
 		<key>React-jsi.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>54</integer>
+			<integer>53</integer>
 		</dict>
 		<key>React-jsiexecutor.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>55</integer>
+			<integer>54</integer>
 		</dict>
 		<key>React-jsinspector.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>56</integer>
+			<integer>55</integer>
 		</dict>
 		<key>React.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>50</integer>
+			<integer>49</integer>
 		</dict>
 		<key>ReactCommon.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>66</integer>
+			<integer>65</integer>
 		</dict>
 		<key>Stripe-Stripe.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>69</integer>
+			<integer>68</integer>
 		</dict>
 		<key>Stripe.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>68</integer>
+			<integer>67</integer>
 		</dict>
 		<key>UMAppLoader.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>71</integer>
+			<integer>70</integer>
 		</dict>
 		<key>UMBarCodeScannerInterface.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>72</integer>
+			<integer>71</integer>
 		</dict>
 		<key>UMCameraInterface.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>73</integer>
+			<integer>72</integer>
 		</dict>
 		<key>UMConstantsInterface.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>74</integer>
+			<integer>73</integer>
 		</dict>
 		<key>UMCore.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>75</integer>
+			<integer>74</integer>
 		</dict>
 		<key>UMFaceDetectorInterface.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>76</integer>
+			<integer>75</integer>
 		</dict>
 		<key>UMFileSystemInterface.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>77</integer>
+			<integer>76</integer>
 		</dict>
 		<key>UMFontInterface.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>78</integer>
+			<integer>77</integer>
 		</dict>
 		<key>UMImageLoaderInterface.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>79</integer>
+			<integer>78</integer>
 		</dict>
 		<key>UMPermissionsInterface.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>80</integer>
+			<integer>79</integer>
 		</dict>
 		<key>UMReactNativeAdapter.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>81</integer>
+			<integer>80</integer>
 		</dict>
 		<key>UMSensorsInterface.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>82</integer>
+			<integer>81</integer>
 		</dict>
 		<key>UMTaskManagerInterface.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>83</integer>
+			<integer>82</integer>
 		</dict>
 		<key>Yoga.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>82</integer>
+			<integer>83</integer>
 		</dict>
 		<key>boost-for-react-native.xcscheme</key>
 		<dict>
@@ -560,40 +555,35 @@
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>34</integer>
+			<integer>33</integer>
 		</dict>
 		<key>lottie-ios.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>45</integer>
+			<integer>44</integer>
 		</dict>
 		<key>nanopb.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>46</integer>
+			<integer>45</integer>
 		</dict>
 		<key>rn-fetch-blob.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>67</integer>
+			<integer>66</integer>
 		</dict>
 		<key>tipsi-stripe.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>70</integer>
-		</dict>
-		<key>yoga.xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>84</integer>
+			<integer>69</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
