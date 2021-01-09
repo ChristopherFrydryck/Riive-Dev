@@ -425,38 +425,38 @@ class reserveSpace extends Component {
                                 },
                             }
 
-                            const spaceSavedData = {
-                                tripID: ref.id,
-                                visitorID: this.props.UserStore.userID,
-                                listingID: this.props.ComponentStore.selectedExternalSpot[0].listingID,
-                                listingSubSpaceID: null,
-                                isCancelled: false,
-                                cancelledBy: null,
-                                updated: currentTime,
-                                visit: {
-                                    day: daySearched,
-                                    time: {
-                                        start: {
-                                            label: timeSearched[0].label,
-                                            labelFormatted: timeSearched[0].labelFormatted,
-                                            unix: startDate.getTime(),
-                                            dateString: startDateString,
-                                            dateUTC: startDate,
-                                        },
-                                        end: {
-                                            label: timeSearched[1].label,
-                                            labelFormatted: timeSearched[1].labelFormatted,
-                                            unix: endDate.getTime(),
-                                            dateString: endDateString,
-                                            dateUTC: endDate,
-                                        },
-                                    },
-                                }
-                            }
+                            // const spaceSavedData = {
+                                // tripID: ref.id,
+                                // visitorID: this.props.UserStore.userID,
+                                // listingID: this.props.ComponentStore.selectedExternalSpot[0].listingID,
+                                // listingSubSpaceID: null,
+                                // isCancelled: false,
+                                // cancelledBy: null,
+                                // updated: currentTime,
+                                // visit: {
+                                //     day: daySearched,
+                                //     time: {
+                                //         start: {
+                                //             label: timeSearched[0].label,
+                                //             labelFormatted: timeSearched[0].labelFormatted,
+                                //             unix: startDate.getTime(),
+                                //             dateString: startDateString,
+                                //             dateUTC: startDate,
+                                //         },
+                                //         end: {
+                                //             label: timeSearched[1].label,
+                                //             labelFormatted: timeSearched[1].labelFormatted,
+                                //             unix: endDate.getTime(),
+                                //             dateString: endDateString,
+                                //             dateUTC: endDate,
+                                //         },
+                                //     },
+                                // }
+                            // }
 
                             db.collection("trips").doc(ref.id).set(obj)
                             db.collection("listings").doc(this.props.ComponentStore.selectedExternalSpot[0].listingID).update({
-                                visits: firebase.firestore.FieldValue.arrayUnion(spaceSavedData)
+                                visits: firebase.firestore.FieldValue.arrayUnion(ref.id)
                             });
 
                             
