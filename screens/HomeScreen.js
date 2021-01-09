@@ -558,6 +558,14 @@ export default class Home extends Component{
                 //     },
                 // },
                 searchInputValue: '',
+                locationDifferenceWalking: {
+                    distance: null,
+                    duration: null,
+                },
+                locationDifferenceDriving: {
+                    distance: null,
+                    duration: null,
+                }
             }))
           }
 
