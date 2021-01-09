@@ -1,5 +1,8 @@
+// import 'intl';
 import React, { Component } from 'react';
-import { Animated, Dimensions, StatusBar, ScrollView, View, StyleSheet } from 'react-native';
+import { Platform, Animated, Dimensions, StatusBar, ScrollView, View, StyleSheet } from 'react-native';
+
+
 
 
 
@@ -26,7 +29,11 @@ import firebaseConfig from '../firebaseConfig'
 import {inject, observer} from 'mobx-react/native'
 
     
+// if (Platform.OS === "android") {
+//     Intl.__disableRegExpRestore()
+// }
 
+import 'intl/locale-data/jsonp/en';
 
 
 @inject("UserStore", "ComponentStore")
@@ -352,9 +359,9 @@ class reserveSpace extends Component {
                             // timeSearched[0].label.slice(0,2), timeSearched[0].label.slice(2,4)
 
                             let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                            let timeZoneAbbr = new Date().toLocaleTimeString('en-us',{timeZoneName:'short'}).split(' ')[2]
+                            // let timeZoneAbbr = new Date().toLocaleTimeString('en-us',{timeZoneName:'short'}).split(' ')[2]
 
-                            console.log(timeZone)
+                            
 
                             
                             

@@ -94,7 +94,7 @@ devicefarm {
 
 configurations.all {
   resolutionStrategy {
-    force 'org.webkit:android-jsc:r245459'
+    force 'org.webkit:android-jsc-intl:r245459'
   }
 }
 
