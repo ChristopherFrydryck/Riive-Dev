@@ -416,20 +416,27 @@ export default class Home extends Component{
                         let upcomingVisits = resultsFiltered[i].visits
                         // Check each upcoming visit for a space
                         for(data of upcomingVisits){
-                            // if a visit start is after start time and before end time
-                            if(parseInt(data.visit.time.start.label) >= parseInt(this.state.timeSearched[0].label) && parseInt(data.visit.time.start.label) <= parseInt(this.state.timeSearched[1].label)){
-                                console.log("Space does not work")
-                                worksArray.push(false)
-                                break;
-                            
-                             // if a visit end is before a start time and after end time
-                            }else if(parseInt(data.visit.time.end.label) >= parseInt(this.state.timeSearched[0].label) && parseInt(data.visit.time.end.label) <= parseInt(this.state.timeSearched[1].label)){
-                                console.log("Space does not work")
-                                worksArray.push(false)
-                                break;
+                            // Check if day of search matches visit day
+                            if(this.state.daySearched.dayValue === data.visit.day.dayValue){
+                                // if a visit start is after start time and before end time
+                                if(parseInt(data.visit.time.start.label) >= parseInt(this.state.timeSearched[0].label) && parseInt(data.visit.time.start.label) <= parseInt(this.state.timeSearched[1].label)){
+                                    console.log("Space does not work")
+                                    worksArray.push(false)
+                                    break;
+                                
+                                // if a visit end is before a start time and after end time
+                                }else if(parseInt(data.visit.time.end.label) >= parseInt(this.state.timeSearched[0].label) && parseInt(data.visit.time.end.label) <= parseInt(this.state.timeSearched[1].label)){
+                                    console.log("Space does not work")
+                                    worksArray.push(false)
+                                    break;
 
+                                }else{
+                                    console.log("Space works")
+                                    worksArray.push(true)
+                                    continue;
+                                }
+                            // If visit day doesn't match searched day
                             }else{
-                                console.log("Space works")
                                 worksArray.push(true)
                                 continue;
                             }
