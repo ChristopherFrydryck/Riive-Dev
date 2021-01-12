@@ -338,16 +338,40 @@ export default class Home extends Component{
  
                await query.get().then( async(value) => {
                  // All GeoDocument returned by GeoQuery, like the GeoDocument added above
-                //  console.log(value.docs.data);
+                //  console.log(value.docs);
+               
+
                 for (const doc of value.docs) {
                     const hostRef = db.collection('users').doc(doc.data().hostID);
+                    const spaceVisits = db.collection("trips").where("listingID", "==", doc.data().listingID)
+                    const spaceVisitsFuture = spaceVisits.where("visit.time.end.unix", ">", new Date().getTime())
+                    let futureVisits = new Array;
+                   
+                    
+                    await spaceVisitsFuture.get().then((spaceData) => {
+                       spaceData.docs.map(x => {
+                            futureVisits.push(x.data())
+                        })
+                        
+                    })
+                    // await hostVisitsFuture.get().then(visitDoc => {
+                    //     console.log(visitDoc.size)
+                    //     // if(visitDoc.empty){
+                    //     //     console.log("No upcoming visits")
+                    //     // }else{
+                    //     //     console.log("prep for visitors")
+                    //     // }
+                  
+                    // })
 
                     await hostRef.get().then((hostDoc) => {
+                        
                         return hostDoc.data();
                     }).then((hostDoc) => {
                         results.push({
                             space: doc.data(),
                             host: hostDoc,
+                            visits: futureVisits,
                         })
                        
                         // console.log(`space id: ${doc.data().hostID} and host: ${hostDoc.id}`)
@@ -360,7 +384,7 @@ export default class Home extends Component{
                let resultsFiltered = results.filter(res => !res.space.hidden && !res.space.toBeDeleted && !res.host.deleted.toBeDeleted && !res.host.deleted.isDeleted && !this.props.UserStore.deleted && !res.host.disabled.isDisabled)
                let resultsFilteredTimeAvail = new Array;
 
-            
+               console.log(resultsFiltered[0].visits)
                
                
 
