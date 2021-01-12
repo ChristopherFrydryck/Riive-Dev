@@ -14,6 +14,8 @@ import * as ImagePicker from 'expo-image-picker'
 import RNImagePicker from 'react-native-image-crop-picker';
 import * as Permissions from 'expo-permissions'
 
+import 'intl'
+
 
 
 import Input from '../components/Input'

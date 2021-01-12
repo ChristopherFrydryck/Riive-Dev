@@ -283,26 +283,26 @@ class reserveSpace extends Component {
                
         }
 
-        getPrice = async() => {
+        getPrice = () => {
             // console.log(`${this.state.hoursSpent} hours and ${this.state.minutesSpent} minutes`)
             let price = (this.state.hoursSpent * this.props.ComponentStore.selectedExternalSpot[0].spacePriceCents) + (this.state.minutesSpent === 0 ? 0 : Math.ceil(this.props.ComponentStore.selectedExternalSpot[0].spacePriceCents / 2));
 
             
-            var dollars = (price / 100).toFixed(2);
+            var dollars = (price / 100);
             var dollarsCents = Math.ceil(price);
-            // dollars = dollars.toLocaleString("en-US", {style:"currency", currency:"USD"});
+            dollars = dollars.toLocaleString("en-US", {style:"currency", currency:"USD"});
 
 
-            var dollarsServiceFee = price * this.state.serviceFeePercentage / 100 > 1.75 ? (price * this.state.serviceFeePercentage / 100).toFixed(2) : 1.75;
+            var dollarsServiceFee = price * this.state.serviceFeePercentage / 100 > 1.75 ? (price * this.state.serviceFeePercentage / 100) : 1.75;
             var dollarsServiceFeeCents = price * this.state.serviceFeePercentage > 175 ? Math.ceil(price * this.state.serviceFeePercentage) : 175;
-            // dollarsServiceFee = dollarsServiceFee.toLocaleString("en-US", {style:"currency", currency:"USD"});
+            dollarsServiceFee = dollarsServiceFee.toLocaleString("en-US", {style:"currency", currency:"USD"});
 
-            var dollarsProcessingFee = ((((price * this.state.serviceFeePercentage) * .029) + 30) / 100).toFixed(2);
+            var dollarsProcessingFee = ((((price * this.state.serviceFeePercentage) * .029) + 30) / 100);
             var dollarsProcessingFeeCents = Math.ceil(((price * this.state.serviceFeePercentage) * .029) + 30)
-            // dollarsProcessingFee = dollarsProcessingFee.toLocaleString("en-US", {style:"currency", currency:"USD"});
+            dollarsProcessingFee = dollarsProcessingFee.toLocaleString("en-US", {style:"currency", currency:"USD"});
 
 
-            await this.setState({
+            this.setState({
                 price: dollars, 
                 priceCents: dollarsCents,
                 serviceFee: dollarsServiceFee,
@@ -311,8 +311,8 @@ class reserveSpace extends Component {
                 processingFeeCents: dollarsProcessingFeeCents,
             })
 
-            await this.setState({
-                total: ((this.state.priceCents + this.state.serviceFeeCents + this.state.processingFeeCents) / 100),
+            this.setState({
+                total: ((this.state.priceCents + this.state.serviceFeeCents + this.state.processingFeeCents) / 100).toLocaleString("en-US", {style:"currency", currency:"USD"}),
                 totalCents: this.state.priceCents + this.state.serviceFeeCents + this.state.processingFeeCents
             })
 
@@ -386,13 +386,13 @@ class reserveSpace extends Component {
                                 listingSubSpaceID: null,
                                 payment: this.state.selectedPayment,
                                 price: {
-                                    price: `$${this.state.price}`,
+                                    price: this.state.price,
                                     priceCents: this.state.priceCents,
-                                    serviceFee: `$${this.state.serviceFee}`,
+                                    serviceFee: this.state.serviceFee,
                                     serviceFeeCents: this.state.serviceFeeCents,
-                                    processingFee: `$${this.state.processingFee}`,
+                                    processingFee: this.state.processingFee,
                                     processingFeeCents: this.state.processingFeeCents,
-                                    total: `$${this.state.total}`,
+                                    total: this.state.total,
                                     totalCents: this.state.totalCents,
                                 },
                                 tripID: ref.id,
@@ -651,15 +651,15 @@ class reserveSpace extends Component {
                     <View style={[styles.container, {marginTop: 32}]}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
                             <Text>Parking Fare</Text>
-                            <Text>${this.state.price}</Text>
+                            <Text>{this.state.price}</Text>
                         </View>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
                             <Text>Service Fee</Text>
-                            <Text>${this.state.serviceFee}</Text>
+                            <Text>{this.state.serviceFee}</Text>
                         </View>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
                             <Text>Processing Fee</Text>
-                            <Text>${this.state.processingFee}</Text>
+                            <Text>{this.state.processingFee}</Text>
                         </View>
                         <View
                             style={{
@@ -670,7 +670,7 @@ class reserveSpace extends Component {
                         />
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
                             <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>Total (USD)</Text>
-                            <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>${this.state.total}</Text>
+                            <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>{this.state.total}</Text>
                         </View>
                         <Button onPress={() => this.checkout()} style = {this.state.spaceAvailabilityWorks ? styles.activeButton : styles.disabledButton} disabled={!this.state.spaceAvailabilityWorks} textStyle={this.state.spaceAvailabilityWorks ? {color: 'white'} : {color: Colors.cosmos300}}>{this.state.spaceAvailabilityWorks? "Reserve Space" : `Unavailable at ${timeSearched[0].labelFormatted}`}</Button>
                     </View>

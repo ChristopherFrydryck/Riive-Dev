@@ -219,7 +219,7 @@ export default class Home extends Component{
                   this.getCurrentLocation(false)
                 //   console.log("Got new location")
                 }
-              }, Platform.OS === 'ios' ? 5000 : 30000)
+              }, 5000)
               
         }
 
