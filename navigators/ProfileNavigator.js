@@ -13,7 +13,12 @@ import EditSpace from '../screens/EditSpace'
 
 
 const ProfileNavigator = createStackNavigator({
-    Profile: Profile,
+    Profile: {
+        screen: Profile,
+        navigationOptions: {
+            headerShown: false,
+        }
+    },
     AddVehicle: AddVehicle,
     EditVehicle: EditVehicle,
     AddPayment: AddPayment,
