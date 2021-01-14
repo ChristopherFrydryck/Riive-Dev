@@ -327,10 +327,14 @@ export default class Home extends Component{
              // Create a GeoCollection reference
              const geocollection = GeoFirestore.collection('listings');
  
-               const query = geocollection.near({ 
+               let query = geocollection.near({ 
                    center: new firebase.firestore.GeoPoint(lat, lng), 
                    radius: radius,
-                });
+                   limit: 100,
+                }).where("hidden", "==", false)
+
+                query = query.where("toBeDeleted", "==", false)
+                // query = query.where()
 
                 // console.log(`Lat is ${lat} and prev lat is ${prevLat}`)
 
@@ -354,15 +358,7 @@ export default class Home extends Component{
                         })
                         
                     })
-                    // await hostVisitsFuture.get().then(visitDoc => {
-                    //     console.log(visitDoc.size)
-                    //     // if(visitDoc.empty){
-                    //     //     console.log("No upcoming visits")
-                    //     // }else{
-                    //     //     console.log("prep for visitors")
-                    //     // }
-                  
-                    // })
+             
 
                     await hostRef.get().then((hostDoc) => {
                         
@@ -381,8 +377,9 @@ export default class Home extends Component{
                     
                   }
                });
-               let resultsFiltered = results.filter(res => !res.space.hidden && !res.space.toBeDeleted && !res.host.deleted.toBeDeleted && !res.host.deleted.isDeleted && !this.props.UserStore.deleted && !res.host.disabled.isDisabled)
-               let resultsFilteredTimeAvail = new Array;
+            let resultsFiltered = results.filter(res => !res.host.deleted.toBeDeleted && !res.host.deleted.isDeleted && !this.props.UserStore.deleted && !res.host.disabled.isDisabled)
+           
+            let resultsFilteredTimeAvail = new Array;
 
                
                

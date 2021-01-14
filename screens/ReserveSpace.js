@@ -1,6 +1,6 @@
 // import 'intl';
 import React, { Component } from 'react';
-import { Platform, Animated, Dimensions, StatusBar, ScrollView, View, StyleSheet } from 'react-native';
+import { Platform, Animated, Dimensions, StatusBar, ScrollView, View, StyleSheet, ActivityIndicator } from 'react-native';
 
 
 
@@ -70,8 +70,11 @@ class reserveSpace extends Component {
             selectedVehicle: null,
             selectedPayment: null,
 
-            spaceAvailabilityWorks: false,
+            
             inSameTimezone: false,
+
+            spaceAvailabilityWorks: true,
+            authenticatingReservation: false,
         }
         
     }
@@ -79,7 +82,6 @@ class reserveSpace extends Component {
     async componentDidMount(){
         const { timeSearched } = this.props.navigation.state.params.homeState;
         await this.getDiffHours(timeSearched[0].label, timeSearched[1].label)
-        await this.checkAvailability()
 
         await this.getPrice();
 
@@ -240,35 +242,75 @@ class reserveSpace extends Component {
 
         }
 
-        checkAvailability = () => {
-            let worksArray = new Array;
+        checkAvailability = async() => {
+            let worksArray = [];
+            let futureVisits = [];
+            const db = firebase.firestore()
             
             let {timeSearched, daySearched} = this.props.navigation.state.params.homeState;
 
-            this.props.ComponentStore.selectedExternalSpot[0].availability[daySearched.dayValue].data.forEach((data, i) => {
+            const spaceVisits = db.collection("trips").where("listingID", "==", this.props.ComponentStore.selectedExternalSpot[0].listingID)
+            const spaceVisitsFuture = spaceVisits.where("visit.time.end.unix", ">", new Date().getTime())
+
+            await spaceVisitsFuture.get().then((spaceData) => {
+                spaceData.docs.map(x => {
+                     futureVisits.push(x.data())
+                 })
+             })
+
+            await this.props.ComponentStore.selectedExternalSpot[0].availability[daySearched.dayValue].data.forEach((data, i) => {
                  // If specific time slot is marked unavailable, we will check it
                  if(!data.available){
                     // Check if start time is out of bounds
                     if(parseInt(data.start) >= parseInt(timeSearched[0].label) && parseInt(data.start) <= parseInt(timeSearched[1].label)){
                         // console.log(`Start value ${data.start} is invalid within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
                         worksArray.push(false)
+            
                         
                     }
                     // Check if end time is out of bounds
                     else if(parseInt(data.end) >= parseInt(timeSearched[0].label) && parseInt(data.start) <= parseInt(timeSearched[1].label)){
                         worksArray.push(false)
+                  
                        
                         // console.log(`End value ${data.end} is invalid within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
                     // If both start and end time don't interfere with filtered time slots
                     }else{
                         worksArray.push(true)
+       
                         // console.log(`Time slot ${data.id} is marked unavailable but works since ${data.start} and ${data.end} are not within the bounds of ${this.state.timeSearched[0].label} and ${this.state.timeSearched[1].label}`)
                     }
                    
                     // console.log("Time slot " + data.id + " does not work")
                 }else{
-                    worksArray.push(true)
-                    // console.log("Time slot " + data.id + " is marked available")
+                    
+                     // Check each upcoming visit for a space
+                     for(data of futureVisits){
+                        // Check if day of search matches visit day
+                        if(daySearched.dayValue === data.visit.day.dayValue){
+                            // if a visit start is after start time and before end time
+                            if(parseInt(data.visit.time.start.label) >= parseInt(timeSearched[0].label) && parseInt(data.visit.time.start.label) <= parseInt(timeSearched[1].label)){
+                                console.log("Space does not work")
+                                worksArray.push(false)
+                                break;
+                            
+                            // if a visit end is before a start time and after end time
+                            }else if(parseInt(data.visit.time.end.label) >= parseInt(timeSearched[0].label) && parseInt(data.visit.time.end.label) <= parseInt(timeSearched[1].label)){
+                                console.log("Space does not work")
+                                worksArray.push(false)
+                                break;
+
+                            }else{
+                                console.log("Space works")
+                                worksArray.push(true)
+                                continue;
+                            }
+                        // If visit day doesn't match searched day
+                        }else{
+                            worksArray.push(true)
+                            continue;
+                        }
+                    }
                 }
 
             })
@@ -322,10 +364,11 @@ class reserveSpace extends Component {
 
         checkout = async() => {
             const { region, searchedAddress, searchInputValue, daySearched, timeSearched, locationDifferenceWalking } = this.props.navigation.state.params.homeState;
-
+            await this.setState({authenticatingReservation: true})
+            await this.checkAvailability()
             const db = firebase.firestore();
 
-            if(this.state.selectedVehicle && this.state.selectedPayment){
+            if(this.state.selectedVehicle && this.state.selectedPayment && this.state.spaceAvailabilityWorks){
                 let card = this.state.selectedPayment;
                 let vehicle = this.state.selectedPayment;
                 // console.log(`${this.props.UserStore.userID} is paying for spot ${this.props.ComponentStore.selectedExternalSpot[0].listingID} with card ${this.state.selectedPayment.PaymentID} and driving a ${this.state.selectedVehicle.Year} ${this.state.selectedVehicle.Make} ${this.state.selectedVehicle.Model}`)
@@ -461,7 +504,7 @@ class reserveSpace extends Component {
 
                             
                            
-                         
+                            await this.setState({authenticatingReservation: false})
                             
                             // console.log(obj)
                             // console.log(startDate.getTime())
@@ -473,6 +516,7 @@ class reserveSpace extends Component {
                             // console.log(`Payment SETI is ${this.state.selectedPayment.StripeID}`)
                             // await this.payForSpace(hostDoc.stripeID)
                         }catch(e){
+                            this.setState({authenticatingReservation: false})
                             throw e
                         }
                     }).catch(e => {
@@ -672,7 +716,7 @@ class reserveSpace extends Component {
                             <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>Total (USD)</Text>
                             <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>{this.state.total}</Text>
                         </View>
-                        <Button onPress={() => this.checkout()} style = {this.state.spaceAvailabilityWorks ? styles.activeButton : styles.disabledButton} disabled={!this.state.spaceAvailabilityWorks} textStyle={this.state.spaceAvailabilityWorks ? {color: 'white'} : {color: Colors.cosmos300}}>{this.state.spaceAvailabilityWorks? "Reserve Space" : `Unavailable at ${timeSearched[0].labelFormatted}`}</Button>
+                        <Button onPress={() => this.checkout()} style = {this.state.spaceAvailabilityWorks ? styles.activeButton : styles.disabledButton} disabled={!this.state.spaceAvailabilityWorks || this.state.authenticatingReservation} textStyle={this.state.spaceAvailabilityWorks ? {color: 'white'} : {color: Colors.cosmos300}}>{this.state.spaceAvailabilityWorks ? "Reserve Space" : `Booked at ${timeSearched[0].labelFormatted}`}</Button>
                     </View>
                     
                 </ScrollView>
