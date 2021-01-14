@@ -58,16 +58,6 @@ const GOOGLE_API_KEY = "AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c";
 export default class Home extends Component{
     _interval = 0;
 
-    
-    static navigationOptions = {
-        headerShown: false
-    }
-      
-
-
-
-
-
     constructor(props){
         super(props);
 

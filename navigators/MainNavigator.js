@@ -16,6 +16,7 @@ const navBar =  createBottomTabNavigator(
         Home: {
             screen: HomeNavigator,
             navigationOptions: {
+                headerShown: false,
                 tabBarLabel: 'Explore',
                 title: 'Welcome!',
                 tabBarIcon: ({ focused, tintColor }) => (
@@ -30,6 +31,7 @@ const navBar =  createBottomTabNavigator(
         Trips: {
             screen: TripsScreen,
             navigationOptions: {
+                headerShown: false,
                 tabBarLabel: 'Trips',
                 title: 'Your Trips',
                 tabBarIcon: ({ focused, tintColor }) => (
@@ -45,6 +47,7 @@ const navBar =  createBottomTabNavigator(
         Profile: {
             screen: ProfileNavigator,
             navigationOptions: {
+                headerShown: false,
                 tabBarLabel: 'Profile',
                 title: 'Your Profile',
                 tabBarIcon: ({ focused, tintColor }) => (

@@ -505,6 +505,7 @@ class reserveSpace extends Component {
                             
                            
                             await this.setState({authenticatingReservation: false})
+                            await this.props.navigation.navigate("ReservationConfirmed")
                             
                             // console.log(obj)
                             // console.log(startDate.getTime())

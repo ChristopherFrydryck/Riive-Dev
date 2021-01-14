@@ -58,10 +58,6 @@ let phoneValid = true;
 @observer
 class Profile extends Component{
 
-    static navigationOptions = {
-        headerShown: false
-    };
-    
     constructor(props){
         super(props);
         

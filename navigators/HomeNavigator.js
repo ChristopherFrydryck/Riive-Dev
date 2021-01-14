@@ -6,6 +6,7 @@ import Home from '../screens/HomeScreen'
 import ExternalProfile from '../screens/ExternalProfile'
 import ExternalSpace from '../screens/ExternalSpace'
 import ReserveSpace from '../screens/ReserveSpace'
+import ReservationConfirmed from '../screens/ReservationConfirmed'
 
 import AddVehicle from '../screens/AddVehicle'
 import AddPayment from '../screens/AddPayment'
@@ -13,17 +14,36 @@ import AddPayment from '../screens/AddPayment'
 
 const HomeNavigator = createStackNavigator({
     Home: {
-        screen: Home, 
-       
+        screen: Home,
+        navigationOptions: {
+            headerShown: false,
+        }
     },
     ExternalProfile: {
         screen: ExternalProfile, 
+        navigationOptions: {
+            headerShown: false,
+        }
     },
     ExternalSpace: {
         screen: ExternalSpace, 
     },
     ReserveSpace: {
         screen: ReserveSpace, 
+        navigationOptions: {
+            title: "Reserve Space",
+            headerTitleStyle:{
+                fontWeight: "300",
+                fontSize: 18,
+            }
+        }
+    },
+    ReservationConfirmed: {
+        screen: ReservationConfirmed,
+        navigationOptions: {
+            headerShown: false,
+            gestureEnabled: false,
+        }
     },
     AddVehicle: {
         screen: AddVehicle, 

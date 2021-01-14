@@ -23,11 +23,6 @@ import {inject, observer} from 'mobx-react/native'
 @observer
 export default class ExternalProfile extends Component{
 
-    static navigationOptions = {
-        headerShown: false
-    };
-    
-
     constructor(props){
         super(props);
 
