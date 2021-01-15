@@ -42,11 +42,7 @@ class reserveSpace extends Component {
     _isMounted = false;
 
     static navigationOptions = {
-        title: "Reserve Space",
-        headerTitleStyle:{
-            fontWeight: "300",
-            fontSize: 18,
-        }
+        
     };
 
     constructor(props){
@@ -505,7 +501,12 @@ class reserveSpace extends Component {
                             
                            
                             await this.setState({authenticatingReservation: false})
-                            await this.props.navigation.navigate("ReservationConfirmed")
+                            await this.props.navigation.navigate("ReservationConfirmed", {
+                                homeState: {
+                                    tripID: obj.tripID,
+                                    ...this.props.navigation.state.params.homeState
+                                }
+                            })
                             
                             // console.log(obj)
                             // console.log(startDate.getTime())

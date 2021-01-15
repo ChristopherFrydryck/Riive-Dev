@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { Platform, Animated, Dimensions, StatusBar, SafeAreaView, ScrollView, View, StyleSheet, ActivityIndicator } from 'react-native';
 import Colors from '../constants/Colors'
 
+import MapView, {Marker} from 'react-native-maps';
+import DayMap from '../constants/DayMap'
+import NightMap from '../constants/NightMap'
+
 import Button from '../components/Button'
 import Text from '../components/Txt'
 import Icon from '../components/Icon'
@@ -24,18 +28,21 @@ class ReservationConfirmed extends Component {
     }
     constructor(props){
         super(props);
+        console.log()
     }
 
     render(){
         const {width, height} = Dimensions.get("window")
+        const { region, searchedAddress, searchInputValue, daySearched, timeSearched, locationDifferenceWalking, tripID, selectedSpace } = this.props.navigation.state.params.homeState;
         return(
             <SafeAreaView style={styles.container}>
                 
                 <ScrollView 
+                     bounces={false}
                      stickyHeaderIndices={[0]}
                      contentContainerStyle={{flex: 1}}
                 >
-                    <View style={{flex: 0, flexDirection: 'row', zIndex: -1}}>
+                    <View style={{flex: 0, flexDirection: 'row', zIndex: -1, marginTop: 16,}}>
                         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 56, paddingRight: 80}}>
                             <Icon 
                                 iconName="checkcircleo"
@@ -45,14 +52,63 @@ class ReservationConfirmed extends Component {
                                 // onPress={() => this.editAccountModal(!this.state.editAccountModalVisible)}
                                 
                             />
-                            <Text style={{fontSize: 28, fontWeight: '500', paddingLeft: 16, color: Colors.fortune700, lineHeight: 32}}>See you at 11 AM Leah.</Text>
+                            { daySearched.dayValue === new Date().getDay ?
+                            <Text style={{fontSize: 28, fontWeight: '500', paddingLeft: 16, color: Colors.fortune700, lineHeight: 32}}>See you at {timeSearched[0].labelFormatted} {this.props.UserStore.firstname}.</Text>
+                            : <Text style={{fontSize: 28, fontWeight: '500', paddingLeft: 16, color: Colors.fortune700, lineHeight: 32}}>See you on {daySearched.dayName} {this.props.UserStore.firstname}.</Text>}    
                         </View>
                         <Text style={{fontSize: 16, textAlign: 'center', marginVertical: 16}}>We have emailed you a reciept at {this.props.UserStore.email}.</Text>
                     </View>
-                    <View style={{backgroundColor: 'white', flex: 1, borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingHorizontal: 16, paddingTop: 24, zIndex: 99,}}>
-                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text>Your Order</Text>
-                            <Text>#XXXXXXXXXX</Text>
+                    <View style={{backgroundColor: 'white', flex: 1, borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingHorizontal: 32, paddingTop: 24, zIndex: 99,}}>
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                            <Text style={{fontSize: 24}}>Your Order</Text>
+                            {daySearched.dayValue === new Date().getDay ?
+                                <Text>Today, {daySearched.monthNameAbbr} {daySearched.dateName} {new Date().getFullYear()}</Text>
+                            :
+                                <Text>{daySearched.dayName}, {daySearched.monthNameAbbr} {daySearched.dateName} {daySearched.monthNameAbbr === "Jan" && new Date().getMonth() === 11 ? new Date().getFullYear() + 1 : new Date().getFullYear()}</Text>
+                            }
+                            
+                        </View>
+                        <View>
+                            <Text style={{color: Colors.cosmos300, opacity: .7}}>{tripID}</Text>
+                        </View>
+                        <View style={{flexDirection: 'row', alignItems: "flex-end", justifyContent: 'space-between', marginTop: 16, paddingBottom: 16, borderBottomWidth: 1, borderBottomColor: Colors.mist900}}>
+                            <View style={{flexDirection: 'column', alignItems: 'flex-start', flex: 3}}>
+                                
+                                <Text type="light" numberOfLines={1} style={{fontSize: 18}}>Arrival</Text>
+                                <Text type="regular" numberOfLines={1} style={{fontSize: 24, color: Colors.tango700}}>{timeSearched[0].labelFormatted}</Text>
+                            </View>
+                            <Icon 
+                                iconName="arrow-right"
+                                iconColor={Colors.tango700}
+                                iconSize={24}
+                                iconLib="MaterialCommunityIcons"
+                                style={{flex: 1}}
+                            />
+                            <View style={{flexDirection: 'column', alignItems: 'center', flex: 3}}>
+                                <Text type="light" numberOfLines={1} style={{fontSize: 18}}>Departure</Text>
+                                <Text type="regular" numberOfLines={1} style={{fontSize: 24, color: Colors.tango700}}>{timeSearched[1].labelFormatted}</Text>
+                            </View>
+                        </View>
+                        <View style={{paddingVertical: 16, borderBottomColor: Colors.mist900, borderBottomWidth: 1, flexDirection: 'row'}}>
+                        <MapView
+                            provider={MapView.PROVIDER_GOOGLE}
+                            mapStyle={NightMap}
+                            style={{width: 100, height: 100, flex: 1, aspectRatio: 1/1,  marginRight: 16}}
+                            region={{
+                                latitude: selectedSpace.region.latitude,
+                                longitude: selectedSpace.region.longitude,
+                                latitudeDelta: .25,
+                                longitudeDelta: .25,
+                                }}
+                            pitchEnabled={false} 
+                            rotateEnabled={false} 
+                            zoomEnabled={false} 
+                            scrollEnabled={false}
+                        ></MapView>
+                        <View style={{flex: 2}}>
+                            <Text>{selectedSpace.address.full}</Text>
+                            <Button onPress={() => console.log("Get location")} style = {{backgroundColor: 'rgba(255, 193, 76, 0.3)', height: 48}} textStyle={{color: Colors.tango900, fontWeight: "500"}}>Get Directions</Button>
+                        </View>
                         </View>
                     </View>          
                 </ScrollView>
