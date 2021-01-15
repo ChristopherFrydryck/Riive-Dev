@@ -280,7 +280,7 @@ const { UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
             })
         }).then(() => {
             return null
-        }).catch(e => {return e})
+        }).catch(e => {return e}}
 
     })
 

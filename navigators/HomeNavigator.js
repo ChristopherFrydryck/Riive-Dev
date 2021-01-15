@@ -8,6 +8,8 @@ import ExternalSpace from '../screens/ExternalSpace'
 import ReserveSpace from '../screens/ReserveSpace'
 import ReservationConfirmed from '../screens/ReservationConfirmed'
 
+import TermsOfService from '../screens/LegalScreens/Tos'
+
 import AddVehicle from '../screens/AddVehicle'
 import AddPayment from '../screens/AddPayment'
 
@@ -43,6 +45,16 @@ const HomeNavigator = createStackNavigator({
         navigationOptions: {
             headerShown: false,
             gestureEnabled: false,
+        }
+    },
+    TermsOfService: {
+        screen: TermsOfService,
+        navigationOptions: {
+            title: "Terms of Service",
+            headerTitleStyle:{
+                fontWeight: "300",
+                fontSize: 18,
+            }
         }
     },
     AddVehicle: {

@@ -15,6 +15,10 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import * as Font from 'expo-font'
 import * as Location from 'expo-location'
 
+//For Shimmer
+import SvgAnimatedLinearGradient from 'react-native-svg-animated-linear-gradient'
+import Svg, {Circle, Rect} from 'react-native-svg'
+
 import Colors from '../constants/Colors'
 import SearchFilter from '../components/SearchFilter'
 import Times from '../constants/TimesAvailable'
@@ -22,9 +26,6 @@ import Times from '../constants/TimesAvailable'
 
 import axios from 'axios'
 
-//For Shimmer
-import SvgAnimatedLinearGradient from 'react-native-svg-animated-linear-gradient'
-import Svg, {Circle, Rect} from 'react-native-svg'
 
 import * as firebase from 'firebase'
 import firebaseConfig from '../firebaseConfig'
@@ -957,9 +958,14 @@ export default class Home extends Component{
         )
     }else{
         return(
-            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                <ActivityIndicator size="large" />
-             </View>
+            <SafeAreaView style={{flex: 1}}>
+                <SvgAnimatedLinearGradient width={width} height={height}>
+                        <Rect x="16" width={width / 2} height={40} rx="0" ry="0" />
+                        <Rect x={width / 2 + 24}  width={width / 2 - 40} height="40" rx="0" ry="0" />
+                        <Rect x="16" y="64" width={width -32} height="48" rx="24" ry="24"/>
+                        <Rect x="0" y="48" width={width} height={height} />
+                </SvgAnimatedLinearGradient>
+             </SafeAreaView>
         )
         }
     }

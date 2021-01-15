@@ -507,6 +507,16 @@ class reserveSpace extends Component {
                             await this.props.navigation.navigate("ReservationConfirmed", {
                                 homeState: {
                                     tripID: obj.tripID,
+                                    cost: {
+                                        price: this.state.price,
+                                        priceCents: this.state.priceCents,
+                                        serviceFee: this.state.serviceFee,
+                                        serviceFeeCents: this.state.serviceFeeCents,
+                                        processingFee: this.state.processingFee,
+                                        processingFeeCents: this.state.processingFeeCents,
+                                        total: this.state.total,
+                                        totalCents: this.state.totalCents,
+                                    },
                                     ...this.props.navigation.state.params.homeState
                                 }
                             })

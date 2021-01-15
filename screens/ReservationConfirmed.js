@@ -45,14 +45,15 @@ class ReservationConfirmed extends Component {
 
     render(){
         const {width, height} = Dimensions.get("window")
-        const { region, searchedAddress, searchInputValue, daySearched, timeSearched, locationDifferenceWalking, tripID, selectedSpace } = this.props.navigation.state.params.homeState;
+        const { region, searchedAddress, searchInputValue, daySearched, timeSearched, locationDifferenceWalking, tripID, selectedSpace, cost } = this.props.navigation.state.params.homeState;
+        console.log(this.props.navigation.state.params.homeState.cost)
         return(
             <SafeAreaView style={styles.container}>
                 
                 <ScrollView 
                      bounces={false}
                      stickyHeaderIndices={[0]}
-                     contentContainerStyle={{flex: 1}}
+                    //  contentContainerStyle={{flex: 1}}
                 >
                     <View style={{flex: 0, flexDirection: 'row', zIndex: -1, marginTop: 16,}}>
                         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 56, paddingRight: 80}}>
@@ -65,8 +66,8 @@ class ReservationConfirmed extends Component {
                                 
                             />
                             { daySearched.dayValue === new Date().getDay ?
-                            <Text style={{fontSize: 28, fontWeight: '500', paddingLeft: 16, color: Colors.fortune700, lineHeight: 32}}>See you at {timeSearched[0].labelFormatted} {this.props.UserStore.firstname}.</Text>
-                            : <Text style={{fontSize: 28, fontWeight: '500', paddingLeft: 16, color: Colors.fortune700, lineHeight: 32}}>See you on {daySearched.dayName} {this.props.UserStore.firstname}.</Text>}    
+                            <Text style={{fontSize: 28, fontWeight: '500', paddingLeft: 16, color: Colors.fortune700, lineHeight: 32}}>See you at {timeSearched[0].labelFormatted}, {this.props.UserStore.firstname}.</Text>
+                            : <Text style={{fontSize: 28, fontWeight: '500', paddingLeft: 16, color: Colors.fortune700, lineHeight: 32}}>See you on {daySearched.dayName}, {this.props.UserStore.firstname}.</Text>}    
                         </View>
                         <Text style={{fontSize: 16, textAlign: 'center', marginVertical: 16}}>We have emailed you a reciept at {this.props.UserStore.email}.</Text>
                     </View>
@@ -102,25 +103,49 @@ class ReservationConfirmed extends Component {
                             </View>
                         </View>
                         <View style={{paddingVertical: 16, borderBottomColor: Colors.mist900, borderBottomWidth: 1, flexDirection: 'row'}}>
-                        <MapView
-                            provider={MapView.PROVIDER_GOOGLE}
-                            mapStyle={NightMap}
-                            style={{width: 100, height: 100, flex: 1, aspectRatio: 1/1,  marginRight: 16}}
-                            region={{
-                                latitude: selectedSpace.region.latitude,
-                                longitude: selectedSpace.region.longitude,
-                                latitudeDelta: .25,
-                                longitudeDelta: .25,
-                                }}
-                            pitchEnabled={false} 
-                            rotateEnabled={false} 
-                            zoomEnabled={false} 
-                            scrollEnabled={false}
-                        ></MapView>
-                        <View style={{flex: 2}}>
-                            <Text>{selectedSpace.address.full}</Text>
-                            <Button onPress={() => this.openGps(selectedSpace.region.latitude, selectedSpace.region.longitude, selectedSpace.address.full)} style = {{backgroundColor: 'rgba(255, 193, 76, 0.3)', height: 48}} textStyle={{color: Colors.tango900, fontWeight: "500"}}>Get Directions</Button>
+                            <MapView
+                                provider={MapView.PROVIDER_GOOGLE}
+                                mapStyle={NightMap}
+                                style={{width: 100, height: 100, flex: 1, aspectRatio: 1/1,  marginRight: 16}}
+                                region={{
+                                    latitude: selectedSpace.region.latitude,
+                                    longitude: selectedSpace.region.longitude,
+                                    latitudeDelta: .25,
+                                    longitudeDelta: .25,
+                                    }}
+                                pitchEnabled={false} 
+                                rotateEnabled={false} 
+                                zoomEnabled={false} 
+                                scrollEnabled={false}
+                            />
+                            <View style={{flex: 2}}>
+                                <Text>{selectedSpace.address.full}</Text>
+                                <Button onPress={() => this.openGps(selectedSpace.region.latitude, selectedSpace.region.longitude, selectedSpace.address.full)} style = {{backgroundColor: 'rgba(255, 193, 76, 0.3)', height: 48}} textStyle={{color: Colors.tango900, fontWeight: "500"}}>Get Directions</Button>
+                            </View>
                         </View>
+                        <View style={{paddingVertical: 16, borderBottomColor: Colors.mist900, borderBottomWidth: 1, flexDirection: 'column'}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
+                                <Text>Parking Fare</Text>
+                                <Text>{cost.price}</Text>
+                            </View>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
+                                <Text>Service Fee</Text>
+                                <Text>{cost.serviceFee}</Text>
+                            </View>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
+                                <Text>Processing Fee</Text>
+                                <Text>{cost.processingFee}</Text>
+                            </View>
+                        </View>
+                        <View style={{paddingVertical: 16, flexDirection: 'column'}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
+                                <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>Total (USD)</Text>
+                                <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>{cost.total}</Text>
+                            </View>
+                            <Text>For more information in regards to our return policy or currency conversion, please visit our <Text style={{color: Colors.tango900}} onPress={() => this.props.navigation.navigate("TermsOfService")}>Terms of Service</Text>. If you have a question, or you do not recall booking this parking experience, please contact us at <Text style={{color: Colors.tango900}} onPress={() => Linking.openURL(`mailto:support@riive.net?subject=Booking Question&body=Hey Riive, I have a question about my visit to ${selectedSpace.address.full}. My order number is ${tripID}`)}>support@riive.net.</Text></Text>
+                        </View>
+                        <View style={{flexDirection: 'row'}}>
+                            <Button onPress={() =>  this.props.navigation.navigate("Home")} style = {{flex: 1, height: 48, backgroundColor: Colors.tango900}} textStyle={{color: "white", fontWeight: "500"}}>Return to Map</Button>
                         </View>
                     </View>          
                 </ScrollView>
