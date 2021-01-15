@@ -1,4 +1,3 @@
-// import 'intl';
 import React, { Component } from 'react';
 import { Platform, Animated, Dimensions, StatusBar, ScrollView, View, StyleSheet, ActivityIndicator } from 'react-native';
 
@@ -30,10 +29,14 @@ import {inject, observer} from 'mobx-react/native'
 
     
 // if (Platform.OS === "android") {
-//     Intl.__disableRegExpRestore()
+//     
 // }
+if(Platform.OS === 'android') { // only android needs polyfill
+    require('intl'); // import intl object
+    require('intl/locale-data/jsonp/en');
+    Intl.__disableRegExpRestore()
+  }
 
-import 'intl/locale-data/jsonp/en';
 
 
 @inject("UserStore", "ComponentStore")

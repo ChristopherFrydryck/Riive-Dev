@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, Animated, Dimensions, StatusBar, SafeAreaView, ScrollView, View, StyleSheet, ActivityIndicator } from 'react-native';
+import { Platform, Animated, Dimensions, StatusBar, SafeAreaView, ScrollView, View, StyleSheet, ActivityIndicator, Linking } from 'react-native';
 import Colors from '../constants/Colors'
 
 import MapView, {Marker} from 'react-native-maps';
@@ -30,6 +30,18 @@ class ReservationConfirmed extends Component {
         super(props);
         console.log()
     }
+
+    openGps = (lat, lng, fullAddress) => {
+        const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+        const latLng = `${lat},${lng}`;
+        const label = fullAddress;
+        const url = Platform.select({
+            ios: `${scheme}${label}@${latLng}`,
+            android: `${scheme}${latLng}(${label})`
+        })
+
+        Linking.openURL(url);
+      }
 
     render(){
         const {width, height} = Dimensions.get("window")
@@ -107,7 +119,7 @@ class ReservationConfirmed extends Component {
                         ></MapView>
                         <View style={{flex: 2}}>
                             <Text>{selectedSpace.address.full}</Text>
-                            <Button onPress={() => console.log("Get location")} style = {{backgroundColor: 'rgba(255, 193, 76, 0.3)', height: 48}} textStyle={{color: Colors.tango900, fontWeight: "500"}}>Get Directions</Button>
+                            <Button onPress={() => this.openGps(selectedSpace.region.latitude, selectedSpace.region.longitude, selectedSpace.address.full)} style = {{backgroundColor: 'rgba(255, 193, 76, 0.3)', height: 48}} textStyle={{color: Colors.tango900, fontWeight: "500"}}>Get Directions</Button>
                         </View>
                         </View>
                     </View>          
