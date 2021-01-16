@@ -28,7 +28,6 @@ class ReservationConfirmed extends Component {
     }
     constructor(props){
         super(props);
-        console.log()
     }
 
     openGps = (lat, lng, fullAddress) => {
@@ -46,7 +45,7 @@ class ReservationConfirmed extends Component {
     render(){
         const {width, height} = Dimensions.get("window")
         const { region, searchedAddress, searchInputValue, daySearched, timeSearched, locationDifferenceWalking, tripID, selectedSpace, cost } = this.props.navigation.state.params.homeState;
-        console.log(this.props.navigation.state.params.homeState.cost)
+        
         return(
             <SafeAreaView style={styles.container}>
                 
@@ -142,7 +141,7 @@ class ReservationConfirmed extends Component {
                                 <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>Total (USD)</Text>
                                 <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>{cost.total}</Text>
                             </View>
-                            <Text>For more information in regards to our return policy or currency conversion, please visit our <Text style={{color: Colors.tango900}} onPress={() => this.props.navigation.navigate("TermsOfService")}>Terms of Service</Text>. If you have a question, or you do not recall booking this parking experience, please contact us at <Text style={{color: Colors.tango900}} onPress={() => Linking.openURL(`mailto:support@riive.net?subject=Booking Question&body=Hey Riive, I have a question about my visit to ${selectedSpace.address.full}. My order number is ${tripID}`)}>support@riive.net.</Text></Text>
+                            <Text style={{fontSize: 12, lineHeight: 16}}>For more information in regards to our return policy or currency conversion, please visit our <Text style={{color: Colors.tango900}} onPress={() => this.props.navigation.navigate("TermsOfService")}>Terms of Service</Text>. If you have a question, or you do not recall booking this parking experience, please contact us at <Text style={{color: Colors.tango900}} onPress={() => Linking.openURL(`mailto:support@riive.net?subject=Booking Question&body=Hey Riive, I have a question about my visit to ${selectedSpace.address.full}. My order number is ${tripID}`)}>support@riive.net.</Text></Text>
                         </View>
                         <View style={{flexDirection: 'row'}}>
                             <Button onPress={() =>  this.props.navigation.navigate("Home")} style = {{flex: 1, height: 48, backgroundColor: Colors.tango900}} textStyle={{color: "white", fontWeight: "500"}}>Return to Map</Button>

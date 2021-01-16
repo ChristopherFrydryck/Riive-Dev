@@ -133,7 +133,10 @@ class ExternalSpacesList extends React.Component{
             })
            
             this.props.navigation.navigate("ExternalSpace", {
-                homeState: this.props.searchParams,
+                homeState: {
+                    ...this.props.searchParams,
+                    selectedSpace : spot,
+                }
             })
 
 
@@ -143,12 +146,9 @@ class ExternalSpacesList extends React.Component{
         if(this.state.data[0].listingID){
            var orderedData = this.state.data.slice().sort((a, b) => b.created - a.created)
            let indexPosition = orderedData.map(x => x.listingID).indexOf(listingID)
-            console.log("Valid")
            if(indexPosition != -1){
-            console.log("Scrolling")
             this.spacesRef.scrollToIndex({animated: false, index: indexPosition, viewOffset: 0})
            }else{
-            console.log("Scrolling to 0")
             this.spacesRef.scrollToIndex({animated: false, index: 0, viewOffset: 0})
            }
 

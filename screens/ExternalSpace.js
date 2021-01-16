@@ -74,6 +74,7 @@ class externalSpace extends React.Component {
 
       let {spaceName} = this.props.ComponentStore.selectedExternalSpot[0]
 
+
     
 
       this.props.navigation.setParams({
@@ -127,7 +128,9 @@ class externalSpace extends React.Component {
     goToHostProfile = () => {
         this.props.ComponentStore.selectedUser[0] = this.state.host ;
         this.props.navigation.navigate("ExternalProfile", {
-            homeState: {...this.props.navigation.state.params.homeState},
+            homeState: {
+                ...this.props.navigation.state.params.homeState,
+            },
         })
     }
 

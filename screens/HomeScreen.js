@@ -288,8 +288,6 @@ export default class Home extends Component{
             // await this.props.ComponentStore.selectedSpaceHost.push(data.host)
             // const db = firebase.firestore();
             // const hostData = db.collection('users').doc(space.hostID);
-
-            console.log(this.region.searched.latitude)
         
             if(this.state.searchInputValue.split("").length > 0){
                 await this.getDistance(`${data.space.region.latitude}, ${data.space.region.longitude}`, `${this.region.searched.latitude}, ${this.region.searched.longitude}`, "walking")
@@ -408,18 +406,14 @@ export default class Home extends Component{
                             if(this.state.daySearched.dayValue === data.visit.day.dayValue){
                                 // if a visit start is after start time and before end time
                                 if(parseInt(data.visit.time.start.label) >= parseInt(this.state.timeSearched[0].label) && parseInt(data.visit.time.start.label) <= parseInt(this.state.timeSearched[1].label)){
-                                    console.log("Space does not work")
                                     worksArray.push(false)
                                     break;
                                 
                                 // if a visit end is before a start time and after end time
                                 }else if(parseInt(data.visit.time.end.label) >= parseInt(this.state.timeSearched[0].label) && parseInt(data.visit.time.end.label) <= parseInt(this.state.timeSearched[1].label)){
-                                    console.log("Space does not work")
                                     worksArray.push(false)
                                     break;
-
                                 }else{
-                                    console.log("Space works")
                                     worksArray.push(true)
                                     continue;
                                 }

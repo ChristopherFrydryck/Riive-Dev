@@ -23,6 +23,8 @@ import {inject, observer} from 'mobx-react/native'
 @observer
 export default class ExternalProfile extends Component{
 
+    
+
     constructor(props){
         super(props);
 
@@ -119,6 +121,7 @@ export default class ExternalProfile extends Component{
 
     render(){
         let { host, space, allListings, numVisits, avgRating} = this.state;
+        console.log(this.props.navigation.state.params.homeState)
         
         if(host && allListings){
             return(

@@ -289,18 +289,15 @@ class reserveSpace extends Component {
                         if(daySearched.dayValue === data.visit.day.dayValue){
                             // if a visit start is after start time and before end time
                             if(parseInt(data.visit.time.start.label) >= parseInt(timeSearched[0].label) && parseInt(data.visit.time.start.label) <= parseInt(timeSearched[1].label)){
-                                console.log("Space does not work")
                                 worksArray.push(false)
                                 break;
                             
                             // if a visit end is before a start time and after end time
                             }else if(parseInt(data.visit.time.end.label) >= parseInt(timeSearched[0].label) && parseInt(data.visit.time.end.label) <= parseInt(timeSearched[1].label)){
-                                console.log("Space does not work")
                                 worksArray.push(false)
                                 break;
 
                             }else{
-                                console.log("Space works")
                                 worksArray.push(true)
                                 continue;
                             }
