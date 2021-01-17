@@ -78,14 +78,14 @@ export default class SearchFilter extends React.PureComponent{
     componentDidMount(){
         this.props.dayCallback(this.state.dayData[this.state.dayValue + 3]);
         this.props.timeCallback([this.state.arriveValue, this.state.departValue]);
-
+        
     }
 
     componentWillUnmount(){
    
     }
 
-    componentDidUpdate(prevProps, prevState) {
+   componentDidUpdate(prevProps, prevState) {
         // On opening of component
         if(!prevProps.visible && this.props.visible){
             this.slideAnimate(true)
@@ -95,6 +95,7 @@ export default class SearchFilter extends React.PureComponent{
         // Scrolling dates check current date
         if(!prevState.scrollingDates && this.state.scrollingDates){
             this.setState({dayData: this.getDays()})
+            this.slideAnimate(true)
         }
         
        
@@ -373,11 +374,11 @@ export default class SearchFilter extends React.PureComponent{
     
                                 
                                 
-    slideAnimate = (toArrival) => {
+    slideAnimate = async(toArrival) => {
             // console.log(`Arr Value before: ${this.state.arriveValue.labelFormatted}`)
         const {width} = Dimensions.get('window')
 
-        this.getIndex();
+        await this.getIndex();
 
         
 
