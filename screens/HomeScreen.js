@@ -1,5 +1,5 @@
 import React, {Component, createRef} from 'react'
-import {Fragment, View, ActivityIndicator, SafeAreaView, StatusBar, Platform, StyleSheet, Dimensions, Animated, TouchableOpacity} from 'react-native'
+import {Fragment, View, ActivityIndicator, SafeAreaView, StatusBar, Platform, StyleSheet, Dimensions, Animated, Easing, TouchableOpacity} from 'react-native'
 import ActionSheet from "react-native-actions-sheet";
 import Button from '../components/Button'
 import Text from '../components/Txt'
@@ -90,12 +90,14 @@ export default class Home extends Component{
         this.state = {
             rippleFadeAnimation: new Animated.Value(1),
             rippleScaleAnimation: new Animated.Value(0.8),
+            slideUpAnimation: new Animated.Value(-100),
 
             inputFocus: false,
             searchedAddress: false,
             mapScrolled: false,
             searchFilterOpen: false,
             searchInputValue: '',
+            fetchingResults: true,
             
               daySearched: {
                 index: 0,
@@ -108,6 +110,8 @@ export default class Home extends Component{
                 isEnabled: true,
             },
             timeSearched: [filteredStarts[0], filteredEnds[filteredEnds.length / 2]],
+            dayTimeValid: false,
+
             selectedSpace: null,
             selectedSpaceHost: null,
 
@@ -215,12 +219,13 @@ export default class Home extends Component{
         }
 
         searchFilterTimeCallback = (timeData) => {
-            this.setState({timeSearched: timeData})
-
+            this.setState({timeSearched: timeData, dayTimeValid: true});
+            this.slideBottomPill()
         }
 
         searchFilterDayCallback = (dayData) => {
-           this.setState({daySearched: dayData})
+           this.setState({daySearched: dayData, dayTimeValid: true});
+           this.slideBottomPill()
         }
 
         rippleAnimation = () => {
@@ -240,6 +245,79 @@ export default class Home extends Component{
                                 }),
                     ]),
             ).start()
+        }
+
+        slideBottomPill = () => {
+            const { dayTimeValid, fetchingResults } = this.state
+            var shouldShow;
+            if(!fetchingResults && this.results.length > 0 && dayTimeValid){
+                shouldShow = false;
+            }else{
+                shouldShow = true
+            }
+            if(shouldShow){
+                Animated.timing(this.state.slideUpAnimation, {
+                    toValue: 16,
+                    duration: 250,
+                    easing: Easing.elastic(30),
+                  }).start();
+            }else{
+                Animated.timing(this.state.slideUpAnimation, {
+                    toValue: -100,
+                    duration: 250,
+                    easing: Easing.elastic(30),
+                  }).start();
+            }
+            
+        }
+
+
+
+        checkDayTimeValid = async() => {
+            var date = new Date();
+            var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+            let today = date.getDate();
+            let weekday = days[date.getDay()]
+
+            let hour = date.getHours()
+            let minute = date.getMinutes();
+            let minutes = minute >= 10 ? minute.toString() : "0" + minute;
+
+            var startTimes = [];
+            for (var i = 0 ; i < Times[0].start.length; i++){
+                startTimes.push({key: i, label: Times[0].start[i], labelFormatted: this.convertToCommonTime(Times[0].start[i])})
+            }
+
+            var endTimes = []
+            for (var i = 0 ; i < Times[1].end.length; i++){
+                endTimes.push({key: i, label: Times[1].end[i], labelFormatted: this.convertToCommonTime(Times[1].end[i])})
+            }
+
+            let filteredStarts = startTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
+            let filteredEnds = endTimes.filter((x) =>  parseInt(x.label) >= parseInt(hour+""+minutes) - 30)
+
+
+
+            // console.log(filteredStarts[0].key)
+            // console.log(this.state.timeSearched[0].key)
+        
+            var isCurrentDay = weekday === this.state.daySearched.dayName && today === this.state.daySearched.dateName && this.state.daySearched.dayValue === 0;
+
+            if(isCurrentDay){
+                if(filteredStarts[0].key <= this.state.timeSearched[0].key){
+                    await this.setState({dayTimeValid: true})
+                }else{
+                    await this.setState({dayTimeValid: false})      
+                }
+                this.slideBottomPill()
+            }else{
+                await this.setState({dayTimeValid: true})
+                this.slideBottomPill()
+            }
+            
+        
         }
 
         filterResults = async() => {
@@ -282,22 +360,25 @@ export default class Home extends Component{
         }
 
         clickSpace = async (data) => {
-            await this.props.ComponentStore.selectedExternalSpot.clear()
-            await this.setState({selectedSpace: data.space, selectedSpaceHost: data.host})
-            await this.props.ComponentStore.selectedExternalSpot.push(data.space)
-            // await this.props.ComponentStore.selectedSpaceHost.push(data.host)
-            // const db = firebase.firestore();
-            // const hostData = db.collection('users').doc(space.hostID);
-        
-            if(this.state.searchInputValue.split("").length > 0){
-                await this.getDistance(`${data.space.region.latitude}, ${data.space.region.longitude}`, `${this.region.searched.latitude}, ${this.region.searched.longitude}`, "walking")
-            }
-            // await hostData.get().then(doc => {
-            //     this.setState({selectedSpaceHost: doc.data()})
-            // })
+            await this.checkDayTimeValid()
+            if(this.state.dayTimeValid){
+                await this.props.ComponentStore.selectedExternalSpot.clear()
+                await this.setState({selectedSpace: data.space, selectedSpaceHost: data.host})
+                await this.props.ComponentStore.selectedExternalSpot.push(data.space)
+                // await this.props.ComponentStore.selectedSpaceHost.push(data.host)
+                // const db = firebase.firestore();
+                // const hostData = db.collection('users').doc(space.hostID);
             
-        
-            actionSheetRef.current?.setModalVisible()
+                if(this.state.searchInputValue.split("").length > 0){
+                    await this.getDistance(`${data.space.region.latitude}, ${data.space.region.longitude}`, `${this.region.searched.latitude}, ${this.region.searched.longitude}`, "walking")
+                }
+                // await hostData.get().then(doc => {
+                //     this.setState({selectedSpaceHost: doc.data()})
+                // })
+                
+            
+                actionSheetRef.current?.setModalVisible()
+            }
 
         
 
@@ -306,6 +387,8 @@ export default class Home extends Component{
 
         getResults = async (lat, lng, radius, prevLat, prevLng) => {
             let results = [];
+            await this.setState({fetchingResults: true})
+            await this.slideBottomPill();
             
              // Create a Firestore reference
              const db = firebase.firestore();
@@ -435,6 +518,8 @@ export default class Home extends Component{
             })
        
             this.results = resultsFilteredTimeAvail;
+            await this.setState({fetchingResults: false})
+            await this.slideBottomPill();
 
         // }
 
@@ -947,6 +1032,11 @@ export default class Home extends Component{
                             }
                         </View>
                     </ActionSheet>
+                    
+                    <Animated.View style={[styles.searchToastPill, {bottom: this.state.slideUpAnimation}]}>
+                        {/* <ActivityIndicator /> */}
+                        <Text style={{color: "white"}}>{this.state.fetchingResults ? "Finding Spaces" : !this.state.dayTimeValid ? "Update Search Time" : this.results.length === 0 ? "No Results" : null}</Text>
+                    </Animated.View>
                        
                 </SafeAreaView>
         )
@@ -979,6 +1069,17 @@ const styles = StyleSheet.create({
         width: 20,
         backgroundColor: Colors.apollo300, 
         borderRadius: Dimensions.get('window').width/2, 
+    },
+    searchToastPill: {
+        height: 40, 
+        backgroundColor: Colors.apollo900, 
+        position: 'absolute', 
+        alignSelf: 'center', 
+        alignItems: 'center', 
+        flexDirection: 'row',
+        justifyContent: 'center', 
+        borderRadius: 24, 
+        paddingHorizontal: 16
     },
     actionSheetContent:{
         paddingHorizontal: 16, 
