@@ -64,7 +64,7 @@ class ReservationConfirmed extends Component {
                                 // onPress={() => this.editAccountModal(!this.state.editAccountModalVisible)}
                                 
                             />
-                            { daySearched.dayValue === new Date().getDay ?
+                            { daySearched.dayValue === new Date().getDay() ?
                             <Text style={{fontSize: 28, fontWeight: '500', paddingLeft: 16, color: Colors.fortune700, lineHeight: 32}}>See you at {timeSearched[0].labelFormatted}, {this.props.UserStore.firstname}.</Text>
                             : <Text style={{fontSize: 28, fontWeight: '500', paddingLeft: 16, color: Colors.fortune700, lineHeight: 32}}>See you on {daySearched.dayName}, {this.props.UserStore.firstname}.</Text>}    
                         </View>
@@ -73,10 +73,10 @@ class ReservationConfirmed extends Component {
                     <View style={{backgroundColor: 'white', flex: 1, borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingHorizontal: 32, paddingTop: 24, zIndex: 99,}}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                             <Text style={{fontSize: 24}}>Your Order</Text>
-                            {daySearched.dayValue === new Date().getDay ?
-                                <Text>Today, {daySearched.monthNameAbbr} {daySearched.dateName} {new Date().getFullYear()}</Text>
+                            {daySearched.dayValue === new Date().getDay() ?
+                                <Text>Today, {daySearched.monthNameAbbr} {daySearched.dateName} {daySearched.year}</Text>
                             :
-                                <Text>{daySearched.dayName}, {daySearched.monthNameAbbr} {daySearched.dateName} {daySearched.monthNameAbbr === "Jan" && new Date().getMonth() === 11 ? new Date().getFullYear() + 1 : new Date().getFullYear()}</Text>
+                                <Text>{daySearched.dayName}, {daySearched.monthNameAbbr} {daySearched.dateName} {daySearched.year}</Text>
                             }
                             
                         </View>
