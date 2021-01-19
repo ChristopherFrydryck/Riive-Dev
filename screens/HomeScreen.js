@@ -382,7 +382,6 @@ export default class Home extends Component{
          
             
                 await actionSheetRef.current?.setModalVisible(true)
-                await console.log(this.state.locationDifferenceWalking)
             }
 
         
@@ -1002,7 +1001,7 @@ export default class Home extends Component{
                                                 style={{paddingRight: 8}}
                                             />
                                             
-                                            { this.state.locationDifferenceWalking.duration.split(" ")[1] === 'mins' || 'min' ?
+                                            { this.state.locationDifferenceWalking.duration.split(" ")[1] === 'mins' || this.state.locationDifferenceWalking.duration.split(" ")[1] === 'min' ?
                                                 <Text numberOfLines={1}>{this.state.locationDifferenceWalking.duration} to {this.state.searchInputValue}</Text> 
                                                 :
                                                 <Text numberOfLines={1}>Longer than 1 hour to {this.state.searchInputValue}</Text> 
