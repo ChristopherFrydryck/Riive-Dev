@@ -54,8 +54,8 @@ class ReservationConfirmed extends Component {
                      stickyHeaderIndices={[0]}
                     //  contentContainerStyle={{flex: 1}}
                 >
-                    <View style={{flex: 0, flexDirection: 'row', zIndex: -1, marginTop: 16,}}>
-                        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 56, paddingRight: 80}}>
+                    <View style={{flex: 0, flexDirection: 'row', zIndex: -1, paddingTop: 16,}}>
+                        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 80}}>
                             <Icon 
                                 iconName="checkcircleo"
                                 iconLib="AntDesign"
@@ -68,7 +68,7 @@ class ReservationConfirmed extends Component {
                             <Text style={{fontSize: 28, fontWeight: '500', paddingLeft: 16, color: Colors.fortune700, lineHeight: 32}}>See you at {timeSearched[0].labelFormatted}, {this.props.UserStore.firstname}.</Text>
                             : <Text style={{fontSize: 28, fontWeight: '500', paddingLeft: 16, color: Colors.fortune700, lineHeight: 32}}>See you on {daySearched.dayName}, {this.props.UserStore.firstname}.</Text>}    
                         </View>
-                        <Text style={{fontSize: 16, textAlign: 'center', marginVertical: 16}}>We have emailed you a reciept at {this.props.UserStore.email}.</Text>
+                        <Text style={{fontSize: 16, textAlign: 'center', marginVertical: 16, paddingHorizontal: 24}}>We have emailed you a reciept at {this.props.UserStore.email}.</Text>
                     </View>
                     <View style={{backgroundColor: 'white', flex: 1, borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingHorizontal: 32, paddingTop: 24, zIndex: 99,}}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
