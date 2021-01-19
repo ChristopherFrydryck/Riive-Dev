@@ -326,11 +326,9 @@ export default class Home extends Component{
                 await this.setState({dayTimeValid: false})
                 this.slideBottomPill()
             }
-
-
-       
-
         }
+
+
 
         filterResults = async() => {
             if(this.state.searchFilterOpen){
@@ -338,12 +336,10 @@ export default class Home extends Component{
             }
             
             await this.setState({searchFilterOpen: !this.state.searchFilterOpen})
-            
-
              
         }
 
-        getDistance = (start, end, type) => {
+        getDistance = async(start, end, type) => {
             var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
             let stringName = `locationDifference${type}`
@@ -357,39 +353,36 @@ export default class Home extends Component{
             d.setMinutes(parseInt(this.state.timeSearched[0].label.slice(2)))
 
             let arrival = d.getTime();
+
             
-            try{
-                axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${start}&destinations=${end}&departure_time=now&mode=${type}&arrival_time=${arrival}&traffic_model=optimistic&key=AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c`).then(x =>{
+          
+                await axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${start}&destinations=${end}&departure_time=now&mode=${type}&arrival_time=${arrival}&traffic_model=optimistic&key=AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c`).then(x =>{
                     this.setState({[stateName]: {
                         distance: x.data.rows[0].elements[0].distance.text,
                         duration: x.data.rows[0].elements[0].duration.text,
                     }})
                     return x
+                }).catch(e => {
+                    console.log(e)
                 })
-            }catch(e){
-                console.log(e)
-            }
+            
         }
 
-        clickSpace = async (data) => {
+        clickSpace = async(data) => {
             await this.checkDayTimeValid()
             if(this.state.dayTimeValid){
                 await this.props.ComponentStore.selectedExternalSpot.clear()
-                await this.setState({selectedSpace: data.space, selectedSpaceHost: data.host})
-                await this.props.ComponentStore.selectedExternalSpot.push(data.space)
-                // await this.props.ComponentStore.selectedSpaceHost.push(data.host)
-                // const db = firebase.firestore();
-                // const hostData = db.collection('users').doc(space.hostID);
+                this.setState({selectedSpace: data.space, selectedSpaceHost: data.host})
+                this.props.ComponentStore.selectedExternalSpot.push(data.space)
+
             
                 if(this.state.searchInputValue.split("").length > 0){
                     await this.getDistance(`${data.space.region.latitude}, ${data.space.region.longitude}`, `${this.region.searched.latitude}, ${this.region.searched.longitude}`, "walking")
                 }
-                // await hostData.get().then(doc => {
-                //     this.setState({selectedSpaceHost: doc.data()})
-                // })
-                
+         
             
-                actionSheetRef.current?.setModalVisible()
+                await actionSheetRef.current?.setModalVisible(true)
+                await console.log(this.state.locationDifferenceWalking)
             }
 
         
@@ -734,7 +727,6 @@ export default class Home extends Component{
     render(){
         const {width, height} = Dimensions.get('window')
         const {firstname, email} = this.props.UserStore
-
        
 
         if(this.currentLocation.geometry.location.lat && this.currentLocation.geometry.location.lng){
@@ -1010,10 +1002,10 @@ export default class Home extends Component{
                                                 style={{paddingRight: 8}}
                                             />
                                             
-                                            { this.state.locationDifferenceWalking.duration.split(" ")[1] !== 'mins' ?
-                                                <Text numberOfLines={1}>Longer than 1 hour to {this.state.searchInputValue}</Text> 
-                                                :
+                                            { this.state.locationDifferenceWalking.duration.split(" ")[1] === 'mins' || 'min' ?
                                                 <Text numberOfLines={1}>{this.state.locationDifferenceWalking.duration} to {this.state.searchInputValue}</Text> 
+                                                :
+                                                <Text numberOfLines={1}>Longer than 1 hour to {this.state.searchInputValue}</Text> 
                                             }
                                         </View>
                                     : null}
