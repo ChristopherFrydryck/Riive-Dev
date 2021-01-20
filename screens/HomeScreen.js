@@ -596,7 +596,15 @@ export default class Home extends Component{
               }
         }
 
-        onSelectAddress = (det) => {
+        onSelectAddress = async(det) => {
+            const db = firebase.firestore();
+            const date = new Date();
+            let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            let dateString = date.toLocaleString('en-US', {timezone: timeZone});
+            let ref = db.collection("users").doc(this.props.UserStore.userID).collection("searchHistory").doc();
+
+            
+
             this.region = {
                 current: {
                     ...this.region.current,
@@ -610,26 +618,74 @@ export default class Home extends Component{
                 }
             }
             this.setState(prevState => ({
-                // region: {
-                //     current: {
-                //         ...prevState.region.current,
-                //         latitude: det.geometry.location.lat,
-                //         longitude: det.geometry.location.lng
-                //     },
-                //     searched:{
-                //         ...prevState.region.current,
-                //         latitude: det.geometry.location.lat,
-                //         longitude: det.geometry.location.lng
-                //     }
-                    
-                // },
                 mapScrolled: false,
                 searchedAddress: true,
                 searchInputValue: det.description == "Current Location" ? "Current Location" : det.name,
 
             }));
+            
+            if(det.description != "Current Location"){
+                var number = det.address_components.filter(x => x.types.includes('street_number'))[0] || null;
+                var street = det.address_components.filter(x => x.types.includes('route'))[0] || null;
+                var city = det.address_components.filter(x => x.types.includes('locality'))[0] || null;
+                var county = det.address_components.filter(x => x.types.includes('administrative_area_level_2'))[0] || null;
+                var state = det.address_components.filter(x => x.types.includes('administrative_area_level_1'))[0] || null;
+                var country = det.address_components.filter(x => x.types.includes('country'))[0] || null;
+                var zip = det.address_components.filter(x => x.types.includes('postal_code'))[0] || null;
 
-            this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.longitudeDelta * 69, 99999.9999, 99999.9999)
+              
+
+                var searchHistoryData = {
+                    locationID: det.place_id,
+                    searchID: ref.id,
+                    region:{
+                        latitude: det.geometry.location.lat,
+                        longitude: det.geometry.location.lng
+                    },
+                    addressData:{
+                        formattedName: det.name || null,
+                        full: det.formatted_address || null,
+                        number: number ? number.long_name : null,
+                        street: street ? street.long_name : null,
+                        city: city ? city.long_name : null,
+                        county: county ? county.long_name : null,
+                        state: state ? state.long_name : null,
+                        state_abbr: state ? state.short_name : null,
+                        country: country ? country.long_name : null,
+                        zip: zip ? zip.long_name : null,
+                        vicinity: det.vicinity || null,
+                    },
+                    dateTime: {
+                        unix: date.getTime(),
+                        date: date,
+                        dateString: dateString,
+                    } 
+                }
+       
+            }else{
+                var searchHistoryData = {
+                    locationID: null,
+                    searchID: ref.id,
+                    region:{
+                        latitude: det.geometry.location.lat,
+                        longitude: det.geometry.location.lng
+                    },
+                    addressData:{
+                        formattedName: "Current Location",
+                    },
+                    dateTime: {
+                        unix: date.getTime(),
+                        date: date,
+                        dateString: dateString,
+                    } 
+                }
+                
+            }
+
+            this.props.UserStore.searchHistory.push(searchHistoryData);
+            await db.collection("users").doc(this.props.UserStore.userID).collection("searchHistory").doc(ref.id).set(searchHistoryData)
+
+            await this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.longitudeDelta * 69, 99999.9999, 99999.9999)
         }
 
         onRegionChange = async (region) => {

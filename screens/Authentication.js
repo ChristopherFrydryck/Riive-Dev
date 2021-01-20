@@ -368,7 +368,6 @@ resetPassword = () =>{
                       lastname: this.props.UserStore.lastname,
                       email: this.props.UserStore.email,
                       phone: this.props.UserStore.phone,
-                      searchHistory: [],
                       totalNumTimesParked: 0,
                       numTimesOpenedApp: 1,
                       listings: [],
@@ -475,7 +474,7 @@ resetPassword = () =>{
     this.setState ({ authenticating: true})
 
   
-    firebase.auth().signInWithEmailAndPassword(this.props.UserStore.email, this.props.UserStore.password).then(() => {
+    firebase.auth().signInWithEmailAndPassword(this.props.UserStore.email, this.props.UserStore.password).then(async() => {
       // define user id before calling the db from it
       this.props.UserStore.userID = firebase.auth().currentUser.uid;
       this.setState({
@@ -486,12 +485,19 @@ resetPassword = () =>{
 
       const db = firebase.firestore();
       const doc = db.collection('users').doc(this.props.UserStore.userID);
-        
 
-         
+      const searchHistoryRef = db.collection('users').doc(this.props.UserStore.userID).collection('searchHistory');
+      let searchHistory = new Array();
 
-      // console.log(firebase.auth().currentUser.providerId)
 
+     await searchHistoryRef.get().then((doc) => {
+       if(!doc.empty){
+          doc.forEach(doc =>{
+            searchHistory.push(doc.data())
+          })
+        }
+     })
+      
       
 
       
@@ -499,9 +505,6 @@ resetPassword = () =>{
       // MOBX is not cached upon force close. Reinitalize data to mobx here!
         doc.get().then((doc) => {
           if (doc.exists){
-
-          
-             
                   // alert(`${doc.id} => ${doc.data().fullname}`);
                   this.props.UserStore.fullname = doc.data().fullname;
                   this.props.UserStore.phone = doc.data().phone;
@@ -514,7 +517,7 @@ resetPassword = () =>{
                   this.props.UserStore.listings = [];
                   this.props.UserStore.trips = doc.data().trips;
                   this.props.UserStore.payments = doc.data().payments;
-                  this.props.UserStore.searchHistory = doc.data().searchHistory;
+                  this.props.UserStore.searchHistory = searchHistory;
                   this.props.UserStore.disabled = doc.data().disabled.isDisabled;
                   this.props.UserStore.deleted = doc.data().deleted.toBeDeleted
 

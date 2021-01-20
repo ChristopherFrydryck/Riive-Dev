@@ -563,7 +563,7 @@ onSelectAddress = (det) => {
     timeZoneDB = tzdbArray[0]
   }
 
-  console.log(timeZoneDB)
+
 
  
   
