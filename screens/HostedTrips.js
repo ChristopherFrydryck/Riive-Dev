@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
-import {View, Text, SafeAreaView, StatusBar, Platform} from 'react-native'
+import {View, Text, SafeAreaView, StatusBar, Platform, StyleSheet} from 'react-native'
 import Button from '../components/Button'
 
 export default class HostedTrips extends Component{
-    
+
     componentDidMount(){
         // Set Status Bar page info here!
        this._navListener = this.props.navigation.addListener('didFocus', () => {
@@ -14,10 +14,16 @@ export default class HostedTrips extends Component{
 
     render(){
         return(
-            <SafeAreaView>
+            <View style={styles.container}>
                 <Text>This is hosted trips.</Text>
                 {/* <Button onPress={() => this.props.navigation.navigate('Profile')}>Go to Profile</Button> */}
-            </SafeAreaView>
+            </View>
         )
     }
 }
+const styles = StyleSheet.create({
+    container: {
+        marginTop: 8,
+        paddingHorizontal: 16
+    }  
+})
