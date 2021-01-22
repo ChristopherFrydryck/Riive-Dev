@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import { View, ScrollView, StatusBar, Platform, StyleSheet, RefreshControl, SectionList, ViewPagerAndroid } from 'react-native'
 import Button from '../components/Button'
 import Text from '../components/Txt'
+import Image from '../components/Image'
 import Colors from '../constants/Colors'
 
 import * as firebase from 'firebase'
@@ -14,6 +15,7 @@ import 'firebase/firestore';
 import {inject, observer} from 'mobx-react/native'
 import { Constants } from 'expo-constants';
 import { TouchableWithoutFeedback } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 
 @inject("UserStore", "ComponentStore")
@@ -56,52 +58,52 @@ export default class VisitingTrips extends Component{
         let year = date.getFullYear();
 
         const spaceVisits = db.collection("trips").where("visitorID", "==", this.props.UserStore.userID)
-        spaceVisits.where("isCancelled", '==', 'false')
-
-
-        let tomorrowAtMidnight = new Date();
-                tomorrowAtMidnight.setDate(tomorrowAtMidnight.getDate() + 1)
-                tomorrowAtMidnight.setHours(0)
-                tomorrowAtMidnight.setMinutes(0)
-                tomorrowAtMidnight.setMilliseconds(0)
+        await spaceVisits.where("isCancelled", '==', 'false')
+        await spaceVisits.orderBy("endTimeUnix", "desc")
         
         
         let visits = [];
         
 
-        await spaceVisits.limit(3).get().then( async(spaceData) => {
+        await spaceVisits.limit(5).get().then( async(spaceData) => {
             for(doc of spaceData.docs){
                 const listingCollection = db.collection("listings").doc(doc.data().listingID)
 
                 const isToday = doc.data().visit.day.dateName === today && doc.data().visit.day.year === year && doc.data().visit.day.monthName === month;
 
-                
 
-                const beforeToday = (parseInt(doc.data().visit.time.end.unix) < tomorrowAtMidnight)
-                // console.log(`Tomorrow date unix: ${new Date().setHours(24,0,0,0)} Visit time end: ${doc.data().visit.time.end.unix}`)
+
+                
                
                 
 
                 await listingCollection.get().then(listing => {
                     return listing.data()
                 }).then(listing => {
+
                     if(isToday){
                         var title = "Today"
                     }else{
                         var title = `${doc.data().visit.day.monthName} ${doc.data().visit.day.dateName} ${doc.data().visit.day.year}`
                     }
 
+                    const timeDiff = doc.data().visit.time.end.unix - new Date().getTime()
+
+                    let isInPast = timeDiff != Math.abs(timeDiff)
+
+                    let visitData = {listing: listing, isInPast: isInPast, visit: doc.data()}
+
                     if(visits.some(x => x.title === title)){
                         let visitIndex = visits.findIndex(i => i.title === title)
-                        visits[visitIndex].data.push({listing: listing, isInPast: beforeToday, visit: doc.data()})
+                        visits[visitIndex].data.push(visitData)
                     }else{
-                        visits.push({title: title, isInPast: beforeToday, data: [{listing: listing, visit: doc.data()}]})
+                        visits.push({title: title, isInPast: isInPast, data: [visitData]})
                     } 
                 })               
             }
 
             // Sort by futuremost trips
-            visits.sort((a, b) => b.data[0].visit.visit.time.end.unix - a.data[0].visit.visit.time.end.unix)
+            // visits.sort((a, b) => b.data[0].visit.visit.time.end.unix - a.data[0].visit.visit.time.end.unix)
         })
 
 
@@ -113,13 +115,36 @@ export default class VisitingTrips extends Component{
 
     
     renderVisit = (data) => {
+        const {visit, listing, isInPast} = data;
         return(
-            <View style={styles.visitCard}>
-                <Text>{data.listing.spaceName}</Text>
-                <Text>Is before today {data.isInPast ? "Yes" : "No"}</Text>
-                <Text>{data.listing.address.number} {data.listing.address.street}</Text>
-                <Text>{data.listing.address.city}, {data.listing.address.state_abbr} {data.listing.address.zip}</Text>
-            </View>  
+
+            <TouchableOpacity style={styles.visitCard}>
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                    <View style={{borderRadius: 4, overflow: 'hidden'}}>
+                        <Text style={{position: 'absolute', borderRadius: 4, zIndex: 9, backgroundColor: 'white', top: 4, left: 4, paddingHorizontal: 6, paddingVertical: 4}}>{visit.price.price}</Text>
+                        <Image 
+                                aspectRatio={1/1}
+                                source={{uri: listing.photo}}
+                                height={100}
+                                style={{shadowColor: '#000', 
+                                shadowOpacity: 0.6, 
+                                shadowOffset:{width: 0, height: 0}, 
+                                shadowRadius: 3, 
+                                elevation: 12,}}
+                                resizeMode={'cover'}
+                        /> 
+                    </View>
+                 <View style={{flex: 1, marginHorizontal: 8}}>
+                    
+                    <Text style={{fontSize: 16}}>{listing.spaceName}</Text>
+                    
+                <Text>Is before today {isInPast ? "Yes" : "No"}</Text>
+                <Text>{listing.address.number} {data.listing.address.street}</Text>
+                <Text>{listing.address.city}, {listing.address.state_abbr} {listing.address.zip}</Text>
+                 </View>
+                 
+                </View>
+            </TouchableOpacity>  
         )
     }
  
@@ -132,7 +157,7 @@ export default class VisitingTrips extends Component{
                  {/* <ScrollView refreshControl={<RefreshControl refreshing={this.state.isRefreshing} onRefresh={this.updateVisits}/>}>
                     <Text>This is Visiting trips.</Text>
                      <View> */}
-                        {/* <SectionList
+                        <SectionList
                             refreshControl={<RefreshControl refreshing={this.state.isRefreshing} onRefresh={this.updateVisits}/>}
                             ref={(ref) => { this.visitsRef = ref; }}
                             sections={this.state.visits}
@@ -140,7 +165,7 @@ export default class VisitingTrips extends Component{
                             renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
                             keyExtractor={(item, index) => index}
                          
-                        /> */}
+                        />
                {/* </View>
              </ScrollView> */}
             </View>
@@ -171,14 +196,15 @@ const styles = StyleSheet.create({
       },
       visitCard: {
           backgroundColor: 'white',
-          flex: 1,
+          
+          height: 100,
           marginVertical: 8,
           marginHorizontal: 4,
-          shadowColor: '#000', 
-          shadowOpacity: 0.6, 
-          shadowOffset:{width: 2, height: 2}, 
-          shadowRadius: 3, 
-          elevation: 12,
+        //   shadowColor: '#000', 
+        //   shadowOpacity: 0.6, 
+        //   shadowOffset:{width: 2, height: 2}, 
+        //   shadowRadius: 3, 
+        //   elevation: 12,
           borderRadius: 4,
       }
 })

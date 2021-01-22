@@ -424,6 +424,8 @@ class reserveSpace extends Component {
                                 listingID: this.props.ComponentStore.selectedExternalSpot[0].listingID,
                                 listingSubSpaceID: null,
                                 payment: this.state.selectedPayment,
+                                startTimeUnix: startDate.getTime(),
+                                endTimeUnix: endDate.getTime(),
                                 price: {
                                     price: this.state.price,
                                     priceCents: this.state.priceCents,
@@ -497,6 +499,9 @@ class reserveSpace extends Component {
                             db.collection("listings").doc(this.props.ComponentStore.selectedExternalSpot[0].listingID).update({
                                 visits: firebase.firestore.FieldValue.arrayUnion(ref.id)
                             });
+                            db.collection("users").doc(this.props.UserStore.userID).update({
+                                trips: firebase.firestore.FieldValue.arrayUnion(ref.id)
+                            })
 
                             
                            
