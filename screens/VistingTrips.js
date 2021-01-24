@@ -26,8 +26,12 @@ export default class VisitingTrips extends Component{
         this.state = {
             isRefreshing: false,
             visits: [],
+
+            // secitonlist stuff
+            lastLoadCount: 0,
         }
         // this._visits = [];
+        this.scrollingList = true;
 
    
    }
@@ -73,12 +77,6 @@ export default class VisitingTrips extends Component{
                 const listingCollection = db.collection("listings").doc(doc.data().listingID)
 
                 const isToday = doc.data().visit.day.dateName === today && doc.data().visit.day.year === year && doc.data().visit.day.monthName === month;
-
-
-
-                
-               
-                
 
                 await listingCollection.get().then(listing => {
                     return listing.data()
@@ -126,12 +124,28 @@ export default class VisitingTrips extends Component{
 
     }
 
+    _onMomentumScrollBegin = () => {
+        console.log("Start")
+        this.scrollingList = true;
+    }
+
+    _onMomentumScrollEnd = () => {
+        console.log("End")
+        this.scrollingList = false;
+    }
+
+    loadMoreData = () => {
+        if (!this.scrollingList) {
+           console.log("Getting data...")
+        };
+    };
+
     
     renderVisit = (data) => {
         const {visit, listing, isInPast} = data;
         return(
 
-            <TouchableOpacity style={styles.visitCard}>
+            <TouchableOpacity style={styles.visitCard} onPress={() => console.log(data)}>
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <View style={{borderRadius: 4, overflow: 'hidden'}}>
                         <View style={{position: 'absolute', zIndex: 9, backgroundColor: 'white', top: 4, left: 4, paddingHorizontal: 6, paddingVertical: 4, borderRadius: 4}}>
@@ -152,7 +166,7 @@ export default class VisitingTrips extends Component{
                  <View style={{flex: 1, marginHorizontal: 8}}>
                     
                     <Text style={{fontSize: 16}}>{listing.spaceName}</Text>
-                    <Text style={{flex: 1}} numberOfLines={1} ellipsizeMode='tail'>{listing.address.number} {listing.address.street}, {listing.address.city} {listing.address.state_abbr}</Text>
+                    <Text numberOfLines={1} ellipsizeMode='tail'>{listing.address.number} {listing.address.street}, {listing.address.city} {listing.address.state_abbr}</Text>
                     <Text>{visit.visit.time.start.labelFormatted} - {visit.visit.time.end.labelFormatted}</Text>
                 {/* <Text>Is before today {isInPast ? "Yes" : "No"}</Text> */}
                 
@@ -178,9 +192,12 @@ export default class VisitingTrips extends Component{
                             ref={(ref) => { this.visitsRef = ref; }}
                             sections={this.state.visits}
                             renderItem={({item}) => this.renderVisit(item)}
-                            renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+                            renderSectionHeader={({section}) => <Text style={section.isInPast ? [styles.sectionHeader, styles.sectionHeaderPast] : styles.sectionHeader}>{section.title}</Text>}
                             keyExtractor={(item, index) => index}
-                         
+                            onEndReachedThreshold={0.01}
+                            onEndReached={() => this.loadMoreData()}
+                            onMomentumScrollBegin={() => this._onMomentumScrollBegin()}
+                            onMomentumScrollEnd={() => this._onMomentumScrollEnd()}
                         />
                {/* </View>
              </ScrollView> */}
@@ -201,9 +218,12 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         fontSize: 20,
         fontWeight: '400',
-        color: Colors.cosmos300,
+        color: Colors.cosmos700,
         backgroundColor: 'white'
       },
+    sectionHeaderPast: {
+        color: '#c2c2c2',
+    },
     
       item: {
         padding: 10,
