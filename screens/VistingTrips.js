@@ -33,21 +33,25 @@ export default class VisitingTrips extends Component{
    }
 
    componentDidMount(){
-    // Set Status Bar page info here!
-   this._navListener = this.props.navigation.addListener('didFocus', () => {
-        StatusBar.setBarStyle('dark-content', true);
-        Platform.OS === 'android' && StatusBar.setBackgroundColor('white');
-        
-    });
+        // Set Status Bar page info here!
+    this._navListener = this.props.navigation.addListener('didFocus', () => {
+            StatusBar.setBarStyle('dark-content', true);
+            Platform.OS === 'android' && StatusBar.setBackgroundColor('white');
+            
+        });
 
-    this.updateVisits();
+        this.updateVisits();
+        this.sortBy = this.sortBy.bind("this")
     
-}
+    }
 
+    sortBy(field){
+        return ((a, b) => {
+        (a[field] > b[field]) - (a[field] < b[field])
+        })
+    }
 
-
-    updateVisits = async() => {
-        console.log("Yo")
+    updateVisits = () => {
         this.setState({isRefreshing: true})
         const db = firebase.firestore();
 
@@ -57,15 +61,14 @@ export default class VisitingTrips extends Component{
         let month = months[date.getMonth()]
         let year = date.getFullYear();
 
-        const spaceVisits = db.collection("trips").where("visitorID", "==", this.props.UserStore.userID)
-        await spaceVisits.where("isCancelled", '==', 'false')
-        await spaceVisits.orderBy("endTimeUnix", "desc")
+        let spaceVisits = db.collection("trips").where("visitorID", "==", this.props.UserStore.userID)
+        spaceVisits = spaceVisits.where("isCancelled", '==', false).orderBy("endTimeUnix", "desc")
         
         
         let visits = [];
         
 
-        await spaceVisits.limit(5).get().then( async(spaceData) => {
+        spaceVisits.limit(5).get().then( async(spaceData) => {
             for(doc of spaceData.docs){
                 const listingCollection = db.collection("listings").doc(doc.data().listingID)
 
@@ -102,12 +105,22 @@ export default class VisitingTrips extends Component{
                 })               
             }
 
-            // Sort by futuremost trips
-            // visits.sort((a, b) => b.data[0].visit.visit.time.end.unix - a.data[0].visit.visit.time.end.unix)
+            // Sort each day by start time
+            visits.forEach(x => {
+               x.data.sort((a, b) => a.visit.visit.time.start.unix - b.visit.visit.time.start.unix)
+            })
+            
+            return(visits)
+
+            
+        }).then(arrays => {
+            let a = arrays
+            this.setState({isRefreshing: false, visits: a})
         })
 
+        
 
-        this.setState({isRefreshing: false, visits: visits})
+        
 
         
 
@@ -121,7 +134,9 @@ export default class VisitingTrips extends Component{
             <TouchableOpacity style={styles.visitCard}>
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <View style={{borderRadius: 4, overflow: 'hidden'}}>
-                        <Text style={{position: 'absolute', borderRadius: 4, zIndex: 9, backgroundColor: 'white', top: 4, left: 4, paddingHorizontal: 6, paddingVertical: 4}}>{visit.price.price}</Text>
+                        <View style={{position: 'absolute', zIndex: 9, backgroundColor: 'white', top: 4, left: 4, paddingHorizontal: 6, paddingVertical: 4, borderRadius: 4}}>
+                            <Text>{visit.price.total}</Text>
+                        </View>
                         <Image 
                                 aspectRatio={1/1}
                                 source={{uri: listing.photo}}
@@ -137,10 +152,11 @@ export default class VisitingTrips extends Component{
                  <View style={{flex: 1, marginHorizontal: 8}}>
                     
                     <Text style={{fontSize: 16}}>{listing.spaceName}</Text>
-                    
-                <Text>Is before today {isInPast ? "Yes" : "No"}</Text>
-                <Text>{listing.address.number} {data.listing.address.street}</Text>
-                <Text>{listing.address.city}, {listing.address.state_abbr} {listing.address.zip}</Text>
+                    <Text style={{flex: 1}} numberOfLines={1} ellipsizeMode='tail'>{listing.address.number} {listing.address.street}, {listing.address.city} {listing.address.state_abbr}</Text>
+                    <Text>{visit.visit.time.start.labelFormatted} - {visit.visit.time.end.labelFormatted}</Text>
+                {/* <Text>Is before today {isInPast ? "Yes" : "No"}</Text> */}
+                
+                
                  </View>
                  
                 </View>
@@ -205,6 +221,6 @@ const styles = StyleSheet.create({
         //   shadowOffset:{width: 2, height: 2}, 
         //   shadowRadius: 3, 
         //   elevation: 12,
-          borderRadius: 4,
+        //   borderRadius: 4,
       }
 })
