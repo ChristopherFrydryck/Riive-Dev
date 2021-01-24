@@ -147,7 +147,7 @@ export default class VisitingTrips extends Component{
 
             <TouchableOpacity style={styles.visitCard} onPress={() => console.log(data)}>
                 <View style={{flex: 1, flexDirection: 'row'}}>
-                    <View style={{borderRadius: 4, overflow: 'hidden'}}>
+                    <View style={{borderRadius: 4, overflow: 'hidden',}}>
                         <View style={{position: 'absolute', zIndex: 9, backgroundColor: 'white', top: 4, left: 4, paddingHorizontal: 6, paddingVertical: 4, borderRadius: 4}}>
                             <Text>{visit.price.total}</Text>
                         </View>
@@ -159,7 +159,7 @@ export default class VisitingTrips extends Component{
                                 shadowOpacity: 0.6, 
                                 shadowOffset:{width: 0, height: 0}, 
                                 shadowRadius: 3, 
-                                elevation: 12,}}
+                                elevation: 0,}}
                                 resizeMode={'cover'}
                         /> 
                     </View>
