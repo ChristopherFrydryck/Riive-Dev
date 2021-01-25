@@ -126,16 +126,21 @@ export default class VisitingTrips extends Component{
     }
 
     _onMomentumScrollBegin = () => {
+        console.log("Scroll Start")
         this.scrollingList = true;
     }
 
     _onMomentumScrollEnd = () => {
+        console.log("Scroll End")
         this.scrollingList = false;
+        this.forceUpdate()
     }
 
     loadMoreData = () => {
-        if (!this.scrollingList && !this.state.isRefreshing) {
+        console.log("Pre Fetching")
+        if (this.scrollingList && !this.state.isRefreshing) {
             this.setState({isRefreshing: true})
+            console.log("Fetching")
             const db = firebase.firestore();
     
             var date = new Date()
@@ -193,6 +198,7 @@ export default class VisitingTrips extends Component{
                 }).then(arrays => {
                     let a = arrays
                     this.setState({isRefreshing: false, visits: a})
+                    this.scrollingList = false;
                 })
 
                 
@@ -258,7 +264,7 @@ export default class VisitingTrips extends Component{
                             onEndReachedThreshold={0.01}
                             onEndReached={() => this.loadMoreData()}
                             onMomentumScrollBegin={() => this._onMomentumScrollBegin()}
-                            onMomentumScrollEnd={() => this._onMomentumScrollEnd()}
+                            // onMomentumScrollEnd={() => this._onMomentumScrollEnd()}
                         />
                {/* </View>
              </ScrollView> */}
