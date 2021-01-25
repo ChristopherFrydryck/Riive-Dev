@@ -126,17 +126,16 @@ export default class VisitingTrips extends Component{
     }
 
     _onMomentumScrollBegin = () => {
-        console.log("Start")
         this.scrollingList = true;
     }
 
     _onMomentumScrollEnd = () => {
-        console.log("End")
         this.scrollingList = false;
     }
 
     loadMoreData = () => {
-        if (!this.scrollingList) {
+        if (!this.scrollingList && !this.state.isRefreshing) {
+            this.setState({isRefreshing: true})
             const db = firebase.firestore();
     
             var date = new Date()
