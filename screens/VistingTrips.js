@@ -28,7 +28,7 @@ export default class VisitingTrips extends Component{
             visits: [],
 
             // secitonlist stuff
-            lastLoadCount: 0,
+            
         }
         // this._visits = [];
         this.scrollingList = true;
@@ -65,14 +65,15 @@ export default class VisitingTrips extends Component{
         let month = months[date.getMonth()]
         let year = date.getFullYear();
 
-        let spaceVisits = db.collection("trips").where("visitorID", "==", this.props.UserStore.userID)
-        spaceVisits = spaceVisits.where("isCancelled", '==', false).orderBy("endTimeUnix", "desc")
-        
-        
-        let visits = [];
+
+   
+        var spaceVisits = db.collection("trips").where("visitorID", "==", this.props.UserStore.userID)
+            spaceVisits = spaceVisits.where("isCancelled", '==', false).orderBy("endTimeUnix", "desc").limit(5)
+
+        var visits = [];
         
 
-        spaceVisits.limit(5).get().then( async(spaceData) => {
+        spaceVisits.get().then( async(spaceData) => {
             for(doc of spaceData.docs){
                 const listingCollection = db.collection("listings").doc(doc.data().listingID)
 
@@ -136,7 +137,68 @@ export default class VisitingTrips extends Component{
 
     loadMoreData = () => {
         if (!this.scrollingList) {
-           console.log("Getting data...")
+            const db = firebase.firestore();
+    
+            var date = new Date()
+            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            let today = date.getDate();
+            let month = months[date.getMonth()]
+            let year = date.getFullYear();
+        
+
+            var spaceVisits = db.collection("trips").where("visitorID", "==", this.props.UserStore.userID)
+            spaceVisits = spaceVisits.where("isCancelled", '==', false).orderBy("endTimeUnix", "desc").limit(5)
+
+            var visits = this.state.visits;
+
+            spaceVisits.get().then( async(spaceData) => {
+                var lastVisible = spaceData.docs[spaceData.docs.length-1];
+                // console.log("last", lastVisible);
+
+                spaceVisits.startAfter(lastVisible).get().then( async(nextData) => {
+                    for(doc of nextData.docs){
+                        const listingCollection = db.collection("listings").doc(doc.data().listingID)
+        
+                        const isToday = doc.data().visit.day.dateName === today && doc.data().visit.day.year === year && doc.data().visit.day.monthName === month;
+        
+                        await listingCollection.get().then(listing => {
+                            return listing.data()
+                        }).then(listing => {
+        
+                            if(isToday){
+                                var title = "Today"
+                            }else{
+                                var title = `${doc.data().visit.day.monthName} ${doc.data().visit.day.dateName} ${doc.data().visit.day.year}`
+                            }
+        
+                            const timeDiff = doc.data().visit.time.end.unix - new Date().getTime()
+        
+                            let isInPast = timeDiff != Math.abs(timeDiff)
+        
+                            let visitData = {listing: listing, isInPast: isInPast, visit: doc.data()}
+        
+                            if(visits.some(x => x.title === title)){
+                                let visitIndex = visits.findIndex(i => i.title === title)
+                                visits[visitIndex].data.push(visitData)
+                            }else{
+                                visits.push({title: title, isInPast: isInPast, data: [visitData]})
+                            } 
+                        })               
+                    }
+                    // Sort each day by start time
+                    visits.forEach(x => {
+                        x.data.sort((a, b) => a.visit.visit.time.start.unix - b.visit.visit.time.start.unix)
+                    })
+                    
+                    return(visits)
+                }).then(arrays => {
+                    let a = arrays
+                    this.setState({isRefreshing: false, visits: a})
+                })
+
+                
+
+            })
         };
     };
 
