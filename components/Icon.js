@@ -1,7 +1,7 @@
 import React from 'react'
 import {View, Text, StyleSheet, Dimensions} from 'react-native'
 
-import { Feather, Entypo, EvilIcons, Foundation, Ionicons, AntDesign, FontAwesome, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { Feather, Entypo, EvilIcons, Foundation, Ionicons, AntDesign, FontAwesome, MaterialCommunityIcons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 
 
 const Icon = ({iconLib, iconColor, iconName, iconSize, onPress, alignSelf, justifySelf, ...props }) => {
@@ -19,6 +19,10 @@ const Icon = ({iconLib, iconColor, iconName, iconSize, onPress, alignSelf, justi
     }else if(iconLib == "FontAwesome"){
         return(
             <FontAwesome {...allProps}   name={iconName} size={iconSize} color={iconColor} onPress={onPress} alignSelf={alignSelf} justifySelf={justifySelf} />
+        )
+    }else if(iconLib == "FontAwesome5"){
+        return(
+            <FontAwesome5 {...allProps}   name={iconName} size={iconSize} color={iconColor} onPress={onPress} alignSelf={alignSelf} justifySelf={justifySelf} />
         )
     }else if(iconLib == "MaterialCommunityIcons"){
         return(

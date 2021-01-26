@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { View, ScrollView, StatusBar, Platform, StyleSheet, RefreshControl, SectionList, Dimensions } from 'react-native'
+import { View, ScrollView, StatusBar, Platform, StyleSheet, RefreshControl, SectionList} from 'react-native'
 import Button from '../components/Button'
 import Text from '../components/Txt'
 import Icon from '../components/Icon'
@@ -236,7 +236,6 @@ export default class HostedTrips extends Component{
     }
 
     emptyComponent = () => {
-        const {width, height} = Dimensions.get("window")
         return(
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32}}>
                 <Icon 
@@ -245,8 +244,8 @@ export default class HostedTrips extends Component{
                     iconSize={120}
                     style={{marginBottom: 32}}
                 />
-                <Text type="medium" style={{fontSize: 24, textAlign: 'center'}} >You are not hosting any guests... yet!</Text>
-                <Text type="regular" style={{marginTop: 8, fontSize: 16, textAlign: 'center'}}>Pull down to refresh and see if any future trips are booked.</Text>
+                <Text type="medium" style={{fontSize: 24, textAlign: 'center', color: Colors.cosmos500}} >You are not hosting any guests... yet!</Text>
+                <Text type="regular" style={{marginTop: 8, fontSize: 16, textAlign: 'center', color: Colors.cosmos500}}>Pull down to refresh and see if any future trips are booked.</Text>
             </View>
         )
     }

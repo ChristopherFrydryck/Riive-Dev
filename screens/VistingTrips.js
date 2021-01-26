@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import { View, ScrollView, StatusBar, Platform, StyleSheet, RefreshControl, SectionList, ViewPagerAndroid } from 'react-native'
 import Button from '../components/Button'
 import Text from '../components/Txt'
+import Icon from '../components/Icon'
 import Image from '../components/Image'
 import Colors from '../constants/Colors'
 
@@ -236,6 +237,22 @@ export default class VisitingTrips extends Component{
             </TouchableOpacity>  
         )
     }
+
+    emptyComponent = () => {
+        return(
+            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32}}>
+                <Icon 
+                    iconName="parking"
+                    iconLib="FontAwesome5"
+                    iconColor={Colors.cosmos500}
+                    iconSize={120}
+                    style={{marginBottom: 32}}
+                />
+                <Text type="medium" style={{fontSize: 24, textAlign: 'center', color: Colors.cosmos500}} >You have no booked trips yet.</Text>
+                <Text type="regular" style={{marginTop: 8, fontSize: 16, textAlign: 'center', color: Colors.cosmos500}}>Pull down to refresh and see any trips you have planned.</Text>
+            </View>
+        )
+    }
  
 
     
@@ -247,6 +264,7 @@ export default class VisitingTrips extends Component{
                     <Text>This is Visiting trips.</Text>
                      <View> */}
                         <SectionList
+                            contentContainerStyle={{flexGrow: 1}}
                             refreshControl={<RefreshControl refreshing={this.state.isRefreshing} onRefresh={this.updateVisits}/>}
                             ref={(ref) => { this.visitsRef = ref; }}
                             sections={this.state.visits}
@@ -256,6 +274,7 @@ export default class VisitingTrips extends Component{
                             onEndReachedThreshold={0.1}
                             onEndReached={() => this.loadMoreData()}
                             onMomentumScrollBegin={() => this._onMomentumScrollBegin()}
+                            ListEmptyComponent={() => this.emptyComponent()}
                         />
                {/* </View>
              </ScrollView> */}
