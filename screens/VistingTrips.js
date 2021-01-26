@@ -129,21 +129,12 @@ export default class VisitingTrips extends Component{
     }
 
     _onMomentumScrollBegin = () => {
-        console.log("Scroll Start")
         this.scrollingList = true;
     }
 
-    _onMomentumScrollEnd = () => {
-        console.log("Scroll End")
-        this.scrollingList = false;
-        this.forceUpdate()
-    }
-
     loadMoreData = () => {
-        console.log("Pre Fetching")
         if (this.scrollingList && !this.state.isRefreshing) {
             this.setState({isRefreshing: true})
-            console.log("Fetching")
             const db = firebase.firestore();
     
             var date = new Date()
@@ -157,9 +148,6 @@ export default class VisitingTrips extends Component{
             spaceVisits = spaceVisits.where("isCancelled", '==', false).orderBy("endTimeUnix", "desc").limit(5)
 
             var visits = this.state.visits;
-
-            spaceVisits.get().then( async(spaceData) => {
-                // console.log("last", lastVisible);
 
                 spaceVisits.startAfter(this.state.lastRenderedItem).get().then( async(nextData) => {
                     await this.setState({lastRenderedItem: nextData.docs[nextData.docs.length-1]})
@@ -206,11 +194,7 @@ export default class VisitingTrips extends Component{
                     this.setState({isRefreshing: false, visits: a})
                     this.scrollingList = false;
                 })
-
-                
-
-            })
-        };
+        }
     };
 
     
@@ -267,10 +251,9 @@ export default class VisitingTrips extends Component{
                             renderItem={({item}) => this.renderVisit(item)}
                             renderSectionHeader={({section}) => <Text style={section.isInPast ? [styles.sectionHeader, styles.sectionHeaderPast] : styles.sectionHeader}>{section.title}</Text>}
                             keyExtractor={(item, index) => index}
-                            onEndReachedThreshold={0.01}
+                            onEndReachedThreshold={0.1}
                             onEndReached={() => this.loadMoreData()}
                             onMomentumScrollBegin={() => this._onMomentumScrollBegin()}
-                            // onMomentumScrollEnd={() => this._onMomentumScrollEnd()}
                         />
                {/* </View>
              </ScrollView> */}
