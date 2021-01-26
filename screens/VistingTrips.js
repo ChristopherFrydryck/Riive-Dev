@@ -26,7 +26,7 @@ export default class VisitingTrips extends Component{
         this.state = {
             isRefreshing: false,
             visits: [],
-
+            lastRenderedItem: null,
             // secitonlist stuff
             
         }
@@ -74,6 +74,9 @@ export default class VisitingTrips extends Component{
         
 
         spaceVisits.get().then( async(spaceData) => {
+
+            await this.setState({lastRenderedItem: spaceData.docs[spaceData.docs.length-1]})
+
             for(doc of spaceData.docs){
                 const listingCollection = db.collection("listings").doc(doc.data().listingID)
 
@@ -156,10 +159,11 @@ export default class VisitingTrips extends Component{
             var visits = this.state.visits;
 
             spaceVisits.get().then( async(spaceData) => {
-                var lastVisible = spaceData.docs[spaceData.docs.length-1];
                 // console.log("last", lastVisible);
 
-                spaceVisits.startAfter(lastVisible).get().then( async(nextData) => {
+                spaceVisits.startAfter(this.state.lastRenderedItem).get().then( async(nextData) => {
+                    await this.setState({lastRenderedItem: nextData.docs[nextData.docs.length-1]})
+
                     for(doc of nextData.docs){
                         const listingCollection = db.collection("listings").doc(doc.data().listingID)
         
@@ -193,6 +197,8 @@ export default class VisitingTrips extends Component{
                     visits.forEach(x => {
                         x.data.sort((a, b) => a.visit.visit.time.start.unix - b.visit.visit.time.start.unix)
                     })
+
+                    
                     
                     return(visits)
                 }).then(arrays => {
