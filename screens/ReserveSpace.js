@@ -418,6 +418,7 @@ class reserveSpace extends Component {
 
                             var obj = {
                                 hostID: hostDoc.id,
+                                hostName: hostDoc.fullname,
                                 hostStripeID: hostDoc.stripeID,
                                 isCancelled: false,
                                 cancelledBy: null,
@@ -440,6 +441,7 @@ class reserveSpace extends Component {
                                 updated: currentTime,
                                 vehicle: this.state.selectedVehicle,
                                 visitorID: this.props.UserStore.userID,
+                                visitorName: this.props.UserStore.fullname,
                                 searchedAddress: searchedAddress,
                                 searchInputValue: searchInputValue,
                                 distanceWalking: locationDifferenceWalking,
