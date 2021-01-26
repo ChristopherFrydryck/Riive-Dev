@@ -55,6 +55,7 @@ export default class HostedTrips extends Component{
 
         var date = new Date()
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         let today = date.getDate();
         let month = months[date.getMonth()]
         let year = date.getFullYear();
@@ -83,7 +84,7 @@ export default class HostedTrips extends Component{
                     if(isToday){
                         var title = "Today"
                     }else{
-                        var title = `${doc.data().visit.day.monthName} ${doc.data().visit.day.dateName} ${doc.data().visit.day.year}`
+                        var title = `${days[doc.data().visit.day.dayValue]}, ${doc.data().visit.day.monthName} ${doc.data().visit.day.dateName} ${doc.data().visit.day.year}`
                     }
 
                     const timeDiff = doc.data().visit.time.end.unix - new Date().getTime()
@@ -133,6 +134,7 @@ export default class HostedTrips extends Component{
     
             var date = new Date()
             var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             let today = date.getDate();
             let month = months[date.getMonth()]
             let year = date.getFullYear();
@@ -162,7 +164,7 @@ export default class HostedTrips extends Component{
                             if(isToday){
                                 var title = "Today"
                             }else{
-                                var title = `${doc.data().visit.day.monthName} ${doc.data().visit.day.dateName} ${doc.data().visit.day.year}`
+                                var title = `${days[doc.data().visit.day.dayValue]}, ${doc.data().visit.day.monthName} ${doc.data().visit.day.dateName} ${doc.data().visit.day.year}`
                             }
         
                             const timeDiff = doc.data().visit.time.end.unix - new Date().getTime()
@@ -201,7 +203,7 @@ export default class HostedTrips extends Component{
         const visitorName = `${visit.visitorName.split(" ")[0]} ${visit.visitorName.split(" ")[1].slice(0,1)}.`
         return(
 
-            <TouchableOpacity style={styles.visitCard} onPress={() => console.log(data)}>
+            <TouchableOpacity style={styles.visitCard} onPress={() => console.log(visit)}>
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <View style={{borderRadius: 4, overflow: 'hidden',}}>
                         <View style={{position: 'absolute', zIndex: 9, backgroundColor: 'white', top: 4, left: 4, paddingHorizontal: 6, paddingVertical: 4, borderRadius: 4}}>
@@ -239,7 +241,8 @@ export default class HostedTrips extends Component{
         return(
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32}}>
                 <Icon 
-                    iconName="map-pin"
+                    iconName="home-city"
+                    iconLib="MaterialCommunityIcons"
                     iconColor={Colors.cosmos500}
                     iconSize={120}
                     style={{marginBottom: 32}}

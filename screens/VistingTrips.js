@@ -62,6 +62,7 @@ export default class VisitingTrips extends Component{
 
         var date = new Date()
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         let today = date.getDate();
         let month = months[date.getMonth()]
         let year = date.getFullYear();
@@ -90,7 +91,7 @@ export default class VisitingTrips extends Component{
                     if(isToday){
                         var title = "Today"
                     }else{
-                        var title = `${doc.data().visit.day.monthName} ${doc.data().visit.day.dateName} ${doc.data().visit.day.year}`
+                        var title = `${days[doc.data().visit.day.dayValue]}, ${doc.data().visit.day.monthName} ${doc.data().visit.day.dateName} ${doc.data().visit.day.year}`
                     }
 
                     const timeDiff = doc.data().visit.time.end.unix - new Date().getTime()
@@ -140,6 +141,7 @@ export default class VisitingTrips extends Component{
     
             var date = new Date()
             var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             let today = date.getDate();
             let month = months[date.getMonth()]
             let year = date.getFullYear();
@@ -165,7 +167,7 @@ export default class VisitingTrips extends Component{
                             if(isToday){
                                 var title = "Today"
                             }else{
-                                var title = `${doc.data().visit.day.monthName} ${doc.data().visit.day.dateName} ${doc.data().visit.day.year}`
+                                var title = `${days[doc.data().visit.day.dayValue]}, ${doc.data().visit.day.monthName} ${doc.data().visit.day.dateName} ${doc.data().visit.day.year}`
                             }
         
                             const timeDiff = doc.data().visit.time.end.unix - new Date().getTime()
@@ -248,7 +250,7 @@ export default class VisitingTrips extends Component{
                     iconSize={120}
                     style={{marginBottom: 32}}
                 />
-                <Text type="medium" style={{fontSize: 24, textAlign: 'center', color: Colors.cosmos500}} >You have no booked trips yet.</Text>
+                <Text type="medium" style={{fontSize: 24, textAlign: 'center', color: Colors.cosmos500}} >You have no booked trips.</Text>
                 <Text type="regular" style={{marginTop: 8, fontSize: 16, textAlign: 'center', color: Colors.cosmos500}}>Pull down to refresh and see any trips you have planned.</Text>
             </View>
         )
