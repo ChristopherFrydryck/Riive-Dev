@@ -200,6 +200,7 @@ export default class VisitingTrips extends Component{
     
     renderVisit = (data) => {
         const {visit, listing, isInPast} = data;
+        const hostName = `${visit.hostName.split(" ")[0]} ${visit.hostName.split(" ")[1].slice(0,1)}.`
         return(
 
             <TouchableOpacity style={styles.visitCard} onPress={() => console.log(data)}>
@@ -222,7 +223,8 @@ export default class VisitingTrips extends Component{
                     </View>
                  <View style={{flex: 1, marginHorizontal: 8}}>
                     
-                    <Text style={{fontSize: 16}}>{listing.spaceName}</Text>
+                    <Text numberOfLines={1} ellipsizeMode='tail' style={{fontSize: 18}}>{listing.spaceName}</Text>
+                    <Text>Hosted by {hostName}</Text>
                     <Text numberOfLines={1} ellipsizeMode='tail'>{listing.address.number} {listing.address.street}, {listing.address.city} {listing.address.state_abbr}</Text>
                     <Text>{visit.visit.time.start.labelFormatted} - {visit.visit.time.end.labelFormatted}</Text>
                 {/* <Text>Is before today {isInPast ? "Yes" : "No"}</Text> */}

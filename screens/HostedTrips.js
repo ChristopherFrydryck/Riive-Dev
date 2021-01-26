@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
-import { View, ScrollView, StatusBar, Platform, StyleSheet, RefreshControl, SectionList, ViewPagerAndroid } from 'react-native'
+import { View, ScrollView, StatusBar, Platform, StyleSheet, RefreshControl, SectionList, Dimensions } from 'react-native'
 import Button from '../components/Button'
 import Text from '../components/Txt'
+import Icon from '../components/Icon'
 import Image from '../components/Image'
 import Colors from '../constants/Colors'
 
@@ -197,6 +198,7 @@ export default class HostedTrips extends Component{
     
     renderVisit = (data) => {
         const {visit, listing, isInPast} = data;
+        const visitorName = `${visit.visitorName.split(" ")[0]} ${visit.visitorName.split(" ")[1].slice(0,1)}.`
         return(
 
             <TouchableOpacity style={styles.visitCard} onPress={() => console.log(data)}>
@@ -219,7 +221,8 @@ export default class HostedTrips extends Component{
                     </View>
                  <View style={{flex: 1, marginHorizontal: 8}}>
                     
-                    <Text style={{fontSize: 16}}>{listing.spaceName}</Text>
+                    <Text numberOfLines={1} ellipsizeMode='tail' style={{fontSize: 18}}>{listing.spaceName}</Text>
+                    <Text numberOfLines={1} ellipsizeMode='tail'>Visited by {visitorName}</Text>
                     <Text numberOfLines={1} ellipsizeMode='tail'>{listing.address.number} {listing.address.street}, {listing.address.city} {listing.address.state_abbr}</Text>
                     <Text>{visit.visit.time.start.labelFormatted} - {visit.visit.time.end.labelFormatted}</Text>
                 {/* <Text>Is before today {isInPast ? "Yes" : "No"}</Text> */}
@@ -229,6 +232,22 @@ export default class HostedTrips extends Component{
                  
                 </View>
             </TouchableOpacity>  
+        )
+    }
+
+    emptyComponent = () => {
+        const {width, height} = Dimensions.get("window")
+        return(
+            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32}}>
+                <Icon 
+                    iconName="map-pin"
+                    iconColor={Colors.cosmos500}
+                    iconSize={120}
+                    style={{marginBottom: 32}}
+                />
+                <Text type="medium" style={{fontSize: 24, textAlign: 'center'}} >You are not hosting any guests... yet!</Text>
+                <Text type="regular" style={{marginTop: 8, fontSize: 16, textAlign: 'center'}}>Pull down to refresh and see if any future trips are booked.</Text>
+            </View>
         )
     }
  
@@ -242,6 +261,7 @@ export default class HostedTrips extends Component{
                     <Text>This is Visiting trips.</Text>
                      <View> */}
                         <SectionList
+                            contentContainerStyle={{ flexGrow: 1 }}
                             refreshControl={<RefreshControl refreshing={this.state.isRefreshing} onRefresh={this.updateVisits}/>}
                             ref={(ref) => { this.visitsRef = ref; }}
                             sections={this.state.visits}
@@ -251,6 +271,7 @@ export default class HostedTrips extends Component{
                             onEndReachedThreshold={0.1}
                             onEndReached={() => this.loadMoreData()}
                             onMomentumScrollBegin={() => this._onMomentumScrollBegin()}
+                            ListEmptyComponent={() => this.emptyComponent()}
                         />
                {/* </View>
              </ScrollView> */}
@@ -262,7 +283,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: 8,
-        paddingHorizontal: 8
+        paddingHorizontal: 8,
     },
     sectionHeader: {
         paddingTop: 2,
