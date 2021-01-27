@@ -213,7 +213,7 @@ export default class HostedTrips extends Component{
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <View style={{borderRadius: 4, overflow: 'hidden',}}>
                         <View style={{position: 'absolute', zIndex: 9, backgroundColor: 'white', top: 4, left: 4, paddingHorizontal: 6, paddingVertical: 4, borderRadius: 4}}>
-                            <Text>{visit.price.total}</Text>
+                            <Text>{visit.price.price}</Text>
                         </View>
                         <Image 
                                 aspectRatio={1/1}
