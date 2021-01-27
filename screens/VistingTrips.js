@@ -131,7 +131,8 @@ export default class VisitingTrips extends Component{
     }
 
     loadMoreData = () => {
-        if (!this.scrollingList && !this.state.isRefreshing) {
+        console.log(this.state.lastRenderedItem)
+        if (!this.scrollingList && !this.state.isRefreshing && this.state.lastRenderedItem) {
             try{
 
                 // console.log(`Loading More Data on ${Platform.OS}`)

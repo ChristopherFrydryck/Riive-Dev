@@ -131,7 +131,7 @@ export default class HostedTrips extends Component{
     }
 
     loadMoreData = () => {
-        if (!this.scrollingList && !this.state.isRefreshing) {
+        if (!this.scrollingList && !this.state.isRefreshing && this.state.lastRenderedItem) {
             try{
                 // console.log(`Loading More Data on ${Platform.OS}`)
                 this.setState({isRefreshing: true})
