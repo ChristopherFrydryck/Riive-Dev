@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { View, ScrollView, StatusBar, Platform, StyleSheet, RefreshControl, SectionList} from 'react-native'
+import { View, ScrollView, StatusBar, Platform, StyleSheet, RefreshControl, SectionList, ActivityIndicator} from 'react-native'
 import Button from '../components/Button'
 import Text from '../components/Txt'
 import Icon from '../components/Icon'
@@ -52,6 +52,7 @@ export default class HostedTrips extends Component{
     updateVisits = () => {
         try{
             this.setState({isRefreshing: true})
+            this.scrollingList = false
             const db = firebase.firestore();
             // console.log(`Fetching Original Data on ${Platform.OS}`)
 
@@ -65,7 +66,7 @@ export default class HostedTrips extends Component{
 
     
             var spaceVisits = db.collection("trips").where("hostID", "==", this.props.UserStore.userID)
-                spaceVisits = spaceVisits.where("isCancelled", '==', false).orderBy("endTimeUnix", "desc").limit(5)
+                spaceVisits = spaceVisits.where("isCancelled", '==', false).orderBy("endTimeUnix", "desc").limit(6)
 
             var visits = [];
             
@@ -115,12 +116,12 @@ export default class HostedTrips extends Component{
             }).then(arrays => {
                 let a = arrays
                 this.setState({isRefreshing: false, visits: a})
-                this.scrollingList = false;
+                this.scrollingList = true;
             })
         }catch(e){
             alert(e)
             this.setState({isRefreshing: false})
-            this.scrollingList = false;
+            this.scrollingList = true;
         }
 
     }
@@ -131,10 +132,11 @@ export default class HostedTrips extends Component{
     }
 
     loadMoreData = () => {
-        if (!this.scrollingList && !this.state.isRefreshing && this.state.lastRenderedItem) {
+        if (this.scrollingList && !this.state.isRefreshing && this.state.lastRenderedItem) {
             try{
                 // console.log(`Loading More Data on ${Platform.OS}`)
                 this.setState({isRefreshing: true})
+                this.scrollingList = false;
                 const db = firebase.firestore();
         
                 var date = new Date()
@@ -193,12 +195,12 @@ export default class HostedTrips extends Component{
                     }).then(arrays => {
                         let a = arrays
                         this.setState({isRefreshing: false, visits: a})
-                        this.scrollingList = false;
+                        this.scrollingList = true;
                     })
             }catch(e){
                 alert(e)
                 this.setState({isRefreshing: false})
-                this.scrollingList = false;
+                this.scrollingList = true;
             }
         }
     };
@@ -258,6 +260,24 @@ export default class HostedTrips extends Component{
             </View>
         )
     }
+
+    LoadingIndicatorBottom = () => {
+        if(this.state.isRefreshing){
+            return(
+                <View style={{height: 80, alignItems: "center", justifyContent: 'center', paddingVertical: 16}}>
+                    <ActivityIndicator color={Colors.apollo900} style={{paddingBottom: 8}}/>
+                    <Text>Finding more...</Text>
+                </View>
+            )
+        }else{
+            return(
+                <View style={{alignItems: "center", justifyContent: 'center', paddingVertical: 16}}>
+                    <Text>No more results</Text>
+                </View>
+            )
+        }
+        
+    }
  
 
     
@@ -270,7 +290,7 @@ export default class HostedTrips extends Component{
                      <View> */}
                         <SectionList
                             contentContainerStyle={{flexGrow: 1}}
-                            refreshControl={<RefreshControl refreshing={this.state.isRefreshing} onRefresh={this.updateVisits}/>}
+                            refreshControl={<RefreshControl color={Colors.apollo900} refreshing={this.state.isRefreshing} onRefresh={this.updateVisits}/>}
                             ref={(ref) => { this.visitsRef = ref; }}
                             sections={this.state.visits}
                             renderItem={({item}) => this.renderVisit(item)}
@@ -280,6 +300,7 @@ export default class HostedTrips extends Component{
                             onEndReached={() => this.loadMoreData()}
                             onMomentumScrollBegin={() => this._onMomentumScrollBegin()}
                             ListEmptyComponent={() => this.emptyComponent()}
+                            ListFooterComponent={this.LoadingIndicatorBottom()}
                         />
                {/* </View>
              </ScrollView> */}
