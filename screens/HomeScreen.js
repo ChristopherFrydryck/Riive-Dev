@@ -282,6 +282,7 @@ export default class Home extends Component{
             let today = date.getDate();
             let weekday = days[date.getDay()]
             let month = months[date.getMonth()]
+            let year = date.getFullYear();
 
             let hour = date.getHours()
             let minute = date.getMinutes();
@@ -303,9 +304,13 @@ export default class Home extends Component{
 
 
             // console.log(filteredStarts[0].key)
-            console.log(this.state.daySearched)
+            // console.log(this.state.daySearched)
         
-            var isToday = weekday === this.state.daySearched.dayName && today === this.state.daySearched.dateName && this.state.daySearched.monthName === month && this.state.daySearched.dayValue === 0;
+
+            var isToday = year === this.state.daySearched.year && months.indexOf(month) === months.indexOf(this.state.daySearched.monthName) && today === this.state.daySearched.dateName
+
+            var isFuture = year < this.state.daySearched.year || (year === this.state.daySearched.year && months.indexOf(month) < months.indexOf(this.state.daySearched.monthName)) || (year === this.state.daySearched.year && months.indexOf(month) === months.indexOf(this.state.daySearched.monthName) && today < this.state.daySearched.dateName);
+
 
             if(isToday){
                 if(filteredStarts[0].key <= this.state.timeSearched[0].key){
@@ -314,15 +319,17 @@ export default class Home extends Component{
                     await this.setState({dayTimeValid: false})      
                 }
                 this.slideBottomPill()
-            }else if(today > this.state.daySearched.dateName && this.state.daySearched.monthName === month){
-                await this.setState({dayTimeValid: false})
-                this.slideBottomPill()
-            }else{
+            }else if(isFuture){
                 await this.setState({dayTimeValid: true})
                 this.slideBottomPill()
+            }else{
+                await this.setState({dayTimeValid: false})
+                this.slideBottomPill()
             }
-            
-        
+
+
+       
+
         }
 
         filterResults = async() => {
