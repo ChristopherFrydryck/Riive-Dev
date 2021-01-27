@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { View, ScrollView, StatusBar, Platform, StyleSheet, RefreshControl, SectionList, ViewPagerAndroid } from 'react-native'
+import { View, ScrollView, StatusBar, Platform, StyleSheet, RefreshControl, SectionList} from 'react-native'
 import Button from '../components/Button'
 import Text from '../components/Txt'
 import Icon from '../components/Icon'
@@ -32,9 +32,9 @@ export default class VisitingTrips extends Component{
             
         }
         // this._visits = [];
-        this.scrollingList = true;
+        this.scrollingList = false
+       
 
-   
    }
 
    componentDidMount(){
@@ -46,157 +46,161 @@ export default class VisitingTrips extends Component{
         });
 
         this.updateVisits();
-        this.sortBy = this.sortBy.bind("this")
-    
+         
     }
 
-    sortBy(field){
-        return ((a, b) => {
-        (a[field] > b[field]) - (a[field] < b[field])
-        })
-    }
-
-    updateVisits = () => {
-        this.setState({isRefreshing: true})
-        const db = firebase.firestore();
-
-        var date = new Date()
-        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        let today = date.getDate();
-        let month = months[date.getMonth()]
-        let year = date.getFullYear();
-
-
-   
-        var spaceVisits = db.collection("trips").where("visitorID", "==", this.props.UserStore.userID)
-            spaceVisits = spaceVisits.where("isCancelled", '==', false).orderBy("endTimeUnix", "desc").limit(5)
-
-        var visits = [];
-        
-
-        spaceVisits.get().then( async(spaceData) => {
-
-            await this.setState({lastRenderedItem: spaceData.docs[spaceData.docs.length-1]})
-
-            for(doc of spaceData.docs){
-                const listingCollection = db.collection("listings").doc(doc.data().listingID)
-
-                const isToday = doc.data().visit.day.dateName === today && doc.data().visit.day.year === year && doc.data().visit.day.monthName === month;
-
-                await listingCollection.get().then(listing => {
-                    return listing.data()
-                }).then(listing => {
-
-                    if(isToday){
-                        var title = "Today"
-                    }else{
-                        var title = `${days[doc.data().visit.day.dayValue]}, ${doc.data().visit.day.monthName} ${doc.data().visit.day.dateName} ${doc.data().visit.day.year}`
-                    }
-
-                    const timeDiff = doc.data().visit.time.end.unix - new Date().getTime()
-
-                    let isInPast = timeDiff != Math.abs(timeDiff)
-
-                    let visitData = {listing: listing, isInPast: isInPast, visit: doc.data()}
-
-                    if(visits.some(x => x.title === title)){
-                        let visitIndex = visits.findIndex(i => i.title === title)
-                        visits[visitIndex].data.push(visitData)
-                    }else{
-                        visits.push({title: title, isInPast: isInPast, data: [visitData]})
-                    } 
-                })               
-            }
-
-            // Sort each day by start time
-            visits.forEach(x => {
-               x.data.sort((a, b) => a.visit.visit.time.start.unix - b.visit.visit.time.start.unix)
-            })
-            
-            return(visits)
-
-            
-        }).then(arrays => {
-            let a = arrays
-            this.setState({isRefreshing: false, visits: a})
-        })
-
-        
-
-        
-
-        
-
-    }
-
-    _onMomentumScrollBegin = () => {
-        this.scrollingList = true;
-    }
-
-    loadMoreData = () => {
-        if (this.scrollingList && !this.state.isRefreshing) {
+    updateVisits = () => {   
+        try{
             this.setState({isRefreshing: true})
             const db = firebase.firestore();
-    
+            // console.log(`Fetching Original Data on ${Platform.OS}`)
+
             var date = new Date()
             var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             let today = date.getDate();
             let month = months[date.getMonth()]
             let year = date.getFullYear();
-        
 
+
+    
             var spaceVisits = db.collection("trips").where("visitorID", "==", this.props.UserStore.userID)
-            spaceVisits = spaceVisits.where("isCancelled", '==', false).orderBy("endTimeUnix", "desc").limit(5)
+                spaceVisits = spaceVisits.where("isCancelled", '==', false).orderBy("endTimeUnix", "desc").limit(5)
 
-            var visits = this.state.visits;
+            var visits = [];
+            
 
-                spaceVisits.startAfter(this.state.lastRenderedItem).get().then( async(nextData) => {
-                    await this.setState({lastRenderedItem: nextData.docs[nextData.docs.length-1]})
+            spaceVisits.get().then( async(spaceData) => {
 
-                    for(doc of nextData.docs){
-                        const listingCollection = db.collection("listings").doc(doc.data().listingID)
-        
-                        const isToday = doc.data().visit.day.dateName === today && doc.data().visit.day.year === year && doc.data().visit.day.monthName === month;
-        
-                        await listingCollection.get().then(listing => {
-                            return listing.data()
-                        }).then(listing => {
-        
-                            if(isToday){
-                                var title = "Today"
-                            }else{
-                                var title = `${days[doc.data().visit.day.dayValue]}, ${doc.data().visit.day.monthName} ${doc.data().visit.day.dateName} ${doc.data().visit.day.year}`
-                            }
-        
-                            const timeDiff = doc.data().visit.time.end.unix - new Date().getTime()
-        
-                            let isInPast = timeDiff != Math.abs(timeDiff)
-        
-                            let visitData = {listing: listing, isInPast: isInPast, visit: doc.data()}
-        
-                            if(visits.some(x => x.title === title)){
-                                let visitIndex = visits.findIndex(i => i.title === title)
-                                visits[visitIndex].data.push(visitData)
-                            }else{
-                                visits.push({title: title, isInPast: isInPast, data: [visitData]})
-                            } 
-                        })               
-                    }
-                    // Sort each day by start time
-                    visits.forEach(x => {
-                        x.data.sort((a, b) => a.visit.visit.time.start.unix - b.visit.visit.time.start.unix)
-                    })
+                await this.setState({lastRenderedItem: spaceData.docs[spaceData.docs.length-1]})
 
-                    
-                    
-                    return(visits)
-                }).then(arrays => {
-                    let a = arrays
-                    this.setState({isRefreshing: false, visits: a})
-                    this.scrollingList = false;
+                for(doc of spaceData.docs){
+                    const listingCollection = db.collection("listings").doc(doc.data().listingID)
+
+                    const isToday = doc.data().visit.day.dateName === today && doc.data().visit.day.year === year && doc.data().visit.day.monthName === month;
+
+                    await listingCollection.get().then(listing => {
+                        return listing.data()
+                    }).then(listing => {
+
+                        if(isToday){
+                            var title = "Today"
+                        }else{
+                            var title = `${days[doc.data().visit.day.dayValue]}, ${doc.data().visit.day.monthName} ${doc.data().visit.day.dateName} ${doc.data().visit.day.year}`
+                        }
+
+                        const timeDiff = doc.data().visit.time.end.unix - new Date().getTime()
+
+                        let isInPast = timeDiff != Math.abs(timeDiff)
+
+                        let visitData = {listing: listing, isInPast: isInPast, visit: doc.data()}
+
+                        if(visits.some(x => x.title === title)){
+                            let visitIndex = visits.findIndex(i => i.title === title)
+                            visits[visitIndex].data.push(visitData)
+                        }else{
+                            visits.push({title: title, isInPast: isInPast, data: [visitData]})
+                        } 
+                    })               
+                }
+
+                // Sort each day by start time
+                visits.forEach(x => {
+                x.data.sort((a, b) => a.visit.visit.time.start.unix - b.visit.visit.time.start.unix)
                 })
+                
+                return(visits)
+
+                
+            }).then(arrays => {
+                let a = arrays
+                this.setState({isRefreshing: false, visits: a})
+                this.scrollingList = false;
+            })
+        }catch(e){
+            alert(e)
+            this.setState({isRefreshing: false})
+            this.scrollingList = false;
+        }
+
+    }
+
+    _onMomentumScrollBegin = () => {
+        // console.log(`Scrolling on ${Platform.OS}`)
+        this.scrollingList = true;
+    }
+
+    loadMoreData = () => {
+        if (!this.scrollingList && !this.state.isRefreshing) {
+            try{
+
+                // console.log(`Loading More Data on ${Platform.OS}`)
+                this.setState({isRefreshing: true})
+                const db = firebase.firestore();
+        
+                var date = new Date()
+                var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                let today = date.getDate();
+                let month = months[date.getMonth()]
+                let year = date.getFullYear();
+            
+
+                var spaceVisits = db.collection("trips").where("visitorID", "==", this.props.UserStore.userID)
+                spaceVisits = spaceVisits.where("isCancelled", '==', false).orderBy("endTimeUnix", "desc").limit(5)
+
+                var visits = this.state.visits;
+
+                    spaceVisits.startAfter(this.state.lastRenderedItem).get().then( async(nextData) => {
+                        await this.setState({lastRenderedItem: nextData.docs[nextData.docs.length-1]})
+
+                        for(doc of nextData.docs){
+                            const listingCollection = db.collection("listings").doc(doc.data().listingID)
+            
+                            const isToday = doc.data().visit.day.dateName === today && doc.data().visit.day.year === year && doc.data().visit.day.monthName === month;
+            
+                            await listingCollection.get().then(listing => {
+                                return listing.data()
+                            }).then(listing => {
+            
+                                if(isToday){
+                                    var title = "Today"
+                                }else{
+                                    var title = `${days[doc.data().visit.day.dayValue]}, ${doc.data().visit.day.monthName} ${doc.data().visit.day.dateName} ${doc.data().visit.day.year}`
+                                }
+            
+                                const timeDiff = doc.data().visit.time.end.unix - new Date().getTime()
+            
+                                let isInPast = timeDiff != Math.abs(timeDiff)
+            
+                                let visitData = {listing: listing, isInPast: isInPast, visit: doc.data()}
+            
+                                if(visits.some(x => x.title === title)){
+                                    let visitIndex = visits.findIndex(i => i.title === title)
+                                    visits[visitIndex].data.push(visitData)
+                                }else{
+                                    visits.push({title: title, isInPast: isInPast, data: [visitData]})
+                                } 
+                            })               
+                        }
+                        // Sort each day by start time
+                        visits.forEach(x => {
+                            x.data.sort((a, b) => a.visit.visit.time.start.unix - b.visit.visit.time.start.unix)
+                        })
+
+                        
+                        
+                        return(visits)
+                    }).then(arrays => {
+                        let a = arrays
+                        this.setState({isRefreshing: false, visits: a})
+                        this.scrollingList = false;
+                    })
+                }catch(e){
+                    alert(e)
+                    this.setState({isRefreshing: false})
+                    this.scrollingList = false;
+                }
         }
     };
 
@@ -227,7 +231,7 @@ export default class VisitingTrips extends Component{
                  <View style={{flex: 1, marginHorizontal: 8}}>
                     
                     <Text numberOfLines={1} ellipsizeMode='tail' style={{fontSize: 18}}>{listing.spaceName}</Text>
-                    <Text>Hosted by {hostName}</Text>
+                    <Text numberOfLines={1} ellipsizeMode='tail'>Hosted by {hostName}</Text>
                     <Text numberOfLines={1} ellipsizeMode='tail'>{listing.address.number} {listing.address.street}, {listing.address.city} {listing.address.state_abbr}</Text>
                     <Text>{visit.visit.time.start.labelFormatted} - {visit.visit.time.end.labelFormatted}</Text>
                 {/* <Text>Is before today {isInPast ? "Yes" : "No"}</Text> */}
@@ -273,7 +277,7 @@ export default class VisitingTrips extends Component{
                             renderItem={({item}) => this.renderVisit(item)}
                             renderSectionHeader={({section}) => <Text style={section.isInPast ? [styles.sectionHeader, styles.sectionHeaderPast] : styles.sectionHeader}>{section.title}</Text>}
                             keyExtractor={(item, index) => index}
-                            onEndReachedThreshold={0.1}
+                            onEndReachedThreshold={Platform.OS === "ios" ? 0 : 0.1}
                             onEndReached={() => this.loadMoreData()}
                             onMomentumScrollBegin={() => this._onMomentumScrollBegin()}
                             ListEmptyComponent={() => this.emptyComponent()}
@@ -288,7 +292,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: 8,
-        paddingHorizontal: 8
+        paddingHorizontal: 8,
     },
     sectionHeader: {
         paddingTop: 2,
