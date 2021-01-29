@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import { View, ScrollView, StatusBar, Platform, StyleSheet, RefreshControl, SectionList, ActivityIndicator, Modal, SafeAreaView, Linking} from 'react-native'
 import Button from '../components/Button'
-import TopBar from '../components/TopBar'
 import Text from '../components/Txt'
 import Icon from '../components/Icon'
 import Image from '../components/Image'
@@ -480,7 +479,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 8,
         paddingHorizontal: 8,
-        backgroundColor: 'white'
+        backgroundColor: "white"
     },
     sectionHeader: {
         paddingTop: 2,

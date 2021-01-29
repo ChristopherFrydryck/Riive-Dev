@@ -10,7 +10,7 @@ const VisitedTripsNavigator = createStackNavigator({
     VisitedTrips: {
         screen: VisitedTrips,
         navigationOptions: {
-            title: "Visits",
+            title: "Back",
             headerShown: false,
             gestureEnabled: false,
         }
