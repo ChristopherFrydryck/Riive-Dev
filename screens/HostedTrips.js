@@ -9,6 +9,7 @@ import Colors from '../constants/Colors'
 import MapView, {Marker} from 'react-native-maps';
 import DayMap from '../constants/DayMap'
 import NightMap from '../constants/NightMap'
+
 import * as firebase from 'firebase'
 import firebaseConfig from '../firebaseConfig'
 import withFirebaseAuth from 'react-with-firebase-auth'
@@ -39,8 +40,6 @@ export default class HostedTrips extends Component{
         // this._visits = [];
         this.scrollingList = false
         this.VisitModal = this.VisitModal.bind(this)
-
-   
    }
 
    componentDidMount(){
@@ -52,7 +51,6 @@ export default class HostedTrips extends Component{
         });
 
         this.updateVisits();
-
     }
 
     updateVisits = () => {
@@ -96,11 +94,14 @@ export default class HostedTrips extends Component{
                             var title = `${days[doc.data().visit.day.dayValue]}, ${doc.data().visit.day.monthName} ${doc.data().visit.day.dateName} ${doc.data().visit.day.year}`
                         }
 
-                        const timeDiff = doc.data().visit.time.end.unix - new Date().getTime()
+                        const timeDiffEnd = doc.data().visit.time.end.unix - new Date().getTime()
+                        const timeDiffStart = doc.data().visit.time.start.unix - new Date().getTime()
+                        
 
-                        let isInPast = timeDiff != Math.abs(timeDiff)
+                        let isInPast = timeDiffEnd != Math.abs(timeDiffEnd)
+                        let isCurrentlyActive = timeDiffStart != Math.abs(timeDiffStart) && !isInPast
 
-                        let visitData = {listing: listing, isInPast: isInPast, visit: doc.data()}
+                        let visitData = {listing: listing, isInPast: isInPast, current: isCurrentlyActive, visit: doc.data()}
 
                         if(visits.some(x => x.title === title)){
                             let visitIndex = visits.findIndex(i => i.title === title)
@@ -176,11 +177,14 @@ export default class HostedTrips extends Component{
                                     var title = `${days[doc.data().visit.day.dayValue]}, ${doc.data().visit.day.monthName} ${doc.data().visit.day.dateName} ${doc.data().visit.day.year}`
                                 }
             
-                                const timeDiff = doc.data().visit.time.end.unix - new Date().getTime()
+                                const timeDiffEnd = doc.data().visit.time.end.unix - new Date().getTime()
+                                const timeDiffStart = doc.data().visit.time.start.unix - new Date().getTime()
+
             
-                                let isInPast = timeDiff != Math.abs(timeDiff)
+                                let isInPast = timeDiffEnd != Math.abs(timeDiffEnd)
+                                let isCurrentlyActive = timeDiffStart != Math.abs(timeDiffStart) && !isInPast
             
-                                let visitData = {listing: listing, isInPast: isInPast, visit: doc.data()}
+                                let visitData = {listing: listing, isInPast: isInPast, current: isCurrentlyActive, visit: doc.data()}
             
                                 if(visits.some(x => x.title === title)){
                                     let visitIndex = visits.findIndex(i => i.title === title)
@@ -213,7 +217,7 @@ export default class HostedTrips extends Component{
 
     
     renderVisit = (data) => {
-        const {visit, listing, isInPast} = data;
+        const {visit, listing, isInPast, current} = data;
         const visitorName = `${visit.visitorName.split(" ")[0]} ${visit.visitorName.split(" ")[1].slice(0,1)}.`
         return(
 
@@ -236,14 +240,11 @@ export default class HostedTrips extends Component{
                         /> 
                     </View>
                  <View style={{flex: 1, marginHorizontal: 8}}>
-                    
                     <Text numberOfLines={1} ellipsizeMode='tail' style={{fontSize: 18}}>{listing.spaceName}</Text>
-                    <Text numberOfLines={1} ellipsizeMode='tail'>Visited by {visitorName}</Text>
-                    <Text numberOfLines={1} ellipsizeMode='tail'>{listing.address.number} {listing.address.street}, {listing.address.city} {listing.address.state_abbr}</Text>
-                    <Text>{visit.visit.time.start.labelFormatted} - {visit.visit.time.end.labelFormatted}</Text>
-                {/* <Text>Is before today {isInPast ? "Yes" : "No"}</Text> */}
-                
-                
+                    <Text numberOfLines={1} ellipsizeMode='tail' style={{color: Colors.cosmos700}}>Visited by {visitorName}</Text>
+                    {/* <Text numberOfLines={1} ellipsizeMode='tail'>{listing.address.number} {listing.address.street}, {listing.address.city} {listing.address.state_abbr}</Text> */}
+                    <Text numberOfLines={1} ellipsizeMode='tail' style={{color: Colors.cosmos700}}>{visit.visit.time.start.labelFormatted} - {visit.visit.time.end.labelFormatted}</Text>
+                    {/* <Text>Is current {current ? "Yes" : "No"}</Text> */}
                  </View>
                  
                 </View>
@@ -278,6 +279,8 @@ export default class HostedTrips extends Component{
 
         Linking.openURL(url);
       }
+
+
     LoadingIndicatorBottom = () => {
         if(this.state.isRefreshing){
             return(
@@ -315,7 +318,6 @@ export default class HostedTrips extends Component{
 
             const isToday = data.visit.visit.day.dateName === today && data.visit.visit.day.year === year && data.visit.visit.day.monthName === month;
 
-            let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
             let sameTimezone = false;
 
             // Check if space is in same timezone as current device
