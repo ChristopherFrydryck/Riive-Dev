@@ -1,10 +1,15 @@
 import React, {Component} from 'react'
-import { View, ScrollView, StatusBar, Platform, StyleSheet, RefreshControl, SectionList, ActivityIndicator} from 'react-native'
+import { View, ScrollView, StatusBar, Platform, StyleSheet, RefreshControl, SectionList, ActivityIndicator, Modal, SafeAreaView, Linking} from 'react-native'
 import Button from '../components/Button'
+import TopBar from '../components/TopBar'
 import Text from '../components/Txt'
 import Icon from '../components/Icon'
 import Image from '../components/Image'
 import Colors from '../constants/Colors'
+
+import MapView, {Marker} from 'react-native-maps';
+import DayMap from '../constants/DayMap'
+import NightMap from '../constants/NightMap'
 
 import * as firebase from 'firebase'
 import firebaseConfig from '../firebaseConfig'
@@ -29,13 +34,14 @@ export default class VisitingTrips extends Component{
             isRefreshing: false,
             visits: [],
             lastRenderedItem: null,
+            selectedVisit: null,
+            modalVisible: false,
             // secitonlist stuff
             
         }
         // this._visits = [];
         this.scrollingList = false
-       
-
+        this.VisitModal = this.VisitModal.bind(this)
    }
 
    componentDidMount(){
@@ -47,7 +53,6 @@ export default class VisitingTrips extends Component{
         });
 
         this.updateVisits();
-         
     }
 
     updateVisits = () => {   
@@ -212,7 +217,7 @@ export default class VisitingTrips extends Component{
         const hostName = `${visit.hostName.split(" ")[0]} ${visit.hostName.split(" ")[1].slice(0,1)}.`
         return(
 
-            <TouchableOpacity style={styles.visitCard} onPress={() => console.log(data)}>
+            <TouchableOpacity style={styles.visitCard} onPress={() => this.setState({selectedVisit: data, modalVisible: true})}>
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <View style={{borderRadius: 4, overflow: 'hidden',}}>
                         <View style={{position: 'absolute', zIndex: 9, backgroundColor: 'white', top: 4, left: 4, paddingHorizontal: 6, paddingVertical: 4, borderRadius: 4}}>
@@ -262,6 +267,20 @@ export default class VisitingTrips extends Component{
         )
     }
 
+    openGps = (lat, lng, fullAddress) => {
+        const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+        const latLng = `${lat},${lng}`;
+        const label = fullAddress;
+        const url = Platform.select({
+            ios: `${scheme}${label}@${latLng}`,
+            android: `${scheme}${latLng}(${label})`
+        })
+
+        Linking.openURL(url);
+      }
+
+    
+
     LoadingIndicatorBottom = () => {
         if(this.state.isRefreshing){
             return(
@@ -279,13 +298,155 @@ export default class VisitingTrips extends Component{
         }
         
     }
- 
+
+    
+    VisitModal(props) {
+        const {data, visible} = props;
+        
+        if(data){
+            // console.log(data.isInPast)
+            var date = new Date()
+            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            let today = date.getDate();
+            let month = months[date.getMonth()]
+            let year = date.getFullYear();
+
+            const isToday = data.visit.visit.day.dateName === today && data.visit.visit.day.year === year && data.visit.visit.day.monthName === month;
+
+            let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            let sameTimezone = false;
+
+            // Check if space is in same timezone as current device
+            if(data.listing.timezone.offsetValue + new Date().getTimezoneOffset()/60 === 0){
+                sameTimezone = true;
+            }
+
+            const hostName = `${data.visit.hostName.split(" ")[0]} ${data.visit.hostName.split(" ")[1].slice(0,1)}.`
+
+
+            return(
+                <Modal 
+                    animationType="slide"
+                    visible={visible}
+                    onRequestClose={() => this.setState({modalVisible: false, selectedVisit: null})}
+                >
+                    <SafeAreaView style={{flex: 1}}>
+                        <View style={{flex: 0}}>
+                            <View style={{flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
+                                <Text numberOfLines={1}  ellipsizeMode='tail' style={{ fontSize: 18}}>{data.listing.spaceName}</Text>
+                                <Text type="normal" numberOfLines={1} ellipsizeMode='tail' style={{paddingBottom: 8}}>Hosted by {hostName}</Text>
+                            </View>
+                                <Icon 
+                                    iconName="x"
+                                    iconColor={Colors.cosmos500}
+                                    iconSize={28}
+                                    onPress={() => this.setState({modalVisible: false, selectedVisit: null})}
+                                    style={{position: 'absolute', top: 8, right: 8}}
+                                />
+                        </View>
+                        <ScrollView style={{flex: 1}}>
+                            <Image 
+                                    aspectRatio={21/9}
+                                    source={{uri: data.listing.photo}}
+                                    resizeMode={'cover'}
+                            /> 
+                            <View style={{paddingHorizontal: 16}}>
+                                
+                                <Text type="light" numberOfLines={1} style={{textAlign: 'center', fontSize: 18, marginTop: 8, paddingBottom: 16}}>{isToday ? `Today, ${data.visit.visit.day.monthName} ${data.visit.visit.day.dateName} ${data.visit.visit.day.year}` : `${data.visit.visit.day.dayName}, ${data.visit.visit.day.monthName} ${data.visit.visit.day.dateName} ${data.visit.visit.day.year}`}</Text>
+                                <View style={{flexDirection: 'row', alignItems: "flex-end", justifyContent: 'space-between', marginTop: 0, paddingBottom: 16, borderBottomWidth: 1, borderBottomColor: Colors.mist900}}>
+                                    <View style={{flexDirection: 'column', alignItems: 'center', flex: 3}}>
+                                        <Text type="light" numberOfLines={1} style={{fontSize: 18}}>Arrival</Text>
+                                        <Text type="regular" numberOfLines={1} style={{fontSize: 22, color: Colors.tango700}}>{data.visit.visit.time.start.labelFormatted} {sameTimezone ? null : data.listing.timezone.timeZoneAbbr}</Text>
+                                    </View>
+                                    <Icon 
+                                        iconName="arrow-right"
+                                        iconColor={Colors.tango700}
+                                        iconSize={24}
+                                        iconLib="MaterialCommunityIcons"
+                                        style={{flex: 1, paddingBottom: 4, textAlign: 'center'}}
+                                    />
+                                    <View style={{flexDirection: 'column', alignItems: 'center', flex: 3}}>
+                                        <Text type="light" numberOfLines={1} style={{fontSize: 18}}>Departure</Text>
+                                        <Text type="regular" numberOfLines={1} style={{fontSize: 22, color: Colors.tango700}}>{data.visit.visit.time.end.labelFormatted} {sameTimezone ? null : data.listing.timezone.timeZoneAbbr}</Text>
+                                    </View>
+                                </View>
+                                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingTop: 8}}>
+                                        <Text style={{flex: 1, fontSize: 18, paddingRight: 8}} numberOfLines={1} ellipsizeMode='tail'>Listing Details</Text>
+                                        <Text style={{flex: 0, color: Colors.cosmos300, fontSize: 11}}>{data.visit.tripID}</Text>
+                                </View>
+                                {data.listing.spaceBio ? <Text style={{color: Colors.cosmos500}}>{data.listing.spaceBio}</Text> : null}
+                                <View style={{paddingVertical: 16, borderBottomColor: Colors.mist900, borderBottomWidth: 1, flexDirection: 'row'}}>
+                                    <MapView
+                                        provider={MapView.PROVIDER_GOOGLE}
+                                        mapStyle={NightMap}
+                                        style={{width: 100, height: 100, flex: 1, aspectRatio: 1/1,  marginRight: 16}}
+                                        region={{
+                                            latitude: data.listing.region.latitude,
+                                            longitude: data.listing.region.longitude,
+                                            latitudeDelta: .25,
+                                            longitudeDelta: .25,
+                                            }}
+                                        pitchEnabled={false} 
+                                        rotateEnabled={false} 
+                                        zoomEnabled={false} 
+                                        scrollEnabled={false}
+                                    />
+                                    <View style={{flex: 2, justifyContent: 'space-between'}}>
+                                        <Text>{data.listing.address.full}</Text>
+                                        <Button onPress={() => this.openGps(data.listing.region.latitude, data.listing.region.longitude, data.listing.address.full)} style = {{backgroundColor: 'rgba(255, 193, 76, 0.3)', height: 48}} textStyle={{color: Colors.tango900, fontWeight: "500"}}>Get Directions</Button>
+                                    </View>
+                                </View>
+                                <View style={{paddingVertical: 16, borderBottomColor: Colors.mist900, borderBottomWidth: 1, flexDirection: 'column'}}>
+                                    <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
+                                        <Text>Parking Fare</Text>
+                                        <Text>{data.visit.price.price}</Text>
+                                    </View>
+                                    <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
+                                        <Text>Service Fee</Text>
+                                        <Text>{data.visit.price.serviceFee}</Text>
+                                    </View>
+                                    <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
+                                        <Text>Processing Fee</Text>
+                                        <Text>{data.visit.price.processingFee}</Text>
+                                    </View>
+                                </View>
+                                <View style={{paddingVertical: 16, flexDirection: 'column'}}>
+                                    <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
+                                        <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>Total (USD)</Text>
+                                        <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>{data.visit.price.total}</Text>
+                                    </View>
+                                    <Text style={{fontSize: 12, lineHeight: 16}}>For more information in regards to our return policy or currency conversion, please visit our <Text style={{color: Colors.tango900}} onPress={() => this.props.navigation.navigate("TermsOfService")}>Terms of Service</Text>. If you have a question, or you do not recall booking this parking experience, please contact us at <Text style={{color: Colors.tango900}} onPress={() => Linking.openURL(`mailto:support@riive.net?subject=Booking Question&body=Hey Riive, I have a question about my visit to ${data.listing.address.full}. My order number is ${data.visit.tripID}`)}>support@riive.net.</Text></Text>
+                                </View>
+                                {data.isInPast ? 
+                                <View style={{flexDirection: 'row'}}>
+                                    <Button onPress={() =>  this.props.navigation.navigate("Home")} style = {{flex: 1, height: 48, backgroundColor: Colors.tango900}} textStyle={{color: "white", fontWeight: "500"}}>Return to Map</Button>
+                                </View>
+                                : 
+                                <View style={{flexDirection: 'row'}}>
+                                    <Button onPress={() =>  this.props.navigation.navigate("Home")} style = {{flex: 1, height: 48, backgroundColor: Colors.tango900}} textStyle={{color: "white", fontWeight: "500"}}>Cancel Trip</Button>
+                                    <Button onPress={() =>  this.props.navigation.navigate("Home")} style = {{flex: 1, height: 48, backgroundColor: Colors.tango900}} textStyle={{color: "white", fontWeight: "500"}}>Cancel Trip</Button>
+                                </View>
+                                }
+                            </View>
+                            
+                            
+                            
+                        </ScrollView>
+                    </SafeAreaView>
+                </Modal>
+            )
+        }else{
+            return null
+        }
+    }
 
     
 
     render(){
         return(
             <View style={styles.container}>
+                <this.VisitModal visible={this.state.modalVisible} data={this.state.selectedVisit}/>
                  {/* <ScrollView refreshControl={<RefreshControl refreshing={this.state.isRefreshing} onRefresh={this.updateVisits}/>}>
                     <Text>This is Visiting trips.</Text>
                      <View> */}

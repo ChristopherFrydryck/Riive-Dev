@@ -117,7 +117,7 @@ class ReservationConfirmed extends Component {
                                 zoomEnabled={false} 
                                 scrollEnabled={false}
                             />
-                            <View style={{flex: 2}}>
+                            <View style={{flex: 2, justifyContent: 'space-between'}}>
                                 <Text>{selectedSpace.address.full}</Text>
                                 <Button onPress={() => this.openGps(selectedSpace.region.latitude, selectedSpace.region.longitude, selectedSpace.address.full)} style = {{backgroundColor: 'rgba(255, 193, 76, 0.3)', height: 48}} textStyle={{color: Colors.tango900, fontWeight: "500"}}>Get Directions</Button>
                             </View>
