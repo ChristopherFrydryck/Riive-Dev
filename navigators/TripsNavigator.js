@@ -3,8 +3,8 @@ import { SafeAreaView } from 'react-native';
 import { createMaterialTopTabNavigator, MaterialTopTabBar } from 'react-navigation-tabs';
 import Colors from '../constants/Colors'
 
-import HostedTrips from '../screens/HostedTrips'
-import VisitingTrips from '../screens/VistingTrips'
+import HostedTrips from './TripsPages/HostedTripsNavigator'
+import VisitingTrips from './TripsPages/VisitedTripsNavigator'
 
 class MaterialTopTabBarWrapper extends React.Component {
     render() {
@@ -30,8 +30,7 @@ const TripsNavigator = createMaterialTopTabNavigator({
         navigationOptions: {
             tabBarLabel: 'Hosted Trips',
         }
-    },
-    
+    },    
 },
 {   
     tabBarComponent: MaterialTopTabBarWrapper,
@@ -44,7 +43,7 @@ const TripsNavigator = createMaterialTopTabNavigator({
     tabBarOptions: {
         labelStyle: {
           fontSize: 14,
-          color: Colors.apollo900,
+          color: Colors.cosmos900,
         },
         indicatorStyle: {
             backgroundColor: Colors.tango900,

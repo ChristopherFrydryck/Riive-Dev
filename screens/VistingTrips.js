@@ -299,6 +299,11 @@ export default class VisitingTrips extends Component{
         
     }
 
+    pressedTOS = () => {
+        this.setState({modalVisible: false})
+        this.props.navigation.navigate("TOS")
+    }
+
     
     VisitModal(props) {
         const {data, visible} = props;
@@ -416,15 +421,15 @@ export default class VisitingTrips extends Component{
                                         <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>Total (USD)</Text>
                                         <Text type="medium" numberOfLines={1} style={{fontSize: 24}}>{data.visit.price.total}</Text>
                                     </View>
-                                    <Text style={{fontSize: 12, lineHeight: 16}}>For more information in regards to our return policy or currency conversion, please visit our <Text style={{color: Colors.tango900}} onPress={() => this.props.navigation.navigate("TermsOfService")}>Terms of Service</Text>. If you have a question, or you do not recall booking this parking experience, please contact us at <Text style={{color: Colors.tango900}} onPress={() => Linking.openURL(`mailto:support@riive.net?subject=Booking Question&body=Hey Riive, I have a question about my visit to ${data.listing.address.full}. My order number is ${data.visit.tripID}`)}>support@riive.net.</Text></Text>
+                                    <Text style={{fontSize: 12, lineHeight: 16}}>For more information in regards to our return policy or currency conversion, please visit our <Text style={{color: Colors.tango900}} onPress={() => this.pressedTOS()}>Terms of Service</Text>. If you have a question, or you do not recall booking this parking experience, please contact us at <Text style={{color: Colors.tango900}} onPress={() => Linking.openURL(`mailto:support@riive.net?subject=Booking Question&body=Hey Riive, I have a question about my visit to ${data.listing.address.full}. My order number is ${data.visit.tripID}`)}>support@riive.net.</Text></Text>
                                 </View>
                                 {data.isInPast ? 
                                 <View style={{flexDirection: 'row'}}>
-                                    <Button onPress={() =>  this.props.navigation.navigate("Home")} style = {{flex: 1, height: 48, backgroundColor: Colors.tango900}} textStyle={{color: "white", fontWeight: "500"}}>Return to Map</Button>
+                                    <Button onPress={() =>  this.props.navigation.navigate("Home")} style = {{flex: 1, height: 48, backgroundColor: Colors.tango900}} textStyle={{color: "white", fontWeight: "500"}}>Report Trip</Button>
                                 </View>
                                 : 
                                 <View style={{flexDirection: 'row'}}>
-                                    <Button onPress={() =>  this.props.navigation.navigate("Home")} style = {{flex: 1, height: 48, backgroundColor: Colors.tango900}} textStyle={{color: "white", fontWeight: "500"}}>Cancel Trip</Button>
+                                    <Button onPress={() =>  this.props.navigation.navigate("Home")} style = {{flex: 1, height: 48, backgroundColor: Colors.tango900}} textStyle={{color: "white", fontWeight: "500"}}>Report Trip</Button>
                                     <Button onPress={() =>  this.props.navigation.navigate("Home")} style = {{flex: 1, height: 48, backgroundColor: Colors.tango900}} textStyle={{color: "white", fontWeight: "500"}}>Cancel Trip</Button>
                                 </View>
                                 }
@@ -473,8 +478,9 @@ export default class VisitingTrips extends Component{
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 8,
+        paddingTop: 8,
         paddingHorizontal: 8,
+        backgroundColor: 'white'
     },
     sectionHeader: {
         paddingTop: 2,
