@@ -268,17 +268,12 @@ export default class HostedTrips extends Component{
         )
     }
 
-    openGps = (lat, lng, fullAddress) => {
-        const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
-        const latLng = `${lat},${lng}`;
-        const label = fullAddress;
-        const url = Platform.select({
-            ios: `${scheme}${label}@${latLng}`,
-            android: `${scheme}${latLng}(${label})`
-        })
-
-        Linking.openURL(url);
-      }
+    openEditSpace = (spot) => {
+        this.props.ComponentStore.selectedSpot.clear()
+        this.props.ComponentStore.selectedSpot.push(spot)
+        this.setState({modalVisible: false})
+        this.props.navigation.navigate("EditSpace")
+    }
 
 
     LoadingIndicatorBottom = () => {
@@ -398,7 +393,7 @@ export default class HostedTrips extends Component{
                                     />
                                     <View style={{flex: 2, justifyContent: 'space-between'}}>
                                         <Text>{data.listing.address.full}</Text>
-                                        <Button onPress={() => this.openGps(data.listing.region.latitude, data.listing.region.longitude, data.listing.address.full)} style = {{backgroundColor: 'rgba(255, 193, 76, 0.3)', height: 48}} textStyle={{color: Colors.tango900, fontWeight: "500"}}>Edit Details</Button>
+                                        <Button onPress={() => this.openEditSpace(data.listing)} style = {{backgroundColor: 'rgba(255, 193, 76, 0.3)', height: 48}} textStyle={{color: Colors.tango900, fontWeight: "500"}}>Edit Details</Button>
                                     </View>
                                 </View>
                                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingTop: 8}}>

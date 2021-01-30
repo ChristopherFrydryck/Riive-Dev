@@ -781,7 +781,7 @@ renderDotsView = (numItems, position) =>{
                                 iconSize={16}
                                 style={{marginRight: 8, marginTop: 4}}
                             />
-                            <Text style={{fontSize: 16, color: Colors.cosmos300, marginRight: 24}}>{this.state.spaceBio}</Text> 
+                            <Text style={{fontSize: 14, color: Colors.cosmos300, marginRight: 24}}>{this.state.spaceBio}</Text> 
                         </View>
                         : null}
                        
