@@ -336,7 +336,7 @@ export default class VisitingTrips extends Component{
                 >
                     <SafeAreaView style={{flex: 1}}>
                         <View style={{flex: 0}}>
-                            <View style={{flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
+                            <View style={{flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start', paddingTop: Platform.OS === 'ios' ? 0 : 16}}>
                                 <Text numberOfLines={1}  ellipsizeMode='tail' style={{ fontSize: 18}}>{data.listing.spaceName}</Text>
                                 <Text type="normal" numberOfLines={1} ellipsizeMode='tail' style={{paddingBottom: 8}}>Hosted by {hostName}</Text>
                             </View>
@@ -345,7 +345,7 @@ export default class VisitingTrips extends Component{
                                     iconColor={Colors.cosmos500}
                                     iconSize={28}
                                     onPress={() => this.setState({modalVisible: false, selectedVisit: null})}
-                                    style={{position: 'absolute', top: 8, right: 8}}
+                                    style={{position: 'absolute', top: Platform.OS === 'ios' ? 8 : 16, right: 8}}
                                 />
                         </View>
                         <ScrollView style={{flex: 1}}>
@@ -356,7 +356,8 @@ export default class VisitingTrips extends Component{
                             /> 
                             <View style={{paddingHorizontal: 16}}>
                                 
-                                <Text type="light" numberOfLines={1} style={{textAlign: 'center', fontSize: 18, marginTop: 8, paddingBottom: 16}}>{isToday ? `Today, ${data.visit.visit.day.monthName} ${data.visit.visit.day.dateName} ${data.visit.visit.day.year}` : `${data.visit.visit.day.dayName}, ${data.visit.visit.day.monthName} ${data.visit.visit.day.dateName} ${data.visit.visit.day.year}`}</Text>
+                                <Text numberOfLines={1} style={{textAlign: 'center', fontSize: 18, marginTop: 8, paddingBottom: 4}}>{isToday ? `Today, ${data.visit.visit.day.monthName} ${data.visit.visit.day.dateName} ${data.visit.visit.day.year}` : `${data.visit.visit.day.dayName}, ${data.visit.visit.day.monthName} ${data.visit.visit.day.dateName} ${data.visit.visit.day.year}`}</Text>
+                                <Text numberOfLines={1} style={{textAlign: "center", paddingBottom: 8, color: Colors.cosmos300}}>Driving {data.visit.vehicle.Year} {data.visit.vehicle.Make} {data.visit.vehicle.Model} ({data.visit.vehicle.LicensePlate})</Text>
                                 <View style={{flexDirection: 'row', alignItems: "flex-end", justifyContent: 'space-between', marginTop: 0, paddingBottom: 16, borderBottomWidth: 1, borderBottomColor: Colors.mist900}}>
                                     <View style={{flexDirection: 'column', alignItems: 'center', flex: 3}}>
                                         <Text type="light" numberOfLines={1} style={{fontSize: 18}}>Arrival</Text>
@@ -400,6 +401,16 @@ export default class VisitingTrips extends Component{
                                         <Button onPress={() => this.openGps(data.listing.region.latitude, data.listing.region.longitude, data.listing.address.full)} style = {{backgroundColor: 'rgba(255, 193, 76, 0.3)', height: 48}} textStyle={{color: Colors.tango900, fontWeight: "500"}}>Get Directions</Button>
                                     </View>
                                 </View>
+                                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingTop: 8}}>
+                                        <Text style={{flex: 1, fontSize: 18, paddingRight: 8}} numberOfLines={1} ellipsizeMode='tail'>Payment Details</Text>
+                                        <Icon 
+                                            iconName={data.visit.payment.CardType !== '' ? 'cc-' + data.visit.payment.CardType : 'credit-card'}
+                                            iconLib="FontAwesome"
+                                            iconColor={Colors.cosmos300}
+                                            iconSize={28}
+                                            style={{ marginLeft: 16}}
+                                        />
+                                </View>
                                 <View style={{paddingVertical: 16, borderBottomColor: Colors.mist900, borderBottomWidth: 1, flexDirection: 'column'}}>
                                     <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4}}>
                                         <Text>Parking Fare</Text>
@@ -427,8 +438,8 @@ export default class VisitingTrips extends Component{
                                 </View>
                                 : 
                                 <View style={{flexDirection: 'row'}}>
-                                    <Button onPress={() =>  this.props.navigation.navigate("Home")} style = {{flex: 1, height: 48, backgroundColor: Colors.tango900}} textStyle={{color: "white", fontWeight: "500"}}>Report Trip</Button>
                                     <Button onPress={() =>  this.props.navigation.navigate("Home")} style = {{flex: 1, height: 48, backgroundColor: Colors.tango900}} textStyle={{color: "white", fontWeight: "500"}}>Cancel Trip</Button>
+                                    <Button onPress={() =>  this.props.navigation.navigate("Home")} style = {{flex: 1, height: 48, backgroundColor: Colors.tango900}} textStyle={{color: "white", fontWeight: "500"}}>Edit Trip Details</Button>
                                 </View>
                                 }
                             </View>
