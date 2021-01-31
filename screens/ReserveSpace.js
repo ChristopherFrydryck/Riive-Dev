@@ -155,9 +155,9 @@ class reserveSpace extends Component {
         }
 
         setActivePayment = (payment, idOnly) => {
+            console.log(payment.StripePMID)
             if(idOnly){
                 let activePayment = this.props.UserStore.payments.filter(x => x.PaymentID === payment)[0]
-
                 this.setState({selectedPayment: {
                     CCV: activePayment.CCV,
                     CardType: activePayment.CardType,

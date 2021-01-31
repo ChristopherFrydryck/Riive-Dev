@@ -40,13 +40,6 @@ import * as geofirestore from 'geofirestore'
 
 
 
-
-
-
-  
-
-
-
 //MobX Imports
 import {inject, observer} from 'mobx-react/native'
 import { TouchableWithoutFeedback } from 'react-native';
@@ -221,7 +214,7 @@ export default class Home extends Component{
                 if (finalStatus !== 'granted') {
                 Alert.alert(
                     'Warning',
-                    'You will not receive reminders if you do not enable push notifications. If you would like to receive reminders, please enable push notifications for Riive in your settings.',
+                    'You will be unable to see reminders and up to date information on your trips without push notifications. Please enable push notifications for Riive in your settings.',
                     [
                     { text: 'Cancel' },
                     // If they said no initially and want to change their mind,
@@ -307,13 +300,13 @@ export default class Home extends Component{
                 Animated.timing(this.state.slideUpAnimation, {
                     toValue: 16,
                     duration: 250,
-                    easing: Easing.elastic(30),
+                    easing: Easing.elastic(1),
                   }).start();
             }else{
                 Animated.timing(this.state.slideUpAnimation, {
                     toValue: -100,
                     duration: 250,
-                    easing: Easing.elastic(30),
+                    easing: Easing.elastic(1),
                   }).start();
             }
             

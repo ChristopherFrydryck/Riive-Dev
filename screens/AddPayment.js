@@ -223,11 +223,10 @@ submitPayment = async() => {
             throw result
           }else{
                // add card to mobx UserStore
-           
-               this.props.UserStore.payments.push({
+              this.props.UserStore.payments.push({
                 PaymentID: result.card.PaymentID,
                 StripeID: result.card.StripeID,
-                StripePMID: result.card.PMID,
+                StripePMID: result.card.StripePMID,
                 Type: "Card",
                 CardType: this.state.creditCardType !== "" ? this.state.creditCardType : "Credit",
                 Name: this.state.name,

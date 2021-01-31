@@ -47,10 +47,10 @@ export default class VisitingTrips extends Component{
     this._navListener = this.props.navigation.addListener('didFocus', () => {
             StatusBar.setBarStyle('dark-content', true);
             Platform.OS === 'android' && StatusBar.setBackgroundColor('white');
+            this.updateVisits();
             
         });
 
-        this.updateVisits();
     }
 
     updateVisits = () => {   
@@ -224,7 +224,7 @@ export default class VisitingTrips extends Component{
             <TouchableOpacity disabled={isCancelled} style={styles.visitCard} onPress={() => this.setState({selectedVisit: data, modalVisible: true})}>
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <View style={{borderRadius: 4, overflow: 'hidden',}}>
-                        {isCancelled ? 
+                        {!isCancelled ? 
                             <View style={{position: 'absolute', zIndex: 9, backgroundColor: 'white', top: 4, left: 4, paddingHorizontal: 6, paddingVertical: 4, borderRadius: 4}}>
                                 <Text>{visit.price.total}</Text>
                             </View>
