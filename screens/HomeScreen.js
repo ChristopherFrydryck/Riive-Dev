@@ -1,5 +1,5 @@
 import React, {Component, createRef} from 'react'
-import {Fragment, View, ActivityIndicator, SafeAreaView, StatusBar, Platform, StyleSheet, Dimensions, Animated, Easing, TouchableOpacity} from 'react-native'
+import {Fragment, View, ActivityIndicator, SafeAreaView, StatusBar, Platform, StyleSheet, Dimensions, Animated, Easing, TouchableOpacity, Alert} from 'react-native'
 import ActionSheet from "react-native-actions-sheet";
 import Button from '../components/Button'
 import Text from '../components/Txt'
@@ -12,8 +12,11 @@ import MapView, {Marker} from 'react-native-maps';
 import DayMap from '../constants/DayMap'
 import NightMap from '../constants/NightMap'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import * as Font from 'expo-font'
+
+
 import * as Location from 'expo-location'
+import * as Permissions from 'expo-permissions';
+import { Linking, Constants } from 'expo';
 
 //For Shimmer
 import SvgAnimatedLinearGradient from 'react-native-svg-animated-linear-gradient'
@@ -157,12 +160,6 @@ export default class Home extends Component{
               }
           }
 
-        
-
-          
-
-        
-      
 
     }
 
@@ -197,6 +194,7 @@ export default class Home extends Component{
 
 
           await this.getCurrentLocation(true);
+          await this.hasNotificationPermission()
           await this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.latitudeDelta * 69, 99999.9999, 99999.9999)
           
           
@@ -207,6 +205,55 @@ export default class Home extends Component{
           
     
         }
+
+
+        hasNotificationPermission = async () => {
+        if (Constants.isDevice) {
+            try {
+                const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+                let finalStatus = existingStatus;
+                // If we don't already have permission, ask for it
+                if (existingStatus !== 'granted') {
+                    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+                    finalStatus = status;
+                }
+                if (finalStatus === 'granted') return true;
+                if (finalStatus !== 'granted') {
+                Alert.alert(
+                    'Warning',
+                    'You will not receive reminders if you do not enable push notifications. If you would like to receive reminders, please enable push notifications for Riive in your settings.',
+                    [
+                    { text: 'Cancel' },
+                    // If they said no initially and want to change their mind,
+                    // we can automatically open our app in their settings
+                    // so there's less friction in turning notifications on
+                    { text: 'Enable Notifications', onPress: () => Platform.OS === 'ios' ? Linking.openURL('app-settings:') : Linking.openSettings() }
+                    ]
+                )
+                return false;
+                }
+            } catch (error) {
+                Alert.alert(
+                'Error',
+                'Something went wrong while check your notification permissions, please try again later.'
+                );
+                return false;
+            }
+          }else{
+            alert("Must use a physical device for push notifications")
+          }
+
+          if (Platform.OS === 'android') {
+            Notifications.createChannelAndroidAsync('default', {
+              name: 'default',
+              sound: true,
+              priority: 'max',
+              vibrate: [0, 250, 250, 250],
+            });
+          }
+        }
+
+
 
 
         mapLocationFunction = () => {
