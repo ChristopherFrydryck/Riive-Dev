@@ -16,7 +16,8 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions';
-import { Linking, Constants } from 'expo';
+import { Linking } from 'expo';
+import * as Constants from 'expo-constants'
 
 //For Shimmer
 import SvgAnimatedLinearGradient from 'react-native-svg-animated-linear-gradient'
@@ -48,7 +49,6 @@ import * as geofirestore from 'geofirestore'
 
 //MobX Imports
 import {inject, observer} from 'mobx-react/native'
-import { Constants } from 'expo-constants';
 import { TouchableWithoutFeedback } from 'react-native';
 
 
