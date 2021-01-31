@@ -17,7 +17,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions';
 import { Linking } from 'expo';
-import * as Constants from 'expo-constants'
+import Constants from 'expo-constants'
 
 //For Shimmer
 import SvgAnimatedLinearGradient from 'react-native-svg-animated-linear-gradient'
