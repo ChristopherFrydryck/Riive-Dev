@@ -69,8 +69,8 @@ export default class VisitingTrips extends Component{
 
 
     
-            var spaceVisits = db.collection("trips").where("visitorID", "==", this.props.UserStore.userID)
-                spaceVisits = spaceVisits.where("isCancelled", '==', false).orderBy("endTimeUnix", "desc").limit(6)
+            var spaceVisits = db.collection("trips").where("visitorID", "==", this.props.UserStore.userID).orderBy("endTimeUnix", "desc").limit(6)
+            // spaceVisits = spaceVisits.where("isCancelled", '==', false)
 
             var visits = [];
             
@@ -114,7 +114,7 @@ export default class VisitingTrips extends Component{
 
                 // Sort each day by start time
                 visits.forEach(x => {
-                x.data.sort((a, b) => a.visit.visit.time.start.unix - b.visit.visit.time.start.unix)
+                    x.data.sort((a, b) => a.visit.visit.time.start.unix - b.visit.visit.time.start.unix)
                 })
                 
                 return(visits)
@@ -154,8 +154,7 @@ export default class VisitingTrips extends Component{
                 let year = date.getFullYear();
             
 
-                var spaceVisits = db.collection("trips").where("visitorID", "==", this.props.UserStore.userID)
-                spaceVisits = spaceVisits.where("isCancelled", '==', false).orderBy("endTimeUnix", "desc").limit(5)
+                var spaceVisits = db.collection("trips").where("visitorID", "==", this.props.UserStore.userID).orderBy("endTimeUnix", "desc").limit(5)
 
                 var visits = this.state.visits;
 
@@ -218,15 +217,18 @@ export default class VisitingTrips extends Component{
     
     renderVisit = (data) => {
         const {visit, listing, isInPast, current} = data;
+        const {isCancelled} = visit
         const hostName = `${visit.hostName.split(" ")[0]} ${visit.hostName.split(" ")[1].slice(0,1)}.`
         return(
 
-            <TouchableOpacity style={styles.visitCard} onPress={() => this.setState({selectedVisit: data, modalVisible: true})}>
+            <TouchableOpacity disabled={isCancelled} style={styles.visitCard} onPress={() => this.setState({selectedVisit: data, modalVisible: true})}>
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <View style={{borderRadius: 4, overflow: 'hidden',}}>
-                        <View style={{position: 'absolute', zIndex: 9, backgroundColor: 'white', top: 4, left: 4, paddingHorizontal: 6, paddingVertical: 4, borderRadius: 4}}>
-                            <Text>{visit.price.total}</Text>
-                        </View>
+                        {isCancelled ? 
+                            <View style={{position: 'absolute', zIndex: 9, backgroundColor: 'white', top: 4, left: 4, paddingHorizontal: 6, paddingVertical: 4, borderRadius: 4}}>
+                                <Text>{visit.price.total}</Text>
+                            </View>
+                        : null }
                         <Image 
                                 aspectRatio={1/1}
                                 source={{uri: listing.photo}}
@@ -240,11 +242,15 @@ export default class VisitingTrips extends Component{
                         /> 
                     </View>
                  <View style={{flex: 1, marginHorizontal: 8}}>  
-                    <Text  numberOfLines={1} ellipsizeMode='tail' style={{fontSize: 18}}>{listing.spaceName}</Text>
-                    <Text numberOfLines={1} ellipsizeMode='tail' style={{color: Colors.cosmos700}}>Hosted by {hostName}</Text>
-                    {/* <Text numberOfLines={1} ellipsizeMode='tail'>{listing.address.number} {listing.address.street}, {listing.address.city} {listing.address.state_abbr}</Text> */}
-                    <Text numberOfLines={1} ellipsizeMode='tail' style={{color: Colors.cosmos700}}>{visit.visit.time.start.labelFormatted} - {visit.visit.time.end.labelFormatted}</Text>
-                    {/* <Text>Is current {current ? "Yes" : "No"}</Text> */}
+                    <Text numberOfLines={1} ellipsizeMode='tail' style={{fontSize: 18}}>{listing.spaceName}</Text>
+                    {isCancelled ? 
+                      <Text type="medium" numberOfLines={1} ellipsizeMode='tail' style={{color: Colors.hal500}}>Cancelled by {data.cancelledBy === 'host' || 'you'}</Text>
+                    : 
+                      <Text numberOfLines={1} ellipsizeMode='tail' style={{color: Colors.cosmos700}}>Hosted by {hostName}</Text>
+                    }
+                    {isCancelled ? null : 
+                        <Text numberOfLines={1} ellipsizeMode='tail' style={{color: Colors.cosmos700}}>{visit.visit.time.start.labelFormatted} - {visit.visit.time.end.labelFormatted}</Text>
+                    }
                  </View>
                  
                 </View>
