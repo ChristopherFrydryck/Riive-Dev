@@ -140,7 +140,7 @@
     <string name="pick_image_intent_chooser_title">画像を選択</string>
     <string name="price_free">無料</string>
     <string msgid="730395136688082741" name="search_menu_title">"検索"</string>
-    <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"999+"</string>
+    <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
     <string name="title_add_a_card">カードを追加</string>
     <string name="title_add_an_address">住所を設定してください</string>
     <string name="title_payment_method">お支払い方法</string>

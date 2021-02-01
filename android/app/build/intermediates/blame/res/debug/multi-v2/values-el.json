@@ -55,13 +55,13 @@
                     }
                 },
                 {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/jetified-firebase-messaging-19.0.1.aar/638b3100de81a58ec9fe8e9e24c286bf/res/values-el/values.xml",
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/jetified-firebase-messaging-20.2.4.aar/c922606d3ecd48ad2b0fd4fb5239d291/res/values-el/values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
-                        "startOffsets": "205",
+                        "startOffsets": "207",
                         "endColumns": "101",
-                        "endOffsets": "306"
+                        "endOffsets": "308"
                     },
                     "to": {
                         "startLines": "69",
@@ -86,23 +86,6 @@
                         "startOffsets": "7985",
                         "endColumns": "102",
                         "endOffsets": "8083"
-                    }
-                },
-                {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0934012119e6007f6c5d12a0d621635f/res/values-el/values-el.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "100",
-                        "endOffsets": "151"
-                    },
-                    "to": {
-                        "startLines": "73",
-                        "startColumns": "4",
-                        "startOffsets": "8237",
-                        "endColumns": "100",
-                        "endOffsets": "8333"
                     }
                 },
                 {
@@ -137,6 +120,23 @@
                         "startOffsets": "105,223,334,451,536,642,765,854,940,1031,1123,1218,1312,1413,1506,1601,1698,1789,1880,1964,2075,2184,2286,2397,2507,2615,2786,8152",
                         "endColumns": "117,110,116,84,105,122,88,85,90,91,94,93,100,92,94,96,90,90,83,110,108,101,110,109,107,170,99,84",
                         "endOffsets": "218,329,446,531,637,760,849,935,1026,1118,1213,1307,1408,1501,1596,1693,1784,1875,1959,2070,2179,2281,2392,2502,2610,2781,2881,8232"
+                    }
+                },
+                {
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/1040a5d40f657559c5dc2267b6abe1bd/res/values-el/values-el.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "73",
+                        "startColumns": "4",
+                        "startOffsets": "8237",
+                        "endColumns": "100",
+                        "endOffsets": "8333"
                     }
                 }
             ]

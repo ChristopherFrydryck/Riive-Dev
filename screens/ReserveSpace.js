@@ -155,7 +155,6 @@ class reserveSpace extends Component {
         }
 
         setActivePayment = (payment, idOnly) => {
-            console.log(payment.StripePMID)
             if(idOnly){
                 let activePayment = this.props.UserStore.payments.filter(x => x.PaymentID === payment)[0]
                 this.setState({selectedPayment: {
@@ -468,35 +467,6 @@ class reserveSpace extends Component {
                                 },
                             }
 
-                            // const spaceSavedData = {
-                                // tripID: ref.id,
-                                // visitorID: this.props.UserStore.userID,
-                                // listingID: this.props.ComponentStore.selectedExternalSpot[0].listingID,
-                                // listingSubSpaceID: null,
-                                // isCancelled: false,
-                                // cancelledBy: null,
-                                // updated: currentTime,
-                                // visit: {
-                                //     day: daySearched,
-                                //     time: {
-                                //         start: {
-                                //             label: timeSearched[0].label,
-                                //             labelFormatted: timeSearched[0].labelFormatted,
-                                //             unix: startDate.getTime(),
-                                //             dateString: startDateString,
-                                //             dateUTC: startDate,
-                                //         },
-                                //         end: {
-                                //             label: timeSearched[1].label,
-                                //             labelFormatted: timeSearched[1].labelFormatted,
-                                //             unix: endDate.getTime(),
-                                //             dateString: endDateString,
-                                //             dateUTC: endDate,
-                                //         },
-                                //     },
-                                // }
-                            // }
-
                             db.collection("trips").doc(ref.id).set(obj)
                             db.collection("listings").doc(this.props.ComponentStore.selectedExternalSpot[0].listingID).update({
                                 visits: firebase.firestore.FieldValue.arrayUnion(ref.id)
@@ -525,21 +495,12 @@ class reserveSpace extends Component {
                                 }
                             })
                             
-                            // console.log(obj)
-                            // console.log(startDate.getTime())
-                            // console.log(endDate.getTime())
-                            // console.log(hostDoc)
-                            // console.log(`Host is: ${hostDoc.stripeID}`)
-                            // console.log(`Visitor is: ${this.props.UserStore.stripeID}`)
-                            // console.log(`Vehicle is ${this.state.selectedVehicle.Year} ${this.state.selectedVehicle.Make} ${this.state.selectedVehicle.Model}`)
-                            // console.log(`Payment SETI is ${this.state.selectedPayment.StripeID}`)
-                            // await this.payForSpace(hostDoc.stripeID)
                         }catch(e){
                             this.setState({authenticatingReservation: false})
                             throw e
                         }
                     }).catch(e => {
-                        console.log(e)
+                        alert(e)
                     })
 
 
@@ -656,7 +617,11 @@ class reserveSpace extends Component {
                             iconSize={20}
                             iconLib="MaterialCommunityIcons"
                         />
-                        <Text numberOfLines={1} style={{color: Colors.mist300, marginLeft: 8, flex: 1}}>{locationDifferenceWalking.duration} to {searchInputValue}</Text>
+                        {locationDifferenceWalking.duration.split(" ")[1] === 'mins' || locationDifferenceWalking.duration.split(" ")[1] === 'min' ? 
+                            <Text numberOfLines={1} style={{color: Colors.mist300, marginLeft: 8, flex: 1}}>{locationDifferenceWalking.duration} to {searchInputValue}</Text>
+                        :
+                            <Text numberOfLines={1} style={{color: Colors.mist300, marginLeft: 8, flex: 1}}>Longer than 1 hour to {searchInputValue}</Text>
+                        }
                     </View>
                     : null}
 

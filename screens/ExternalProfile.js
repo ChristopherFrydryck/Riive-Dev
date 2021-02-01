@@ -121,7 +121,7 @@ export default class ExternalProfile extends Component{
 
     render(){
         let { host, space, allListings, numVisits, avgRating} = this.state;
-        console.log(this.props.navigation.state.params.homeState)
+        //  
         
         if(host && allListings){
             return(

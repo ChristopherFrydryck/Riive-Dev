@@ -91,23 +91,6 @@
                     }
                 },
                 {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/jetified-firebase-messaging-19.0.1.aar/638b3100de81a58ec9fe8e9e24c286bf/res/values-it/values.xml",
-                    "from": {
-                        "startLines": "4",
-                        "startColumns": "0",
-                        "startOffsets": "205",
-                        "endColumns": "99",
-                        "endOffsets": "304"
-                    },
-                    "to": {
-                        "startLines": "144",
-                        "startColumns": "4",
-                        "startOffsets": "12759",
-                        "endColumns": "103",
-                        "endOffsets": "12858"
-                    }
-                },
-                {
                     "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/play-services-base-17.0.0.aar/4f634cc0e7bc4a3c2ccb1bdcb0726d80/res/values-it/values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
@@ -144,20 +127,20 @@
                     }
                 },
                 {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0934012119e6007f6c5d12a0d621635f/res/values-it/values-it.xml",
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/jetified-firebase-messaging-20.2.4.aar/c922606d3ecd48ad2b0fd4fb5239d291/res/values-it/values.xml",
                     "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "100",
-                        "endOffsets": "151"
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "207",
+                        "endColumns": "99",
+                        "endOffsets": "306"
                     },
                     "to": {
-                        "startLines": "167",
+                        "startLines": "144",
                         "startColumns": "4",
-                        "startOffsets": "14638",
-                        "endColumns": "100",
-                        "endOffsets": "14734"
+                        "startOffsets": "12759",
+                        "endColumns": "103",
+                        "endOffsets": "12858"
                     }
                 },
                 {
@@ -175,6 +158,23 @@
                         "startOffsets": "748,853,956,1065,1149,1254,1373,1451,1527,1619,1712,1805,1899,2001,2095,2192,2287,2379,2471,2551,2657,2764,2862,2966,3072,3179,3342,14557",
                         "endColumns": "104,102,108,83,104,118,77,75,91,92,92,93,101,93,96,94,91,91,79,105,106,97,103,105,106,162,99,80",
                         "endOffsets": "848,951,1060,1144,1249,1368,1446,1522,1614,1707,1800,1894,1996,2090,2187,2282,2374,2466,2546,2652,2759,2857,2961,3067,3174,3337,3437,14633"
+                    }
+                },
+                {
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/1040a5d40f657559c5dc2267b6abe1bd/res/values-it/values-it.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "167",
+                        "startColumns": "4",
+                        "startOffsets": "14638",
+                        "endColumns": "100",
+                        "endOffsets": "14734"
                     }
                 },
                 {

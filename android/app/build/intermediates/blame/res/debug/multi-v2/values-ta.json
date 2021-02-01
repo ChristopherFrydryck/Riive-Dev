@@ -4,23 +4,6 @@
             "outputFile": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-ta/values-ta.xml",
             "map": [
                 {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/jetified-firebase-messaging-19.0.1.aar/638b3100de81a58ec9fe8e9e24c286bf/res/values-ta/values.xml",
-                    "from": {
-                        "startLines": "4",
-                        "startColumns": "0",
-                        "startOffsets": "205",
-                        "endColumns": "100",
-                        "endOffsets": "305"
-                    },
-                    "to": {
-                        "startLines": "69",
-                        "startColumns": "4",
-                        "startOffsets": "7706",
-                        "endColumns": "104",
-                        "endOffsets": "7806"
-                    }
-                },
-                {
                     "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/jetified-play-services-wallet-16.0.1.aar/e0a07bebe2f804fe7c44cbb401f39715/res/values-ta/values.xml",
                     "from": {
                         "startLines": "4",
@@ -55,20 +38,20 @@
                     }
                 },
                 {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0934012119e6007f6c5d12a0d621635f/res/values-ta/values-ta.xml",
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/jetified-firebase-messaging-20.2.4.aar/c922606d3ecd48ad2b0fd4fb5239d291/res/values-ta/values.xml",
                     "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "207",
                         "endColumns": "100",
-                        "endOffsets": "151"
+                        "endOffsets": "307"
                     },
                     "to": {
-                        "startLines": "73",
+                        "startLines": "69",
                         "startColumns": "4",
-                        "startOffsets": "8057",
-                        "endColumns": "100",
-                        "endOffsets": "8153"
+                        "startOffsets": "7706",
+                        "endColumns": "104",
+                        "endOffsets": "7806"
                     }
                 },
                 {
@@ -103,6 +86,23 @@
                         "startOffsets": "2871,3026,3139,3252,3346,3421,3494,3555,3630,3705,3801,3899,3974,4049,4141,4253,4319,4384,4559,4640,4730,4830,7913",
                         "endColumns": "154,112,112,93,74,72,60,74,74,95,97,74,74,91,111,65,64,174,80,89,99,142,62",
                         "endOffsets": "3021,3134,3247,3341,3416,3489,3550,3625,3700,3796,3894,3969,4044,4136,4248,4314,4379,4554,4635,4725,4825,4968,7971"
+                    }
+                },
+                {
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/1040a5d40f657559c5dc2267b6abe1bd/res/values-ta/values-ta.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "73",
+                        "startColumns": "4",
+                        "startOffsets": "8057",
+                        "endColumns": "100",
+                        "endOffsets": "8153"
                     }
                 },
                 {

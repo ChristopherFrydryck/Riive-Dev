@@ -894,9 +894,9 @@ public final class R {
         public static final int crop_image_menu_flip_vertically = 0x7f10008c;
         public static final int crop_image_menu_rotate_left = 0x7f10008d;
         public static final int crop_image_menu_rotate_right = 0x7f10008e;
-        public static final int pick_image_intent_chooser_title = 0x7f1000da;
-        public static final int search_menu_title = 0x7f100114;
-        public static final int status_bar_notification_info_overflow = 0x7f100115;
+        public static final int pick_image_intent_chooser_title = 0x7f1000db;
+        public static final int search_menu_title = 0x7f100115;
+        public static final int status_bar_notification_info_overflow = 0x7f100116;
     }
     public static final class style {
         private style() {}

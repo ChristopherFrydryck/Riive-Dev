@@ -48,6 +48,6 @@
     <string msgid="4133737464567140336" name="fcm_fallback_notification_channel_label">"Varios"</string>
     <string msgid="9521340570209730" name="gcm_fallback_notification_channel_label">"Varios"</string>
     <string msgid="730395136688082741" name="search_menu_title">"Buscar"</string>
-    <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"999+"</string>
+    <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
     <string msgid="363496807345461806" name="wallet_buy_button_place_holder">"Comprar con Google"</string>
 </resources>

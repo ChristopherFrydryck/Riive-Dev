@@ -80,6 +80,6 @@
     <string name="messenger_send_button_text">보내기</string>
     <string name="pick_image_intent_chooser_title">이미지 선택</string>
     <string msgid="730395136688082741" name="search_menu_title">"검색"</string>
-    <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"999+"</string>
+    <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
     <string msgid="363496807345461806" name="wallet_buy_button_place_holder">"Google로 구매"</string>
 </resources>

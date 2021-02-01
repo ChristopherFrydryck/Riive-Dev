@@ -2238,6 +2238,7 @@ string error_uncaught
 string experience_needs_permissions
 string expiry_date_hint
 string expiry_label_short
+string expo_notifications_fallback_channel_name
 string fab_transformation_scrim_behavior
 string fab_transformation_sheet_behavior
 string fcm_fallback_notification_channel_label
