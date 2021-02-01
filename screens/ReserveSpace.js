@@ -284,25 +284,30 @@ class reserveSpace extends Component {
                     
                      // Check each upcoming visit for a space
                      for(data of futureVisits){
-                        // Check if day of search matches visit day
-                        if(daySearched.dayValue === data.visit.day.dayValue){
-                            // if a visit start is after start time and before end time
-                            if(parseInt(data.visit.time.start.label) >= parseInt(timeSearched[0].label) && parseInt(data.visit.time.start.label) <= parseInt(timeSearched[1].label)){
-                                worksArray.push(false)
-                                break;
-                            
-                            // if a visit end is before a start time and after end time
-                            }else if(parseInt(data.visit.time.end.label) >= parseInt(timeSearched[0].label) && parseInt(data.visit.time.end.label) <= parseInt(timeSearched[1].label)){
-                                worksArray.push(false)
-                                break;
+                         // Check if visit is not cancelled
+                         if(!data.isCancelled){
+                            // Check if day of search matches visit day
+                            if(daySearched.dayValue === data.visit.day.dayValue){
+                                // if a visit start is after start time and before end time
+                                if(parseInt(data.visit.time.start.label) >= parseInt(timeSearched[0].label) && parseInt(data.visit.time.start.label) <= parseInt(timeSearched[1].label)){
+                                    worksArray.push(false)
+                                    break;
+                                
+                                // if a visit end is before a start time and after end time
+                                }else if(parseInt(data.visit.time.end.label) >= parseInt(timeSearched[0].label) && parseInt(data.visit.time.end.label) <= parseInt(timeSearched[1].label)){
+                                    worksArray.push(false)
+                                    break;
 
+                                }else{
+                                    worksArray.push(true)
+                                    continue;
+                                }
+                            // If visit day doesn't match searched day
                             }else{
                                 worksArray.push(true)
                                 continue;
                             }
-                        // If visit day doesn't match searched day
                         }else{
-                            worksArray.push(true)
                             continue;
                         }
                     }
