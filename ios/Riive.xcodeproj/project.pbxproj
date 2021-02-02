@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		06108A1F2389AD8B006B0E73 /* TPSStripe in Resources */ = {isa = PBXBuildFile; fileRef = 06108A1E2389AD8B006B0E73 /* TPSStripe */; };
 		0681535324AFEFD800C22A3B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0681535224AFEFD800C22A3B /* GoogleService-Info.plist */; };
+		06FDD42325C92F5E005AB63B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 06FDD42225C92F5E005AB63B /* GoogleService-Info.plist */; };
 		169C5D68F1CD4019A1F374BD /* WorkSans-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 15FEA0101AD94DF3AB247247 /* WorkSans-Medium.otf */; };
 		1D46018CAF034770AF7B8F0C /* WorkSans-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4D05460585B94354AA3B11DA /* WorkSans-Italic.otf */; };
 		1EB48F42C1F84960A09A08AF /* WorkSans-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = FB28552D8F4149409B562AC1 /* WorkSans-ExtraLight.otf */; };
@@ -47,6 +48,8 @@
 /* Begin PBXFileReference section */
 		06108A1E2389AD8B006B0E73 /* TPSStripe */ = {isa = PBXFileReference; lastKnownFileType = folder; name = TPSStripe; path = "../node_modules/tipsi-stripe/ios/TPSStripe"; sourceTree = "<group>"; };
 		0681535224AFEFD800C22A3B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		06FDD41F25C90596005AB63B /* riive.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = riive.entitlements; sourceTree = "<group>"; };
+		06FDD42225C92F5E005AB63B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		15FEA0101AD94DF3AB247247 /* WorkSans-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Medium.otf"; path = "../assets/fonts/WorkSans-Medium.otf"; sourceTree = "<group>"; };
 		29C2288C62224994BE23A646 /* WorkSans-ExtraBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-ExtraBold.otf"; path = "../assets/fonts/WorkSans-ExtraBold.otf"; sourceTree = "<group>"; };
 		380661F4759F42BB8408C21E /* WorkSans-SemiBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-SemiBold.otf"; path = "../assets/fonts/WorkSans-SemiBold.otf"; sourceTree = "<group>"; };
@@ -144,6 +147,7 @@
 		B56386381DB9693800A0598C = {
 			isa = PBXGroup;
 			children = (
+				06FDD42225C92F5E005AB63B /* GoogleService-Info.plist */,
 				06108A1E2389AD8B006B0E73 /* TPSStripe */,
 				B56386431DB9693800A0598C /* riive */,
 				B56386421DB9693800A0598C /* Products */,
@@ -166,6 +170,7 @@
 		B56386431DB9693800A0598C /* riive */ = {
 			isa = PBXGroup;
 			children = (
+				06FDD41F25C90596005AB63B /* riive.entitlements */,
 				0681535224AFEFD800C22A3B /* GoogleService-Info.plist */,
 				B56386471DB9693800A0598C /* AppDelegate.h */,
 				B56386481DB9693800A0598C /* AppDelegate.m */,
@@ -235,8 +240,8 @@
 				TargetAttributes = {
 					B56386401DB9693800A0598C = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 6TX82T4YT2;
-						ProvisioningStyle = Automatic;
+						DevelopmentTeam = 49J3538JQK;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -298,6 +303,7 @@
 				93686D0DF032458CA7B60550 /* WorkSans-Light.otf in Resources */,
 				169C5D68F1CD4019A1F374BD /* WorkSans-Medium.otf in Resources */,
 				C05D4E7D55774F09AFB1FD4A /* WorkSans-Regular.otf in Resources */,
+				06FDD42325C92F5E005AB63B /* GoogleService-Info.plist in Resources */,
 				4CC2189287044164BCB7B76D /* WorkSans-SemiBold.otf in Resources */,
 				B6B2D6E2A4834986917DB7A0 /* WorkSans-Thin.otf in Resources */,
 			);
@@ -518,7 +524,84 @@
 			baseConfigurationReference = 8B9DD23868BD9E5710A04C83 /* Pods-riive.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 6TX82T4YT2;
+				CODE_SIGN_ENTITLEMENTS = riive/riive.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 49J3538JQK;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/Amplitude-iOS\"",
+					"\"${PODS_ROOT}/Headers/Public/AppAuth\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
+					"\"${PODS_ROOT}/Headers/Public/DoubleConversion\"",
+					"\"${PODS_ROOT}/Headers/Public/EXAppAuth\"",
+					"\"${PODS_ROOT}/Headers/Public/EXAppLoaderProvider\"",
+					"\"${PODS_ROOT}/Headers/Public/EXConstants\"",
+					"\"${PODS_ROOT}/Headers/Public/EXErrorRecovery\"",
+					"\"${PODS_ROOT}/Headers/Public/EXFileSystem\"",
+					"\"${PODS_ROOT}/Headers/Public/EXFont\"",
+					"\"${PODS_ROOT}/Headers/Public/EXGoogleSignIn\"",
+					"\"${PODS_ROOT}/Headers/Public/EXImageLoader\"",
+					"\"${PODS_ROOT}/Headers/Public/EXImagePicker\"",
+					"\"${PODS_ROOT}/Headers/Public/EXKeepAwake\"",
+					"\"${PODS_ROOT}/Headers/Public/EXLinearGradient\"",
+					"\"${PODS_ROOT}/Headers/Public/EXLocation\"",
+					"\"${PODS_ROOT}/Headers/Public/EXPermissions\"",
+					"\"${PODS_ROOT}/Headers/Public/EXSQLite\"",
+					"\"${PODS_ROOT}/Headers/Public/EXWebBrowser\"",
+					"\"${PODS_ROOT}/Headers/Public/ExpoKit\"",
+					"\"${PODS_ROOT}/Headers/Public/FBLazyVector\"",
+					"\"${PODS_ROOT}/Headers/Public/FBReactNativeSpec\"",
+					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseAnalyticsInterop\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseCore\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseCoreDiagnostics\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseCoreDiagnosticsInterop\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseInstanceID\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseMessaging\"",
+					"\"${PODS_ROOT}/Headers/Public/GTMAppAuth\"",
+					"\"${PODS_ROOT}/Headers/Public/GTMSessionFetcher\"",
+					"\"${PODS_ROOT}/Headers/Public/Google-Maps-iOS-Utils\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleDataTransport\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleDataTransportCCTSupport\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleUtilities\"",
+					"\"${PODS_ROOT}/Headers/Public/JKBigInteger2\"",
+					"\"${PODS_ROOT}/Headers/Public/Protobuf\"",
+					"\"${PODS_ROOT}/Headers/Public/RCTRequired\"",
+					"\"${PODS_ROOT}/Headers/Public/RCTTypeSafety\"",
+					"\"${PODS_ROOT}/Headers/Public/React-Core\"",
+					"\"${PODS_ROOT}/Headers/Public/React-RCTBlob\"",
+					"\"${PODS_ROOT}/Headers/Public/React-RCTText\"",
+					"\"${PODS_ROOT}/Headers/Public/React-cxxreact\"",
+					"\"${PODS_ROOT}/Headers/Public/React-jsi\"",
+					"\"${PODS_ROOT}/Headers/Public/React-jsiexecutor\"",
+					"\"${PODS_ROOT}/Headers/Public/React-jsinspector\"",
+					"\"${PODS_ROOT}/Headers/Public/ReactCommon\"",
+					"\"${PODS_ROOT}/Headers/Public/Stripe\"",
+					"\"${PODS_ROOT}/Headers/Public/UMAppLoader\"",
+					"\"${PODS_ROOT}/Headers/Public/UMBarCodeScannerInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMCameraInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMConstantsInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMCore\"",
+					"\"${PODS_ROOT}/Headers/Public/UMFaceDetectorInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMFileSystemInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMFontInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMImageLoaderInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMPermissionsInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMReactNativeAdapter\"",
+					"\"${PODS_ROOT}/Headers/Public/UMSensorsInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMTaskManagerInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/Yoga\"",
+					"\"${PODS_ROOT}/Headers/Public/glog\"",
+					"\"${PODS_ROOT}/Headers/Public/lottie-ios\"",
+					"\"${PODS_ROOT}/Headers/Public/nanopb\"",
+					"\"${PODS_ROOT}/Headers/Public/rn-fetch-blob\"",
+					"\"${PODS_ROOT}/Headers/Public/tipsi-stripe\"",
+					"$(inherited)",
+					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
+					"\"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase\"/**",
+					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/riive/Supporting/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -527,7 +610,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.riive;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				PROVISIONING_PROFILE_SPECIFIER = "Riive Dev Env";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -536,7 +620,84 @@
 			baseConfigurationReference = 73A906175AA240CF82F1F20C /* Pods-riive.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 6TX82T4YT2;
+				CODE_SIGN_ENTITLEMENTS = riive/riive.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 49J3538JQK;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/Amplitude-iOS\"",
+					"\"${PODS_ROOT}/Headers/Public/AppAuth\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
+					"\"${PODS_ROOT}/Headers/Public/DoubleConversion\"",
+					"\"${PODS_ROOT}/Headers/Public/EXAppAuth\"",
+					"\"${PODS_ROOT}/Headers/Public/EXAppLoaderProvider\"",
+					"\"${PODS_ROOT}/Headers/Public/EXConstants\"",
+					"\"${PODS_ROOT}/Headers/Public/EXErrorRecovery\"",
+					"\"${PODS_ROOT}/Headers/Public/EXFileSystem\"",
+					"\"${PODS_ROOT}/Headers/Public/EXFont\"",
+					"\"${PODS_ROOT}/Headers/Public/EXGoogleSignIn\"",
+					"\"${PODS_ROOT}/Headers/Public/EXImageLoader\"",
+					"\"${PODS_ROOT}/Headers/Public/EXImagePicker\"",
+					"\"${PODS_ROOT}/Headers/Public/EXKeepAwake\"",
+					"\"${PODS_ROOT}/Headers/Public/EXLinearGradient\"",
+					"\"${PODS_ROOT}/Headers/Public/EXLocation\"",
+					"\"${PODS_ROOT}/Headers/Public/EXPermissions\"",
+					"\"${PODS_ROOT}/Headers/Public/EXSQLite\"",
+					"\"${PODS_ROOT}/Headers/Public/EXWebBrowser\"",
+					"\"${PODS_ROOT}/Headers/Public/ExpoKit\"",
+					"\"${PODS_ROOT}/Headers/Public/FBLazyVector\"",
+					"\"${PODS_ROOT}/Headers/Public/FBReactNativeSpec\"",
+					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseAnalyticsInterop\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseCore\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseCoreDiagnostics\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseCoreDiagnosticsInterop\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseInstanceID\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseMessaging\"",
+					"\"${PODS_ROOT}/Headers/Public/GTMAppAuth\"",
+					"\"${PODS_ROOT}/Headers/Public/GTMSessionFetcher\"",
+					"\"${PODS_ROOT}/Headers/Public/Google-Maps-iOS-Utils\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleDataTransport\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleDataTransportCCTSupport\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleUtilities\"",
+					"\"${PODS_ROOT}/Headers/Public/JKBigInteger2\"",
+					"\"${PODS_ROOT}/Headers/Public/Protobuf\"",
+					"\"${PODS_ROOT}/Headers/Public/RCTRequired\"",
+					"\"${PODS_ROOT}/Headers/Public/RCTTypeSafety\"",
+					"\"${PODS_ROOT}/Headers/Public/React-Core\"",
+					"\"${PODS_ROOT}/Headers/Public/React-RCTBlob\"",
+					"\"${PODS_ROOT}/Headers/Public/React-RCTText\"",
+					"\"${PODS_ROOT}/Headers/Public/React-cxxreact\"",
+					"\"${PODS_ROOT}/Headers/Public/React-jsi\"",
+					"\"${PODS_ROOT}/Headers/Public/React-jsiexecutor\"",
+					"\"${PODS_ROOT}/Headers/Public/React-jsinspector\"",
+					"\"${PODS_ROOT}/Headers/Public/ReactCommon\"",
+					"\"${PODS_ROOT}/Headers/Public/Stripe\"",
+					"\"${PODS_ROOT}/Headers/Public/UMAppLoader\"",
+					"\"${PODS_ROOT}/Headers/Public/UMBarCodeScannerInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMCameraInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMConstantsInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMCore\"",
+					"\"${PODS_ROOT}/Headers/Public/UMFaceDetectorInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMFileSystemInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMFontInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMImageLoaderInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMPermissionsInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMReactNativeAdapter\"",
+					"\"${PODS_ROOT}/Headers/Public/UMSensorsInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/UMTaskManagerInterface\"",
+					"\"${PODS_ROOT}/Headers/Public/Yoga\"",
+					"\"${PODS_ROOT}/Headers/Public/glog\"",
+					"\"${PODS_ROOT}/Headers/Public/lottie-ios\"",
+					"\"${PODS_ROOT}/Headers/Public/nanopb\"",
+					"\"${PODS_ROOT}/Headers/Public/rn-fetch-blob\"",
+					"\"${PODS_ROOT}/Headers/Public/tipsi-stripe\"",
+					"$(inherited)",
+					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
+					"\"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase\"/**",
+					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/riive/Supporting/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -545,7 +706,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.riive;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				PROVISIONING_PROFILE_SPECIFIER = "Riive Dev Env";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

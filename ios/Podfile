@@ -4,6 +4,8 @@ platform :ios, '10.0'
 target 'riive' do
   pod 'Stripe', '~> 14.0.0'
   pod 'GoogleAppMeasurement', '~> 6.1.6'
+  pod 'Firebase/Core'
+  pod 'Firebase/Messaging'
   pod 'Firebase/Analytics'
   pod 'ExpoKit',
     :git => "http://github.com/expo/expo.git",

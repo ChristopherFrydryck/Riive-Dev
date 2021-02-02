@@ -1,5 +1,5 @@
 import React, {Component, createRef} from 'react'
-import {Fragment, View, ActivityIndicator, SafeAreaView, StatusBar, Platform, StyleSheet, Dimensions, Animated, Easing, TouchableOpacity, Alert} from 'react-native'
+import {Fragment, View, ActivityIndicator, SafeAreaView, StatusBar, Platform, StyleSheet, Dimensions, Animated, Easing, TouchableOpacity, Alert, AsyncStorage} from 'react-native'
 import ActionSheet from "react-native-actions-sheet";
 import Button from '../components/Button'
 import Text from '../components/Txt'
@@ -32,6 +32,7 @@ import axios from 'axios'
 
 
 import * as firebase from 'firebase'
+import RNFirebase from 'react-native-firebase'
 import firebaseConfig from '../firebaseConfig'
 import withFirebaseAuth from 'react-with-firebase-auth'
 import 'firebase/auth';
@@ -200,50 +201,54 @@ export default class Home extends Component{
         }
 
 
-        hasNotificationPermission = async () => {
-        if (Constants.isDevice) {
-            try {
-                const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-                let finalStatus = existingStatus;
-                // If we don't already have permission, ask for it
-                if (existingStatus !== 'granted') {
-                    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-                    finalStatus = status;
-                }
-                if (finalStatus === 'granted') return true;
-                if (finalStatus !== 'granted') {
-                Alert.alert(
-                    'Warning',
-                    'You will be unable to see reminders and up to date information on your trips without push notifications. Please enable push notifications for Riive in your settings.',
-                    [
-                    { text: 'Cancel' },
-                    // If they said no initially and want to change their mind,
-                    // we can automatically open our app in their settings
-                    // so there's less friction in turning notifications on
-                    { text: 'Enable Notifications', onPress: () => Platform.OS === 'ios' ? Linking.openURL('app-settings:') : Linking.openSettings() }
-                    ]
-                )
-                return false;
-                }
-            } catch (error) {
-                Alert.alert(
-                'Error',
-                'Something went wrong while check your notification permissions, please try again later.'
-                );
-                return false;
-            }
-          }else{
-            alert("Must use a physical device for push notifications")
-          }
+    hasNotificationPermission = async () => {
+        const enabled = await RNFirebase.messaging().hasPermission();
+        if (enabled) {
+            console.log("Enabled")
+            // this.getToken();
+        } else {
+            console.log("Not enabled")
+            // this.requestPermission();
+        }
+        // let token;
+        // if (Constants.isDevice) {
+        //     try {
+        //         const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+        //         let finalStatus = existingStatus;
+        //         // If we don't already have permission, ask for it
+        //         if (existingStatus !== 'granted') {
+        //             const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        //             finalStatus = status;
+        //         }
+        //         if (finalStatus !== 'granted') {
+        //             Alert.alert(
+        //                 'Warning',
+        //                 'You will be unable to see reminders and up to date information on your trips without push notifications. Please enable push notifications for Riive in your settings.',
+        //                 [
+        //                 { text: 'Cancel' },
+        //                 // If they said no initially and want to change their mind,
+        //                 // we can automatically open our app in their settings
+        //                 // so there's less friction in turning notifications on
+        //                 { text: 'Enable Notifications', onPress: () => Platform.OS === 'ios' ? Linking.openURL('app-settings:') : Linking.openSettings() }
+        //                 ]
+        //             )
+        //             return false;
+        //         }
+                
+        //             return true;
 
-          if (Platform.OS === 'android') {
-            Notifications.createChannelAndroidAsync('default', {
-              name: 'default',
-              sound: true,
-              priority: 'max',
-              vibrate: [0, 250, 250, 250],
-            });
-          }
+        //     } catch (error) {
+        //         Alert.alert(
+        //         'Error',
+        //         'Something went wrong while check your notification permissions, please try again later.'
+        //         );
+        //         return false;
+        //     }
+        //   }else{
+        //     alert("Must use a physical device for push notifications")
+        //   }
+
+        
         }
 
 

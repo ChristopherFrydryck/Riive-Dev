@@ -13,7 +13,16 @@
           "package_name": "com.riive"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "888723186328-lk7ncbb67os71tltickojco8evpk7vnd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.riive",
+            "certificate_hash": "44f253623e92e41c713847d3253626fe4d242594"
+          }
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCsZup3roSbxSJHTnQ4cqYSU4-UHzK5XTQ"
@@ -23,7 +32,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "888723186328-ps591m3rges9kvhq4d8eisfbfq6m418a.apps.googleusercontent.com",
+              "client_id": "888723186328-2kl8rti0cqsehtrqvum2nrjrme93h0r4.apps.googleusercontent.com",
               "client_type": 3
             },
             {
