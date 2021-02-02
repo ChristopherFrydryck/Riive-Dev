@@ -189,6 +189,8 @@ export default class Home extends Component{
 
           await this.getCurrentLocation(true);
           await this.hasNotificationPermission()
+          await this.checkPermission()
+          await this.createNotificationListener();
           await this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.latitudeDelta * 69, 99999.9999, 99999.9999)
           
           
@@ -199,6 +201,62 @@ export default class Home extends Component{
           
     
         }
+
+        async checkPermission() {
+            const enabled = await RNFirebase.messaging().hasPermission();
+            if (enabled) {
+                this.getToken();
+            } else {
+                this.requestPermission();
+            }
+          }
+          
+            //3
+          async getToken() {
+            let fcmToken = await AsyncStorage.getItem('fcmToken');
+            if (!fcmToken) {
+                fcmToken = await RNFirebase.messaging().getToken();
+                if (fcmToken) {
+                    // user has a device token
+                    await AsyncStorage.setItem('fcmToken', fcmToken);
+                }
+            }
+          }
+          
+            //2
+          async requestPermission() {
+            try {
+                await RNFirebase.messaging().requestPermission();
+                // User has authorised
+                this.getToken();
+            } catch (error) {
+                // User has rejected permissions
+                console.log('permission rejected');
+            }
+          }
+
+          async createNotificationListener() {
+                this.notificationListener = RNFirebase.notifications().onNotification((notification) => {
+                    const { title, body } = notification;
+                    console.log(title)
+                    this.showAlert(title, body);
+                });
+
+                this.messageListener = RNFirebase.messaging().onMessage((message) => {
+                    //process data message
+                    console.log(JSON.stringify(message));
+                  });
+          }
+
+          showAlert(title, body) {
+            Alert.alert(
+              title, body,
+              [
+                  { text: 'OK', onPress: () => console.log('OK Pressed') },
+              ],
+              { cancelable: false },
+            );
+          }
 
 
     hasNotificationPermission = async () => {
