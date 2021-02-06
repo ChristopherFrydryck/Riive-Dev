@@ -14,20 +14,26 @@
  * limitations under the License.
  */
 
-#import "FIRInstanceID+Private.h"
+#import "Firebase/InstanceID/Private/FIRInstanceID+Private.h"
 
-#import "FIRInstanceIDAuthService.h"
-#import "FIRInstanceIDKeyPairStore.h"
-#import "FIRInstanceIDTokenManager.h"
+#import "FirebaseInstallations/Source/Library/Private/FirebaseInstallationsInternal.h"
+
+#import "Firebase/InstanceID/FIRInstanceIDAuthService.h"
+#import "Firebase/InstanceID/FIRInstanceIDTokenManager.h"
+#import "Firebase/InstanceID/Private/FIRInstanceID_Private.h"
+
+@class FIRInstallations;
 
 @interface FIRInstanceID ()
 
 @property(nonatomic, readonly, strong) FIRInstanceIDTokenManager *tokenManager;
-@property(nonatomic, readonly, strong) FIRInstanceIDKeyPairStore *keyPairStore;
 
 @end
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
 @implementation FIRInstanceID (Private)
+#pragma clang diagnostic pop
 
 // This method just wraps our pre-configured auth service to make the request.
 // This method is only needed by first-party users, like Remote Config.
@@ -35,8 +41,12 @@
   [self.tokenManager.authService fetchCheckinInfoWithHandler:handler];
 }
 
-- (NSString *)appInstanceID:(NSError **)error {
-  return [self.keyPairStore appIdentityWithError:error];
+#pragma mark - Firebase Installations Compatibility
+
+/// Presence of this method indicates that this version of IID uses FirebaseInstallations under the
+/// hood. It is checked by FirebaseInstallations SDK.
++ (BOOL)usesFIS {
+  return YES;
 }
 
 @end

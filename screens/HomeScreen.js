@@ -34,7 +34,6 @@ import axios from 'axios'
 
 
 import * as firebase from 'firebase'
-import RNFirebase from 'react-native-firebase'
 import firebaseConfig from '../firebaseConfig'
 import withFirebaseAuth from 'react-with-firebase-auth'
 import 'firebase/auth';
@@ -206,61 +205,61 @@ export default class Home extends Component{
     
         }
 
-        async checkPermission() {
-            const enabled = await RNFirebase.messaging().hasPermission();
-            if (enabled) {
-                this.getToken();
-            } else {
-                this.requestPermission();
-            }
-          }
+        // async checkPermission() {
+        //     const enabled = await RNFirebase.messaging().hasPermission();
+        //     if (enabled) {
+        //         this.getToken();
+        //     } else {
+        //         this.requestPermission();
+        //     }
+        //   }
           
-            //3
-          async getToken() {
-            let fcmToken = await AsyncStorage.getItem('fcmToken');
-            if (!fcmToken) {
-                fcmToken = await RNFirebase.messaging().getToken();
-                if (fcmToken) {
-                    // user has a device token
-                    await AsyncStorage.setItem('fcmToken', fcmToken);
-                }
-            }
-          }
+        //     //3
+        //   async getToken() {
+        //     let fcmToken = await AsyncStorage.getItem('fcmToken');
+        //     if (!fcmToken) {
+        //         fcmToken = await RNFirebase.messaging().getToken();
+        //         if (fcmToken) {
+        //             // user has a device token
+        //             await AsyncStorage.setItem('fcmToken', fcmToken);
+        //         }
+        //     }
+        //   }
           
-            //2
-          async requestPermission() {
-            try {
-                await RNFirebase.messaging().requestPermission();
-                // User has authorised
-                this.getToken();
-            } catch (error) {
-                // User has rejected permissions
-                console.log('permission rejected');
-            }
-          }
+        //     //2
+        //   async requestPermission() {
+        //     try {
+        //         await RNFirebase.messaging().requestPermission();
+        //         // User has authorised
+        //         this.getToken();
+        //     } catch (error) {
+        //         // User has rejected permissions
+        //         console.log('permission rejected');
+        //     }
+        //   }
 
-          async createNotificationListener() {
-                this.notificationListener = RNFirebase.notifications().onNotification((notification) => {
-                    const { title, body } = notification;
-                    console.log(title)
-                    this.showAlert(title, body);
-                });
+        //   async createNotificationListener() {
+        //         this.notificationListener = RNFirebase.notifications().onNotification((notification) => {
+        //             const { title, body } = notification;
+        //             console.log(title)
+        //             this.showAlert(title, body);
+        //         });
 
-                this.messageListener = RNFirebase.messaging().onMessage((message) => {
-                    //process data message
-                    console.log(JSON.stringify(message));
-                  });
-          }
+        //         this.messageListener = RNFirebase.messaging().onMessage((message) => {
+        //             //process data message
+        //             console.log(JSON.stringify(message));
+        //           });
+        //   }
 
-          showAlert(title, body) {
-            Alert.alert(
-              title, body,
-              [
-                  { text: 'OK', onPress: () => console.log('OK Pressed') },
-              ],
-              { cancelable: false },
-            );
-          }
+        //   showAlert(title, body) {
+        //     Alert.alert(
+        //       title, body,
+        //       [
+        //           { text: 'OK', onPress: () => console.log('OK Pressed') },
+        //       ],
+        //       { cancelable: false },
+        //     );
+        //   }
 
 
     

@@ -1,6 +1,6 @@
 {
   "name": "EXConstants",
-  "version": "10.0.0",
+  "version": "9.0.0",
   "summary": "Provides system information that remains constant throughout the lifetime of your app.",
   "description": "Provides system information that remains constant throughout the lifetime of your app.",
   "license": "MIT",
@@ -9,11 +9,14 @@
   },
   "homepage": "https://docs.expo.io/versions/latest/sdk/constants/",
   "platforms": {
-    "ios": "11.0"
+    "ios": "10.0"
   },
   "source": {
     "git": "https://github.com/expo/expo.git"
   },
+  "source_files": "**/*.{h,m}",
+  "preserve_paths": "**/*.{h,m}",
+  "requires_arc": true,
   "dependencies": {
     "UMCore": [
 
@@ -21,6 +24,5 @@
     "UMConstantsInterface": [
 
     ]
-  },
-  "source_files": "EXConstants/**/*.{h,m}"
+  }
 }

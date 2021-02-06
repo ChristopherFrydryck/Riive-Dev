@@ -3,8 +3,8 @@
 #import "AppDelegate.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import <Firebase.h>
-#import "RNFirebaseNotifications.h"
-#import "RNFirebaseMessaging.h"
+// #import "RNFirebaseNotifications.h"
+// #import "RNFirebaseMessaging.h"
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
@@ -14,12 +14,13 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  if ([FIRApp defaultApp] == nil) {
-    [FIRApp configure];
-  }
-    
   [GMSServices provideAPIKey:@"AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c"];
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
+
+  [FIRApp configure];
+  [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
+  // [RNFirebaseNotifications configure];
+
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
