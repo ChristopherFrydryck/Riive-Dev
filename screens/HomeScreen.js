@@ -260,14 +260,6 @@ export default class Home extends Component{
 
 
     hasNotificationPermission = async () => {
-        // const enabled = await RNFirebase.messaging().hasPermission();
-        // if (enabled) {
-        //     console.log("Enabled")
-        //     // this.getToken();
-        // } else {
-        //     console.log("Not enabled")
-        //     // this.requestPermission();
-        // }
         let token;
         if (Constants.isDevice) {
             try {
@@ -292,9 +284,14 @@ export default class Home extends Component{
                     )
                     return false;
                 }
+                if(Platform.OS === 'android'){
                     token = await Notifications.getExpoPushTokenAsync();
                     console.log(token);
-                    return true;
+                }else{
+                    console.log('ios')
+                }
+                
+              return true;
                     
 
             } catch (error) {
@@ -309,14 +306,7 @@ export default class Home extends Component{
             alert("Must use a physical device for push notifications")
           }
 
-          if (Platform.OS === 'android') {
-            Notifications.setNotificationChannelAsync('default', {
-              name: 'default',
-              importance: Notifications.AndroidImportance.MAX,
-              vibrationPattern: [0, 250, 250, 250],
-              lightColor: '#FF231F7C',
-            });
-          }
+          
 
         
         }
