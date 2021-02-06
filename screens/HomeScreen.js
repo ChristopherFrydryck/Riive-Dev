@@ -16,8 +16,10 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions';
-import { Linking, Notifications } from 'expo';
+import { Linking } from 'expo';
 import Constants from 'expo-constants'
+
+import { notificationPermissions } from '../functions/in-app/notifications'
 
 //For Shimmer
 import SvgAnimatedLinearGradient from 'react-native-svg-animated-linear-gradient'
@@ -49,6 +51,7 @@ import { TouchableWithoutFeedback } from 'react-native';
 
 const actionSheetRef = createRef();
 const GOOGLE_API_KEY = "AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c";
+
 
 
 @inject("UserStore", "ComponentStore")
@@ -188,7 +191,8 @@ export default class Home extends Component{
 
 
           await this.getCurrentLocation(true);
-          await this.hasNotificationPermission()
+        //   await this.hasNotificationPermission()
+        await notificationPermissions();
         //   await this.checkPermission()
         //   await this.createNotificationListener();
           await this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.latitudeDelta * 69, 99999.9999, 99999.9999)
@@ -259,57 +263,7 @@ export default class Home extends Component{
           }
 
 
-    hasNotificationPermission = async () => {
-        let token;
-        if (Constants.isDevice) {
-            try {
-                const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-                let finalStatus = existingStatus;
-                // If we don't already have permission, ask for it
-                if (existingStatus !== 'granted') {
-                    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-                    finalStatus = status;
-                }
-                if (finalStatus !== 'granted') {
-                    Alert.alert(
-                        'Warning',
-                        'You will be unable to see reminders and up to date information on your trips without push notifications. Please enable push notifications for Riive in your settings.',
-                        [
-                        { text: 'Cancel' },
-                        // If they said no initially and want to change their mind,
-                        // we can automatically open our app in their settings
-                        // so there's less friction in turning notifications on
-                        { text: 'Enable Notifications', onPress: () => Platform.OS === 'ios' ? Linking.openURL('app-settings:') : Linking.openSettings() }
-                        ]
-                    )
-                    return false;
-                }
-                if(Platform.OS === 'android'){
-                    token = await Notifications.getExpoPushTokenAsync();
-                    console.log(token);
-                }else{
-                    console.log('ios')
-                }
-                
-              return true;
-                    
-
-            } catch (error) {
-                console.log(error)
-                Alert.alert(
-                'Error',
-                'Something went wrong while check your notification permissions, please try again later.'
-                );
-                return false;
-            }
-          }else{
-            alert("Must use a physical device for push notifications")
-          }
-
-          
-
-        
-        }
+    
 
 
 
