@@ -12,6 +12,8 @@ export let notificationPermissions = async() => {
             authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
         if (enabled) {
+            let tok = await messaging().getToken();
+            console.log(tok)
             console.log('Authorization status:', authStatus);
         }
     
