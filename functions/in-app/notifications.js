@@ -4,7 +4,7 @@ import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants'
 import messaging from '@react-native-firebase/messaging';
 
-export let notificationPermissions = async()  => {
+export let notificationPermissions = async() => {
 
         const authStatus = await messaging().requestPermission();
         const enabled =

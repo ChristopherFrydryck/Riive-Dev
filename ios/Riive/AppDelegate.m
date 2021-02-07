@@ -16,9 +16,6 @@
   [GMSServices provideAPIKey:@"AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c"];
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 
-  
-  [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
-
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application

@@ -24,6 +24,8 @@ import com.gettipsi.stripe.StripeReactPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 
 import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
+import io.invertase.firebase.messaging.ReactNativeFirebaseMessagingPackage;
+
 
 public class MainApplication extends ExpoApplication implements AppLoaderPackagesProviderInterface<ReactPackage> {
 
@@ -46,6 +48,7 @@ public class MainApplication extends ExpoApplication implements AppLoaderPackage
             new RNGoogleSigninPackage(),
             // new RNGestureHandlerPackage(),
             new ReactNativeFirebaseAppPackage(),
+            new ReactNativeFirebaseMessagingPackage(),
             new RNFetchBlobPackage(),
             new StripeReactPackage()
 //            new MapsPackage()

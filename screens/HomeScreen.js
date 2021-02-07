@@ -47,6 +47,11 @@ import {inject, observer} from 'mobx-react/native'
 import { TouchableWithoutFeedback } from 'react-native';
 
 
+if (!firebase.apps.length) {
+    // Initlialized FB Vars
+    firebase.initializeApp(firebaseConfig);
+  }
+
 
 const actionSheetRef = createRef();
 const GOOGLE_API_KEY = "AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c";

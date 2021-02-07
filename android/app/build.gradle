@@ -115,7 +115,9 @@ dependencies {
     implementation project(':rn-fetch-blob')
   implementation project(':tipsi-stripe')
 
+// React native firebase
   implementation project(path: ":@react-native-firebase_app")
+  implementation project(path: ":@react-native-firebase_messaging")
 
   implementation(project(':react-native-maps')){
     exclude group: 'com.google.android.gms', module: 'play-services-base'

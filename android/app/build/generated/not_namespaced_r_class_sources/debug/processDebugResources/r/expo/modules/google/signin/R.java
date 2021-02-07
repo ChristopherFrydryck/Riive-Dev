@@ -43,24 +43,24 @@ public final class R {
     public static final class color {
         private color() {}
 
-        public static final int common_google_signin_btn_text_dark = 0x7f060050;
-        public static final int common_google_signin_btn_text_dark_default = 0x7f060051;
-        public static final int common_google_signin_btn_text_dark_disabled = 0x7f060052;
-        public static final int common_google_signin_btn_text_dark_focused = 0x7f060053;
-        public static final int common_google_signin_btn_text_dark_pressed = 0x7f060054;
-        public static final int common_google_signin_btn_text_light = 0x7f060055;
-        public static final int common_google_signin_btn_text_light_default = 0x7f060056;
-        public static final int common_google_signin_btn_text_light_disabled = 0x7f060057;
-        public static final int common_google_signin_btn_text_light_focused = 0x7f060058;
-        public static final int common_google_signin_btn_text_light_pressed = 0x7f060059;
-        public static final int common_google_signin_btn_tint = 0x7f06005a;
-        public static final int notification_action_color_filter = 0x7f0600a0;
-        public static final int notification_icon_bg_color = 0x7f0600a1;
-        public static final int notification_material_background_media_default_color = 0x7f0600a2;
-        public static final int primary_text_default_material_dark = 0x7f0600a8;
-        public static final int ripple_material_light = 0x7f0600ae;
-        public static final int secondary_text_default_material_dark = 0x7f0600af;
-        public static final int secondary_text_default_material_light = 0x7f0600b0;
+        public static final int common_google_signin_btn_text_dark = 0x7f060060;
+        public static final int common_google_signin_btn_text_dark_default = 0x7f060061;
+        public static final int common_google_signin_btn_text_dark_disabled = 0x7f060062;
+        public static final int common_google_signin_btn_text_dark_focused = 0x7f060063;
+        public static final int common_google_signin_btn_text_dark_pressed = 0x7f060064;
+        public static final int common_google_signin_btn_text_light = 0x7f060065;
+        public static final int common_google_signin_btn_text_light_default = 0x7f060066;
+        public static final int common_google_signin_btn_text_light_disabled = 0x7f060067;
+        public static final int common_google_signin_btn_text_light_focused = 0x7f060068;
+        public static final int common_google_signin_btn_text_light_pressed = 0x7f060069;
+        public static final int common_google_signin_btn_tint = 0x7f06006a;
+        public static final int notification_action_color_filter = 0x7f060100;
+        public static final int notification_icon_bg_color = 0x7f060101;
+        public static final int notification_material_background_media_default_color = 0x7f060102;
+        public static final int primary_text_default_material_dark = 0x7f060118;
+        public static final int ripple_material_light = 0x7f060120;
+        public static final int secondary_text_default_material_dark = 0x7f060128;
+        public static final int secondary_text_default_material_light = 0x7f060129;
     }
     public static final class dimen {
         private dimen() {}

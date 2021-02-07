@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Sat Feb 06 18:04:44 MST 2021
+#Sat Feb 06 19:27:42 MST 2021
 60.set=NATIVE_RESOURCE
 52.set=NATIVE_RESOURCE
 53.base=/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/transforms/mergeJniLibs/debug/0
