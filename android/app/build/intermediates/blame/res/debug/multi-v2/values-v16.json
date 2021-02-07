@@ -4,7 +4,7 @@
             "outputFile": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v16/values-v16.xml",
             "map": [
                 {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0.aar/86b39316b95c3d89969980f9483e992a/res/values-v16/values-v16.xml",
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0.aar/66afb97cbd066554a0a98e936ed57837/res/values-v16/values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/1040a5d40f657559c5dc2267b6abe1bd/res/values-v16/values-v16.xml",
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/values-v16/values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

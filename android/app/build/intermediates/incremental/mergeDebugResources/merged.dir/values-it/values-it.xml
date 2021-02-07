@@ -165,7 +165,7 @@
     <string name="pick_image_intent_chooser_title">Seleziona origine</string>
     <string name="price_free">Gratuito</string>
     <string msgid="730395136688082741" name="search_menu_title">"Cerca"</string>
-    <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
+    <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"999+"</string>
     <string name="title_add_a_card">Aggiungi una carta</string>
     <string name="title_add_an_address">Aggiungi un indirizzo</string>
     <string name="title_payment_method">Metodo di pagamento</string>

@@ -310,9 +310,9 @@ public final class R {
         public static final int common_open_on_phone = 0x7f100084;
         public static final int common_signin_button_text = 0x7f100085;
         public static final int common_signin_button_text_long = 0x7f100086;
-        public static final int fcm_fallback_notification_channel_label = 0x7f1000a3;
-        public static final int status_bar_notification_info_overflow = 0x7f100116;
-        public static final int wallet_buy_button_place_holder = 0x7f10011e;
+        public static final int fcm_fallback_notification_channel_label = 0x7f1000a2;
+        public static final int status_bar_notification_info_overflow = 0x7f100115;
+        public static final int wallet_buy_button_place_holder = 0x7f10011d;
     }
     public static final class style {
         private style() {}

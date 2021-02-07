@@ -80,6 +80,6 @@
     <string name="messenger_send_button_text">Wyślij</string>
     <string name="pick_image_intent_chooser_title">Wybierz źródło</string>
     <string msgid="730395136688082741" name="search_menu_title">"Szukaj"</string>
-    <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
+    <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"999+"</string>
     <string msgid="363496807345461806" name="wallet_buy_button_place_holder">"Kup to z Google"</string>
 </resources>

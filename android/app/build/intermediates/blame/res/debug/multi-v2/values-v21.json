@@ -4,26 +4,26 @@
             "outputFile": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v21/values-v21.xml",
             "map": [
                 {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/material-1.0.0.aar/b57c219b5acee21ab48ded94ea306116/res/values-v21/values-v21.xml",
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/values-v21/values-v21.xml",
                     "from": {
-                        "startLines": "2,10,18,26",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "55,484,910,1333",
-                        "endLines": "9,17,25,33",
-                        "endColumns": "10,10,10,10",
-                        "endOffsets": "479,905,1328,1763"
+                        "startLines": "2,3,4,5,6,7,8,9,10,13",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,159,223,290,354,470,596,722,850,1022",
+                        "endLines": "2,3,4,5,6,7,8,9,12,17",
+                        "endColumns": "103,63,66,63,115,125,125,127,12,12",
+                        "endOffsets": "154,218,285,349,465,591,717,845,1017,1355"
                     },
                     "to": {
-                        "startLines": "283,291,299,307",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "20573,21002,21428,21851",
-                        "endLines": "290,298,306,314",
-                        "endColumns": "10,10,10,10",
-                        "endOffsets": "20997,21423,21846,22281"
+                        "startLines": "2,3,4,5,267,268,275,279,315,318",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,159,223,290,19411,19527,19984,20278,22286,22458",
+                        "endLines": "2,3,4,5,267,268,275,279,317,322",
+                        "endColumns": "103,63,66,63,115,125,125,127,12,12",
+                        "endOffsets": "154,218,285,349,19522,19648,20105,20401,22453,22791"
                     }
                 },
                 {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/media-1.0.0.aar/e6b1853b90983eded89d67476f3a477f/res/values-v21/values-v21.xml",
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/media-1.0.0.aar/759a932d04e8cf0ef67e2c72e49ed8c7/res/values-v21/values-v21.xml",
                     "from": {
                         "startLines": "2,5,8,11",
                         "startColumns": "4,4,4,4",
@@ -42,26 +42,7 @@
                     }
                 },
                 {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/jetified-CreditCardEntry-1.5.1.aar/ea14e46b8fcfd95661bb92e7e238b113/res/values-v21/values-v21.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endLines": "4",
-                        "endColumns": "12",
-                        "endOffsets": "191"
-                    },
-                    "to": {
-                        "startLines": "6",
-                        "startColumns": "4",
-                        "startOffsets": "354",
-                        "endLines": "8",
-                        "endColumns": "12",
-                        "endOffsets": "490"
-                    }
-                },
-                {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0.aar/86b39316b95c3d89969980f9483e992a/res/values-v21/values-v21.xml",
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0.aar/66afb97cbd066554a0a98e936ed57837/res/values-v21/values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,19,20,21,22,24,26,27,28,29,30,32,34,36,38,40,42,43,48,50,52,53,54,56,58,59,60,61,62,63,106,109,152,155,158,160,162,164,167,171,174,175,176,179,180,181,182,183,184,187,188,190,192,194,196,200,202,203,204,205,207,211,213,215,216,217,218,219,220,222,223,224,234,235,236,248",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -80,22 +61,41 @@
                     }
                 },
                 {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/1040a5d40f657559c5dc2267b6abe1bd/res/values-v21/values-v21.xml",
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/jetified-CreditCardEntry-1.5.1.aar/008f5ecea1f4ce5e4302dd235e12452e/res/values-v21/values-v21.xml",
                     "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10,13",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,159,223,290,354,470,596,722,850,1022",
-                        "endLines": "2,3,4,5,6,7,8,9,12,17",
-                        "endColumns": "103,63,66,63,115,125,125,127,12,12",
-                        "endOffsets": "154,218,285,349,465,591,717,845,1017,1355"
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "4",
+                        "endColumns": "12",
+                        "endOffsets": "191"
                     },
                     "to": {
-                        "startLines": "2,3,4,5,267,268,275,279,315,318",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,159,223,290,19411,19527,19984,20278,22286,22458",
-                        "endLines": "2,3,4,5,267,268,275,279,317,322",
-                        "endColumns": "103,63,66,63,115,125,125,127,12,12",
-                        "endOffsets": "154,218,285,349,19522,19648,20105,20401,22453,22791"
+                        "startLines": "6",
+                        "startColumns": "4",
+                        "startOffsets": "354",
+                        "endLines": "8",
+                        "endColumns": "12",
+                        "endOffsets": "490"
+                    }
+                },
+                {
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/material-1.0.0.aar/3ab89df765078989c9bb77bec7974e8b/res/values-v21/values-v21.xml",
+                    "from": {
+                        "startLines": "2,10,18,26",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,484,910,1333",
+                        "endLines": "9,17,25,33",
+                        "endColumns": "10,10,10,10",
+                        "endOffsets": "479,905,1328,1763"
+                    },
+                    "to": {
+                        "startLines": "283,291,299,307",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "20573,21002,21428,21851",
+                        "endLines": "290,298,306,314",
+                        "endColumns": "10,10,10,10",
+                        "endOffsets": "20997,21423,21846,22281"
                     }
                 }
             ]

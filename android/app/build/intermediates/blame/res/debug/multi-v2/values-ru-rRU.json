@@ -4,7 +4,7 @@
             "outputFile": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-ru-rRU/values-ru-rRU.xml",
             "map": [
                 {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/jetified-android-image-cropper-2.7.0.aar/336d97d2f3771d69dec1e5fc3046ed1c/res/values-ru-rRU/values-ru-rRU.xml",
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/jetified-android-image-cropper-2.7.0.aar/a856b207cea260e79a0fe489215aca6b/res/values-ru-rRU/values-ru-rRU.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8",
                         "startColumns": "4,4,4,4,4,4,4",

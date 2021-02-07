@@ -14,6 +14,7 @@ import ComponentStore from './stores/componentStore'
 
 // Firebase imports
 import * as firebase from 'firebase'
+import firebaseConfig from './firebaseConfig'
 import 'firebase/firestore';
 import 'firebase/auth';
 
@@ -26,7 +27,13 @@ stripe.setOptions({
 })
 
 
+if (!firebase.apps.length) {
 
+  // Initlialized FB Vars
+  firebase.initializeApp(firebaseConfig);
+
+
+}
 
 
 const stores = {

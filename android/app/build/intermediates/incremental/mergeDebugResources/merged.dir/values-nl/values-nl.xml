@@ -163,7 +163,7 @@
     <string name="pick_image_intent_chooser_title">Bron selecteren</string>
     <string name="price_free">Gratis</string>
     <string msgid="730395136688082741" name="search_menu_title">"Zoeken"</string>
-    <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
+    <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"999+"</string>
     <string name="title_add_a_card">Een kaart toevoegen</string>
     <string name="title_add_an_address">Voeg een adres toe</string>
     <string name="title_payment_method">Betalingsmethode</string>

@@ -93,7 +93,7 @@ public final class R {
     public static final class string {
         private string() {}
 
-        public static final int wallet_buy_button_place_holder = 0x7f10011e;
+        public static final int wallet_buy_button_place_holder = 0x7f10011d;
     }
     public static final class style {
         private style() {}

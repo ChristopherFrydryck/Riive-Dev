@@ -19,10 +19,11 @@ import com.swmansion.rnscreens.RNScreensPackage;
 // import com.swmansion.reanimated.ReanimatedPackage;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
 // import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
-import io.invertase.firebase.RNFirebasePackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.gettipsi.stripe.StripeReactPackage;
 import com.airbnb.android.react.maps.MapsPackage;
+
+import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
 
 public class MainApplication extends ExpoApplication implements AppLoaderPackagesProviderInterface<ReactPackage> {
 
@@ -44,7 +45,7 @@ public class MainApplication extends ExpoApplication implements AppLoaderPackage
             // new ReanimatedPackage(),
             new RNGoogleSigninPackage(),
             // new RNGestureHandlerPackage(),
-            new RNFirebasePackage(),
+            new ReactNativeFirebaseAppPackage(),
             new RNFetchBlobPackage(),
             new StripeReactPackage()
 //            new MapsPackage()

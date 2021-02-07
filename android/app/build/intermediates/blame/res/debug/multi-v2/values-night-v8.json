@@ -4,7 +4,7 @@
             "outputFile": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml",
             "map": [
                 {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0.aar/86b39316b95c3d89969980f9483e992a/res/values-night-v8/values-night-v8.xml",
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0.aar/66afb97cbd066554a0a98e936ed57837/res/values-night-v8/values-night-v8.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/expoview-36.0.0.aar/27c6a0004fcf75872bd82e3a28afdc6e/res/values-night-v8/values-night-v8.xml",
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/expoview-36.0.0.aar/b7bb745056abe644eab0cacfba3e4036/res/values-night-v8/values-night-v8.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

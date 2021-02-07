@@ -49,12 +49,13 @@ const providers = {
 };
 
 
-if (!firebase.apps.length) {
+// if (!firebase.apps.length) {
 
-  // Initlialized FB Vars
-  var firebaseApp = firebase.initializeApp(firebaseConfig);
-  var firebaseAppAuth = firebaseApp.auth();
-}
+//   // Initlialized FB Vars
+//   var firebaseApp = firebase.initializeApp(firebaseConfig);
+
+//   var firebaseAppAuth = firebaseApp.auth();
+// }
 
 
 
@@ -838,5 +839,5 @@ const styles = StyleSheet.create({
   }
 });
 
-
-export default withFirebaseAuth ({providers, firebaseAppAuth})(Authentication);
+export default Authentication;
+// export default withFirebaseAuth ({providers, firebaseAppAuth})(Authentication);
