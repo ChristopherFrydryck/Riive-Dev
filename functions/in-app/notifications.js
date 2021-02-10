@@ -8,6 +8,7 @@ import messaging from '@react-native-firebase/messaging';
 export let notificationPermissions = async() => {
     if(Platform.OS === 'ios'){
         if(Constants.isDevice){
+            try{
             const authStatus = await messaging().requestPermission();
             const enabled =
                 authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
@@ -35,6 +36,14 @@ export let notificationPermissions = async() => {
                     { text: 'Enable Notifications', onPress: () => Linking.openURL('app-settings:')}
                     ]
                 )
+            }
+            }catch (error) {
+                console.log(error)
+                Alert.alert(
+                'Error',
+                'Something went wrong while check your notification permissions, please try again later.'
+                );
+                return false;
             }
         }else{
             alert("Must use a physical device for push notifications");
