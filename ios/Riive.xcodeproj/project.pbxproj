@@ -30,7 +30,7 @@
 		B6B2D6E2A4834986917DB7A0 /* WorkSans-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = DD5FDBC4A9774BACBEF100EF /* WorkSans-Thin.otf */; };
 		C05D4E7D55774F09AFB1FD4A /* WorkSans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 50A1AC4C862C4FA7A4A778EB /* WorkSans-Regular.otf */; };
 		C5EA0F028BF041409C4939FD /* WorkSans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = F156353C5792448F9973480B /* WorkSans-Bold.otf */; };
-		ED8B5F0BF55D014AFE20E9E7 /* libPods-riive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F4C8849CDC32BF2AF3C81982 /* libPods-riive.a */; };
+		D223F8DE0B13DFE9FD6B59F6 /* libPods-riive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F51ABC1B4AF8B8EFA66FD9F /* libPods-riive.a */; };
 		F5F7B2B46ED54B6CB971D386 /* WorkSans-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 29C2288C62224994BE23A646 /* WorkSans-ExtraBold.otf */; };
 /* End PBXBuildFile section */
 
@@ -40,13 +40,14 @@
 		06FDD41F25C90596005AB63B /* riive.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = riive.entitlements; sourceTree = "<group>"; };
 		06FDD42225C92F5E005AB63B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		15FEA0101AD94DF3AB247247 /* WorkSans-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Medium.otf"; path = "../assets/fonts/WorkSans-Medium.otf"; sourceTree = "<group>"; };
-		27D33145F69E55878C6428FF /* Pods-riive.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riive.release.xcconfig"; path = "Target Support Files/Pods-riive/Pods-riive.release.xcconfig"; sourceTree = "<group>"; };
+		1AC04C70870F44E02F84B1FE /* Pods-riive.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riive.debug.xcconfig"; path = "Target Support Files/Pods-riive/Pods-riive.debug.xcconfig"; sourceTree = "<group>"; };
+		1DE8228AB9F6276652339137 /* Pods-riive.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riive.release.xcconfig"; path = "Target Support Files/Pods-riive/Pods-riive.release.xcconfig"; sourceTree = "<group>"; };
 		29C2288C62224994BE23A646 /* WorkSans-ExtraBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-ExtraBold.otf"; path = "../assets/fonts/WorkSans-ExtraBold.otf"; sourceTree = "<group>"; };
 		380661F4759F42BB8408C21E /* WorkSans-SemiBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-SemiBold.otf"; path = "../assets/fonts/WorkSans-SemiBold.otf"; sourceTree = "<group>"; };
 		4D05460585B94354AA3B11DA /* WorkSans-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Italic.otf"; path = "../assets/fonts/WorkSans-Italic.otf"; sourceTree = "<group>"; };
 		4F249A11530A4672AF8B0715 /* libRNFirebase.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFirebase.a; sourceTree = "<group>"; };
 		50A1AC4C862C4FA7A4A778EB /* WorkSans-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Regular.otf"; path = "../assets/fonts/WorkSans-Regular.otf"; sourceTree = "<group>"; };
-		86DB25C097B76C5FDD99879E /* Pods-riive.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riive.debug.xcconfig"; path = "Target Support Files/Pods-riive/Pods-riive.debug.xcconfig"; sourceTree = "<group>"; };
+		6F51ABC1B4AF8B8EFA66FD9F /* libPods-riive.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-riive.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		915166776FF844E49FC6D67B /* WorkSans-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Light.otf"; path = "../assets/fonts/WorkSans-Light.otf"; sourceTree = "<group>"; };
 		B501732A1DC01252003445D9 /* EXShell.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = EXShell.plist; sourceTree = "<group>"; };
 		B56386411DB9693800A0598C /* riive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = riive.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,7 +66,6 @@
 		DD5FDBC4A9774BACBEF100EF /* WorkSans-Thin.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Thin.otf"; path = "../assets/fonts/WorkSans-Thin.otf"; sourceTree = "<group>"; };
 		E2E11916852D4DE7A298CA93 /* WorkSans-Black.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Black.otf"; path = "../assets/fonts/WorkSans-Black.otf"; sourceTree = "<group>"; };
 		F156353C5792448F9973480B /* WorkSans-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Bold.otf"; path = "../assets/fonts/WorkSans-Bold.otf"; sourceTree = "<group>"; };
-		F4C8849CDC32BF2AF3C81982 /* libPods-riive.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-riive.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB28552D8F4149409B562AC1 /* WorkSans-ExtraLight.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-ExtraLight.otf"; path = "../assets/fonts/WorkSans-ExtraLight.otf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -74,7 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ED8B5F0BF55D014AFE20E9E7 /* libPods-riive.a in Frameworks */,
+				D223F8DE0B13DFE9FD6B59F6 /* libPods-riive.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,8 +92,8 @@
 		2855B4A62075CFD365DC936D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				86DB25C097B76C5FDD99879E /* Pods-riive.debug.xcconfig */,
-				27D33145F69E55878C6428FF /* Pods-riive.release.xcconfig */,
+				1AC04C70870F44E02F84B1FE /* Pods-riive.debug.xcconfig */,
+				1DE8228AB9F6276652339137 /* Pods-riive.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -115,10 +115,10 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		8EA34D5CCE2D28BADA48A692 /* Frameworks */ = {
+		4CA85E41F7C2A3CF7C710DA7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F4C8849CDC32BF2AF3C81982 /* libPods-riive.a */,
+				6F51ABC1B4AF8B8EFA66FD9F /* libPods-riive.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -141,7 +141,7 @@
 				06AE490D23A09AF70075E8DA /* Recovered References */,
 				2855B4A62075CFD365DC936D /* Pods */,
 				47D0635DE2754B9A82820053 /* Resources */,
-				8EA34D5CCE2D28BADA48A692 /* Frameworks */,
+				4CA85E41F7C2A3CF7C710DA7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -190,13 +190,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B56386581DB9693800A0598C /* Build configuration list for PBXNativeTarget "riive" */;
 			buildPhases = (
-				1FFBBA428ED805819524E6CB /* [CP] Check Pods Manifest.lock */,
+				3F5E99FBF594A44786C7D825 /* [CP] Check Pods Manifest.lock */,
 				B5722AD01DFB7E3F0084848F /* Prepare Expo */,
 				B563863D1DB9693800A0598C /* Sources */,
 				B563863E1DB9693800A0598C /* Frameworks */,
 				B563863F1DB9693800A0598C /* Resources */,
 				19D233B7204FDD7D0087ED51 /* Bundle Expo Assets */,
-				B6AFEC42B699FEF441884A65 /* [CP] Copy Pods Resources */,
+				5BDEBB4907D64EC2010D9606 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -223,7 +223,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B563863C1DB9693800A0598C /* Build configuration list for PBXProject "riive" */;
+			buildConfigurationList = B563863C1DB9693800A0598C /* Build configuration list for PBXProject "Riive" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -288,7 +288,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -eo pipefail\n\nif [ \"$CONFIGURATION\" == \"Debug\" ]; then\n  echo \"Skipping asset bundling in debug mode.\"\n  exit 0\nfi\n\npushd \"${SRCROOT}/..\"\nexport PATH=\"$(if [ -f ~/.expo/PATH ]; then echo $PATH:$(cat ~/.expo/PATH); else echo $PATH; fi)\"\ndest=\"$CONFIGURATION_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\"\nexpo bundle-assets --platform ios --dest \"$dest\"\npopd\n";
 		};
-		1FFBBA428ED805819524E6CB /* [CP] Check Pods Manifest.lock */ = {
+		3F5E99FBF594A44786C7D825 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -310,21 +310,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B5722AD01DFB7E3F0084848F /* Prepare Expo */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Prepare Expo";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/bash;
-			shellScript = "set -eo pipefail\n\nexport PATH=\"$(if [ -f ~/.expo/PATH ]; then echo $PATH:$(cat ~/.expo/PATH); else echo $PATH; fi)\"\nexpo prepare-detached-build --platform ios \"${SRCROOT}/..\"\n";
-		};
-		B6AFEC42B699FEF441884A65 /* [CP] Copy Pods Resources */ = {
+		5BDEBB4907D64EC2010D9606 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -353,6 +339,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-riive/Pods-riive-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		B5722AD01DFB7E3F0084848F /* Prepare Expo */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Prepare Expo";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "set -eo pipefail\n\nexport PATH=\"$(if [ -f ~/.expo/PATH ]; then echo $PATH:$(cat ~/.expo/PATH); else echo $PATH; fi)\"\nexpo prepare-detached-build --platform ios \"${SRCROOT}/..\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -483,7 +483,7 @@
 		};
 		B56386591DB9693800A0598C /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 86DB25C097B76C5FDD99879E /* Pods-riive.debug.xcconfig */;
+			baseConfigurationReference = 1AC04C70870F44E02F84B1FE /* Pods-riive.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = riive/riive.entitlements;
@@ -579,7 +579,7 @@
 		};
 		B563865A1DB9693800A0598C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 27D33145F69E55878C6428FF /* Pods-riive.release.xcconfig */;
+			baseConfigurationReference = 1DE8228AB9F6276652339137 /* Pods-riive.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = riive/riive.entitlements;
@@ -676,7 +676,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B563863C1DB9693800A0598C /* Build configuration list for PBXProject "riive" */ = {
+		B563863C1DB9693800A0598C /* Build configuration list for PBXProject "Riive" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B56386561DB9693800A0598C /* Debug */,

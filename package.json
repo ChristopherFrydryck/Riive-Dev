@@ -37,6 +37,7 @@
     "expo-image-picker": "~8.0.1",
     "expo-linear-gradient": "~8.0.0",
     "expo-location": "^9.0.1",
+    "expo-notifications": "^0.9.0",
     "expokit": "^36.0.1",
     "firebase": "^6.5.0",
     "geofirestore": "^4.3.0",
