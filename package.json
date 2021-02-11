@@ -43,7 +43,7 @@
     "geofirestore": "^4.3.0",
     "intl": "^1.2.5",
     "mobx": "^5.13.0",
-    "mobx-react": "^5.4.3",
+    "mobx-react": "^5.4.4",
     "patch-package": "^6.2.2",
     "permissions": "^0.1.0",
     "react": "16.9.0",

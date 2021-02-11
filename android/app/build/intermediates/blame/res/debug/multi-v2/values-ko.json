@@ -38,23 +38,6 @@
                     }
                 },
                 {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/values-ko/values-ko.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "100",
-                        "endOffsets": "151"
-                    },
-                    "to": {
-                        "startLines": "82",
-                        "startColumns": "4",
-                        "startOffsets": "7811",
-                        "endColumns": "100",
-                        "endOffsets": "7907"
-                    }
-                },
-                {
                     "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/jetified-android-image-cropper-2.7.0.aar/a856b207cea260e79a0fe489215aca6b/res/values-ko/values-ko.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10",
@@ -86,6 +69,23 @@
                         "startOffsets": "5537",
                         "endColumns": "179",
                         "endOffsets": "5712"
+                    }
+                },
+                {
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/values-ko/values-ko.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "82",
+                        "startColumns": "4",
+                        "startOffsets": "7811",
+                        "endColumns": "100",
+                        "endOffsets": "7907"
                     }
                 },
                 {

@@ -19,7 +19,7 @@ import * as Permissions from 'expo-permissions';
 import { Linking } from 'expo';
 import Constants from 'expo-constants'
 
-import { notificationPermissions } from '../functions/in-app/notifications'
+import { getUserToken } from '../functions/in-app/notifications'
 
 //For Shimmer
 import SvgAnimatedLinearGradient from 'react-native-svg-animated-linear-gradient'
@@ -55,6 +55,8 @@ if (!firebase.apps.length) {
 
 const actionSheetRef = createRef();
 const GOOGLE_API_KEY = "AIzaSyBa1s5i_DzraNU6Gw_iO-wwvG2jJGdnq8c";
+
+const db = firebase.firestore();
 
 
 
@@ -196,15 +198,13 @@ export default class Home extends Component{
 
           await this.getCurrentLocation(true);
         //   await this.hasNotificationPermission()
-        await notificationPermissions();
+        await this.notificationSetup();
         //   await this.checkPermission()
         //   await this.createNotificationListener();
           await this.getResults(this.region.current.latitude, this.region.current.longitude, this.region.current.latitudeDelta * 69, 99999.9999, 99999.9999)
           
           
           this.rippleAnimation();
-          
-          
           
           
     
@@ -333,6 +333,28 @@ export default class Home extends Component{
                   }).start();
             }
             
+        }
+
+        notificationSetup = () => {
+            getUserToken().then(token => {
+                if(token){
+                    return token;
+                }else{
+                    throw null;
+                }
+            }).then((token) => {
+                console.log(this.props.UserStore.pushTokens)
+                if(this.props.UserStore.pushTokens.includes(token)){
+                    console.log("Has token")
+                }else{
+                    db.collection("users").doc(this.props.UserStore.userID).update({
+                        pushTokens: firebase.firestore.FieldValue.arrayUnion(token)
+                    })
+                    this.props.UserStore.pushTokens.push(token);
+                }
+            }).catch(e => {
+                console.log(e)
+            })
         }
 
 

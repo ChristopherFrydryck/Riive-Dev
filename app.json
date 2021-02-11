@@ -40,7 +40,7 @@
     },
     "android": {
       "package": "com.riive",
-      "useNextNotificationsApi": true,
+      // "useNextNotificationsApi": true,
       "googleServicesFile": "./google-services.json",
       "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
       "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json",

@@ -5,7 +5,17 @@ import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants'
 import messaging from '@react-native-firebase/messaging';
 
-export let notificationPermissions = async() => {
+//MobX Imports
+import {inject, observer} from 'mobx-react'
+import UserStore from '../../stores/userStore'
+import ComponentStore from '../../stores/componentStore'
+
+
+// @inject("UserStore", "ComponentStore")
+// @observer
+export let getUserToken = async(UserStore) => {
+    
+    
     if(Platform.OS === 'ios'){
         if(Constants.isDevice){
             try{
@@ -16,14 +26,16 @@ export let notificationPermissions = async() => {
 
             if (enabled) {
                 let tok = await messaging().getToken();
-                console.log(tok)
-                console.log('Authorization status:', authStatus);
+             
+                // console.log(tok)
+                // console.log('Authorization status:', authStatus);
                 messaging().onMessage((payload) => {
                     const {title, body} = payload.notification;
                     const { data, messageId } = payload;
-
                     Alert.alert(title, body, [{text: 'Close'}])
                 })
+
+                return tok
             }else{
                 Alert.alert(
                     'Warning',
@@ -36,6 +48,7 @@ export let notificationPermissions = async() => {
                     { text: 'Enable Notifications', onPress: () => Linking.openURL('app-settings:')}
                     ]
                 )
+                return null;
             }
             }catch (error) {
                 console.log(error)
@@ -43,10 +56,11 @@ export let notificationPermissions = async() => {
                 'Error',
                 'Something went wrong while check your notification permissions, please try again later.'
                 );
-                return false;
+                return null;
             }
         }else{
             alert("Must use a physical device for push notifications");
+            return null;
         }
     }else{
         let token;
@@ -76,10 +90,10 @@ export let notificationPermissions = async() => {
                 token = await Notifications.getDevicePushTokenAsync({
                     gcmSenderId: "888723186328",
                 })
-                console.log(token);
+                // console.log(token.data);
                 
                 
-            return true;
+                return token.data
                     
 
             } catch (error) {
@@ -88,10 +102,11 @@ export let notificationPermissions = async() => {
                 'Error',
                 'Something went wrong while check your notification permissions, please try again later.'
                 );
-                return false;
+                return null;
             }
         }else{
             alert("Must use a physical device for push notifications")
+            return null;
         }
     }
     

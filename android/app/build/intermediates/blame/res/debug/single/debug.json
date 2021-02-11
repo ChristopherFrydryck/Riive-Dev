@@ -389,7 +389,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/layout_notification_template_part_time.xml.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/layout/notification_template_part_time.xml"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/layout/notification_template_part_time.xml"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_abc_textfield_activated_mtrl_alpha.9.png.flat",
@@ -441,7 +441,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_notification_bg_normal.9.png.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable-xhdpi-v4/notification_bg_normal.9.png"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable-xhdpi-v4/notification_bg_normal.9.png"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_ic_visa_template_32.png.flat",
@@ -517,7 +517,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_notification_bg_normal.9.png.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable-hdpi-v4/notification_bg_normal.9.png"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable-hdpi-v4/notification_bg_normal.9.png"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable_common_google_signin_btn_icon_light_focused.xml.flat",
@@ -669,11 +669,11 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_notification_bg_low_normal.9.png.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable-mdpi-v4/notification_bg_low_normal.9.png"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable-mdpi-v4/notification_bg_low_normal.9.png"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/layout-v21_notification_template_icon_group.xml.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/layout-v21/notification_template_icon_group.xml"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/layout-v21/notification_template_icon_group.xml"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_messenger_bubble_small_white.png.flat",
@@ -813,7 +813,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_notification_bg_low_pressed.9.png.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable-hdpi-v4/notification_bg_low_pressed.9.png"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable-hdpi-v4/notification_bg_low_pressed.9.png"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/layout_abc_select_dialog_material.xml.flat",
@@ -969,7 +969,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable_notification_bg.xml.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable/notification_bg.xml"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable/notification_bg.xml"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_abc_btn_check_to_on_mtrl_000.png.flat",
@@ -1061,7 +1061,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_notification_bg_low_normal.9.png.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable-xhdpi-v4/notification_bg_low_normal.9.png"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable-xhdpi-v4/notification_bg_low_normal.9.png"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_com_facebook_button_like_icon_selected.png.flat",
@@ -1645,7 +1645,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_notification_bg_normal_pressed.9.png.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable-mdpi-v4/notification_bg_normal_pressed.9.png"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable-mdpi-v4/notification_bg_normal_pressed.9.png"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_abc_text_select_handle_left_mtrl_dark.png.flat",
@@ -1709,7 +1709,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_notification_bg_normal_pressed.9.png.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable-xhdpi-v4/notification_bg_normal_pressed.9.png"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable-xhdpi-v4/notification_bg_normal_pressed.9.png"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_abc_ic_star_black_48dp.png.flat",
@@ -1725,7 +1725,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/layout-v21_notification_action.xml.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/layout-v21/notification_action.xml"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/layout-v21/notification_action.xml"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_abc_textfield_default_mtrl_alpha.9.png.flat",
@@ -1797,7 +1797,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_notification_bg_low_pressed.9.png.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable-xhdpi-v4/notification_bg_low_pressed.9.png"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable-xhdpi-v4/notification_bg_low_pressed.9.png"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/layout_messenger_button_send_white_small.xml.flat",
@@ -1821,7 +1821,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_notify_panel_notification_icon_bg.png.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable-mdpi-v4/notify_panel_notification_icon_bg.png"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable-mdpi-v4/notify_panel_notification_icon_bg.png"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_abc_ic_star_half_black_36dp.png.flat",
@@ -1993,7 +1993,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_notification_bg_normal_pressed.9.png.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable-hdpi-v4/notification_bg_normal_pressed.9.png"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable-hdpi-v4/notification_bg_normal_pressed.9.png"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/raw_amu_nested_multigeometry.kml.flat",
@@ -2017,7 +2017,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable_notification_tile_bg.xml.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable/notification_tile_bg.xml"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable/notification_tile_bg.xml"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_arrow_back_white_36dp.png.flat",
@@ -2089,7 +2089,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/layout_custom_dialog.xml.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/layout/custom_dialog.xml"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/layout/custom_dialog.xml"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_abc_text_select_handle_middle_mtrl_light.png.flat",
@@ -2357,11 +2357,11 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_notification_bg_low_normal.9.png.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable-hdpi-v4/notification_bg_low_normal.9.png"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable-hdpi-v4/notification_bg_low_normal.9.png"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-v21_notification_action_background.xml.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable-v21/notification_action_background.xml"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable-v21/notification_action_background.xml"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_ic_cvc.png.flat",
@@ -2601,7 +2601,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/layout-v21_notification_template_custom_big.xml.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/layout-v21/notification_template_custom_big.xml"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/layout-v21/notification_template_custom_big.xml"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable_com_facebook_favicon_blue.xml.flat",
@@ -2793,7 +2793,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_notify_panel_notification_icon_bg.png.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable-hdpi-v4/notify_panel_notification_icon_bg.png"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable-hdpi-v4/notify_panel_notification_icon_bg.png"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-v21_abc_btn_colored_material.xml.flat",
@@ -3241,7 +3241,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable_notification_icon_background.xml.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable/notification_icon_background.xml"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable/notification_icon_background.xml"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4_crop_image_menu_rotate_left.png.flat",
@@ -3473,7 +3473,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/layout-v21_notification_action_tombstone.xml.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/layout-v21/notification_action_tombstone.xml"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/layout-v21/notification_action_tombstone.xml"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/xml_image_picker_provider_paths.xml.flat",
@@ -3577,7 +3577,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable_notification_bg_low.xml.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable/notification_bg_low.xml"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable/notification_bg_low.xml"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable_messenger_button_white_bg_selector.xml.flat",
@@ -3705,7 +3705,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_notification_bg_low_pressed.9.png.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable-mdpi-v4/notification_bg_low_pressed.9.png"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable-mdpi-v4/notification_bg_low_pressed.9.png"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_abc_switch_track_mtrl_alpha.9.png.flat",
@@ -3837,7 +3837,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/layout_notification_template_part_chronometer.xml.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/layout/notification_template_part_chronometer.xml"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/layout/notification_template_part_chronometer.xml"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_abc_text_select_handle_right_mtrl_light.png.flat",
@@ -3865,7 +3865,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_notification_bg_normal.9.png.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable-mdpi-v4/notification_bg_normal.9.png"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable-mdpi-v4/notification_bg_normal.9.png"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_home_white_36dp.png.flat",
@@ -3889,7 +3889,7 @@
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_notify_panel_notification_icon_bg.png.flat",
-        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/drawable-xhdpi-v4/notify_panel_notification_icon_bg.png"
+        "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/drawable-xhdpi-v4/notify_panel_notification_icon_bg.png"
     },
     {
         "merged": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/res/merged/debug/layout_reactandroid_redbox_item_frame.xml.flat",

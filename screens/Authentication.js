@@ -388,6 +388,7 @@ resetPassword = () =>{
                         toBeDeleted: false,
                         deletedStarts: new Date().getTime() / 1000,
                       },
+                      pushTokens: [],
                     })
                 return docData
               }).then((doc) => {
@@ -405,6 +406,7 @@ resetPassword = () =>{
                     this.props.UserStore.searchHistory = [];
                     this.props.UserStore.disabled = false;
                     this.props.UserStore.deleted = false;
+                    this.props.UserStore.pushTokens = [];
                   }).then(() => {
                     // alert('Welcome to Riive ' + this.props.UserStore.firstname + '!')
      
@@ -521,6 +523,7 @@ resetPassword = () =>{
                   this.props.UserStore.searchHistory = searchHistory;
                   this.props.UserStore.disabled = doc.data().disabled.isDisabled;
                   this.props.UserStore.deleted = doc.data().deleted.toBeDeleted
+                  this.props.UserStore.pushTokens = doc.data().pushTokens || [];
 
                   // ID if user signed in via email or google
                   this.props.UserStore.signInProvider = firebase.auth().currentUser.providerData[0].providerId;

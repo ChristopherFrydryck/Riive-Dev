@@ -4,6 +4,23 @@
             "outputFile": "/Users/christopherfrydryck/Documents/Dev/Riive-Dev/riive/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-vi/values-vi.xml",
             "map": [
                 {
+                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/25b972c2e0dcfa0c37c3df926ef54667/res/values-vi/values-vi.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "82",
+                        "startColumns": "4",
+                        "startOffsets": "8556",
+                        "endColumns": "100",
+                        "endOffsets": "8652"
+                    }
+                },
+                {
                     "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/jetified-android-image-cropper-2.7.0.aar/a856b207cea260e79a0fe489215aca6b/res/values-vi/values-vi.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10",
@@ -35,23 +52,6 @@
                         "startOffsets": "4822,4926,5120,5247,5356,5580,5712,5869,6197,6437,6546,6738,6870,7088,7267,7365,7459",
                         "endColumns": "103,193,126,108,223,131,156,132,239,108,191,131,217,178,97,93,109",
                         "endOffsets": "4921,5115,5242,5351,5575,5707,5864,5997,6432,6541,6733,6865,7083,7262,7360,7454,7564"
-                    }
-                },
-                {
-                    "source": "/Users/christopherfrydryck/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/0bfeb74e9b4be9d5c90816a333c91dc9/res/values-vi/values-vi.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "100",
-                        "endOffsets": "151"
-                    },
-                    "to": {
-                        "startLines": "82",
-                        "startColumns": "4",
-                        "startOffsets": "8556",
-                        "endColumns": "100",
-                        "endOffsets": "8652"
                     }
                 },
                 {

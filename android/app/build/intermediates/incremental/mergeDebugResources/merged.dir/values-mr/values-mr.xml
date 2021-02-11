@@ -71,6 +71,6 @@
     <string msgid="9521340570209730" name="gcm_fallback_notification_channel_label">"मिश्र"</string>
     <string name="messenger_send_button_text">पाठवा</string>
     <string msgid="730395136688082741" name="search_menu_title">"शोध"</string>
-    <string msgid="8106346172024741305" name="status_bar_notification_info_overflow">"९९९+"</string>
+    <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"९९९+"</string>
     <string msgid="363496807345461806" name="wallet_buy_button_place_holder">"Google सह खरेदी करा"</string>
 </resources>

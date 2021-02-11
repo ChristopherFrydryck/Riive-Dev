@@ -16,6 +16,7 @@ class UserStore {
     @observable vehicles = [];
     @observable payments = [];
     @observable searchHistory = [];
+    @observable pushTokens = [];
 
     @observable disabled = false;
     @observable deleted = false;
